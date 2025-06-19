@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tag;
 use App\Models\Team;
@@ -105,17 +104,13 @@ class PostSeeder extends Seeder
                 $user->teams()->attach($team);
             }
 
-            // Get categories from database that were seeded by CategorySeeder
-            $categories = Category::where('team_id', $team->id)
-                ->where('is_active', true)
-                ->get();
+            // Get all active tags for this team
+            $tags = Tag::where('team_id', $team->id)->get();
 
-            if ($categories->isEmpty()) {
-                $this->command->warn('No active categories found. Please run CategorySeeder first!');
+            if ($tags->isEmpty()) {
+                $this->command->warn('No tags found. Please run TagSeeder first!');
                 return;
             }
-
-            $categoryIds = $categories->pluck('id')->toArray();
 
             // Pastikan direktori foto-utama ada di storage
             if (!Storage::disk('public')->exists('foto-utama')) {
@@ -127,40 +122,80 @@ class PostSeeder extends Seeder
                 Storage::disk('public')->makeDirectory('foto-tambahan');
             }
 
-            // Daftar gambar default dari Pexels (hanya landscape)
-            $pexelsImages = [
-                'https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=1600', // Office team (landscape)
-                'https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=1600', // Meeting (landscape)
-                'https://images.pexels.com/photos/3184296/pexels-photo-3184296.jpeg?auto=compress&cs=tinysrgb&w=1600', // Team discussion (landscape)
-                'https://images.pexels.com/photos/3184339/pexels-photo-3184339.jpeg?auto=compress&cs=tinysrgb&w=1600', // Office workspace (landscape)
-                'https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg?auto=compress&cs=tinysrgb&w=1600', // Team meeting (landscape)
-                'https://images.pexels.com/photos/3183153/pexels-photo-3183153.jpeg?auto=compress&cs=tinysrgb&w=1600', // Office team meeting (landscape)
-                'https://images.pexels.com/photos/3183171/pexels-photo-3183171.jpeg?auto=compress&cs=tinysrgb&w=1600', // Office team (landscape)
-                'https://images.pexels.com/photos/3184287/pexels-photo-3184287.jpeg?auto=compress&cs=tinysrgb&w=1600', // Office workspace (landscape)
-                'https://images.pexels.com/photos/3183159/pexels-photo-3183159.jpeg?auto=compress&cs=tinysrgb&w=1600', // Office meeting (landscape)
-                'https://images.pexels.com/photos/3183157/pexels-photo-3183157.jpeg?auto=compress&cs=tinysrgb&w=1600'  // Team discussion (landscape)
+            // Daftar nama file gambar placeholder lokal
+            $localImages = [
+                'placeholder1.jpg',
+                'placeholder2.jpg',
+                'placeholder3.jpg',
+                'placeholder4.jpg',
+                'placeholder5.jpg',
+                'placeholder6.jpg',
+                'placeholder7.jpg',
+                'placeholder8.jpg',
+                'placeholder9.jpg',
+                'placeholder10.jpg'
             ];
 
-            // Unduh gambar default jika folder kosong
-            $availableImages = [];
-            foreach ($pexelsImages as $index => $imageUrl) {
-                $imageName = 'default_' . ($index + 1) . '.jpg';
-                $imagePath = 'foto-utama/' . $imageName;
+            // Pastikan direktori placeholder ada
+            $placeholderDir = public_path('images/placeholders');
+            if (!file_exists($placeholderDir)) {
+                mkdir($placeholderDir, 0777, true);
+            }
 
-                if (!Storage::disk('public')->exists($imagePath)) {
+            // Buat gambar placeholder sederhana jika belum ada
+            $availableImages = [];
+            foreach ($localImages as $index => $imageName) {
+                $imagePath = public_path('images/placeholders/' . $imageName);
+                $storagePath = 'foto-utama/' . $imageName;
+
+                if (!file_exists($imagePath)) {
                     try {
-                        $imageContent = file_get_contents($imageUrl);
-                        if ($imageContent !== false) {
-                            Storage::disk('public')->put($imagePath, $imageContent);
-                            $this->command->info('Downloaded default image: ' . $imageName);
-                        }
+                        // Buat gambar placeholder sederhana
+                        $width = 1200;
+                        $height = 800;
+                        $image = imagecreatetruecolor($width, $height);
+                        
+                        // Warna background acak
+                        $bgColor = imagecolorallocate($image, 
+                            mt_rand(200, 240), 
+                            mt_rand(200, 240), 
+                            mt_rand(200, 240)
+                        );
+                        imagefill($image, 0, 0, $bgColor);
+                        
+                        // Tambahkan teks
+                        $textColor = imagecolorallocate($image, 100, 100, 100);
+                        $text = 'Gambar ' . ($index + 1);
+                        $fontSize = 5;
+                        $textWidth = imagefontwidth($fontSize) * strlen($text);
+                        $textHeight = imagefontheight($fontSize);
+                        $x = ($width - $textWidth) / 2;
+                        $y = ($height - $textHeight) / 2;
+                        
+                        imagestring($image, $fontSize, $x, $y, $text, $textColor);
+                        
+                        // Simpan gambar
+                        imagejpeg($image, $imagePath, 90);
+                        imagedestroy($image);
+                        
+                        $this->command->info('Created placeholder image: ' . $imageName);
                     } catch (\Exception $e) {
-                        $this->command->error('Failed to download image: ' . $e->getMessage());
+                        $this->command->error('Failed to create placeholder image: ' . $e->getMessage());
                         continue;
                     }
                 }
-
-                $availableImages[] = $imagePath;
+                
+                // Salin ke storage jika belum ada
+                if (!Storage::disk('public')->exists($storagePath)) {
+                    try {
+                        Storage::disk('public')->put($storagePath, file_get_contents($imagePath));
+                    } catch (\Exception $e) {
+                        $this->command->error('Failed to copy placeholder image to storage: ' . $e->getMessage());
+                        continue;
+                    }
+                }
+                
+                $availableImages[] = $storagePath;
             }
 
             // Judul berita Indonesia
@@ -207,47 +242,50 @@ class PostSeeder extends Seeder
             foreach ($months as $monthStart) {
                 $this->command->info("Creating posts for " . $monthStart->format('F Y') . "...");
 
-                // Create 10 posts for this month
-                for ($i = 1; $i <= 10; $i++) {
-                    // Random day in the month
-                    $postDate = $monthStart->copy()->addDays(rand(0, $monthStart->daysInMonth - 1))
-                        ->setHour(rand(8, 16))
-                        ->setMinute(rand(0, 59));
+                // Generate sample posts
+                $posts = [];
+                $postCount = 30; // Jumlah post yang ingin dibuat
 
-                    // Random category
-                    $categoryId = $this->faker->randomElement($categoryIds);
+                for ($i = 1; $i <= $postCount; $i++) {
+                    try {
+                        // Random date in the past year
+                        $postDate = now()->subDays(rand(1, 365))->subHours(rand(1, 24));
 
-                    // Create post
-                    $post = Post::create([
-                        'title' => $this->faker->sentence(8),
-                        'slug' => Str::slug($this->faker->sentence(5)),
-                        // 'excerpt' => $this->faker->paragraph(2),
-                        'content' => $this->faker->randomElement($indonesianContents),
-                        'published_at' => $postDate,
-                        'status' => 'published',
-                        'category_id' => $categoryId,
-                        'user_id' => $user->id,
-                        'team_id' => $team->id,
-                        'views' => $this->faker->numberBetween(10, 1000),
-                        'foto_utama' => $this->faker->randomElement($availableImages),
-                        'created_at' => $postDate,
-                        'updated_at' => $postDate,
-                    ]);
+                        // Generate title
+                        $title = $this->generateRandomTitle();
 
-                    // Assign tags (optional)
-                    if ($i % 3 === 0) {
-                        $tags = [];
-                        for ($j = 0; $j < rand(1, 3); $j++) {
-                            $tag = Tag::firstOrCreate(
-                                ['name' => $this->faker->word],
-                                [
-                                    'slug' => Str::slug($this->faker->word),
-                                    'team_id' => $team->id
-                                ]
+                        // Generate content
+                        $content = $this->generateRandomContent($title);
+
+                        // Create post
+                        $post = Post::create([
+                            'title' => $title,
+                            'slug' => Str::slug($title) . '-' . Str::random(6),
+                            'content' => $content,
+                            'published_at' => $postDate,
+                            'status' => 'published',
+                            'user_id' => $user->id,
+                            'team_id' => $team->id,
+                            'views' => $this->faker->numberBetween(10, 1000),
+                            'foto_utama' => $this->faker->randomElement($availableImages),
+                            'gallery_images' => $this->faker->randomElements($availableImages, rand(1, 3)),
+                            'created_at' => $postDate,
+                            'updated_at' => $postDate,
+                        ]);
+
+                        // Attach random tags to post
+                        if ($tags->isNotEmpty()) {
+                            $randomTags = $tags->random(rand(1, min(3, $tags->count())));
+                            $post->tags()->sync(
+                                $randomTags->mapWithKeys(fn($tag) => [
+                                    $tag->id => ['team_id' => $team->id]
+                                ])
                             );
-                            $tags[$tag->id] = ['team_id' => $team->id];
                         }
-                        $post->tags()->sync($tags);
+                    } catch (\Exception $e) {
+                        $this->command->error('Error creating post: ' . $e->getMessage());
+                        $this->command->error($e->getTraceAsString());
+                        continue;
                     }
                 }
             }
@@ -262,5 +300,40 @@ class PostSeeder extends Seeder
             $this->command->error($e->getTraceAsString());
             throw $e;
         }
+    }
+
+    /**
+     * Generate a random title
+     */
+    protected function generateRandomTitle(): string
+    {
+        $templates = [
+            'Berita: ' . $this->faker->sentence(3),
+            'Update: ' . $this->faker->sentence(4),
+            'Terbaru: ' . $this->faker->sentence(3),
+            $this->faker->sentence(4) . ' - ' . $this->faker->sentence(3),
+            'Mengenal Lebih Jauh Tentang ' . $this->faker->words(2, true),
+            $this->faker->sentence(3) . ': ' . $this->faker->sentence(2),
+            $this->faker->sentence(4),
+            $this->faker->sentence(5),
+            $this->faker->sentence(3) . ' - ' . $this->faker->sentence(2),
+        ];
+        
+        return $this->faker->randomElement($templates);
+    }
+    
+    /**
+     * Generate random content
+     */
+    protected function generateRandomContent(string $title): string
+    {
+        $templates = [
+            '<p>' . $title . '</p><p>' . $this->faker->paragraph(3) . '</p>',
+            '<h2>Pendahuluan</h2><p>' . $this->faker->paragraph(2) . '</p><h2>Pembahasan</h2><p>' . $this->faker->paragraph(3) . '</p>',
+            '<p>' . $this->faker->paragraph(5) . '</p>',
+            '<p>' . $this->faker->paragraph(3) . '</p><p>' . $this->faker->paragraph(3) . '</p>',
+        ];
+        
+        return $this->faker->randomElement($templates);
     }
 }

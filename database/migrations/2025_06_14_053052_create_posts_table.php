@@ -18,8 +18,7 @@ return new class extends Migration
             $table->string('slug');
             $table->text('content');
             $table->string('foto_utama')->nullable()->comment('Foto utama/cover untuk postingan');
-            $table->string('foto_tambahan')->nullable()->comment('Gambar tambahan untuk postingan');
-            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
+            $table->json('gallery_images')->nullable()->comment('Daftar path gambar tambahan');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->enum('status', ['draft', 'published', 'archived'])->default('draft');
             $table->dateTime('published_at')->nullable();
@@ -37,7 +36,6 @@ return new class extends Migration
             $table->index('created_at');
             $table->index('updated_at');
             $table->index('foto_utama');
-            $table->index('category_id');
             $table->index('user_id');
         });
     }

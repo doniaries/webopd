@@ -2,7 +2,7 @@
 
 namespace App\Livewire;
 
-use App\Models\Category;
+use App\Models\Tag;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Url;
 use Livewire\Component;
@@ -17,12 +17,12 @@ class Post extends Component
     #[Url]
     public $search = '';
     #[Url]
-    public $category = '';
+    public $tag = '';
     #[Url]
     public $sort = 'latest';
     public $perPage = 10;
-    public $categories;
-    public $categoryName;
+    public $tags;
+    public $tagName;
 
     // Properties for Show
     public $slug;
@@ -34,28 +34,28 @@ class Post extends Component
     public $post;
 
     // Mount for Index
-    public function mount($slug = null, $category_id = null, $limit = 10, $showPagination = true, $layout = 'grid', $columns = 3)
+    public function mount($slug = null, $tag_id = null, $limit = 10, $showPagination = true, $layout = 'grid', $columns = 3)
     {
         $this->slug = $slug;
-        
+
         if ($slug) {
             $this->show($slug);
         } else {
-            $this->categories = Category::where('is_active', true)->get();
+            $this->tags = Tag::where('is_active', true)->get();
             $this->getLatestPosts();
-            
+
             // Set properties from parameters
             $this->perPage = $limit;
             $this->showPagination = $showPagination;
             $this->layout = $layout;
             $this->columns = $columns;
-            
-            // Handle category_id if provided
-            if ($category_id) {
-                $category = Category::find($category_id);
-                if ($category) {
-                    $this->category = $category->slug;
-                    $this->categoryName = $category->name;
+
+            // Handle tag_id if provided
+            if ($tag_id) {
+                $tag = Tag::find($tag_id);
+                if ($tag) {
+                    $this->tag = $tag->slug;
+                    $this->tagName = $tag->name;
                 }
             }
         }
@@ -77,7 +77,7 @@ class Post extends Component
     public function index()
     {
         return view('livewire.posts.index', [
-            'categories' => $this->categories,
+            'tags' => $this->tags,
             'posts' => $this->getPosts()
         ]);
     }
@@ -85,7 +85,7 @@ class Post extends Component
     // Get posts for index page
     protected function getPosts()
     {
-        $query = \App\Models\Post::with(['category', 'user'])
+        $query = \App\Models\Post::with(['tag', 'user'])
             ->where('status', 'published')
             ->where('published_at', '<=', now());
 
@@ -98,10 +98,10 @@ class Post extends Component
             });
         }
 
-        // Apply category filter
-        if ($this->category) {
-            $query->whereHas('category', function($q) {
-                $q->where('slug', $this->category);
+        // Apply tag filter
+        if ($this->tag) {
+            $query->whereHas('tag', function ($q) {
+                $q->where('slug', $this->tag);
             });
         }
 
@@ -120,14 +120,14 @@ class Post extends Component
         if ($this->showPagination) {
             return $query->paginate($this->perPage);
         }
-        
+
         return $query->take($this->perPage)->get();
     }
 
     // Show single post
     public function show($slug)
     {
-        $this->post = \App\Models\Post::with(['category', 'user', 'categories'])
+        $this->post = \App\Models\Post::with(['tag', 'user', 'tags'])
             ->where('slug', $slug)
             ->where('status', 'published')
             ->firstOrFail();
@@ -136,12 +136,15 @@ class Post extends Component
         $this->post->increment('views');
 
         // Get related posts
-        $this->relatedPosts = \App\Models\Post::where('category_id', $this->post->category_id)
-            ->where('id', '!=', $this->post->id)
-            ->where('status', 'published')
-            ->latest('published_at')
-            ->take(3)
-            ->get();
+        $this->relatedPosts = $this->post->tags()->first()
+            ? $this->post->tags()->first()
+                ->posts()
+                ->where('posts.id', '!=', $this->post->id)
+                ->where('status', 'published')
+                ->latest('published_at')
+                ->take(3)
+                ->get()
+            : collect();
     }
 
     // Reset pagination when searching or changing category
@@ -150,7 +153,7 @@ class Post extends Component
         $this->resetPage();
     }
 
-    public function updatingCategory()
+    public function updatingTag()
     {
         $this->resetPage();
     }
@@ -160,7 +163,7 @@ class Post extends Component
      */
     public function resetFilters()
     {
-        $this->reset(['search', 'category', 'sort']);
+        $this->reset(['search', 'tag', 'sort']);
     }
 
     public function render()
@@ -184,9 +187,9 @@ class Post extends Component
             'posts' => $posts,
             'categories' => $this->categories,
             'search' => $this->search,
-            'category' => $this->category,
-            'pageTitle' => $this->categoryName ? 'Kategori: ' . $this->categoryName : 'Berita Terbaru',
-            'pageDescription' => $this->categoryName ? 'Daftar berita dalam kategori ' . $this->categoryName : 'Daftar lengkap semua berita terbaru',
+            'tag' => $this->tag,
+            'pageTitle' => $this->tagName ? 'Tag: ' . $this->tagName : 'Berita Terbaru',
+            'pageDescription' => $this->tagName ? 'Daftar berita dengan tag ' . $this->tagName : 'Daftar lengkap semua berita terbaru',
             'layout' => $this->layout,
             'columns' => $this->columns,
             'showPagination' => $this->showPagination,

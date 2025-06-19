@@ -53,12 +53,14 @@ class PengaturanResource extends Resource
                         Forms\Components\FileUpload::make('logo_instansi')
                             ->image()
                             ->optimize('webp')
+                            ->directory('logo')
                             ->default('images/kabupaten-sijunjung.png')
                             ->required()
                             ->label('Logo Instansi'),
 
                         Forms\Components\FileUpload::make('favicon_instansi')
                             ->image()
+                            ->directory('favicon')
                             ->default('images/favicon.png')
                             ->required()
                             ->label('Favicon Instansi'),

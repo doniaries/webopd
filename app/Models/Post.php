@@ -24,8 +24,8 @@ class Post extends Model
         'slug',
         'content',
         'foto_utama',
-        'foto_tambahan',
-        'category_id',
+        'gallery_images',
+        'tag_id',
         'user_id',
         'status',
         'published_at',
@@ -33,24 +33,28 @@ class Post extends Model
         'is_featured',
     ];
 
-    protected $with = ['category', 'user', 'categories'];
+    protected $with = ['tag', 'user', 'tags'];
 
     protected $casts = [
+        'gallery_images' => 'array',
         'published_at' => 'datetime',
         'is_featured' => 'boolean',
         'views' => 'integer',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',
-        'foto_tambahan' => 'array',
     ];
 
-    protected $appends = ['foto_utama_url', 'foto_tambahan_urls', 'excerpt'];
+    protected $appends = ['foto_utama_url', 'gallery_images_urls', 'excerpt'];
 
     /**
-    /**
-     * Boot the model.
+     * Get the team that owns the post.
      */
+    public function team(): BelongsTo
+    {
+        return $this->belongsTo(Team::class);
+    }
+
     protected static function boot()
     {
         parent::boot();
@@ -112,14 +116,6 @@ class Post extends Model
     }
 
     /**
-     * Get the categories for the post.
-     */
-    public function categories()
-    {
-        return $this->belongsToMany(Category::class, 'post_categories', 'post_id', 'category_id');
-    }
-
-    /**
      * Get the URL for the main photo (foto utama).
      */
     public function getFotoUtamaUrlAttribute()
@@ -151,18 +147,19 @@ class Post extends Model
         return null;
     }
 
-    /**
-     * Get the additional photos with full URLs
-     *
-     * @return array|null
-     */
-    public function getFotoTambahanUrlsAttribute()
+
+
+    public function getGalleryImagesUrlsAttribute()
     {
-        if (empty($this->foto_tambahan)) {
+        if (empty($this->gallery_images)) {
             return [];
         }
 
-        $photos = is_array($this->foto_tambahan) ? $this->foto_tambahan : json_decode($this->foto_tambahan, true);
+        $photos = is_array($this->gallery_images) ? $this->gallery_images : json_decode($this->gallery_images, true);
+
+        if (!is_array($photos)) {
+            return [];
+        }
 
         return collect($photos)->map(function ($photo) {
             if (filter_var($photo, FILTER_VALIDATE_URL)) {
@@ -174,8 +171,8 @@ class Post extends Model
                 return asset('storage/' . $imagePath);
             }
 
-            if (strpos($imagePath, 'foto-tambahan/') === false) {
-                $imagePath = 'foto-tambahan/' . $imagePath;
+            if (strpos($imagePath, 'gallery-images/') === false) {
+                $imagePath = 'gallery-images/' . $imagePath;
                 if (Storage::disk('public')->exists($imagePath)) {
                     return asset('storage/' . $imagePath);
                 }
@@ -183,22 +180,6 @@ class Post extends Model
 
             return $photo; // Return as is if not found in storage
         })->toArray();
-    }
-
-    /**
-     * Get the team that owns the post.
-     */
-    public function team(): BelongsTo
-    {
-        return $this->belongsTo(Team::class);
-    }
-
-    /**
-     * Get all of the images for the post.
-     */
-    public function images(): HasMany
-    {
-        return $this->hasMany(PostImage::class)->orderBy('order');
     }
 
     /**
@@ -210,15 +191,6 @@ class Post extends Model
     }
 
     /**
-     * Get the category that owns the post.
-     */
-    public function category(): BelongsTo
-    {
-        return $this->belongsTo(Category::class);
-    }
-
-
-    /**
      * Get the user that owns the post.
      */
     public function user(): BelongsTo
@@ -226,20 +198,7 @@ class Post extends Model
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * Get the main featured image for the post.
-     */
-    public function featuredImage(): HasOne
-    {
-        return $this->hasOne(PostImage::class)->where('is_featured', true);
-    }
 
-    /**
-     * The tags that belong to the post.
-     */
-    /**
-     * The tags that belong to the post.
-     */
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class, 'post_tag')
@@ -267,11 +226,11 @@ class Post extends Model
     }
 
     /**
-     * Scope a query to only include posts from a specific category.
+     * Scope a query to only include posts from a specific tag.
      */
-    public function scopeInCategory($query, $categoryId)
+    public function scopeInTag($query, $tagId)
     {
-        return $query->where('category_id', $categoryId);
+        return $query->where('tag_id', $tagId);
     }
 
     /**

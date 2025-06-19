@@ -11,7 +11,7 @@ class Pengumuman extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'pengumuman';
+    protected $table = 'pengumumen';
 
     protected $fillable = [
         'team_id',

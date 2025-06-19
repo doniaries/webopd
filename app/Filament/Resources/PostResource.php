@@ -92,16 +92,23 @@ class PostResource extends Resource
                                             ->description('Gambar tambahan untuk konten artikel')
                                             ->schema([
                                                 Forms\Components\FileUpload::make('foto_tambahan')
-                                                    ->label('Gambar Tambahan')
-                                                    ->helperText('Gambar ini akan ditampilkan di dalam konten artikel')
+                                                    ->label('Galeri Gambar')
+                                                    ->helperText('Gambar tambahan untuk konten artikel')
                                                     ->multiple()
-                                                    ->openable()
-                                                    ->directory('foto-tambahan')
+                                                    ->directory('gallery-images')
                                                     ->image()
-                                                    ->imageEditor()
-                                                    ->maxSize(3072)
+                                                    ->imageResizeMode('cover')
                                                     ->optimize('webp')
-                                                    ->resize(80)
+                                                    ->maxSize(2048)
+                                                    ->openable()
+                                                    ->previewable()
+                                                    ->afterStateUpdated(function ($state) {
+                                                        if (!is_array($state)) {
+                                                            return [$state];
+                                                        }
+                                                        return $state;
+                                                    })
+                                                    ->dehydrated(fn($state) => filled($state)),
                                             ])->columnSpan(1),
                                     ])->columnSpan(['lg' => 3]),
                             ])->columnSpan(['lg' => 3]),
@@ -132,12 +139,13 @@ class PostResource extends Resource
                                 Forms\Components\Section::make('Informasi Artikel')
                                     ->description('Informasi dasar artikel')
                                     ->schema([
-                                        Forms\Components\Select::make('category_id')
-                                            ->relationship('category', 'name', function ($query) {
+                                        Forms\Components\Select::make('tag_id')
+                                            ->relationship('tag', 'name', function ($query) {
                                                 return $query->where('team_id', auth()->user()->teams->first()?->id);
                                             })
-                                            ->label('Kategori')
+                                            ->label('Tag')
                                             ->preload()
+                                            ->multiple()
                                             ->searchable()
                                             ->required()
                                             ->exists('categories', 'id'),
@@ -180,8 +188,8 @@ class PostResource extends Resource
                     }),
                 Tables\Columns\TextColumn::make('slug')
                     ->hidden(),
-                Tables\Columns\TextColumn::make('category.name')
-                    ->label('Kategori')
+                Tables\Columns\TextColumn::make('tag.name')
+                    ->label('Tag')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('Penulis')
@@ -231,9 +239,9 @@ class PostResource extends Resource
                         'published' => 'Dipublikasikan',
                         'archived' => 'Diarsipkan',
                     ]),
-                Tables\Filters\SelectFilter::make('category')
-                    ->label('Kategori')
-                    ->relationship('category', 'name', function ($query) {
+                Tables\Filters\SelectFilter::make('tag')
+                    ->label('Tag')
+                    ->relationship('tag', 'name', function ($query) {
                         return $query->where('team_id', auth()->user()->teams->first()?->id);
                     }),
                 Tables\Filters\Filter::make('published_at')

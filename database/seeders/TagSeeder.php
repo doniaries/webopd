@@ -2,48 +2,56 @@
 
 namespace Database\Seeders;
 
-use App\Models\Tag;
 use App\Models\Team;
+use App\Models\Tag;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class TagSeeder extends Seeder
 {
+    /**
+     * Run the database seeds.
+     */
     public function run(): void
     {
-        // Get all teams or create a default team if none exists
+        // Disable foreign key checks to avoid constraint issues
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        Tag::truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
+        // Get all teams
         $teams = Team::all();
 
-        if ($teams->isEmpty()) {
-            $team = Team::create([
-                'name' => 'Default Team',
-                'slug' => 'default-team',
-                'singkatan' => 'DT',
-                'alamat' => 'Alamat default',
-                'email_organisasi' => 'default@example.com'
-            ]);
-            $teams = collect([$team]);
-        }
-
-        // Create some sample tags with different colors
+        // Common tags that will be created for each team
         $tags = [
-            ['name' => 'Penting'],
-            ['name' => 'Informasi'],
-            ['name' => 'Update'],
-            ['name' => 'Peringatan'],
-            ['name' => 'Pengumuman'],
+            'Teknologi',
+            'Kesehatan',
+            'Pendidikan',
+            'Olahraga',
+            'Politik',
+            'Sosial',
+            'Lingkungan',
+            'Pariwisata',
+            'Otomotif',
+            'Agama',
+            'Teknologi Informasi',
+            'Pemerintahan',
+            'Peraturan',
+
         ];
 
         foreach ($teams as $team) {
-            foreach ($tags as $tag) {
-                // Create tag for the team
+            foreach ($tags as $tagName) {
                 Tag::firstOrCreate(
                     [
-                        'team_id' => $team->id,
-                        'slug' => Str::slug($tag['name'])
+                        'name' => $tagName,
+                        'team_id' => $team->id
                     ],
                     [
-                        'name' => $tag['name'],
+                        'slug' => Str::slug($tagName),
+                        'created_at' => now(),
+                        'updated_at' => now(),
                     ]
                 );
             }

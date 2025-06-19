@@ -6,7 +6,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Post;
-use App\Models\Category;
+use App\Models\Tag;
 use App\Models\Banner;
 use App\Models\Slider;
 use Illuminate\Support\Facades\Log as LogFacade;
@@ -19,7 +19,7 @@ class Home extends Component
     public $pageTitle = 'Beranda';
     public $pageDescription = 'Selamat datang di website resmi kami';
 
-    public $kategoriBerita = [];
+    public $tags = [];
     public $featuredPosts = [];
     public $latestPosts = [];
     public $banners = [];
@@ -35,8 +35,8 @@ class Home extends Component
     public function loadData()
     {
         try {
-            // Get active categories with post count
-            $this->kategoriBerita = Category::where('is_active', true)
+            // Get active tags with post count
+            $this->tags = Tag::where('is_active', true)
                 ->whereHas('posts', function ($query) {
                     $query->where('status', 'published');
                 })
@@ -48,7 +48,7 @@ class Home extends Component
 
             // Get featured posts (3 latest posts with different categories if possible)
             $this->featuredPosts = Post::where('status', 'published')
-                ->with(['categories', 'user'])
+                ->with(['tags', 'user'])
                 ->where('is_featured', true)
                 ->latest('published_at')
                 ->take(3)
@@ -57,10 +57,10 @@ class Home extends Component
             // Get latest posts for hero section
             $this->latestPosts = Post::where('status', 'published')
                 ->where('published_at', '<=', now())
-                ->with(['categories' => function ($query) {
+                ->with(['tags' => function ($query) {
                     $query->where('is_active', true);
                 }, 'user'])
-                ->whereHas('categories', function ($query) {
+                ->whereHas('tags', function ($query) {
                     $query->where('is_active', true);
                 })
                 ->latest('published_at')
@@ -110,7 +110,7 @@ class Home extends Component
                 ->get() ?? [];
         } catch (\Exception $e) {
             LogFacade::error('Error in Home@loadData: ' . $e->getMessage());
-            $this->kategoriBerita = [];
+            $this->tags = [];
             $this->featuredPosts = [];
             $this->banners = [];
             $this->sliders = [];
@@ -121,8 +121,8 @@ class Home extends Component
 
     public function render()
     {
-        // Get all active categories for the menu
-        $categories = \App\Models\Category::where('is_active', true)
+        // Get all active tags for the menu
+        $tags = \App\Models\Tag::where('is_active', true)
             ->withCount(['posts' => function ($query) {
                 $query->where('status', 'published');
             }])
@@ -133,7 +133,7 @@ class Home extends Component
             'pageTitle' => 'Beranda - ' . config('app.name'),
             'pageDescription' => 'Portal resmi ' . config('app.name') . ' untuk informasi terbaru, pengumuman, dan layanan publik.',
             'featuredPosts' => $this->featuredPosts,
-            'categories' => $categories,
+            'tags' => $tags,
             'banners' => $this->banners,
             'sliders' => $this->sliders,
             'pengumuman' => $this->pengumuman,

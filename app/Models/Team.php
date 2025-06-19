@@ -58,14 +58,6 @@ class Team extends Model
     }
 
     /**
-     * Get all of the categories for the team.
-     */
-    public function categories(): HasMany
-    {
-        return $this->hasMany(Category::class);
-    }
-
-    /**
      * Get all of the tags for the team.
      */
     public function tags(): HasMany
@@ -76,27 +68,27 @@ class Team extends Model
     /**
      * Get the pengaturan associated with the team.
      */
-    public function pengaturan(): HasOne
+    public function pengaturans(): HasOne
     {
         return $this->hasOne(Pengaturan::class);
     }
 
-    public function agenda(): HasMany
+    public function agendas(): HasMany
     {
         return $this->hasMany(AgendaKegiatan::class);
     }
 
-    public function visiMisi(): HasOne
+    public function visiMisis(): HasOne
     {
         return $this->hasOne(VisiMisi::class);
     }
 
-    public function unitKerja(): HasMany
+    public function unitKerjas(): HasMany
     {
         return $this->hasMany(UnitKerja::class);
     }
 
-    public function sambutanPimpinan(): HasOne
+    public function sambutanPimpinans(): HasOne
     {
         return $this->hasOne(SambutanPimpinan::class);
     }
@@ -117,4 +109,32 @@ class Team extends Model
     {
         return $this->hasMany(Slider::class);
     }
+
+    /** @return HasMany<\App\Models\AgendaKegiatan, self> */
+    public function agendaKegiatans(): HasMany
+    {
+        return $this->hasMany(\App\Models\AgendaKegiatan::class);
+    }
+
+
+    /** @return HasMany<\App\Models\Dokumen, self> */
+    public function dokumens(): HasMany
+    {
+        return $this->hasMany(\App\Models\Dokumen::class);
+    }
+
+
+    /** @return HasMany<\App\Models\Pengumuman, self> */
+    public function pengumumen(): HasMany
+    {
+        return $this->hasMany(\App\Models\Pengumuman::class);
+    }
+
+
+    /** @return HasMany<\App\Models\ProdukHukum, self> */
+    public function produkHukums(): HasMany
+    {
+        return $this->hasMany(\App\Models\ProdukHukum::class);
+    }
+
 }
