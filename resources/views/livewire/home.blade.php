@@ -133,7 +133,7 @@
                                     aria-labelledby="pengumuman-tab">
 
                                     <div class="bg-white p-4">
-                                        @if (count($pengumuman) > 0)
+                                        @if (isset($pengumuman) && count($pengumuman) > 0)
                                             <div class="space-y-3" id="pengumuman-list-home">
                                                 @foreach ($pengumuman as $item)
                                                     <div class="bg-blue-50 rounded-lg p-3 border-l-4 border-blue-600 shadow-sm" wire:key="{{ $item->id }}">

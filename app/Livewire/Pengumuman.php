@@ -35,7 +35,7 @@ class Pengumuman extends Component
             ->firstOrFail();
 
         $this->view = 'show';
-        $this->pengumuman->increment('views');
+        // Kolom views tidak diperlukan
     }
 
     public function updatingSearch()

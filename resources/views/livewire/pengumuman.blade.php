@@ -21,126 +21,93 @@
     </style>
     @endpush
 
-    @if($view === 'show')
-        <div class="py-8 bg-gray-50 fade-in">
-            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="bg-white rounded-lg shadow-sm overflow-hidden p-6">
-                    <div class="mb-4">
-                        <a href="{{ route('pengumuman.index') }}" class="inline-flex items-center text-blue-600 hover:text-blue-800">
-                            <i class="fas fa-arrow-left mr-2"></i> Kembali ke Daftar Pengumuman
-                        </a>
-                    </div>
-                    
-                    <h1 class="text-2xl font-bold text-gray-900 mb-4">{{ $pengumuman->judul }}</h1>
-                    
-                    <div class="flex items-center text-sm text-gray-500 mb-6">
-                        <i class="far fa-calendar-alt mr-2"></i>
-                        <span>{{ $pengumuman->published_at->translatedFormat('d F Y') }}</span>
-                        <span class="mx-2">•</span>
-                        <i class="far fa-eye mr-2"></i>
-                        <span>{{ $pengumuman->views }} kali dilihat</span>
-                    </div>
-                    
-                    <div class="prose max-w-none mb-6">
-                        {!! $pengumuman->isi !!}
-                    </div>
-                    
-                    @if($pengumuman->file)
-                        <div class="mt-6 p-4 bg-gray-50 rounded-lg">
-                            <h3 class="font-medium text-gray-900 mb-2">Lampiran:</h3>
-                            <div class="flex items-center">
-                                <i class="fas fa-file-pdf text-red-500 mr-2"></i>
-                                <a href="{{ Storage::url($pengumuman->file) }}" target="_blank" class="text-blue-600 hover:text-blue-800 mr-4">
-                                    Lihat Dokumen
-                                </a>
-                                <a href="{{ Storage::url($pengumuman->file) }}" download class="inline-flex items-center px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded transition duration-300">
-                                    <i class="fas fa-download mr-1"></i> Download
-                                </a>
+    @if ($view === 'show' && $pengumuman)
+        <div class="container py-4">
+            <div class="row">
+                <div class="col-md-8 mx-auto">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h1 class="card-title h3">{{ $pengumuman->judul }}</h1>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div class="text-muted small">
+                                    <i class="bi bi-calendar-event me-1"></i>
+                                    {{ $pengumuman->published_at->format('d M Y') }}
+                                </div>
                             </div>
+                            <div class="card-text mb-4">
+                                {!! $pengumuman->isi !!}
+                            </div>
+
+                            @if ($pengumuman->file)
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                                    <a href="{{ asset('storage/' . $pengumuman->file) }}" target="_blank"
+                                        class="btn btn-primary btn-sm">
+                                        <i class="bi bi-download me-1"></i>
+                                        Unduh Lampiran
+                                    </a>
+                                </div>
+                            @endif
                         </div>
-                    @endif
+                    </div>
                 </div>
             </div>
         </div>
     @else
-        <div class="py-8 bg-gray-50">
-            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="mb-8">
-                    <h1 class="text-3xl font-bold text-gray-900 flex items-center">
-                        <span class="w-2 h-8 bg-red-600 mr-3"></span>
-                        Daftar Pengumuman
-                    </h1>
-                    <p class="mt-2 text-gray-600">Informasi terbaru dan pengumuman penting</p>
-                </div>
+        <div class="container py-4">
+            <div class="row">
+                <div class="col-md-8 mx-auto">
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-body">
+                            <h1 class="card-title h3 mb-4">Pengumuman</h1>
 
-                @if (isset($pengumuman) && $pengumuman->count() > 0)
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="pengumuman-list">
-                        @foreach ($pengumuman as $item)
-                            <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300" wire:key="{{ $item->id }}">
-                                <div class="p-6">
-                                    <div class="flex items-center mb-4">
-                                        <div class="h-10 w-10 bg-red-100 rounded-full flex items-center justify-center mr-3">
-                                            <i class="fas fa-bullhorn text-red-600"></i>
-                                        </div>
-                                        <h3 class="text-lg font-semibold text-gray-900 line-clamp-2">
-                                            {{ $item->judul }}
-                                        </h3>
-                                    </div>
-                                    
-                                    <div class="mb-4">
-                                        <div class="flex items-center text-sm text-gray-500 mb-3">
-                                            <i class="far fa-calendar-alt mr-2"></i>
-                                            <span>{{ $item->published_at->translatedFormat('d F Y') }}</span>
-                                            @if($item->views > 0)
-                                                <span class="mx-2">•</span>
-                                                <i class="far fa-eye mr-2"></i>
-                                                <span>{{ $item->views }} kali dilihat</span>
-                                            @endif
-                                        </div>
-                                        
-                                        <div class="prose prose-sm max-w-none mb-4 line-clamp-3 text-gray-600">
-                                            {!! $item->isi !!}
-                                        </div>
-                                    </div>
-                                    
-                                    @if($item->file)
-                                        <div class="mb-4 p-3 bg-gray-50 rounded-lg text-sm">
-                                            <div class="flex items-center">
-                                                <i class="fas fa-file-pdf text-red-500 mr-2"></i>
-                                                <span class="text-gray-700 truncate">Lampiran tersedia</span>
-                                            </div>
-                                        </div>
-                                    @endif
-                                    
-                                    <div class="mt-4 flex justify-end">
-                                        <a href="{{ route('pengumuman.show', $item->slug) }}" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition duration-300">
-                                            <span>Baca Selengkapnya</span>
-                                            <i class="fas fa-arrow-right ml-2"></i>
-                                        </a>
-                                    </div>
+                            <div class="mb-4">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Cari pengumuman..."
+                                        wire:model.live.debounce.300ms="search">
+                                    <button class="btn btn-outline-secondary" type="button">
+                                        <i class="bi bi-search"></i>
+                                    </button>
                                 </div>
                             </div>
-                        @endforeach
+
+                            <div class="list-group" id="pengumuman-list">
+                                @if (isset($pengumuman) && count($pengumuman) > 0)
+                                    @foreach ($pengumuman as $item)
+                                        <a href="{{ route('pengumuman.show', $item->slug) }}"
+                                            class="list-group-item list-group-item-action">
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <h5 class="mb-1">{{ $item->judul }}</h5>
+                                                <small>{{ $item->published_at->format('d M Y') }}</small>
+                                            </div>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                @if ($item->file)
+                                                    <small class="text-muted">
+                                                        <i class="bi bi-paperclip me-1"></i>
+                                                        Memiliki lampiran
+                                                    </small>
+                                                @endif
+                                            </div>
+                                        </a>
+                                    @endforeach
+                                @else
+                                    <div class="list-group-item">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <h5 class="mb-1">Tidak ada pengumuman</h5>
+                                        </div>
+                                        <p class="mb-1">Tidak ada pengumuman yang ditemukan.</p>
+                                    </div>
+                                @endif
+                            </div>
+
+                            <div class="d-flex justify-content-center mt-4">
+                                @if(isset($pengumuman) && method_exists($pengumuman, 'links'))
+                                    {{ $pengumuman->links() }}
+                                @endif
+                            </div>
+                        </div>
                     </div>
-                    
-                    <div class="mt-8 bg-white rounded-lg shadow-sm p-4">
-                        {{ $pengumuman->links() }}
-                    </div>
-                @else
-                    <div class="bg-white rounded-lg shadow-sm overflow-hidden text-center py-12">
-                        <i class="fas fa-inbox text-5xl text-gray-300 mb-4"></i>
-                        <p class="text-gray-500">Belum ada pengumuman yang tersedia</p>
-                    </div>
-                @endif
+                </div>
             </div>
         </div>
-
-        <script>
-            document.addEventListener('livewire:navigating', () => {
-                document.querySelectorAll('#pengumuman-list > div').forEach(item => {
-                    item.classList.add('flash-effect');
-                });
-            });
-        </script>
     @endif
 </div>
