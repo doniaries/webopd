@@ -7,6 +7,7 @@ use Livewire\Attributes\Layout;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Auth;
 
 #[Layout('components.layouts.app')]
 class Pengumuman extends Component
@@ -16,29 +17,58 @@ class Pengumuman extends Component
     #[Url]
     public $search = '';
 
-    public $perPage = 10;
+    #[Url]
+    public $bulan = '';
+
+    public $perPage = 6;
     public $pengumuman;
     public $slug;
     public $view = 'index';
-
+    protected $teamId;
+    
+    protected $queryString = [
+        'search' => ['except' => ''],
+        'bulan' => ['except' => ''],
+    ];
+    
     public function mount($slug = null)
     {
+        // Default to team_id = 1 if not logged in
+        $this->teamId = 1;
+        if (Auth::check() && Auth::user()->currentTeam) {
+            $this->teamId = Auth::user()->currentTeam->id;
+        }
+        
         if ($slug) {
             $this->show($slug);
+        }
+        
+        // Set default bulan to current month if not set
+        if (empty($this->bulan)) {
+            $this->bulan = now()->format('Y-m');
         }
     }
 
     public function show($slug)
     {
-        $this->pengumuman = PengumumanModel::where('slug', $slug)
+        $query = PengumumanModel::where('slug', $slug)
             ->where('is_active', true)
-            ->firstOrFail();
+            ->whereNotNull('published_at')
+            ->where('published_at', '<=', now());
+            
+        $query->where('team_id', $this->teamId);
+            
+        $this->pengumuman = $query->firstOrFail();
 
         $this->view = 'show';
-        // Kolom views tidak diperlukan
     }
 
     public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+    
+    public function updatingBulan()
     {
         $this->resetPage();
     }
@@ -57,17 +87,29 @@ class Pengumuman extends Component
             $query = PengumumanModel::query()
                 ->where('is_active', true)
                 ->whereNotNull('published_at')
-                ->where('published_at', '<=', now());
-
-            if ($this->search) {
-                $query->where(function ($q) {
-                    $q->where('judul', 'like', '%' . $this->search . '%')
-                        ->orWhere('isi', 'like', '%' . $this->search . '%');
+                ->where('published_at', '<=', now())
+                ->when($this->bulan, function($q) {
+                    $q->whereYear('published_at', '=', date('Y', strtotime($this->bulan)))
+                      ->whereMonth('published_at', '=', date('m', strtotime($this->bulan)));
+                })
+                ->when($this->search, function($q) {
+                    $q->where(function($query) {
+                        $query->where('judul', 'like', '%' . $this->search . '%')
+                              ->orWhere('isi', 'like', '%' . $this->search . '%');
+                    });
                 });
-            }
+                
+            $query->where('team_id', $this->teamId);
+            
+            $query->latest('published_at');
 
-            $pengumuman = $query->latest('published_at')
-                ->paginate($this->perPage);
+            $pengumuman = $query->paginate($this->perPage);
+            
+            // If no results for selected month, show all announcements
+            if ($pengumuman->isEmpty() && $this->bulan) {
+                $this->bulan = '';
+                return $this->render();
+            }
 
             return view('livewire.pengumuman', [
                 'pengumuman' => $pengumuman
@@ -78,7 +120,10 @@ class Pengumuman extends Component
             
             // Return empty collection if there's an error
             return view('livewire.pengumuman', [
-                'pengumuman' => PengumumanModel::query()->paginate($this->perPage)
+                'pengumuman' => PengumumanModel::where('team_id', $this->teamId)
+                    ->where('is_active', true)
+                    ->latest('published_at')
+                    ->paginate($this->perPage)
             ]);
         }
     }

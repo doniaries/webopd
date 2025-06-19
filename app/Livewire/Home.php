@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Post;
 use App\Models\Category;
 use App\Models\Banner;
@@ -72,12 +73,19 @@ class Home extends Component
             // Get active sliders
             $this->sliders = Slider::active()->orderBy('urutan')->get() ?? [];
             
-            // Get active pengumuman
-            $this->pengumuman = \App\Models\Pengumuman::query()
+            // Get active pengumuman for current team
+            $teamId = 1; // Default to team_id = 1 if not logged in
+            if (Auth::check() && Auth::user()->currentTeam) {
+                $teamId = Auth::user()->currentTeam->id;
+            }
+            
+            $query = \App\Models\Pengumuman::query()
                 ->where('is_active', true)
                 ->whereNotNull('published_at')
                 ->where('published_at', '<=', now())
-                ->latest('published_at')
+                ->where('team_id', $teamId);
+            
+            $this->pengumuman = $query->latest('published_at')
                 ->take(5)
                 ->get() ?? [];
                 

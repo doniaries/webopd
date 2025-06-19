@@ -11,15 +11,15 @@ class PengumumanSeeder extends Seeder
 {
     public function run()
     {
-        // Get all teams
-        $teams = Team::all();
+        // Get team 1
+        $team = Team::find(1);
         
-        if ($teams->isEmpty()) {
-            $this->command->warn('No teams found. Please run TeamSeeder first!');
+        if (!$team) {
+            $this->command->warn('Team with ID 1 not found. Please run TeamSeeder first!');
             return;
         }
 
-        // Base data for announcements
+        // Base data for announcements with different published dates
         $pengumumanData = [
             [
                 'judul' => 'Pengumuman Libur Hari Raya Idul Fitri 1445 H',
@@ -27,7 +27,7 @@ class PengumumanSeeder extends Seeder
                 'isi' => 'Diberitahukan kepada seluruh pegawai bahwa pada tanggal 10-11 April 2025 kantor akan diliburkan dalam rangka Hari Raya Idul Fitri 1445 H. Selamat merayakan hari raya bersama keluarga.',
                 'file' => 'pengumuman-libur-lebaran.pdf',
                 'is_active' => true,
-                'published_at' => now(),
+                'published_at' => now()->subMonths(2),
             ],
             [
                 'judul' => 'Pengumuman Rapat Rutin Bulanan',
@@ -51,25 +51,44 @@ Mohon kehadirannya tepat waktu.',
                 'is_active' => true,
                 'published_at' => now()->subDays(5),
             ],
+            [
+                'judul' => 'Pemadaman Listrik Berkala',
+                'slug' => Str::slug('Pemadaman Listrik Berkala'),
+                'isi' => 'Diberitahukan akan ada pemadaman listrik berkala pada hari Sabtu, 15 Juni 2025 pukul 09.00-15.00 WIB untuk perawatan jaringan. Mohon untuk mempersiapkan perangkat cadangan dan menyimpan data-data penting sebelumnya.',
+                'file' => 'pemadaman-listrik.pdf',
+                'is_active' => true,
+                'published_at' => now()->subDays(1),
+            ],
+            [
+                'judul' => 'Pembaruan Aplikasi E-Office',
+                'slug' => Str::slug('Pembaruan Aplikasi E-Office'),
+                'isi' => 'Akan dilakukan pembaruan aplikasi E-Office pada hari Jumat, 14 Juni 2025 pukul 23.00-03.00 WIB. Selama proses pembaruan, akses ke aplikasi E-Office tidak dapat dilakukan. Harap menyelesaikan pekerjaan yang berhubungan dengan E-Office sebelum jadwal tersebut.',
+                'file' => 'pembaruan-eoffice.pdf',
+                'is_active' => true,
+                'published_at' => now()->subDays(3),
+            ],
+            [
+                'judul' => 'Pengumuman Penerimaan Peserta Magang',
+                'slug' => Str::slug('Pengumuman Penerimaan Peserta Magang'),
+                'isi' => 'Diumumkan kepada seluruh peserta magang yang telah mendaftar, bahwa daftar peserta yang diterima dapat dilihat di bagian SDM mulai tanggal 10 Juni 2025. Bagi yang diterima diharapkan menghadiri pembekalan pada tanggal 17 Juni 2025 pukul 09.00 WIB di Ruang Rapat Utama.',
+                'file' => 'pengumuman-magang.pdf',
+                'is_active' => true,
+                'published_at' => now()->subDays(7),
+            ],
         ];
 
-        // Create announcements for each team
-        foreach ($teams as $team) {
-            foreach ($pengumumanData as $data) {
-                // Make slug unique by appending team ID
-                $uniqueSlug = $data['slug'] . '-' . $team->id;
-                
-                // Add team-specific data with unique slug
-                $pengumuman = array_merge($data, [
-                    'slug' => $uniqueSlug,
-                    'team_id' => $team->id,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
+        // Create announcements for team 1
+        foreach ($pengumumanData as $data) {
+            // Add team-specific data with unique slug
+            $pengumuman = array_merge($data, [
+                'slug' => $data['slug'] . '-1',
+                'team_id' => $team->id,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
 
-                // Create the announcement
-                Pengumuman::create($pengumuman);
-            }
+            // Create the announcement
+            Pengumuman::create($pengumuman);
         }
     }
 }

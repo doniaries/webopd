@@ -77,6 +77,7 @@ class PengumumanResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('published_at', 'desc')
             ->filters([
                 //
             ])
