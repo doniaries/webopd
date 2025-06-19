@@ -51,14 +51,11 @@ class Pengumuman extends Component
 
     public function show($slug)
     {
-        $query = PengumumanModel::where('slug', $slug)
-            ->where('is_active', true)
-            ->whereNotNull('published_at')
-            ->where('published_at', '<=', now());
-            
-        $query->where('team_id', $this->teamId);
-            
-        $this->pengumuman = $query->firstOrFail();
+        $this->pengumuman = PengumumanModel::query()
+            ->where('slug', $slug)
+            ->published()
+            ->forCurrentTeam()
+            ->firstOrFail();
 
         $this->view = 'show';
     }
@@ -75,55 +72,58 @@ class Pengumuman extends Component
 
     public function render()
     {
-        // If showing single pengumuman
-        if ($this->view === 'show' && $this->pengumuman) {
-            return view('livewire.pengumuman', [
-                'view' => 'show',
-                'pengumuman' => $this->pengumuman,
-            ]);
+        if ($this->view === 'show') {
+            return view('livewire.pengumuman');
         }
 
         try {
+            // Build the base query
             $query = PengumumanModel::query()
-                ->where('is_active', true)
-                ->whereNotNull('published_at')
-                ->where('published_at', '<=', now())
-                ->when($this->bulan, function($q) {
-                    $q->whereYear('published_at', '=', date('Y', strtotime($this->bulan)))
-                      ->whereMonth('published_at', '=', date('m', strtotime($this->bulan)));
-                })
-                ->when($this->search, function($q) {
-                    $q->where(function($query) {
-                        $query->where('judul', 'like', '%' . $this->search . '%')
-                              ->orWhere('isi', 'like', '%' . $this->search . '%');
-                    });
+                ->withoutGlobalScopes() // Temporarily disable global scopes
+                ->active()
+                ->published()
+                ->where(function($q) {
+                    $q->where('team_id', 1) // Always include team_id=1
+                      ->orWhere('team_id', $this->teamId); // Include current team's announcements
                 });
-                
-            $query->where('team_id', $this->teamId);
             
-            $query->latest('published_at');
-
-            $pengumuman = $query->paginate($this->perPage);
+            // Filter by month if selected
+            if ($this->bulan) {
+                $query->whereYear('published_at', '=', date('Y', strtotime($this->bulan)))
+                      ->whereMonth('published_at', '=', date('m', strtotime($this->bulan)));
+            }
             
-            // If no results for selected month, show all announcements
-            if ($pengumuman->isEmpty() && $this->bulan) {
-                $this->bulan = '';
-                return $this->render();
+            // Apply search if provided
+            if ($this->search) {
+                $query->search($this->search);
+            }
+            
+            // Execute the query with pagination
+            $pengumuman = $query->orderBy('published_at', 'desc')
+                              ->paginate($this->perPage);
+            
+            // Debug logging in local environment
+            if (app()->environment('local')) {
+                \Illuminate\Support\Facades\Log::info('Pengumuman query:', [
+                    'sql' => $query->toSql(),
+                    'bindings' => $query->getBindings(),
+                    'count' => $pengumuman->total()
+                ]);
             }
 
             return view('livewire.pengumuman', [
-                'pengumuman' => $pengumuman
+                'pengumuman' => $pengumuman,
             ]);
-        } catch (\Exception $e) {
-            // Log error
-            \Illuminate\Support\Facades\Log::error('Error in Pengumuman component: ' . $e->getMessage());
             
-            // Return empty collection if there's an error
+        } catch (\Exception $e) {
+            // Log error for debugging
+            \Illuminate\Support\Facades\Log::error('Error loading pengumuman: ' . $e->getMessage());
+            
+            // Return empty collection on error
             return view('livewire.pengumuman', [
-                'pengumuman' => PengumumanModel::where('team_id', $this->teamId)
-                    ->where('is_active', true)
-                    ->latest('published_at')
-                    ->paginate($this->perPage)
+                'pengumuman' => new \Illuminate\Pagination\LengthAwarePaginator(
+                    [], 0, $this->perPage, 1
+                )
             ]);
         }
     }

@@ -11,13 +11,19 @@ class PengumumanSeeder extends Seeder
 {
     public function run()
     {
-        // Get team 1
-        $team = Team::find(1);
+        // Get or create default team
+        $team = Team::firstOrCreate(
+            ['id' => 1],
+            [
+                'name' => 'Tim Utama',
+                'user_id' => 1,
+                'personal_team' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
+        );
         
-        if (!$team) {
-            $this->command->warn('Team with ID 1 not found. Please run TeamSeeder first!');
-            return;
-        }
+        $this->command->info('Using team: ' . $team->name . ' (ID: ' . $team->id . ')');
 
         // Base data for announcements with different published dates
         $pengumumanData = [
@@ -79,16 +85,23 @@ Mohon kehadirannya tepat waktu.',
 
         // Create announcements for team 1
         foreach ($pengumumanData as $data) {
-            // Add team-specific data with unique slug
-            $pengumuman = array_merge($data, [
-                'slug' => $data['slug'] . '-1',
-                'team_id' => $team->id,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-
-            // Create the announcement
-            Pengumuman::create($pengumuman);
+            // Check if pengumuman with this slug already exists for this team
+            $existing = Pengumuman::where('slug', $data['slug'])
+                                ->where('team_id', $team->id)
+                                ->exists();
+            
+            if (!$existing) {
+                // Create new pengumuman with team_id
+                Pengumuman::create([
+                    'judul' => $data['judul'],
+                    'slug' => $data['slug'],
+                    'isi' => $data['isi'],
+                    'file' => $data['file'],
+                    'is_active' => $data['is_active'],
+                    'published_at' => $data['published_at'],
+                    'team_id' => $team->id,
+                ]);
+            }
         }
     }
 }

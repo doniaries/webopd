@@ -72,23 +72,36 @@ class Home extends Component
             
             // Get active sliders
             $this->sliders = Slider::active()->orderBy('urutan')->get() ?? [];
-            
-            // Get active pengumuman for current team
-            $teamId = 1; // Default to team_id = 1 if not logged in
-            if (Auth::check() && Auth::user()->currentTeam) {
-                $teamId = Auth::user()->currentTeam->id;
+
+            // Load pengumuman
+            try {
+                $pengumumanQuery = \App\Models\Pengumuman::query()
+                    ->withoutGlobalScopes() // Temporarily disable global scopes to ensure we get all relevant announcements
+                    ->active()
+                    ->published()
+                    ->where(function($query) {
+                        $query->where('team_id', 1) // Always include team_id=1
+                              ->orWhere('team_id', Auth::check() ? Auth::user()->current_team_id : 1);
+                    })
+                    ->orderBy('published_at', 'desc')
+                    ->take(5);
+                
+                $pengumumanCollection = $pengumumanQuery->get();
+                $this->pengumuman = $pengumumanCollection->all();
+                
+                // Debug: Log query yang dihasilkan
+                if (app()->environment('local')) {
+                    \Illuminate\Support\Facades\Log::info('Pengumuman query:', [
+                        'sql' => $pengumumanQuery->toSql(),
+                        'bindings' => $pengumumanQuery->getBindings(),
+                        'count' => $pengumumanCollection->count()
+                    ]);
+                }
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error('Error loading pengumuman: ' . $e->getMessage());
+                $this->pengumuman = [];
             }
             
-            $query = \App\Models\Pengumuman::query()
-                ->where('is_active', true)
-                ->whereNotNull('published_at')
-                ->where('published_at', '<=', now())
-                ->where('team_id', $teamId);
-            
-            $this->pengumuman = $query->latest('published_at')
-                ->take(5)
-                ->get() ?? [];
-                
             // Get upcoming agenda
             $this->agenda = \App\Models\AgendaKegiatan::query()
                 ->where('dari_tanggal', '>=', now())
