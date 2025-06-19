@@ -116,8 +116,10 @@ class Home extends Component
 
     public function render()
     {
-        // Get all active tags for the menu
-        $tags = \App\Models\Tag::where('is_active', true)
+        // Get all tags with published posts for the menu
+        $tags = \App\Models\Tag::whereHas('posts', function ($query) {
+                $query->where('status', 'published');
+            })
             ->withCount(['posts' => function ($query) {
                 $query->where('status', 'published');
             }])
