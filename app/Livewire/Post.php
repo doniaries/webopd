@@ -67,7 +67,7 @@ class Post extends Component
         $this->latestPosts = \App\Models\Post::query()
             ->where('status', 'published')
             ->where('published_at', '<=', now())
-            ->with(['category', 'user'])
+            ->with(['tag', 'user'])
             ->latest('published_at')
             ->take(5) // Ambil 5 postingan terbaru (1 untuk utama + 4 untuk grid)
             ->get();
@@ -138,12 +138,12 @@ class Post extends Component
         // Get related posts
         $this->relatedPosts = $this->post->tags()->first()
             ? $this->post->tags()->first()
-                ->posts()
-                ->where('posts.id', '!=', $this->post->id)
-                ->where('status', 'published')
-                ->latest('published_at')
-                ->take(3)
-                ->get()
+            ->posts()
+            ->where('posts.id', '!=', $this->post->id)
+            ->where('status', 'published')
+            ->latest('published_at')
+            ->take(3)
+            ->get()
             : collect();
     }
 

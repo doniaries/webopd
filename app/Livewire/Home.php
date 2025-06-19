@@ -35,9 +35,8 @@ class Home extends Component
     public function loadData()
     {
         try {
-            // Get active tags with post count
-            $this->tags = Tag::where('is_active', true)
-                ->whereHas('posts', function ($query) {
+            // Get tags with published posts
+            $this->tags = Tag::whereHas('posts', function ($query) {
                     $query->where('status', 'published');
                 })
                 ->withCount(['posts' => function ($query) {
@@ -57,12 +56,8 @@ class Home extends Component
             // Get latest posts for hero section
             $this->latestPosts = Post::where('status', 'published')
                 ->where('published_at', '<=', now())
-                ->with(['tags' => function ($query) {
-                    $query->where('is_active', true);
-                }, 'user'])
-                ->whereHas('tags', function ($query) {
-                    $query->where('is_active', true);
-                })
+                ->with(['tags', 'user'])
+                ->whereHas('tags')
                 ->latest('published_at')
                 ->take(6)
                 ->get() ?? [];
