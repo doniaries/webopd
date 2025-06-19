@@ -1,0 +1,807 @@
+<div>
+    @use('Illuminate\Support\Facades\Storage')
+
+    @push('title', $pageTitle)
+    @push('meta')
+        <meta name="description" content="{{ $pageDescription }}">
+    @endpush
+    
+    @push('styles')
+    <style>
+        @keyframes flash {
+            0% { background-color: rgba(254, 202, 202, 0.8); }
+            100% { background-color: transparent; }
+        }
+        
+        .flash-effect {
+            animation: flash 1.5s ease-out;
+        }
+    </style>
+    @endpush
+
+    <!-- Hero Slider Section -->
+    @livewire('slider', ['sliders' => $sliders, 'pengaturan' => $pengaturan ?? null])
+    <!-- End Hero Slider -->
+
+    <main id="main" style="margin-top: -70px;">
+        <!-- Berita & Pengumuman Section -->
+        <section id="berita-pengumuman" class="features">
+            <div class="container" data-aos="fade-up">
+                <div class="row">
+                    <!-- Berita Terbaru Column -->
+                    <div class="col-lg-8">
+                        <div class="d-flex align-items-center mb-4">
+                            <div class="border-start border-3 border-danger me-2" style="height: 24px;"></div>
+                            <h2 class="h4 fw-bold mb-0">Berita Terkini</h2>
+                        </div>
+
+                        <div class="row g-4">
+                            @php
+                                try {
+                                    $recentPosts = App\Models\Post::query()
+                                        ->where('status', 'published')
+                                        ->where('published_at', '<=', now())
+                                        ->with([
+                                            'categories' => function ($q) {
+                                                $q->where('is_active', true);
+                                            },
+                                            'user',
+                                        ])
+                                        ->latest('published_at')
+                                        ->take(6)
+                                        ->get();
+                                } catch (\Exception $e) {
+                                    $recentPosts = collect();
+                                }
+                            @endphp
+
+                            @foreach ($recentPosts as $post)
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="card h-100 border-0 shadow-sm">
+                                        <div class="position-relative" style="height: 180px; overflow: hidden;">
+                                            <img src="{{ $post->foto_utama_url ?? asset('images/placeholder.jpg') }}"
+                                                class="card-img-top h-100 w-100" style="object-fit: cover;"
+                                                alt="{{ $post->title }}">
+                                            <div
+                                                class="position-absolute bottom-0 start-0 p-2 bg-primary text-white small">
+                                                {{ $post->categories->first()->name ?? 'Berita' }}
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <h5 class="card-title">
+                                                <a href="{{ route('berita.show', $post->slug) }}"
+                                                    class="text-dark text-decoration-none">
+                                                    {{ Str::limit($post->title, 60) }}
+                                                </a>
+                                            </h5>
+                                            <p class="card-text text-muted small">
+                                                <i class="bi bi-calendar3 me-1"></i>
+                                                {{ $post->published_at->format('d M Y') }}
+                                                <span class="mx-1">•</span>
+                                                <i class="bi bi-person me-1"></i> {{ $post->user->name ?? 'Admin' }}
+                                            </p>
+                                            <p class="card-text small">
+                                                {{ Str::limit(strip_tags($post->content), 100) }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <a href="{{ route('berita.index') }}" class="btn btn-outline-primary">
+                                Lihat Semua Berita <i class="bi bi-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Pengumuman & Agenda Column -->
+                    <div class="col-lg-4">
+                        <!-- Tabs Container -->
+                        <div class="overflow-hidden rounded-lg shadow-lg">
+                            <!-- Tab Navigation -->
+                            <div class="flex text-center">
+                                <button class="w-1/2 py-3 font-medium text-white bg-blue-600 hover:bg-blue-700 transition duration-300 focus:outline-none" 
+                                    id="pengumuman-tab"
+                                    data-bs-toggle="tab" data-bs-target="#pengumuman-content" type="button"
+                                    role="tab" aria-controls="pengumuman-content" aria-selected="true">
+                                    <div class="flex items-center justify-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
+                                        </svg>
+                                        <span>Pengumuman Terbaru</span>
+                                    </div>
+                                </button>
+                                <button class="w-1/2 py-3 font-medium text-white bg-green-600 hover:bg-green-700 transition duration-300 focus:outline-none" 
+                                    id="agenda-tab"
+                                    data-bs-toggle="tab" data-bs-target="#agenda-content" type="button" role="tab"
+                                    aria-controls="agenda-content" aria-selected="false">
+                                    <div class="flex items-center justify-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        </svg>
+                                        <span>Agenda Mendatang</span>
+                                    </div>
+                                </button>
+                            </div>
+
+                            <!-- Tab Content -->
+                            <div class="tab-content" id="info-tabs-content">
+                                <!-- Pengumuman Tab -->
+                                <div class="tab-pane fade show active" id="pengumuman-content" role="tabpanel"
+                                    aria-labelledby="pengumuman-tab">
+
+                                    <div class="bg-white p-4">
+                                        @if (count($pengumuman) > 0)
+                                            <div class="space-y-3" id="pengumuman-list-home">
+                                                @foreach ($pengumuman as $item)
+                                                    <div class="bg-blue-50 rounded-lg p-3 border-l-4 border-blue-600 shadow-sm" wire:key="{{ $item->id }}">
+                                                        <div class="flex items-start">
+                                                            <div class="flex-shrink-0 mr-3">
+                                                                <div class="p-2 bg-blue-600 text-white rounded-full">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                                                                    </svg>
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <a href="{{ route('pengumuman.show', $item->slug) }}" class="font-bold text-gray-800 hover:text-blue-600 transition-colors">{{ $item->judul }}</a>
+                                                                <div class="text-xs text-gray-500 mt-1">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                                    </svg>
+                                                                    {{ $item->published_at->format('d M Y') }}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                                <div class="text-center mt-2">
+                                                    <a href="{{ route('pengumuman.index') }}" class="inline-flex items-center text-blue-600 hover:text-blue-800">
+                                                        <span>Lihat Semua Pengumuman</span>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                                        </svg>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            
+                                            <script>
+                                                document.addEventListener('livewire:navigating', () => {
+                                                    document.querySelectorAll('#pengumuman-list-home > div').forEach(item => {
+                                                        item.classList.add('flash-effect');
+                                                    });
+                                                });
+                                            </script>
+                                        @else
+                                            <div class="p-6 text-center">
+                                                <div class="mx-auto bg-gray-100 rounded-full p-3 w-16 h-16 flex items-center justify-center mb-4">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                    </svg>
+                                                </div>
+                                                <h5 class="text-lg font-bold text-gray-800">Tidak ada pengumuman terbaru</h5>
+                                                <p class="text-gray-500 mt-2">Pengumuman akan ditampilkan di sini saat tersedia.</p>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <!-- Agenda Tab -->
+                                <div class="tab-pane fade" id="agenda-content" role="tabpanel"
+                                    aria-labelledby="agenda-tab">
+
+                                    <div class="bg-white">
+                                        @if (count($agenda) > 0)
+                                            <div class="swiper agenda-slider">
+                                                <div class="swiper-wrapper">
+                                                    @foreach ($agenda as $item)
+                                                        <div class="swiper-slide">
+                                                            <div class="p-4 border-b border-gray-200">
+                                                                <div class="flex mb-4">
+                                                                    <div class="mr-4">
+                                                                        <div class="w-16 h-16 bg-green-600 text-white rounded flex flex-col items-center justify-center">
+                                                                <span class="text-2xl font-bold">{{ $item->dari_tanggal->format('d') }}</span>
+                                                                <span class="text-xs uppercase">{{ $item->dari_tanggal->format('M') }}</span>
+                                                            </div>
+                                                                    </div>
+                                                                    <div>
+                                                                        <h3 class="font-bold text-lg text-gray-800">{{ $item->nama_agenda }}</h3>
+                                                        <div class="flex flex-wrap text-xs text-gray-500 mt-1">
+                                                            <div class="flex items-center mr-3">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                                </svg>
+                                                                {{ $item->dari_tanggal->format('H:i') }} - {{ $item->sampai_tanggal->format('H:i') }} WIB
+                                                                            </div>
+                                                                            @if ($item->tempat)
+                                                                                <div class="flex items-center">
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                                                    </svg>
+                                                                                    {{ $item->tempat }}
+                                                                                </div>
+                                                                            @endif
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="text-gray-600 text-sm mb-4">
+                                                    {{ Str::limit(strip_tags($item->uraian_agenda ?? ''), 120) }}
+                                                </div>
+                                                                <div class="text-right">
+                                                                    <a href="#" class="inline-flex items-center px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-full transition duration-300">
+                                                                        Detail Agenda
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                                                        </svg>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                                <div class="swiper-pagination"></div>
+                                            </div>
+                                        @else
+                                            <div class="p-6 text-center">
+                                                <div class="mx-auto bg-gray-100 rounded-full p-3 w-16 h-16 flex items-center justify-center mb-4">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                    </svg>
+                                                </div>
+                                                <h5 class="text-lg font-bold text-gray-800">Tidak ada agenda mendatang</h5>
+                                                <p class="text-gray-500 mt-2">Agenda kegiatan akan ditampilkan di sini saat tersedia.</p>
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <div class="bg-gray-50 p-4 text-center">
+                                        <a href="#" class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-full transition duration-300">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                            </svg>
+                                            Lihat Semua Agenda
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        @push('scripts')
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    // Inisialisasi Swiper untuk Pengumuman
+                    const pengumumanSlider = new Swiper('.pengumuman-slider', {
+                        slidesPerView: 1,
+                        spaceBetween: 0,
+                        loop: true,
+                        autoplay: {
+                            delay: 5000,
+                            disableOnInteraction: false,
+                        },
+                        pagination: {
+                            el: '.pengumuman-slider .swiper-pagination',
+                            clickable: true,
+                        },
+                        effect: 'fade',
+                        fadeEffect: {
+                            crossFade: true
+                        },
+                    });
+
+                    // Inisialisasi Swiper untuk Agenda
+                    const agendaSlider = new Swiper('.agenda-slider', {
+                        slidesPerView: 1,
+                        spaceBetween: 0,
+                        loop: true,
+                        autoplay: {
+                            delay: 6000,
+                            disableOnInteraction: false,
+                        },
+                        pagination: {
+                            el: '.agenda-slider .swiper-pagination',
+                            clickable: true,
+                        },
+                        effect: 'slide',
+                    });
+                });
+            </script>
+        @endpush
+        <!-- End Berita & Pengumuman Section -->
+
+
+        <!-- Berita Populer Section -->
+        <section id="berita-populer" class="py-5 bg-white">
+            <div class="container" data-aos="fade-up">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div class="d-flex align-items-center">
+                        <div class="border-start border-3 border-primary me-2" style="height: 24px;"></div>
+                        <h2 class="h4 fw-bold mb-0">Berita Populer</h2>
+                    </div>
+                    <div class="d-flex">
+                        <button class="btn btn-sm btn-outline-secondary me-2 scroll-left" type="button">
+                            <i class="bi bi-chevron-left"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-secondary scroll-right" type="button">
+                            <i class="bi bi-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="position-relative">
+                    <div class="scroll-container"
+                        style="overflow-x: auto; scroll-behavior: smooth; -ms-overflow-style: none; scrollbar-width: none;">
+                        <div class="d-flex flex-nowrap pb-4" style="width: max-content;">
+                            @php
+                                try {
+                                    $popularPosts = App\Models\Post::query()
+                                        ->where('status', 'published')
+                                        ->where('published_at', '<=', now())
+                                        ->with([
+                                            'categories' => function ($q) {
+                                                $q->where('is_active', true);
+                                            },
+                                            'user',
+                                        ])
+                                        ->orderBy('views', 'desc')
+                                        ->take(8)
+                                        ->get();
+                                } catch (\Exception $e) {
+                                    $popularPosts = collect();
+                                }
+                            @endphp
+
+                            @foreach ($popularPosts as $post)
+                                <div class="me-4" style="width: 280px; flex: 0 0 auto;">
+                                    <div class="card h-100 border-0 shadow-sm">
+                                        <div class="position-relative" style="height: 160px; overflow: hidden;">
+                                            <img src="{{ $post->foto_utama_url ?? asset('images/placeholder.jpg') }}"
+                                                class="card-img-top h-100 w-100" style="object-fit: cover;"
+                                                alt="{{ $post->title }}">
+                                            <div class="position-absolute top-0 end-0 m-2">
+                                                <span class="badge bg-danger">
+                                                    <i class="bi bi-fire me-1"></i> Hot
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <span class="badge bg-primary me-2">
+                                                    {{ $post->categories->first()->name ?? 'Berita' }}
+                                                </span>
+                                                <small class="text-muted">
+                                                    <i class="bi bi-eye me-1"></i>
+                                                    {{ number_format($post->views ?? 0) }}
+                                                </small>
+                                            </div>
+                                            <h5 class="card-title" style="font-size: 1rem;">
+                                                <a href="{{ route('berita.show', $post->slug) }}"
+                                                    class="text-dark text-decoration-none">
+                                                    {{ Str::limit($post->title, 50) }}
+                                                </a>
+                                            </h5>
+                                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                                <small class="text-muted">
+                                                    <i class="bi bi-calendar3 me-1"></i>
+                                                    {{ $post->published_at->format('d M Y') }}
+                                                </small>
+                                                <a href="{{ route('berita.show', $post->slug) }}"
+                                                    class="text-primary small">
+                                                    Baca <i class="bi bi-arrow-right"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+
+                            @if ($popularPosts->isEmpty())
+                                <div class="col-12 text-center py-5">
+                                    <div class="text-muted">
+                                        <i class="bi bi-newspaper display-6 d-block mb-3"></i>
+                                        Belum ada berita populer
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- End Berita Populer Section -->
+
+        <!-- Video Terbaru Section -->
+        <section id="video-terbaru" class="py-5 bg-light">
+            <div class="container" data-aos="fade-up">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div class="d-flex align-items-center">
+                        <div class="border-start border-3 border-danger me-2" style="height: 24px;"></div>
+                        <h2 class="h4 fw-bold mb-0">Video Terbaru</h2>
+                    </div>
+                    <a href="#" class="btn btn-sm btn-outline-primary">
+                        Lihat Semua <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
+                </div>
+
+                <div class="position-relative">
+                    <div class="video-scroll-container"
+                        style="overflow-x: auto; scroll-behavior: smooth; -ms-overflow-style: none; scrollbar-width: none;">
+                        <div class="d-flex flex-nowrap pb-4" style="width: max-content;">
+                            @php
+                                // Sample video data - replace with your actual video data
+                                $videos = [
+                                    [
+                                        'title' => 'Pembangunan Jembatan Baru di Pusat Kota',
+                                        'views' => '1.2K',
+                                        'date' => '2 hari yang lalu',
+                                        'thumbnail' =>
+                                            'https://via.placeholder.com/300x169/FF0000/FFFFFF?text=Video+Thumbnail',
+                                        'duration' => '5:30',
+                                    ],
+                                    [
+                                        'title' => 'Pelantikan Pejabat Baru di Lingkungan Pemerintah Daerah',
+                                        'views' => '3.4K',
+                                        'date' => '1 minggu yang lalu',
+                                        'thumbnail' =>
+                                            'https://via.placeholder.com/300x169/0000FF/FFFFFF?text=Video+Thumbnail',
+                                        'duration' => '12:45',
+                                    ],
+                                    [
+                                        'title' => 'Peringatan Hari Kemerdekaan RI Ke-78',
+                                        'views' => '8.7K',
+                                        'date' => '2 minggu yang lalu',
+                                        'thumbnail' =>
+                                            'https://via.placeholder.com/300x169/00FF00/000000?text=Video+Thumbnail',
+                                        'duration' => '8:15',
+                                    ],
+                                    [
+                                        'title' => 'Pembukaan Jalan Tol Baru',
+                                        'views' => '5.1K',
+                                        'date' => '3 minggu yang lalu',
+                                        'thumbnail' =>
+                                            'https://via.placeholder.com/300x169/FFA500/FFFFFF?text=Video+Thumbnail',
+                                        'duration' => '6:22',
+                                    ],
+                                    [
+                                        'title' => 'Rangkaian Acara HUT Kota',
+                                        'views' => '2.9K',
+                                        'date' => '1 bulan yang lalu',
+                                        'thumbnail' =>
+                                            'https://via.placeholder.com/300x169/800080/FFFFFF?text=Video+Thumbnail',
+                                        'duration' => '15:30',
+                                    ],
+                                    [
+                                        'title' => 'Peluncuran Program Baru Pemerintah Daerah',
+                                        'views' => '4.2K',
+                                        'date' => '1 bulan yang lalu',
+                                        'thumbnail' =>
+                                            'https://via.placeholder.com/300x169/FF69B4/FFFFFF?text=Video+Thumbnail',
+                                        'duration' => '9:45',
+                                    ],
+                                ];
+                            @endphp
+
+                            @foreach ($videos as $video)
+                                <div class="me-4" style="width: 280px; flex: 0 0 auto;">
+                                    <div class="card h-100 border-0 shadow-sm">
+                                        <div class="position-relative"
+                                            style="height: 160px; overflow: hidden; background-color: #000;">
+                                            <img src="{{ $video['thumbnail'] }}" class="card-img-top h-100 w-100"
+                                                style="object-fit: cover; opacity: 0.8;" alt="{{ $video['title'] }}">
+                                            <div class="position-absolute top-50 start-50 translate-middle">
+                                                <div class="bg-danger rounded-circle p-3 d-flex align-items-center justify-content-center"
+                                                    style="width: 60px; height: 60px; cursor: pointer;">
+                                                    <i class="bi bi-play-fill text-white"
+                                                        style="font-size: 1.5rem; margin-left: 5px;"></i>
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="position-absolute bottom-0 end-0 m-2 bg-dark text-white px-2 rounded">
+                                                {{ $video['duration'] }}
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <h5 class="card-title" style="font-size: 1rem; line-height: 1.4;">
+                                                <a href="#" class="text-dark text-decoration-none">
+                                                    {{ Str::limit($video['title'], 60) }}
+                                                </a>
+                                            </h5>
+                                            <div class="d-flex justify-content-between align-items-center mt-2">
+                                                <small class="text-muted">
+                                                    <i class="bi bi-eye me-1"></i> {{ $video['views'] }} ditonton
+                                                </small>
+                                                <small class="text-muted">
+                                                    {{ $video['date'] }}
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- End Video Terbaru Section -->
+
+        <!-- Infografis Section -->
+        <section id="infografis" class="portfolio">
+            <div class="container" data-aos="fade-up">
+                <header class="section-header">
+                    <h2>Infografis</h2>
+                    <p>Informasi dalam Bentuk Visual</p>
+                </header>
+
+                @php
+                    try {
+                        $infografis = App\Models\Infografis::query()
+                            ->where('is_active', true)
+                            ->latest()
+                            ->take(6)
+                            ->get();
+                    } catch (\Exception $e) {
+                        $infografis = collect();
+                    }
+                @endphp
+
+                <div class="row gy-4 portfolio-container" data-aos="fade-up" data-aos-delay="200">
+                    @forelse($infografis as $info)
+                        <div class="col-lg-4 col-md-6 portfolio-item">
+                            <div class="portfolio-wrap">
+                                <img src="{{ $info->gambar_url ?? asset('images/placeholder.jpg') }}"
+                                    class="img-fluid" alt="{{ $info->judul }}">
+                                <div class="portfolio-info">
+                                    <h4>{{ $info->judul }}</h4>
+                                    <p>{{ Str::limit($info->deskripsi, 50) }}</p>
+                                    <div class="portfolio-links">
+                                        <a href="{{ $info->gambar_url ?? asset('images/placeholder.jpg') }}"
+                                            data-gallery="portfolioGallery" class="portfokio-lightbox"
+                                            title="{{ $info->judul }}"><i class="bi bi-plus"></i></a>
+                                        <a href="{{ route('infografis') }}" title="More Details"><i
+                                                class="bi bi-link"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="col-12 text-center">
+                            <p>Belum ada infografis yang tersedia.</p>
+                        </div>
+                    @endforelse
+                </div>
+
+                <div class="text-center mt-4">
+                    <a href="{{ route('infografis') }}"
+                        class="btn-read-more d-inline-flex align-items-center justify-content-center align-self-center">
+                        <span>Lihat Semua Infografis</span>
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </section><!-- End Infografis Section -->
+
+        <!-- Dokumen Section -->
+        <section id="dokumen" class="services">
+            <div class="container" data-aos="fade-up">
+                <header class="section-header">
+                    <h2>Dokumen</h2>
+                    <p>Dokumen Publik</p>
+                </header>
+
+                @php
+                    try {
+                        $dokumen = App\Models\Dokumen::query()->where('is_active', true)->latest()->take(6)->get();
+                    } catch (\Exception $e) {
+                        $dokumen = collect();
+                    }
+                @endphp
+
+                <div class="row gy-4">
+                    @forelse($dokumen as $doc)
+                        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
+                            <div class="service-box">
+                                <i class="bi bi-file-earmark-text icon"></i>
+                                <h3>{{ $doc->judul }}</h3>
+                                <p>{{ Str::limit($doc->deskripsi, 100) }}</p>
+                                <a href="{{ $doc->file_url }}" class="read-more"
+                                    target="_blank"><span>Download</span> <i class="bi bi-download"></i></a>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="col-12 text-center">
+                            <p>Belum ada dokumen yang tersedia.</p>
+                        </div>
+                    @endforelse
+                </div>
+
+                <div class="text-center mt-4">
+                    <a href="{{ route('dokumen') }}"
+                        class="btn-read-more d-inline-flex align-items-center justify-content-center align-self-center">
+                        <span>Lihat Semua Dokumen</span>
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </section><!-- End Dokumen Section -->
+
+        <!-- Produk Hukum Section -->
+        <section id="produk-hukum" class="faq">
+            <div class="container" data-aos="fade-up">
+                <header class="section-header">
+                    <h2>Produk Hukum</h2>
+                    <p>Peraturan dan Regulasi</p>
+                </header>
+
+                @php
+                    try {
+                        $produkHukum = App\Models\ProdukHukum::query()
+                            ->where('is_active', true)
+                            ->latest()
+                            ->take(5)
+                            ->get();
+                    } catch (\Exception $e) {
+                        $produkHukum = collect();
+                    }
+                @endphp
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="accordion accordion-flush" id="faqlist">
+                            @forelse($produkHukum as $hukum)
+                                <div class="accordion-item" data-aos="fade-up"
+                                    data-aos-delay="{{ $loop->index * 100 }}">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#faq-content-{{ $loop->index }}">
+                                            {{ $hukum->judul }}
+                                        </button>
+                                    </h2>
+                                    <div id="faq-content-{{ $loop->index }}" class="accordion-collapse collapse"
+                                        data-bs-parent="#faqlist">
+                                        <div class="accordion-body">
+                                            <p>{{ $hukum->deskripsi }}</p>
+                                            <p><strong>Nomor:</strong> {{ $hukum->nomor }}</p>
+                                            <p><strong>Tahun:</strong> {{ $hukum->tahun }}</p>
+                                            <p><strong>Kategori:</strong> {{ $hukum->kategori }}</p>
+                                            <a href="{{ $hukum->file_url }}" class="btn btn-primary btn-sm mt-2"
+                                                target="_blank">Download</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            @empty
+                                <div class="col-12 text-center">
+                                    <p>Belum ada produk hukum yang tersedia.</p>
+                                </div>
+                            @endforelse
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <a href="{{ route('produk-hukum') }}"
+                        class="btn-read-more d-inline-flex align-items-center justify-content-center align-self-center">
+                        <span>Lihat Semua Produk Hukum</span>
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </section><!-- End Produk Hukum Section -->
+    </main><!-- End main -->
+
+    @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Initialize scrolling for news container
+                initHorizontalScroll('.scroll-container', '.scroll-left', '.scroll-right');
+
+                // Initialize scrolling for video container
+                initHorizontalScroll('.video-scroll-container');
+
+                // Initialize video modals
+                initVideoModals();
+
+                function initHorizontalScroll(containerSelector, prevBtnSelector = null, nextBtnSelector = null) {
+                    const container = document.querySelector(containerSelector);
+                    if (!container) return;
+
+                    const scrollAmount = 300; // Adjust this value to control scroll distance
+                    let prevBtn, nextBtn;
+
+                    if (prevBtnSelector && nextBtnSelector) {
+                        prevBtn = document.querySelector(prevBtnSelector);
+                        nextBtn = document.querySelector(nextBtnSelector);
+                    }
+
+
+                    if (prevBtn && nextBtn) {
+                        // Navigation with buttons
+                        prevBtn.addEventListener('click', function() {
+                            container.scrollBy({
+                                left: -scrollAmount,
+                                behavior: 'smooth'
+                            });
+                        });
+
+                        nextBtn.addEventListener('click', function() {
+                            container.scrollBy({
+                                left: scrollAmount,
+                                behavior: 'smooth'
+                            });
+                        });
+
+                        // Hide/show buttons based on scroll position
+                        const updateButtonVisibility = () => {
+                            const {
+                                scrollLeft,
+                                scrollWidth,
+                                clientWidth
+                            } = container;
+                            prevBtn.style.visibility = scrollLeft > 0 ? 'visible' : 'hidden';
+                            nextBtn.style.visibility = scrollLeft < (scrollWidth - clientWidth - 1) ? 'visible' :
+                                'hidden';
+                        };
+
+                        container.addEventListener('scroll', updateButtonVisibility);
+                        window.addEventListener('resize', updateButtonVisibility);
+                        updateButtonVisibility(); // Initial check
+                    } else {
+                        // Touch/swipe support for mobile
+                        let isDown = false;
+                        let startX;
+                        let scrollLeft;
+
+                        container.addEventListener('mousedown', (e) => {
+                            isDown = true;
+                            startX = e.pageX - container.offsetLeft;
+                            scrollLeft = container.scrollLeft;
+                            container.style.cursor = 'grabbing';
+                            container.style.userSelect = 'none';
+                        });
+
+                        container.addEventListener('mouseleave', () => {
+                            isDown = false;
+                            container.style.cursor = 'grab';
+                        });
+
+                        container.addEventListener('mouseup', () => {
+                            isDown = false;
+                            container.style.cursor = 'grab';
+                        });
+
+                        container.addEventListener('mousemove', (e) => {
+                            if (!isDown) return;
+                            e.preventDefault();
+                            const x = e.pageX - container.offsetLeft;
+                            const walk = (x - startX) * 2; // Scroll-fast
+                            container.scrollLeft = scrollLeft - walk;
+                        });
+                    }
+                }
+
+
+                function initVideoModals() {
+                    // This function can be expanded to handle video modal initialization
+                    // when a video thumbnail is clicked
+                    const videoPlayButtons = document.querySelectorAll('.video-play-button');
+
+                    videoPlayButtons.forEach(button => {
+                        button.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            const videoUrl = this.getAttribute('data-video');
+                            // Here you can implement a modal to play the video
+                            // For example, using Bootstrap's modal or another lightbox solution
+                            console.log('Play video:', videoUrl);
+                        });
+                    });
+                }
+            });
+        </script>
+    @endpush
+</div>
