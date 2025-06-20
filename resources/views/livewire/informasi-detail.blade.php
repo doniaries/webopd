@@ -12,13 +12,21 @@
                     </div>
 
                     <div class="card-body p-4">
+                        @php
+                            // Set locale ke Indonesia
+                            \Carbon\Carbon::setLocale('id');
+                        @endphp
                         <div class="d-flex align-items-center mb-4">
-                            <div class="bg-primary bg-opacity-10 rounded-circle p-2 me-3">
-                                <i class="bi bi-calendar3 text-primary"></i>
+                            <div class="d-flex flex-wrap align-items-center gap-4">
+                                <span class="d-flex align-items-center text-muted">
+                                    <i class="bi bi-calendar3 me-2"></i>
+                                    {{ $informasi->published_at->translatedFormat('l, j F Y') }}
+                                </span>
+                                <span class="d-flex align-items-center text-muted">
+                                    <i class="bi bi-clock me-2"></i>
+                                    {{ $informasi->published_at->format('H:i') }} WIB
+                                </span>
                             </div>
-                            <span class="text-muted">
-                                {{ $informasi->published_at->isoFormat('dddd, D MMMM Y') }}
-                            </span>
                         </div>
 
                         <div class="informasi-content prose prose-lg">

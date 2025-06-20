@@ -81,8 +81,45 @@
                     <!-- Informasi Column -->
                     <div class="col-lg-4">
                         <div class="card border-0 shadow-sm">
-                            <div class="card-header bg-primary text-white">
-                                <h5 class="mb-0">Informasi Terbaru</h5>
+                            <style>
+                                .info-card {
+                                    transition: all 0.3s ease;
+                                    border-left: 3px solid transparent;
+                                }
+
+                                .info-card:hover {
+                                    transform: translateX(5px);
+                                    border-left-color: #0d6efd;
+                                    background-color: #f8f9fa;
+                                    box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.1) !important;
+                                }
+
+                                .info-card .info-icon {
+                                    transition: all 0.3s ease;
+                                }
+
+                                .info-card:hover .info-icon {
+                                    transform: scale(1.1);
+                                    background-color: #e7f1ff !important;
+                                }
+
+                                .info-summary {
+                                    display: -webkit-box;
+                                    -webkit-line-clamp: 2;
+                                    -webkit-box-orient: vertical;
+                                    overflow: hidden;
+                                    text-overflow: ellipsis;
+                                    color: #6c757d;
+                                    font-size: 0.875rem;
+                                    margin-top: 0.5rem;
+                                }
+                            </style>
+
+                            <div class="card-header bg-gradient-primary text-white">
+                                <h5 class="mb-0 d-flex align-items-center">
+                                    <i class="bi bi-newspaper me-2"></i>
+                                    Informasi Terbaru
+                                </h5>
                             </div>
                             <div class="card-body p-0">
                                 @php
@@ -91,43 +128,60 @@
                                             ->where('published_at', '<=', now())
                                             ->latest('published_at')
                                             ->take(5)
-                                            ->get();
+                                            ->get(['id', 'judul', 'slug', 'isi', 'published_at']);
                                     } catch (\Exception $e) {
                                         $informasi = collect();
                                     }
                                 @endphp
 
                                 @if ($informasi->count() > 0)
-                                    <ul class="list-group list-group-flush">
+                                    <div class="list-group list-group-flush">
                                         @foreach ($informasi as $item)
-                                            <li class="list-group-item border-0 border-bottom">
-                                                <a href="#" class="text-decoration-none text-dark d-block py-2">
-                                                    <div class="d-flex justify-content-between align-items-start">
-                                                        <div class="me-2">
-                                                            <h5 class="mb-1"><a href="{{ route('informasi.show', $item->slug) }}" class="text-decoration-none text-dark">{{ $item->judul }}</a></h5>
-                                                            <small class="text-muted">
-                                                                <i class="bi bi-calendar3 me-1"></i>
-                                                                {{ $item->published_at->format('d M Y') }}
-                                                            </small>
+                                            <a href="{{ route('informasi.show', $item->slug) }}"
+                                                class="info-card list-group-item list-group-item-action border-0 p-3">
+                                                <div class="d-flex gap-3">
+                                                    <div class="flex-shrink-0">
+                                                        <div class="info-icon bg-light rounded p-2 text-primary">
+                                                            <i class="bi bi-file-earmark-text fs-4"></i>
                                                         </div>
+                                                    </div>
+                                                    <div class="flex-grow-1">
+                                                        <h6 class="mb-1 fw-semibold text-dark">{{ $item->judul }}</h6>
+                                                        @if($item->isi)
+                                                            <div class="info-summary">
+                                                                {{ Str::limit(strip_tags($item->isi), 120) }}
+                                                            </div>
+                                                        @endif
+                                                        <div class="d-flex align-items-center text-muted small mt-2">
+                                                            <i class="bi bi-calendar3 me-1"></i>
+                                                            <span>{{ $item->published_at->diffForHumans() }}</span>
+                                                            <span class="mx-2">•</span>
+                                                            <i class="bi bi-clock me-1"></i>
+                                                            <span>{{ $item->published_at->format('d M Y') }}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex-shrink-0 align-self-center">
                                                         <i class="bi bi-chevron-right text-muted"></i>
                                                     </div>
-                                                </a>
-                                            </li>
+                                                </div>
+                                            </a>
                                         @endforeach
-                                    </ul>
+                                    </div>
                                 @else
-                                    <div class="p-3 text-center text-muted">
-                                        <i class="bi bi-info-circle fs-4 d-block mb-2"></i>
-                                        Tidak ada informasi terbaru
+                                    <div class="text-center p-4">
+                                        <div class="bg-soft-primary text-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                                            style="width: 64px; height: 64px;">
+                                            <i class="bi bi-info-circle fs-3"></i>
+                                        </div>
+                                        <p class="text-muted mb-0">Tidak ada informasi terbaru</p>
                                     </div>
                                 @endif
                             </div>
-                            <div class="card-footer bg-transparent border-0 text-end">
+                            <div class="card-footer bg-transparent border-top-0 pt-0">
                                 <a href="{{ route('informasi.index') }}"
-                                    class="btn btn-sm btn-link text-decoration-none p-0">
-                                    <span>Lihat Semua</span>
-                                    <i class="bi bi-arrow-right ms-1"></i>
+                                    class="btn btn-outline-primary btn-sm d-inline-flex align-items-center">
+                                    <span>Lihat Semua Informasi</span>
+                                    <i class="bi bi-arrow-right ms-2"></i>
                                 </a>
                             </div>
                         </div>

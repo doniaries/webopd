@@ -321,20 +321,29 @@ class ShieldSeeder extends Seeder
         // Define permissions for admin_opd role
         $adminOpdPermissions = array_filter($allPermissions, function ($permission) {
             // Allow access to content management
-            if (strpos($permission, 'post') !== false) return true;
-            if (strpos($permission, 'tag') !== false) return true;
-            if (strpos($permission, 'comment') !== false) return true;
+            $allowedPrefixes = [
+                'view_', 'view_any_', 'create_', 'update_', 'restore_', 'restore_any_',
+                'replicate_', 'reorder_', 'delete_', 'delete_any_', 'force_delete_', 'force_delete_any_'
+            ];
 
-            // Allow basic theme and settings access
-            if (strpos($permission, 'view_theme') !== false) return true;
-            if (strpos($permission, 'view_any_theme') !== false) return true;
-            if (strpos($permission, 'view_pengaturan') !== false) return true;
-            if (strpos($permission, 'view_any_pengaturan') !== false) return true;
+            // Allowed resources for admin_opd
+            $allowedResources = [
+                'post', 'tag', 'comment', 'pengaturan', 'user', 'satuan', 'ukuran',
+                'tentang', 'agenda', 'informasi', 'banner', 'slider', 'dokumen',
+                'sambutan', 'visimisi', 'produkhukum', 'infografis'
+            ];
 
-            // Restrict access to user, role, and team management
-            if (strpos($permission, 'user') !== false) return false;
-            if (strpos($permission, 'role') !== false) return false;
-            if (strpos($permission, 'team') !== false) return false;
+            // Check if permission is for an allowed resource
+            foreach ($allowedResources as $resource) {
+                if (strpos($permission, $resource) !== false) {
+                    // Deny access to user and role management
+                    if (in_array($resource, ['user', 'role'])) {
+                        return false;
+                    }
+                    return true;
+                }
+            }
+
 
             return false;
         });
@@ -342,11 +351,23 @@ class ShieldSeeder extends Seeder
         // Define permissions for editor role
         $editorPermissions = array_filter($allPermissions, function ($permission) {
             // Allow viewing and managing content
-            if (strpos($permission, 'post') !== false) return true;
-            if (strpos($permission, 'tag') !== false) return strpos($permission, 'delete') === false;
-            if (strpos($permission, 'comment') !== false) return true;
+            $allowedPrefixes = ['view_', 'view_any_', 'create_', 'update_'];
+            $allowedResources = ['post', 'tag', 'comment', 'informasi', 'agenda'];
 
-            // Restrict access to everything else
+            // Check if permission is for an allowed resource
+            foreach ($allowedResources as $resource) {
+                if (strpos($permission, $resource) !== false) {
+                    // Only allow view, create, and update actions
+                    foreach ($allowedPrefixes as $prefix) {
+                        if (str_starts_with($permission, $prefix)) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+            }
+
+
             return false;
         });
 

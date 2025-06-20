@@ -12,6 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class InformasiResource extends Resource
 {
@@ -29,16 +30,24 @@ class InformasiResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('team_id')
-                    ->relationship('team', 'name')
-                    ->required(),
+                Forms\Components\Hidden::make('team_id')
+                    ->default(fn() => auth()->user()->teams->first()?->id)
+                    ->dehydrated(),
                 Forms\Components\TextInput::make('judul')
+                    ->label('Judul')
                     ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('slug')
-                    ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->live(onBlur: true)
+                    ->placeholder('Masukkan judul artikel di sini')
+                    ->afterStateUpdated(function ($state, Forms\Set $set) {
+                        $set('slug', \Illuminate\Support\Str::slug($state));
+                    }),
+                Forms\Components\Hidden::make('slug')
+                    ->label('Slug')
+                    ->required(),
+
                 Forms\Components\Textarea::make('isi')
+                    ->label('Isi')
                     ->required()
                     ->columnSpanFull(),
                 Forms\Components\TextInput::make('file')
@@ -53,13 +62,18 @@ class InformasiResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('team.name')
                     ->numeric()
+                    ->hidden()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('judul')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('slug')
-                    ->searchable(),
+                    ->hidden(),
                 Tables\Columns\TextColumn::make('file')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('published_at')
+                    ->label('Tanggal Publikasi')
+                    ->dateTime('d M Y H:i')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
