@@ -50,9 +50,15 @@ class InformasiResource extends Resource
                     ->label('Isi')
                     ->required()
                     ->columnSpanFull(),
-                Forms\Components\TextInput::make('file')
-                    ->required()
-                    ->maxLength(255),
+                Forms\Components\FileUpload::make('file')
+                    ->directory('file_informasi')
+                    ->multiple()
+                    ->openable()
+                    ->acceptedFileTypes(['application/pdf'])
+                    // ->visibility('private')
+                    ->label('File'),
+
+
             ]);
     }
 
