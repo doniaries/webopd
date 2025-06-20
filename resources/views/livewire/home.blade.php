@@ -1,6 +1,6 @@
 <div>
     @use('Illuminate\Support\Facades\Storage')
-@use('Illuminate\Support\Facades\Auth')
+    @use('Illuminate\Support\Facades\Auth')
 
     @push('title', $pageTitle)
     @push('meta')
@@ -42,30 +42,7 @@
                         </div>
 
                         <div class="row g-4">
-                            @php
-                                try {
-                                    $recentPosts = App\Models\Post::query()
-                                        ->where('status', 'published')
-                                        ->where('published_at', '<=', now())
-                                        ->where(function ($query) {
-                                            $query->where('team_id', 1) // Selalu tampilkan dari team_id=1
-                                                ->orWhere('team_id', Auth::check() ? Auth::user()->current_team_id : 1);
-                                        })
-                                        ->with([
-                                            'tag' => function ($q) {
-                                                $q->where('is_active', true);
-                                            },
-                                            'user',
-                                        ])
-                                        ->latest('published_at')
-                                        ->take(6)
-                                        ->get();
-                                } catch (\Exception $e) {
-                                    $recentPosts = collect();
-                                }
-                            @endphp
-
-                            @foreach ($recentPosts as $post)
+                            @foreach ($latestPosts as $post)
                                 <div class="col-md-6 col-lg-4">
                                     <div class="card h-100 border-0 shadow-sm">
                                         <div class="position-relative" style="height: 180px; overflow: hidden;">
@@ -97,253 +74,271 @@
                                     </div>
                                 </div>
                             @endforeach
-                        </div>
-
-                        <div class="text-center mt-4">
-                            <a href="{{ route('berita.index') }}" class="btn btn-outline-primary">
-                                Lihat Semua Berita <i class="bi bi-arrow-right ms-1"></i>
-                            </a>
+                            <div class="position-relative" style="height: 180px; overflow: hidden;">
+                                <img src="{{ $post->foto_utama_url ?? asset('images/placeholder.jpg') }}"
+                                    class="card-img-top h-100 w-100" style="object-fit: cover;"
+                                    alt="{{ $post->title }}">
+                                <div class="position-absolute bottom-0 start-0 p-2 bg-primary text-white small">
+                                    {{ $post->tags->first()->name ?? 'Berita' }}
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <a href="{{ route('berita.show', $post->slug) }}"
+                                        class="text-dark text-decoration-none">
+                                        {{ Str::limit($post->title, 60) }}
+                                    </a>
+                                </h5>
+                                <p class="card-text text-muted small">
+                                    <i class="bi bi-calendar3 me-1"></i>
+                                    {{ $post->published_at->format('d M Y') }}
+                                    <span class="mx-1">•</span>
+                                    <i class="bi bi-person me-1"></i> {{ $post->user->name ?? 'Admin' }}
+                                </p>
+                                <p class="card-text small">
+                                    {{ Str::limit(strip_tags($post->content), 100) }}
+                                </p>
+                            </div>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Pengumuman & Agenda Column -->
-                    <div class="col-lg-4">
-                        <!-- Tabs Container -->
-                        <div class="overflow-hidden rounded-lg shadow-lg">
-                            <!-- Tab Navigation -->
-                            <div class="flex text-center">
-                                <button
-                                    class="w-1/2 py-3 font-medium text-white bg-blue-600 hover:bg-blue-700 transition duration-300 focus:outline-none"
-                                    id="pengumuman-tab" data-bs-toggle="tab" data-bs-target="#pengumuman-content"
-                                    type="button" role="tab" aria-controls="pengumuman-content"
-                                    aria-selected="true">
-                                    <div class="flex items-center justify-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none"
-                                            viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
-                                        </svg>
-                                        <span>Pengumuman Terbaru</span>
-                                    </div>
-                                </button>
-                                <button
-                                    class="w-1/2 py-3 font-medium text-white bg-green-600 hover:bg-green-700 transition duration-300 focus:outline-none"
-                                    id="agenda-tab" data-bs-toggle="tab" data-bs-target="#agenda-content" type="button"
-                                    role="tab" aria-controls="agenda-content" aria-selected="false">
-                                    <div class="flex items-center justify-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none"
-                                            viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                        </svg>
-                                        <span>Agenda Mendatang</span>
-                                    </div>
-                                </button>
+                <div class="text-center mt-4">
+                    <a href="{{ route('berita.index') }}" class="btn btn-outline-primary">
+                        Lihat Semua Berita <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Pengumuman & Agenda Column -->
+            <div class="col-lg-4">
+                <!-- Tabs Container -->
+                <div class="overflow-hidden rounded-lg shadow-lg">
+                    <!-- Tab Navigation -->
+                    <div class="flex text-center">
+                        <button
+                            class="w-1/2 py-3 font-medium text-white bg-blue-600 hover:bg-blue-700 transition duration-300 focus:outline-none"
+                            id="pengumuman-tab" data-bs-toggle="tab" data-bs-target="#pengumuman-content" type="button"
+                            role="tab" aria-controls="pengumuman-content" aria-selected="true">
+                            <div class="flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
+                                </svg>
+                                <span>Pengumuman Terbaru</span>
                             </div>
+                        </button>
+                        <button
+                            class="w-1/2 py-3 font-medium text-white bg-green-600 hover:bg-green-700 transition duration-300 focus:outline-none"
+                            id="agenda-tab" data-bs-toggle="tab" data-bs-target="#agenda-content" type="button"
+                            role="tab" aria-controls="agenda-content" aria-selected="false">
+                            <div class="flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                                <span>Agenda Mendatang</span>
+                            </div>
+                        </button>
+                    </div>
 
-                            <!-- Tab Content -->
-                            <div class="tab-content" id="info-tabs-content">
-                                <!-- Pengumuman Tab -->
-                                <div class="tab-pane fade show active" id="pengumuman-content" role="tabpanel"
-                                    aria-labelledby="pengumuman-tab">
+                    <!-- Tab Content -->
+                    <div class="tab-content" id="info-tabs-content">
+                        <!-- Pengumuman Tab -->
+                        <div class="tab-pane fade show active" id="pengumuman-content" role="tabpanel"
+                            aria-labelledby="pengumuman-tab">
 
-                                    <div class="bg-white p-4">
-                                        @if (isset($pengumuman) && count($pengumuman) > 0)
-                                            <div class="space-y-3" id="pengumuman-list-home">
-                                                @foreach ($pengumuman as $item)
-                                                    <div class="bg-blue-50 rounded-lg p-3 border-l-4 border-blue-600 shadow-sm"
-                                                        wire:key="{{ $item->id }}">
-                                                        <div class="flex items-start">
-                                                            <div class="flex-shrink-0 mr-3">
-                                                                <div class="p-2 bg-blue-600 text-white rounded-full">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                                        class="h-5 w-5" fill="none"
-                                                                        viewBox="0 0 24 24" stroke="currentColor">
-                                                                        <path stroke-linecap="round"
-                                                                            stroke-linejoin="round" stroke-width="2"
-                                                                            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                                                                    </svg>
+                            <div class="bg-white p-4">
+                                @if (isset($pengumuman) && count($pengumuman) > 0)
+                                    <div class="space-y-3" id="pengumuman-list-home">
+                                        @foreach ($pengumuman as $item)
+                                            <div class="bg-blue-50 rounded-lg p-3 border-l-4 border-blue-600 shadow-sm"
+                                                wire:key="{{ $item->id }}">
+                                                <div class="flex items-start">
+                                                    <div class="flex-shrink-0 mr-3">
+                                                        <div class="p-2 bg-blue-600 text-white rounded-full">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"
+                                                                fill="none" viewBox="0 0 24 24"
+                                                                stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2"
+                                                                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                                                            </svg>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <a href="{{ route('pengumuman.show', $item->slug) }}"
+                                                            class="font-bold text-gray-800 hover:text-blue-600 transition-colors">{{ $item->judul }}</a>
+                                                        <div class="text-xs text-gray-500 mt-1">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                class="h-4 w-4 inline mr-1" fill="none"
+                                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2"
+                                                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                            </svg>
+                                                            {{ $item->published_at->format('d M Y') }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                        <div class="text-center mt-2">
+                                            <a href="{{ route('pengumuman.index') }}"
+                                                class="inline-flex items-center text-blue-600 hover:text-blue-800">
+                                                <span>Lihat Semua Pengumuman</span>
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1"
+                                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                                </svg>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <script>
+                                        document.addEventListener('livewire:navigating', () => {
+                                            document.querySelectorAll('#pengumuman-list-home > div').forEach(item => {
+                                                item.classList.add('flash-effect');
+                                            });
+                                        });
+                                    </script>
+                                @else
+                                    <div class="p-6 text-center">
+                                        <div
+                                            class="mx-auto bg-gray-100 rounded-full p-3 w-16 h-16 flex items-center justify-center mb-4">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600"
+                                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                        </div>
+                                        <h5 class="text-lg font-bold text-gray-800">Tidak ada pengumuman
+                                            terbaru</h5>
+                                        <p class="text-gray-500 mt-2">Pengumuman akan ditampilkan di sini saat
+                                            tersedia.</p>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+
+                        <!-- Agenda Tab -->
+                        <div class="tab-pane fade" id="agenda-content" role="tabpanel" aria-labelledby="agenda-tab">
+
+                            <div class="bg-white">
+                                @if (count($agenda) > 0)
+                                    <div class="swiper agenda-slider">
+                                        <div class="swiper-wrapper">
+                                            @foreach ($agenda as $item)
+                                                <div class="swiper-slide">
+                                                    <div class="p-4 border-b border-gray-200">
+                                                        <div class="flex mb-4">
+                                                            <div class="mr-4">
+                                                                <div
+                                                                    class="w-16 h-16 bg-green-600 text-white rounded flex flex-col items-center justify-center">
+                                                                    <span
+                                                                        class="text-2xl font-bold">{{ $item->dari_tanggal->format('d') }}</span>
+                                                                    <span
+                                                                        class="text-xs uppercase">{{ $item->dari_tanggal->format('M') }}</span>
                                                                 </div>
                                                             </div>
                                                             <div>
-                                                                <a href="{{ route('pengumuman.show', $item->slug) }}"
-                                                                    class="font-bold text-gray-800 hover:text-blue-600 transition-colors">{{ $item->judul }}</a>
-                                                                <div class="text-xs text-gray-500 mt-1">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                                        class="h-4 w-4 inline mr-1" fill="none"
-                                                                        viewBox="0 0 24 24" stroke="currentColor">
-                                                                        <path stroke-linecap="round"
-                                                                            stroke-linejoin="round" stroke-width="2"
-                                                                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                                                    </svg>
-                                                                    {{ $item->published_at->format('d M Y') }}
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                @endforeach
-                                                <div class="text-center mt-2">
-                                                    <a href="{{ route('pengumuman.index') }}"
-                                                        class="inline-flex items-center text-blue-600 hover:text-blue-800">
-                                                        <span>Lihat Semua Pengumuman</span>
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1"
-                                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                                                        </svg>
-                                                    </a>
-                                                </div>
-                                            </div>
-
-                                            <script>
-                                                document.addEventListener('livewire:navigating', () => {
-                                                    document.querySelectorAll('#pengumuman-list-home > div').forEach(item => {
-                                                        item.classList.add('flash-effect');
-                                                    });
-                                                });
-                                            </script>
-                                        @else
-                                            <div class="p-6 text-center">
-                                                <div
-                                                    class="mx-auto bg-gray-100 rounded-full p-3 w-16 h-16 flex items-center justify-center mb-4">
-                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                        class="h-8 w-8 text-blue-600" fill="none"
-                                                        viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2"
-                                                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                    </svg>
-                                                </div>
-                                                <h5 class="text-lg font-bold text-gray-800">Tidak ada pengumuman
-                                                    terbaru</h5>
-                                                <p class="text-gray-500 mt-2">Pengumuman akan ditampilkan di sini saat
-                                                    tersedia.</p>
-                                            </div>
-                                        @endif
-                                    </div>
-                                </div>
-
-                                <!-- Agenda Tab -->
-                                <div class="tab-pane fade" id="agenda-content" role="tabpanel"
-                                    aria-labelledby="agenda-tab">
-
-                                    <div class="bg-white">
-                                        @if (count($agenda) > 0)
-                                            <div class="swiper agenda-slider">
-                                                <div class="swiper-wrapper">
-                                                    @foreach ($agenda as $item)
-                                                        <div class="swiper-slide">
-                                                            <div class="p-4 border-b border-gray-200">
-                                                                <div class="flex mb-4">
-                                                                    <div class="mr-4">
-                                                                        <div
-                                                                            class="w-16 h-16 bg-green-600 text-white rounded flex flex-col items-center justify-center">
-                                                                            <span
-                                                                                class="text-2xl font-bold">{{ $item->dari_tanggal->format('d') }}</span>
-                                                                            <span
-                                                                                class="text-xs uppercase">{{ $item->dari_tanggal->format('M') }}</span>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div>
-                                                                        <h3 class="font-bold text-lg text-gray-800">
-                                                                            {{ $item->nama_agenda }}</h3>
-                                                                        <div
-                                                                            class="flex flex-wrap text-xs text-gray-500 mt-1">
-                                                                            <div class="flex items-center mr-3">
-                                                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                                                    class="h-4 w-4 mr-1"
-                                                                                    fill="none" viewBox="0 0 24 24"
-                                                                                    stroke="currentColor">
-                                                                                    <path stroke-linecap="round"
-                                                                                        stroke-linejoin="round"
-                                                                                        stroke-width="2"
-                                                                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                                                </svg>
-                                                                                {{ $item->dari_tanggal->format('H:i') }}
-                                                                                -
-                                                                                {{ $item->sampai_tanggal->format('H:i') }}
-                                                                                WIB
-                                                                            </div>
-                                                                            @if ($item->tempat)
-                                                                                <div class="flex items-center">
-                                                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                                                        class="h-4 w-4 mr-1"
-                                                                                        fill="none"
-                                                                                        viewBox="0 0 24 24"
-                                                                                        stroke="currentColor">
-                                                                                        <path stroke-linecap="round"
-                                                                                            stroke-linejoin="round"
-                                                                                            stroke-width="2"
-                                                                                            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                                                                        <path stroke-linecap="round"
-                                                                                            stroke-linejoin="round"
-                                                                                            stroke-width="2"
-                                                                                            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                                                    </svg>
-                                                                                    {{ $item->tempat }}
-                                                                                </div>
-                                                                            @endif
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="text-gray-600 text-sm mb-4">
-                                                                    {{ Str::limit(strip_tags($item->uraian_agenda ?? ''), 120) }}
-                                                                </div>
-                                                                <div class="text-right">
-                                                                    <a href="#"
-                                                                        class="inline-flex items-center px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-full transition duration-300">
-                                                                        Detail Agenda
+                                                                <h3 class="font-bold text-lg text-gray-800">
+                                                                    {{ $item->nama_agenda }}</h3>
+                                                                <div class="flex flex-wrap text-xs text-gray-500 mt-1">
+                                                                    <div class="flex items-center mr-3">
                                                                         <svg xmlns="http://www.w3.org/2000/svg"
-                                                                            class="h-4 w-4 ml-1" fill="none"
+                                                                            class="h-4 w-4 mr-1" fill="none"
                                                                             viewBox="0 0 24 24" stroke="currentColor">
                                                                             <path stroke-linecap="round"
                                                                                 stroke-linejoin="round"
                                                                                 stroke-width="2"
-                                                                                d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                                                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                                                         </svg>
-                                                                    </a>
+                                                                        {{ $item->dari_tanggal->format('H:i') }}
+                                                                        -
+                                                                        {{ $item->sampai_tanggal->format('H:i') }}
+                                                                        WIB
+                                                                    </div>
+                                                                    @if ($item->tempat)
+                                                                        <div class="flex items-center">
+                                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                class="h-4 w-4 mr-1" fill="none"
+                                                                                viewBox="0 0 24 24"
+                                                                                stroke="currentColor">
+                                                                                <path stroke-linecap="round"
+                                                                                    stroke-linejoin="round"
+                                                                                    stroke-width="2"
+                                                                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                                                                <path stroke-linecap="round"
+                                                                                    stroke-linejoin="round"
+                                                                                    stroke-width="2"
+                                                                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                                            </svg>
+                                                                            {{ $item->tempat }}
+                                                                        </div>
+                                                                    @endif
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    @endforeach
+                                                        <div class="text-gray-600 text-sm mb-4">
+                                                            {{ Str::limit(strip_tags($item->uraian_agenda ?? ''), 120) }}
+                                                        </div>
+                                                        <div class="text-right">
+                                                            <a href="#"
+                                                                class="inline-flex items-center px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-full transition duration-300">
+                                                                Detail Agenda
+                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                    class="h-4 w-4 ml-1" fill="none"
+                                                                    viewBox="0 0 24 24" stroke="currentColor">
+                                                                    <path stroke-linecap="round"
+                                                                        stroke-linejoin="round" stroke-width="2"
+                                                                        d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                                                </svg>
+                                                            </a>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="swiper-pagination"></div>
-                                            </div>
-                                        @else
-                                            <div class="p-6 text-center">
-                                                <div
-                                                    class="mx-auto bg-gray-100 rounded-full p-3 w-16 h-16 flex items-center justify-center mb-4">
-                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                        class="h-8 w-8 text-green-600" fill="none"
-                                                        viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                                    </svg>
-                                                </div>
-                                                <h5 class="text-lg font-bold text-gray-800">Tidak ada agenda mendatang
-                                                </h5>
-                                                <p class="text-gray-500 mt-2">Agenda kegiatan akan ditampilkan di sini
-                                                    saat tersedia.</p>
-                                            </div>
-                                        @endif
+                                            @endforeach
+                                        </div>
+                                        <div class="swiper-pagination"></div>
                                     </div>
-                                    <div class="bg-gray-50 p-4 text-center">
-                                        <a href="#"
-                                            class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-full transition duration-300">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2"
+                                @else
+                                    <div class="p-6 text-center">
+                                        <div
+                                            class="mx-auto bg-gray-100 rounded-full p-3 w-16 h-16 flex items-center justify-center mb-4">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-600"
                                                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                    d="M6 18L18 6M6 6l12 12" />
                                             </svg>
-                                            Lihat Semua Agenda
-                                        </a>
+                                        </div>
+                                        <h5 class="text-lg font-bold text-gray-800">Tidak ada agenda mendatang
+                                        </h5>
+                                        <p class="text-gray-500 mt-2">Agenda kegiatan akan ditampilkan di sini
+                                            saat tersedia.</p>
                                     </div>
-                                </div>
+                                @endif
+                            </div>
+                            <div class="bg-gray-50 p-4 text-center">
+                                <a href="#"
+                                    class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-full transition duration-300">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                    Lihat Semua Agenda
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+
         </section>
 
         @push('scripts')
