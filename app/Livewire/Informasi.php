@@ -10,15 +10,22 @@ class Informasi extends Component
 {
     use WithPagination;
 
+    public $perPage = 12;
+
     public function render()
     {
         $informasi = InformasiModel::query()
             ->where('published_at', '<=', now())
             ->latest('published_at')
-            ->paginate(10);
+            ->paginate($this->perPage);
 
         return view('livewire.informasi', [
             'informasi' => $informasi,
         ]);
+    }
+
+    public function loadMore()
+    {
+        $this->perPage += 12;
     }
 }
