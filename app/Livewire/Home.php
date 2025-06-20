@@ -24,7 +24,7 @@ class Home extends Component
     public $latestPosts = [];
     public $banners = [];
     public $sliders = [];
-    public $pengumuman = [];
+    public $informasi = [];
     public $agenda = [];
 
     public function mount()
@@ -68,9 +68,9 @@ class Home extends Component
             // Get active sliders
             $this->sliders = Slider::active()->orderBy('urutan')->get() ?? [];
 
-            // Load pengumuman
+            // Load informasi
             try {
-                $pengumumanQuery = \App\Models\Pengumuman::query()
+                $informasiQuery = \App\Models\Informasi::query()
                     ->withoutGlobalScopes() // Temporarily disable global scopes to ensure we get all relevant announcements
                     ->active()
                     ->published()
@@ -81,20 +81,20 @@ class Home extends Component
                     ->orderBy('published_at', 'desc')
                     ->take(5);
 
-                $pengumumanCollection = $pengumumanQuery->get();
-                $this->pengumuman = $pengumumanCollection->all();
+                $informasiCollection = $informasiQuery->get();
+                $this->informasi = $informasiCollection->all();
 
                 // Debug: Log query yang dihasilkan
                 if (app()->environment('local')) {
-                    \Illuminate\Support\Facades\Log::info('Pengumuman query:', [
-                        'sql' => $pengumumanQuery->toSql(),
-                        'bindings' => $pengumumanQuery->getBindings(),
-                        'count' => $pengumumanCollection->count()
+                    \Illuminate\Support\Facades\Log::info('Informasi query:', [
+                        'sql' => $informasiQuery->toSql(),
+                        'bindings' => $informasiQuery->getBindings(),
+                        'count' => $informasiCollection->count()
                     ]);
                 }
             } catch (\Exception $e) {
-                \Illuminate\Support\Facades\Log::error('Error loading pengumuman: ' . $e->getMessage());
-                $this->pengumuman = [];
+                \Illuminate\Support\Facades\Log::error('Error loading informasi: ' . $e->getMessage());
+                $this->informasi = [];
             }
 
             // Get upcoming agenda
@@ -109,7 +109,7 @@ class Home extends Component
             $this->featuredPosts = [];
             $this->banners = [];
             $this->sliders = [];
-            $this->pengumuman = [];
+            $this->informasi = [];
             $this->agenda = [];
         }
     }
@@ -128,12 +128,12 @@ class Home extends Component
 
         return view('livewire.home', [
             'pageTitle' => 'Beranda - ' . config('app.name'),
-            'pageDescription' => 'Portal resmi ' . config('app.name') . ' untuk informasi terbaru, pengumuman, dan layanan publik.',
+            'pageDescription' => 'Portal resmi ' . config('app.name') . ' untuk informasi terbaru, informasi, dan layanan publik.',
             'featuredPosts' => $this->featuredPosts,
             'tags' => $tags,
             'banners' => $this->banners,
             'sliders' => $this->sliders,
-            'pengumuman' => $this->pengumuman,
+            'informasi' => $this->informasi,
             'agenda' => $this->agenda,
             'pengaturan' => \App\Models\Pengaturan::getFirst()
         ]);

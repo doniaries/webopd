@@ -3,10 +3,10 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\PostImage;
+use App\Models\Informasi;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class PostImagePolicy
+class InformasiPolicy
 {
     use HandlesAuthorization;
 
@@ -15,15 +15,15 @@ class PostImagePolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('view_any_post::image');
+        return $user->can('view_any_informasi');
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, PostImage $postImage): bool
+    public function view(User $user, Informasi $informasi): bool
     {
-        return $user->can('view_post::image');
+        return $user->can('view_informasi');
     }
 
     /**
@@ -31,23 +31,23 @@ class PostImagePolicy
      */
     public function create(User $user): bool
     {
-        return $user->can('create_post::image');
+        return $user->can('create_informasi');
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, PostImage $postImage): bool
+    public function update(User $user, Informasi $informasi): bool
     {
-        return $user->can('update_post::image');
+        return $user->can('update_informasi');
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, PostImage $postImage): bool
+    public function delete(User $user, Informasi $informasi): bool
     {
-        return $user->can('delete_post::image');
+        return $user->can('delete_informasi');
     }
 
     /**
@@ -55,15 +55,15 @@ class PostImagePolicy
      */
     public function deleteAny(User $user): bool
     {
-        return $user->can('delete_any_post::image');
+        return $user->can('delete_any_informasi');
     }
 
     /**
      * Determine whether the user can permanently delete.
      */
-    public function forceDelete(User $user, PostImage $postImage): bool
+    public function forceDelete(User $user, Informasi $informasi): bool
     {
-        return $user->can('force_delete_post::image');
+        return $user->can('force_delete_informasi');
     }
 
     /**
@@ -71,15 +71,15 @@ class PostImagePolicy
      */
     public function forceDeleteAny(User $user): bool
     {
-        return $user->can('force_delete_any_post::image');
+        return $user->can('force_delete_any_informasi');
     }
 
     /**
      * Determine whether the user can restore.
      */
-    public function restore(User $user, PostImage $postImage): bool
+    public function restore(User $user, Informasi $informasi): bool
     {
-        return $user->can('restore_post::image');
+        return $user->can('restore_informasi');
     }
 
     /**
@@ -87,15 +87,15 @@ class PostImagePolicy
      */
     public function restoreAny(User $user): bool
     {
-        return $user->can('restore_any_post::image');
+        return $user->can('restore_any_informasi');
     }
 
     /**
      * Determine whether the user can replicate.
      */
-    public function replicate(User $user, PostImage $postImage): bool
+    public function replicate(User $user, Informasi $informasi): bool
     {
-        return $user->can('replicate_post::image');
+        return $user->can('replicate_informasi');
     }
 
     /**
@@ -103,6 +103,6 @@ class PostImagePolicy
      */
     public function reorder(User $user): bool
     {
-        return $user->can('reorder_post::image');
+        return $user->can('reorder_informasi');
     }
 }

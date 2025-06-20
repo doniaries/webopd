@@ -6,7 +6,7 @@ use App\Livewire\Kontak;
 use App\Livewire\Dokumen;
 use App\Livewire\VisiMisi;
 use App\Livewire\Infografis;
-use App\Livewire\Pengumuman;
+use App\Livewire\Informasi;
 use App\Livewire\ProdukHukum;
 use App\Livewire\AgendaKegiatan;
 use App\Livewire\SambutanPimpinan;
@@ -24,10 +24,10 @@ Route::get('/post', [Post::class, 'index'])->name('post.index');
 Route::get('/post/kategori/{slug}', Post::class)->name('post.kategori');
 Route::get('/post/{slug}', Post::class)->name('post.show');
 
-// Pengumuman Routes
-Route::get('/pengumuman', Pengumuman::class)->name('pengumuman.index');
-Route::get('/pengumuman/kategori/{slug}', Pengumuman::class)->name('pengumuman.kategori');
-Route::get('/pengumuman/{slug}', Pengumuman::class)->name('pengumuman.show');
+// Informasi Routes
+Route::get('/informasi', Informasi::class)->name('informasi.index');
+Route::get('/informasi/kategori/{slug}', Informasi::class)->name('informasi.kategori');
+Route::get('/informasi/{slug}', Informasi::class)->name('informasi.show');
 
 // Profil Instansi Routes
 Route::get('/profil/sambutan', SambutanPimpinan::class)->name('profil.sambutan');

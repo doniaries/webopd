@@ -124,11 +124,11 @@ class Team extends Model
     }
 
 
-    /** @return HasMany<\App\Models\Pengumuman, self> */
-    public function pengumumans(): HasMany
+    /** @return HasMany<\App\Models\Informasi, self> */
+    public function informasis(): HasMany
 
     {
-        return $this->hasMany(\App\Models\Pengumuman::class);
+        return $this->hasMany(\App\Models\Informasi::class);
     }
 
 

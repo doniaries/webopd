@@ -11,8 +11,8 @@
     <!-- End Hero Slider -->
 
     <main id="main">
-        <!-- Berita & Pengumuman Section -->
-        <section id="berita-pengumuman" class="features">
+        <!-- Berita & Informasi Section -->
+        <section id="berita-informasi" class="features">
             <div class="container" data-aos="fade-up">
                 <div class="row">
                     <!-- Berita Terbaru Column -->
@@ -28,10 +28,7 @@
                                     $recentPosts = App\Models\Post::query()
                                         ->where('status', 'published')
                                         ->where('published_at', '<=', now())
-                                        ->with([ 
-                                             'tags', 
-                                             'user', 
-                                         ])
+                                        ->with(['tags', 'user'])
                                         ->latest('published_at')
                                         ->take(6)
                                         ->get();
@@ -81,29 +78,29 @@
                         </div>
                     </div>
 
-                    <!-- Pengumuman Column -->
+                    <!-- Informasi Column -->
                     <div class="col-lg-4">
                         <div class="card border-0 shadow-sm">
                             <div class="card-header bg-primary text-white">
-                                <h5 class="mb-0">Pengumuman Terbaru</h5>
+                                <h5 class="mb-0">Informasi Terbaru</h5>
                             </div>
                             <div class="card-body p-0">
                                 @php
                                     try {
-                                        $pengumuman = App\Models\Pengumuman::query()
+                                        $informasi = App\Models\Informasi::query()
                                             ->where('is_active', true)
                                             ->where('published_at', '<=', now())
                                             ->latest('published_at')
                                             ->take(5)
                                             ->get();
                                     } catch (\Exception $e) {
-                                        $pengumuman = collect();
+                                        $informasi = collect();
                                     }
                                 @endphp
 
-                                @if ($pengumuman->count() > 0)
+                                @if ($informasi->count() > 0)
                                     <ul class="list-group list-group-flush">
-                                        @foreach ($pengumuman as $item)
+                                        @foreach ($informasi as $item)
                                             <li class="list-group-item border-0 border-bottom">
                                                 <a href="#" class="text-decoration-none text-dark d-block py-2">
                                                     <div class="d-flex justify-content-between align-items-start">
@@ -123,12 +120,13 @@
                                 @else
                                     <div class="p-3 text-center text-muted">
                                         <i class="bi bi-info-circle fs-4 d-block mb-2"></i>
-                                        Tidak ada pengumuman terbaru
+                                        Tidak ada informasi terbaru
                                     </div>
                                 @endif
                             </div>
                             <div class="card-footer bg-transparent border-0 text-end">
-                                <a href="#" class="btn btn-sm btn-link text-decoration-none p-0">
+                                <a href="{{ route('informasi.index') }}"
+                                    class="btn btn-sm btn-link text-decoration-none p-0">
                                     <span>Lihat Semua</span>
                                     <i class="bi bi-arrow-right ms-1"></i>
                                 </a>
@@ -201,11 +199,11 @@
                     </div>
                 </div>
             </div>
-        </section><!-- End Berita & Pengumuman Section -->
+        </section><!-- End Informasi Section -->
 
 
-        <!-- Berita Populer Section -->
-        <section id="berita-populer" class="py-5 bg-white">
+        <!-- Informasi Populer Section -->
+        <section id="informasi-populer" class="py-5 bg-white">
             <div class="container" data-aos="fade-up">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <div class="d-flex align-items-center">

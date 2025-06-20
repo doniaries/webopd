@@ -89,8 +89,8 @@
                         <li><a href="{{ route('agenda-kegiatan.index') }}"
                                 class="{{ request()->routeIs('agenda-kegiatan.index') || request()->routeIs('agenda.show') ? 'active' : '' }}">Agenda
                                 Kegiatan</a></li>
-                        <li><a href="{{ route('pengumuman.index') }}"
-                                class="{{ request()->routeIs('pengumuman.index') || request()->routeIs('pengumuman.show') ? 'active' : '' }}">Pengumuman</a>
+                        <li><a href="{{ route('informasi.index') }}"
+                                class="{{ request()->routeIs('informasi.index') || request()->routeIs('informasi.show') ? 'active' : '' }}">Informasi</a>
                         </li>
                     </ul>
                 </li>
