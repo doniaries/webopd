@@ -11,21 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pengumumen', function (Blueprint $table) {
+        Schema::create('informasis', function (Blueprint $table) {
             $table->id();
             $table->foreignId('team_id')->constrained('teams')->onDelete('cascade');
             $table->string('judul');
-            $table->string('slug')->unique();
+            $table->string('slug');
             $table->text('isi');
-            $table->boolean('is_active')->default(true);
-            $table->string('file')->nullable();
-            $table->timestamp('published_at')->nullable();
-            $table->softDeletes();
+            $table->string('file');
             $table->timestamps();
+            $table->softDeletes();
+
 
             $table->index('team_id');
-            $table->index('is_active');
-            $table->index('published_at');
+            $table->index('created_at');
         });
     }
 
@@ -34,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pengumumen');
+        Schema::dropIfExists('informasis');
     }
 };

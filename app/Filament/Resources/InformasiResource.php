@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\PengumumanResource\Pages;
-use App\Filament\Resources\PengumumanResource\RelationManagers;
-use App\Models\Pengumuman;
+use App\Filament\Resources\InformasiResource\Pages;
+use App\Filament\Resources\InformasiResource\RelationManagers;
+use App\Models\Informasi;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,42 +13,37 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class PengumumanResource extends Resource
+class InformasiResource extends Resource
 {
-    protected static ?string $model = Pengumuman::class;
+    protected static ?string $model = Informasi::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-    protected static ?string $navigationLabel = 'Pengumuman';
-    protected static ?string $modelLabel = 'Pengumuman';
-    protected static ?string $pluralModelLabel = 'Pengumuman';
+
+    protected static ?string $navigationGroup = 'Konten';
+    protected static ?string $navigationLabel = 'Informasi';
     protected static ?int $navigationSort = 2;
 
-    public static function getNavigationGroup(): ?string
-    {
-        return 'Konten';
-    }
+
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
+                Forms\Components\Select::make('team_id')
+                    ->relationship('team', 'name')
+                    ->required(),
                 Forms\Components\TextInput::make('judul')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('slug')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Textarea::make('isi')
                     ->required()
                     ->columnSpanFull(),
-                Forms\Components\FileUpload::make('cover')
+                Forms\Components\TextInput::make('file')
                     ->required()
-                    ->placeholder('Upload foto dari file')
-                    ->image(),
-                Forms\Components\FileUpload::make('file')
-                    ->required()
-                    ->placeholder('Upload file')
-                    ->maxSize(5120),
-                Forms\Components\Toggle::make('is_active')
-                    ->required()
-                    ->default(true),
+                    ->maxLength(255),
             ]);
     }
 
@@ -56,17 +51,14 @@ class PengumumanResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('team.name')
+                    ->numeric()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('judul')
-                    ->label('Judul')
                     ->searchable(),
-                Tables\Columns\ImageColumn::make('cover')
-                    ->label('Cover')
+                Tables\Columns\TextColumn::make('slug')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('file')
-                    ->label('File')
-                    ->searchable(),
-                Tables\Columns\ToggleColumn::make('is_active')
-                    ->label('Aktif')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -76,8 +68,11 @@ class PengumumanResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('deleted_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->defaultSort('published_at', 'desc')
             ->filters([
                 //
             ])
@@ -101,9 +96,9 @@ class PengumumanResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListPengumumen::route('/'),
-            'create' => Pages\CreatePengumuman::route('/create'),
-            'edit' => Pages\EditPengumuman::route('/{record}/edit'),
+            'index' => Pages\ListInformasis::route('/'),
+            'create' => Pages\CreateInformasi::route('/create'),
+            'edit' => Pages\EditInformasi::route('/{record}/edit'),
         ];
     }
 }
