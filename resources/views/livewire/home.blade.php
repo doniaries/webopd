@@ -104,7 +104,7 @@
                                                 <a href="#" class="text-decoration-none text-dark d-block py-2">
                                                     <div class="d-flex justify-content-between align-items-start">
                                                         <div class="me-2">
-                                                            <h6 class="mb-1">{{ $item->judul }}</h6>
+                                                            <h5 class="mb-1"><a href="{{ route('informasi.show', $item->slug) }}" class="text-decoration-none text-dark">{{ $item->judul }}</a></h5>
                                                             <small class="text-muted">
                                                                 <i class="bi bi-calendar3 me-1"></i>
                                                                 {{ $item->published_at->format('d M Y') }}

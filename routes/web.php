@@ -27,7 +27,7 @@ Route::get('/post/{slug}', Post::class)->name('post.show');
 // Informasi Routes
 Route::get('/informasi', Informasi::class)->name('informasi.index');
 Route::get('/informasi/kategori/{slug}', Informasi::class)->name('informasi.kategori');
-Route::get('/informasi/{slug}', Informasi::class)->name('informasi.show');
+Route::get('/informasi/{slug}', \App\Livewire\InformasiDetail::class)->name('informasi.show');
 
 // Profil Instansi Routes
 Route::get('/profil/sambutan', SambutanPimpinan::class)->name('profil.sambutan');
