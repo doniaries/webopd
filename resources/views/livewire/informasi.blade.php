@@ -1,22 +1,19 @@
 <div>
+    <x-page-header title="Informasi Terbaru" :breadcrumbs="['Informasi' => route('informasi.index')]">
+    </x-page-header>
     <style>
         /* Efek bayangan untuk tabel */
         table.shadow-table {
-            box-shadow: 0 4px 16px 0 rgba(0,0,0,0.10), 0 1.5px 8px 0 rgba(0,0,0,0.06);
+            box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.10), 0 1.5px 8px 0 rgba(0, 0, 0, 0.06);
             border-radius: 10px;
             overflow: hidden;
         }
     </style>
     <div class="container py-4">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card shadow-sm mb-4">
-                    <div class="bg-gradient-to-r from-blue-600 to-blue-800 p-4 rounded-t-lg shadow-lg">
-                        <h4 class="text-xl font-bold text-center text-white">
-                            Informasi Terbaru
-                        </h4>
-                    </div>
-                    <div class="card-body">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="card bg-white shadow-sm border-0">
+                    <div class="card-body p-4">
                         @if ($informasi->count() > 0)
                             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                                 @foreach ($informasi as $item)
@@ -81,40 +78,31 @@
                                         $style = $cardStyles[$index];
                                     @endphp
                                     <div
-                                        class="{{ $style['bg'] }} rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:scale-[1.02] hover:z-10">
-                                        <div class="p-5">
-                                            <h3 class="text-lg font-semibold text-gray-800 mb-3 text-center">
-                                                <a href="{{ route('informasi.show', $item->slug) }}" class="hover:text-blue-600 transition-colors duration-300">
-                                                    {{ $item->judul }}
-                                                </a>
-                                            </h3>
-                                            <div class="mb-4">
-                                                <p class="text-gray-600 text-sm leading-relaxed mb-3">
-                                                    {{ Str::limit(strip_tags($item->isi), 120) }}
-                                                </p>
-                                                <div class="flex items-center text-xs text-gray-500 space-x-4">
-                                                    <span class="flex items-center">
-                                                        <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                                        </svg>
-                                                        {{ $item->published_at->translatedFormat('l, j F Y') }}
-                                                    </span>
-                                                    <span class="flex items-center">
-                                                        <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                                        </svg>
-                                                        {{ $item->published_at->format('H:i') }} WIB
-                                                    </span>
+                                        class="card-article bg-white rounded-lg overflow-hidden h-full flex flex-col border border-gray-200">
+                                        <div class="p-5 flex-1 flex flex-col">
+                                            <div class="mb-3">
+                                                <div class="text-xs font-medium text-blue-600 mb-2">
+                                                    {{ $item->published_at->translatedFormat('d M Y') }} •
+                                                    {{ $item->published_at->format('H:i') }} WIB
                                                 </div>
+                                                <h3 class="text-base font-semibold text-gray-800 mb-2 article-title" style="line-height: 1.3;">
+                                                    <a href="{{ route('informasi.show', $item->slug) }}"
+                                                        class="hover:text-blue-600 transition-colors duration-300">
+                                                        {{ $item->judul }}
+                                                    </a>
+                                                </h3>
+                                                <p class="text-gray-600 text-sm mb-4 article-excerpt">
+                                                    {{ Str::limit(strip_tags($item->isi), 150) }}
+                                                </p>
                                             </div>
-                                            <div class="flex justify-end">
+                                            <div class="mt-auto">
                                                 <a href="{{ route('informasi.show', $item->slug) }}"
-                                                    class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-blue-600 bg-blue-100 rounded-md hover:bg-blue-200 transition-colors duration-300">
-                                                    Baca Selengkapnya
-                                                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor"
+                                                    class="inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors duration-300">
+                                                    Selengkapnya
+                                                    <svg class="w-3.5 h-3.5 ml-1" fill="none" stroke="currentColor"
                                                         viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                                            stroke-width="2" d="M9 5l7 7-7 7"></path>
                                                     </svg>
                                                 </a>
                                             </div>
@@ -147,9 +135,39 @@
             </div>
         </div>
     </div>
+
+    @push('styles')
+        <style>
+            .card-article {
+                transition: all 0.3s ease;
+                border: 1px solid rgba(0, 0, 0, 0.1);
+            }
+
+            .card-article:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            }
+
+            .article-title {
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                min-height: 3em;
+            }
+
+            .article-excerpt {
+                display: -webkit-box;
+                -webkit-line-clamp: 3;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                min-height: 4.5em;
+            }
+        </style>
+    @endpush
 </div>
 
-    @push('scripts')
+@push('scripts')
     <script>
         // Inisialisasi tabel shadow setelah Livewire selesai memuat
         document.addEventListener('livewire:load', function() {
@@ -158,5 +176,5 @@
             });
         });
     </script>
-    @endpush
+@endpush
 </div>
