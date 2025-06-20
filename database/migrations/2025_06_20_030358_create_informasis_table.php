@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('slug');
             $table->text('isi');
             $table->string('file');
+            $table->timestamp('published_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

@@ -20,6 +20,7 @@ class Informasi extends Model
         'slug',
         'isi',
         'file',
+        'published_at',
     ];
 
 
@@ -27,6 +28,7 @@ class Informasi extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',
+        'published_at' => 'datetime',
     ];
 
     public function team(): BelongsTo

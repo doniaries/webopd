@@ -13,7 +13,6 @@ class Informasi extends Component
     public function render()
     {
         $informasi = InformasiModel::query()
-            ->where('is_active', true)
             ->where('published_at', '<=', now())
             ->latest('published_at')
             ->paginate(10);

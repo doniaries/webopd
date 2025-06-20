@@ -38,6 +38,7 @@ class InformasiSeeder extends Seeder
         \App\Models\Team::all()->each(function ($team) use ($informasiData) {
             foreach ($informasiData as $data) {
                 \App\Models\Informasi::create(array_merge($data, [
+                    'published_at' => now(),
                     'team_id' => $team->id,
                     'slug' => \Illuminate\Support\Str::slug($data['judul']),
                 ]));

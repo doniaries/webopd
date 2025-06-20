@@ -88,7 +88,6 @@
                                 @php
                                     try {
                                         $informasi = App\Models\Informasi::query()
-                                            ->where('is_active', true)
                                             ->where('published_at', '<=', now())
                                             ->latest('published_at')
                                             ->take(5)
