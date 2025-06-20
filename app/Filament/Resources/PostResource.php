@@ -139,16 +139,16 @@ class PostResource extends Resource
                                 Forms\Components\Section::make('Informasi Artikel')
                                     ->description('Informasi dasar artikel')
                                     ->schema([
-                                        Forms\Components\Select::make('tag_id')
+                                        Forms\Components\Select::make('tag')
                                             ->relationship('tag', 'name', function ($query) {
-                                                return $query->where('team_id', auth()->user()->teams->first()?->id);
+                                                return $query->where('team_id', auth()->user()->current_team_id);
                                             })
                                             ->label('Tag')
                                             ->preload()
                                             ->multiple()
                                             ->searchable()
                                             ->required()
-                                            ->exists('categories', 'id'),
+                                            ->exists('tag', 'id'),
                                         Forms\Components\Select::make('user_id')
                                             ->relationship('user', 'name')
                                             ->default(auth()->id())
@@ -242,8 +242,10 @@ class PostResource extends Resource
                 Tables\Filters\SelectFilter::make('tag')
                     ->label('Tag')
                     ->relationship('tag', 'name', function ($query) {
-                        return $query->where('team_id', auth()->user()->teams->first()?->id);
-                    }),
+                        return $query->where('team_id', auth()->user()->current_team_id);
+                    })
+                    ->multiple()
+                    ->searchable(),
                 Tables\Filters\Filter::make('published_at')
                     ->label('Tanggal Publikasi')
                     ->form([

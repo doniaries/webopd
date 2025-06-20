@@ -41,7 +41,7 @@ class Post extends Component
         if ($slug) {
             $this->show($slug);
         } else {
-            $this->tags = Tag::where('is_active', true)->get();
+            $this->tags = Tag::all();
             $this->getLatestPosts();
 
             // Set properties from parameters
@@ -67,7 +67,7 @@ class Post extends Component
         $this->latestPosts = \App\Models\Post::query()
             ->where('status', 'published')
             ->where('published_at', '<=', now())
-            ->with(['tag', 'user'])
+            ->with(['tags', 'user'])
             ->latest('published_at')
             ->take(5) // Ambil 5 postingan terbaru (1 untuk utama + 4 untuk grid)
             ->get();
@@ -85,7 +85,7 @@ class Post extends Component
     // Get posts for index page
     protected function getPosts()
     {
-        $query = \App\Models\Post::with(['tag', 'user'])
+        $query = \App\Models\Post::with(['tags', 'user'])
             ->where('status', 'published')
             ->where('published_at', '<=', now());
 
@@ -100,7 +100,7 @@ class Post extends Component
 
         // Apply tag filter
         if ($this->tag) {
-            $query->whereHas('tag', function ($q) {
+            $query->whereHas('tags', function ($q) {
                 $q->where('slug', $this->tag);
             });
         }
@@ -127,7 +127,7 @@ class Post extends Component
     // Show single post
     public function show($slug)
     {
-        $this->post = \App\Models\Post::with(['tag', 'user', 'tags'])
+        $this->post = \App\Models\Post::with(['tags', 'user'])
             ->where('slug', $slug)
             ->where('status', 'published')
             ->firstOrFail();
@@ -147,7 +147,7 @@ class Post extends Component
             : collect();
     }
 
-    // Reset pagination when searching or changing category
+    // Reset pagination when searching or changing tag
     public function updatingSearch()
     {
         $this->resetPage();
@@ -185,7 +185,6 @@ class Post extends Component
         // Prepare view data for index view
         return view('livewire.post', [
             'posts' => $posts,
-            'categories' => $this->categories,
             'search' => $this->search,
             'tag' => $this->tag,
             'pageTitle' => $this->tagName ? 'Tag: ' . $this->tagName : 'Berita Terbaru',

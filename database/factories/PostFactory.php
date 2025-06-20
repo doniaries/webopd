@@ -112,7 +112,6 @@ class PostFactory extends Factory
             'slug' => Str::slug($title) . '-' . Str::random(6),
             'content' => $content,
             'featured_image' => $featuredImage,
-            'tag_id' => Tag::inRandomOrder()->first()?->id ?? Tag::factory(),
             'user_id' => User::inRandomOrder()->first()?->id ?? User::factory(),
             'status' => $faker->randomElement(['published', 'draft', 'archived']),
             'published_at' => $faker->dateTimeBetween('-1 year', '+1 month'),
@@ -128,14 +127,13 @@ class PostFactory extends Factory
     public function configure()
     {
         return $this->afterCreating(function (Post $post) {
-            // Attach 1-5 random tags if they exist
+            // Attach 1-3 random tags to the post
             $tags = Tag::inRandomOrder()
-                ->limit(rand(1, 5))
-                ->pluck('id');
-
-            if ($tags->isNotEmpty()) {
-                $post->tags()->attach($tags, ['team_id' => $post->team_id]);
-            }
+                ->take(rand(1, 3))
+                ->pluck('id')
+                ->toArray();
+            
+            $post->tags()->sync($tags);
         });
     }
 

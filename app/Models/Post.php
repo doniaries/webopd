@@ -25,7 +25,6 @@ class Post extends Model
         'content',
         'foto_utama',
         'gallery_images',
-        'tag_id',
         'user_id',
         'status',
         'published_at',
@@ -33,7 +32,7 @@ class Post extends Model
         'is_featured',
     ];
 
-    protected $with = ['tag', 'user', 'tags'];
+    protected $with = ['user', 'tags'];
 
     protected $casts = [
         'gallery_images' => 'array',
@@ -230,7 +229,9 @@ class Post extends Model
      */
     public function scopeInTag($query, $tagId)
     {
-        return $query->where('tag_id', $tagId);
+        return $query->whereHas('tags', function ($q) use ($tagId) {
+            $q->where('tags.id', $tagId);
+        });
     }
 
     /**

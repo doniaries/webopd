@@ -68,20 +68,6 @@ class ShieldSeeder extends Seeder
             "replicate_post",
             "reorder_post",
 
-            // Category permissions
-            "view_category",
-            "view_any_category",
-            "create_category",
-            "update_category",
-            "delete_category",
-            "delete_any_category",
-            "restore_category",
-            "restore_any_category",
-            "force_delete_category",
-            "force_delete_any_category",
-            "replicate_category",
-            "reorder_category",
-
             // Tag permissions
             "view_tag",
             "view_any_tag",
@@ -203,6 +189,127 @@ class ShieldSeeder extends Seeder
             "delete_any_tentang",
             "force_delete_tentang",
             "force_delete_any_tentang",
+            // agenda
+            "view_agenda",
+            "view_any_agenda",
+            "create_agenda",
+            "update_agenda",
+            "restore_agenda",
+            "restore_any_agenda",
+            "replicate_agenda",
+            "reorder_agenda",
+            "delete_agenda",
+            "delete_any_agenda",
+            "force_delete_agenda",
+            "force_delete_any_agenda",
+            // pengumuman
+            "view_pengumuman",
+            "view_any_pengumuman",
+            "create_pengumuman",
+            "update_pengumuman",
+            "restore_pengumuman",
+            "restore_any_pengumuman",
+            "replicate_pengumuman",
+            "reorder_pengumuman",
+            "delete_pengumuman",
+            "delete_any_pengumuman",
+            "force_delete_pengumuman",
+            "force_delete_any_pengumuman",
+            // banner
+            "view_banner",
+            "view_any_banner",
+            "create_banner",
+            "update_banner",
+            "restore_banner",
+            "restore_any_banner",
+            "replicate_banner",
+            "reorder_banner",
+            "delete_banner",
+            "delete_any_banner",
+            "force_delete_banner",
+            "force_delete_any_banner",
+            // slider
+            "view_slider",
+            "view_any_slider",
+            "create_slider",
+            "update_slider",
+            "restore_slider",
+            "restore_any_slider",
+            "replicate_slider",
+            "reorder_slider",
+            "delete_slider",
+            "delete_any_slider",
+            "force_delete_slider",
+            "force_delete_any_slider",
+
+            // dokumen
+            "view_dokumen",
+            "view_any_dokumen",
+            "create_dokumen",
+            "update_dokumen",
+            "restore_dokumen",
+            "restore_any_dokumen",
+            "replicate_dokumen",
+            "reorder_dokumen",
+            "delete_dokumen",
+            "delete_any_dokumen",
+            "force_delete_dokumen",
+            "force_delete_any_dokumen",
+            // sambutan
+            "view_sambutan",
+            "view_any_sambutan",
+            "create_sambutan",
+            "update_sambutan",
+            "restore_sambutan",
+            "restore_any_sambutan",
+            "replicate_sambutan",
+            "reorder_sambutan",
+            "delete_sambutan",
+            "delete_any_sambutan",
+            "force_delete_sambutan",
+            "force_delete_any_sambutan",
+            // visi misi
+            "view_visimisi",
+            "view_any_visimisi",
+            "create_visimisi",
+            "update_visimisi",
+            "restore_visimisi",
+            "restore_any_visimisi",
+            "replicate_visimisi",
+            "reorder_visimisi",
+            "delete_visimisi",
+            "delete_any_visimisi",
+            "force_delete_visimisi",
+            "force_delete_any_visimisi",
+            // produk hukum
+            "view_produkhukum",
+            "view_any_produkhukum",
+            "create_produkhukum",
+            "update_produkhukum",
+            "restore_produkhukum",
+            "restore_any_produkhukum",
+            "replicate_produkhukum",
+            "reorder_produkhukum",
+            "delete_produkhukum",
+            "delete_any_produkhukum",
+            "force_delete_produkhukum",
+            "force_delete_any_produkhukum",
+            // infografis
+            "view_infografis",
+            "view_any_infografis",
+            "create_infografis",
+            "update_infografis",
+            "restore_infografis",
+            "restore_any_infografis",
+            "replicate_infografis",
+            "reorder_infografis",
+            "delete_infografis",
+            "delete_any_infografis",
+            "force_delete_infografis",
+            "force_delete_any_infografis",
+
+
+
             // themes
             "delete_user",
             "delete_any_user",
@@ -215,7 +322,6 @@ class ShieldSeeder extends Seeder
         $adminOpdPermissions = array_filter($allPermissions, function ($permission) {
             // Allow access to content management
             if (strpos($permission, 'post') !== false) return true;
-            if (strpos($permission, 'category') !== false) return true;
             if (strpos($permission, 'tag') !== false) return true;
             if (strpos($permission, 'comment') !== false) return true;
 
@@ -237,7 +343,6 @@ class ShieldSeeder extends Seeder
         $editorPermissions = array_filter($allPermissions, function ($permission) {
             // Allow viewing and managing content
             if (strpos($permission, 'post') !== false) return true;
-            if (strpos($permission, 'category') !== false) return strpos($permission, 'delete') === false;
             if (strpos($permission, 'tag') !== false) return strpos($permission, 'delete') === false;
             if (strpos($permission, 'comment') !== false) return true;
 

@@ -37,15 +37,15 @@ class Home extends Component
         try {
             // Get tags with published posts
             $this->tags = Tag::whereHas('posts', function ($query) {
-                    $query->where('status', 'published');
-                })
+                $query->where('status', 'published');
+            })
                 ->withCount(['posts' => function ($query) {
                     $query->where('status', 'published');
                 }])
                 ->orderBy('name')
                 ->get() ?? [];
 
-            // Get featured posts (3 latest posts with different categories if possible)
+            // Get featured posts (3 latest posts with different tag if possible)
             $this->featuredPosts = Post::where('status', 'published')
                 ->with(['tags', 'user'])
                 ->where('is_featured', true)
@@ -64,7 +64,7 @@ class Home extends Component
 
             // Get active banners
             $this->banners = Banner::active()->get() ?? [];
-            
+
             // Get active sliders
             $this->sliders = Slider::active()->orderBy('urutan')->get() ?? [];
 
@@ -74,16 +74,16 @@ class Home extends Component
                     ->withoutGlobalScopes() // Temporarily disable global scopes to ensure we get all relevant announcements
                     ->active()
                     ->published()
-                    ->where(function($query) {
+                    ->where(function ($query) {
                         $query->where('team_id', 1) // Always include team_id=1
-                              ->orWhere('team_id', Auth::check() ? Auth::user()->current_team_id : 1);
+                            ->orWhere('team_id', Auth::check() ? Auth::user()->current_team_id : 1);
                     })
                     ->orderBy('published_at', 'desc')
                     ->take(5);
-                
+
                 $pengumumanCollection = $pengumumanQuery->get();
                 $this->pengumuman = $pengumumanCollection->all();
-                
+
                 // Debug: Log query yang dihasilkan
                 if (app()->environment('local')) {
                     \Illuminate\Support\Facades\Log::info('Pengumuman query:', [
@@ -96,7 +96,7 @@ class Home extends Component
                 \Illuminate\Support\Facades\Log::error('Error loading pengumuman: ' . $e->getMessage());
                 $this->pengumuman = [];
             }
-            
+
             // Get upcoming agenda
             $this->agenda = \App\Models\AgendaKegiatan::query()
                 ->where('dari_tanggal', '>=', now())
@@ -118,8 +118,8 @@ class Home extends Component
     {
         // Get all tags with published posts for the menu
         $tags = \App\Models\Tag::whereHas('posts', function ($query) {
-                $query->where('status', 'published');
-            })
+            $query->where('status', 'published');
+        })
             ->withCount(['posts' => function ($query) {
                 $query->where('status', 'published');
             }])

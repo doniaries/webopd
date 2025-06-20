@@ -5,24 +5,11 @@ export default {
         "./resources/**/*.blade.php",
         "./resources/**/*.js",
         "./resources/**/*.vue",
+        "./node_modules/flowbite/**/*.js"
     ],
-    theme: {
-        extend: {
-            fontFamily: {
-                sans: ['Instrument Sans', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-            },
-            colors: {
-                // Custom colors for dark mode
-                dark: {
-                    primary: '#1a202c',
-                    secondary: '#2d3748',
-                    accent: '#4a5568',
-                },
-            },
-        },
-    },
     plugins: [
         require('@tailwindcss/forms'),
         require('@tailwindcss/typography'),
+        require('flowbite/plugin')
     ],
 }
