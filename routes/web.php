@@ -18,10 +18,12 @@ Route::get('/', Home::class)->name('home');
 
 // Berita Routes
 Route::get('/berita', [Post::class, 'index'])->name('berita.index');
+Route::get('/berita/tag/{tag:slug}', [Post::class, 'tag'])->name('posts.tag');
 
 // Post Routes (Legacy)
 Route::get('/post', [Post::class, 'index'])->name('post.index');
 Route::get('/post/kategori/{slug}', Post::class)->name('post.kategori');
+Route::get('/post/tag/{tag:slug}', [Post::class, 'tag'])->name('post.tag');
 Route::get('/post/{slug}', Post::class)->name('post.show');
 
 // Informasi Routes
