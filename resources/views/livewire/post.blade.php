@@ -46,63 +46,103 @@
                 $gridPosts = $posts->skip(5);
             @endphp
 
-            <!-- Featured News Slider -->
-            <div x-data="{
-                currentSlide: 0,
-                slides: {{ $featuredPosts }},
-                next() {
-                    this.currentSlide = (this.currentSlide + 1) % this.slides.length;
-                },
-                prev() {
-                    this.currentSlide = (this.currentSlide - 1 + this.slides.length) % this.slides.length;
-                },
-                init() {
-                    // Auto-advance slides every 5 seconds
-                    setInterval(() => {
-                        this.next();
-                    }, 5000);
-                }
-            }" class="relative mb-8 rounded-xl overflow-hidden bg-gray-50 shadow-md hover:shadow transition-all duration-200">
-                <div class="relative h-80 md:h-96">
-                    <template x-for="(slide, index) in slides" :key="index">
-                        <div x-show="currentSlide === index" x-transition:enter="transition ease-out duration-1000"
-                            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-                            x-transition:leave="transition ease-in duration-1000" x-transition:leave-start="opacity-100"
-                            x-transition:leave-end="opacity-0"
-                            class="absolute inset-0 flex items-center bg-black bg-opacity-50">
-                            <div class="absolute inset-0">
-                                <img :src="slide.foto_utama_url || 'https://via.placeholder.com/1200x600?text=No+Image'"
-                                    :alt="slide.title" class="w-full h-full object-cover">
-                            </div>
-                            <div class="relative z-10 p-8 text-white max-w-3xl">
-                                <span x-show="slide.tag"
-                                    class="inline-block px-3 py-1 mb-4 text-sm font-semibold text-white bg-blue-600 rounded-full">
-                                    <span x-text="slide.tag.name"></span>
-                                </span>
-                                <h2 class="text-2xl md:text-4xl font-bold mb-4 leading-tight">
-                                    <a :href="'{{ url('/posts') }}/' + slide.slug" class="hover:underline"
-                                        x-text="slide.title"></a>
-                                </h2>
-                                <p class="text-gray-200 mb-4 line-clamp-2"
-                                    x-text="slide.excerpt || slide.content.substring(0, 150) + '...'"></p>
-                                <div class="flex items-center text-sm text-gray-200">
-                                    <span
-                                        x-text="new Date(slide.published_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) + ' • ' + (slide.views || 0) + 'x dilihat'"></span>
+            <!-- News Slider -->
+            <div class="relative mb-8 bg-white rounded-lg shadow-md overflow-hidden">
+                <div x-data="{
+                    currentSlide: 0,
+                    slides: {{ $featuredPosts }},
+                    next() {
+                        this.currentSlide = (this.currentSlide + 1) % this.slides.length;
+                    },
+                    prev() {
+                        this.currentSlide = (this.currentSlide - 1 + this.slides.length) % this.slides.length;
+                    },
+                    init() {
+                        setInterval(() => {
+                            this.next();
+                        }, 5000);
+                    }
+                }" class="relative">
+                    <!-- Slider Content -->
+                    <div class="relative h-96">
+                        <template x-for="(slide, index) in slides" :key="index">
+                            <div x-show="currentSlide === index" 
+                                 x-transition:enter="transition ease-out duration-500"
+                                 x-transition:enter-start="opacity-0" 
+                                 x-transition:enter-end="opacity-100"
+                                 x-transition:leave="transition ease-in duration-500" 
+                                 x-transition:leave-start="opacity-100"
+                                 x-transition:leave-end="opacity-0" 
+                                 class="absolute inset-0">
+                                <!-- Slide Image -->
+                                <img :src="slide.foto_utama_url" :alt="slide.title" class="w-full h-full object-cover">
+                                
+                                <!-- Gradient Overlay -->
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+                                
+                                <!-- Slide Content -->
+                                <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+                                    <!-- Category Badge -->
+                                    <div class="mb-3">
+                                        <span class="inline-block bg-blue-600 text-white text-xs font-semibold px-3 py-1 rounded-full">
+                                            <span x-text="slide.tag?.name || 'Berita'"></span>
+                                        </span>
+                                    </div>
+                                    
+                                    <!-- Title -->
+                                    <h2 class="text-2xl md:text-3xl font-bold mb-3 leading-tight">
+                                        <a :href="'{{ url('/posts') }}/' + slide.slug" class="hover:underline" x-text="slide.title"></a>
+                                    </h2>
+                                    
+                                    <!-- Date and Views -->
+                                    <div class="flex items-center text-sm text-gray-200">
+                                        <span class="flex items-center mr-4">
+                                            <i class="far fa-clock mr-1"></i>
+                                            <span x-text="new Date(slide.published_at).toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'})"></span>
+                                        </span>
+                                        <span class="flex items-center">
+                                            <i class="far fa-eye mr-1"></i>
+                                            <span x-text="slide.views + 'x dilihat'"></span>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </template>
-
-                    <!-- Slider Indicators -->
-                    <div class="absolute bottom-4 left-0 right-0 text-center text-white text-sm opacity-75">
-                        Geser untuk melihat berita lainnya
-                    </div>
-                    <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
-                        <template x-for="(slide, index) in slides" :key="'indicator-' + index">
-                            <button @click="currentSlide = index" class="w-3 h-3 rounded-full transition-colors"
-                                :class="{ 'bg-white': currentSlide === index, 'bg-white bg-opacity-50': currentSlide !== index }"
-                                :aria-label="'Go to slide ' + (index + 1)"></button>
                         </template>
+                        
+                        <!-- Navigation Arrows -->
+                        <button @click="prev()" class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/40 text-white p-2 rounded-full hover:bg-black/60 transition-colors">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button @click="next()" class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/40 text-white p-2 rounded-full hover:bg-black/60 transition-colors">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                        
+                        <!-- Slider Indicators -->
+                        <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
+                            <template x-for="(slide, index) in slides" :key="'indicator-' + index">
+                                <button @click="currentSlide = index" class="w-2.5 h-2.5 rounded-full transition-colors"
+                                    :class="{ 'bg-white': currentSlide === index, 'bg-white/50': currentSlide !== index }"
+                                    :aria-label="'Go to slide ' + (index + 1)"></button>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slider Footer -->
+                <div class="bg-gray-50 px-6 py-3 border-t border-gray-200">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center text-sm text-gray-600">
+                            <i class="fas fa-info-circle mr-2"></i>
+                            <span>Geser untuk melihat berita lainnya</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button @click="prev()" class="p-1 text-gray-500 hover:text-gray-700">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button @click="next()" class="p-1 text-gray-500 hover:text-gray-700">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
