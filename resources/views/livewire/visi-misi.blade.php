@@ -1,3 +1,4 @@
 <div>
-    {{-- If your happiness depends on money, you will never be happy with yourself. --}}
+    <x-page-header title="Visi & Misi" />
+    {{-- Konten visi & misi akan ditambahkan di sini --}}
 </div>

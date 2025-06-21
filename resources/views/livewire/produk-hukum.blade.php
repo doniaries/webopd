@@ -1,3 +1,4 @@
 <div>
-    {{-- Success is as dangerous as failure. --}}
+    <x-page-header title="Produk Hukum" />
+    {{-- Konten produk hukum akan ditambahkan di sini --}}
 </div>

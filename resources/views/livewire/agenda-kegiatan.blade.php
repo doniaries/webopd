@@ -1,16 +1,5 @@
 <div>
-    <!-- Page Title -->
-    <div class="page-title light-background">
-        <div class="container">
-            <h1>Agenda Kegiatan</h1>
-            <nav class="breadcrumbs">
-                <ol>
-                    <li><a href="{{ route('home') }}">Beranda</a></li>
-                    <li class="current">Agenda Kegiatan</li>
-                </ol>
-            </nav>
-        </div>
-    </div><!-- End Page Title -->
+    <x-page-header title="Agenda Kegiatan" />
 
     <!-- Agenda Section -->
     <section id="agenda" class="agenda-section section">

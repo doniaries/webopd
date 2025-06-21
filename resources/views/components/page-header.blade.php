@@ -1,94 +1,133 @@
 @props([
-    'title' => '',
-    'breadcrumbs' => [],
+    'title' => null,
 ])
 
-<div class="page-header py-4 bg-gradient-primary text-white">
-    <div class="container py-4">
-        <div class="row align-items-center">
-            <div class="col-lg-8">
-                <h1 class="fw-bold mb-3 text-white">{{ $title }}</h1>
-                @if (!empty($breadcrumbs))
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb mb-0">
-                            <li class="breadcrumb-item">
-                                <a href="{{ url('/') }}" class="text-blue-100 text-decoration-none">
-                                    <i class="bi bi-house-door-fill me-1"></i> Beranda
-                                </a>
-                            </li>
-                            @php
-                                $breadcrumbCount = count($breadcrumbs);
-                                $currentIndex = 0;
-                            @endphp
-                            @foreach ($breadcrumbs as $label => $url)
-                                @php $currentIndex++; @endphp
-                                @if ($currentIndex === $breadcrumbCount)
-                                    <li class="breadcrumb-item active" aria-current="page">
-                                        <span class="text-white">{{ $label }}</span>
-                                    </li>
-                                @else
-                                    <li class="breadcrumb-item">
-                                        <a href="{{ $url }}"
-                                            class="text-white text-decoration-none">{{ $label }}</a>
-                                    </li>
-                                @endif
-                            @endforeach
-                        </ol>
-                    </nav>
-                @endif
-            </div>
-            <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
-                {{ $slot }}
-            </div>
+@php
+    // Generate title from URL segments if not provided
+    if (!$title) {
+        $segments = request()->segments();
+        $title = end($segments) ?: 'Beranda';
+        $title = str_replace('-', ' ', $title);
+        $title = ucwords($title);
+
+        // Handle empty segments (homepage)
+        if (empty($title)) {
+            $title = 'Beranda';
+        }
+    }
+@endphp
+
+<!-- Page Header with Water Background -->
+<div class="page-header relative overflow-hidden flex items-center justify-center"
+    style="min-height: 80px; padding: 0.5rem 0;">
+    <!-- Background Overlay -->
+    <div class="absolute inset-0 bg-gradient-to-b from-blue-900 to-blue-700 opacity-90"></div>
+    <!-- Animated Bubbles -->
+    <div class="absolute inset-0 overflow-hidden">
+        <!-- Multiple bubbles with different sizes and speeds -->
+        <div class="bubble" style="left: 10%; animation: bubble 15s infinite linear;"></div>
+        <div class="bubble" style="left: 20%; animation: bubble 18s infinite linear 2s;"></div>
+        <div class="bubble bubble-sm" style="left: 30%; animation: bubble 12s infinite linear 1s;"></div>
+        <div class="bubble" style="left: 50%; animation: bubble 20s infinite linear 3s;"></div>
+        <div class="bubble bubble-sm" style="left: 70%; animation: bubble 14s infinite linear 4s;"></div>
+        <div class="bubble" style="left: 85%; animation: bubble 16s infinite linear 1.5s;"></div>
+    </div>
+
+    <!-- Content -->
+    <div class="container mx-auto px-4 relative z-10 flex flex-col items-center justify-center" style="min-height: 80px;">
+        <!-- Page Title -->
+        <div class="text-center">
+            <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-white tracking-tight leading-none">
+                {{ $title }}
+            </h1>
         </div>
     </div>
 </div>
 
 <style>
     .page-header {
-        background: linear-gradient(135deg, #082a5e 0%, #031c42 100%);
+        background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
         position: relative;
         overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
-    .page-header::before {
-        content: '';
+    /* Bubbles */
+    .bubble {
         position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h100v100H0V0zm5 5v90h90V5H5z' fill='rgba(255,255,255,0.1)' fill-rule='evenodd'/%3E%3C/svg%3E");
-        opacity: 0.5;
+        bottom: -20px;
+        width: 10px;
+        height: 10px;
+        background: rgba(255, 255, 255, 0.6);
+        border-radius: 50%;
+        animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 5;
     }
+
+    .bubble-sm {
+        width: 6px;
+        height: 6px;
+        opacity: 0.4;
+    }
+
+    /* Bubble Animation */
+    @keyframes bubble {
+        0% {
+            transform: translateY(0) translateX(0);
+            opacity: 0;
+        }
+
+        10% {
+            opacity: 0.6;
+        }
+
+        90% {
+            opacity: 0.6;
+        }
+
+        100% {
+            transform: translateY(-100vh) translateX(20px);
+            opacity: 0;
+        }
+    }
+
+    /* Background pattern removed */
 
     .page-header h1 {
         position: relative;
-        font-size: 2.25rem;
         text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     }
 
-    .breadcrumb {
+    .page-header .breadcrumb {
         background: transparent;
         padding: 0;
         margin: 0;
     }
 
-    .breadcrumb-item+.breadcrumb-item::before {
-        color: rgba(255, 255, 255, 0.7);
+    .page-header .breadcrumb-item {
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .page-header .breadcrumb-item a {
+        color: #bfdbfe;
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+
+    .page-header .breadcrumb-item a:hover {
+        color: #ffffff;
+        text-decoration: none;
+    }
+
+    .page-header .breadcrumb-item.active {
+        color: #ffffff;
+    }
+
+    .page-header .breadcrumb-item+.breadcrumb-item::before {
+        color: rgba(255, 255, 255, 0.5);
         content: ">";
-    }
-
-    .breadcrumb-item a {
-        transition: all 0.2s ease;
-    }
-
-    .breadcrumb-item a:hover {
-        opacity: 0.9;
-        text-decoration: underline !important;
-    }
-
-    .breadcrumb-item.active {
-        color: rgba(255, 255, 255, 0.9);
+        padding: 0 0.5rem;
     }
 </style>

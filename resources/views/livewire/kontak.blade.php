@@ -1,11 +1,11 @@
 <div>
+    <x-page-header title="Kontak Kami" />
     <div class="bg-gray-50 py-6">
         <div class="xl:container mx-auto px-3 sm:px-4 xl:px-2">
             <div class="flex flex-wrap">
                 <div class="flex-shrink max-w-full w-full overflow-hidden">
                     <div class="p-7 rounded bg-white">
                         <div class="mb-7">
-                            <h2 class="text-4xl font-bold mb-4">Kontak Kami</h2>
                             <p class="text-gray-600">{{ $description }}</p>
                         </div>
                         

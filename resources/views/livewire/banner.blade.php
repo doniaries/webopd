@@ -1,3 +1,4 @@
 <div>
-    {{-- Be like water. --}}
+    <x-page-header title="Banner" />
+    {{-- Konten banner akan ditambahkan di sini --}}
 </div>

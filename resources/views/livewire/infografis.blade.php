@@ -1,3 +1,4 @@
 <div>
-    {{-- Do your work, then step back. --}}
+    <x-page-header title="Infografis" />
+    {{-- Konten infografis akan ditambahkan di sini --}}
 </div>

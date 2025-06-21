@@ -1,6 +1,6 @@
 @if ($view === 'index')
+    <x-page-header :title="$pageTitle" />
     <div class="container mx-auto px-4 py-8">
-        <h1 class="text-3xl font-bold mb-6">{{ $pageTitle }}</h1>
 
         <!-- Search and Filter -->
         <div class="mb-8 bg-white rounded-lg shadow-sm p-4">
@@ -190,6 +190,7 @@
         </div>
     @else
         <!-- Single Post View -->
+        <x-page-header :title="$post->title" />
         <div class="container mx-auto px-4 py-8">
             <article class="max-w-4xl mx-auto">
                 <!-- Foto Utama -->
