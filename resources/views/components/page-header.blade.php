@@ -12,7 +12,7 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-0">
                             <li class="breadcrumb-item">
-                                <a href="{{ url('/') }}" class="text-white text-decoration-none">
+                                <a href="{{ url('/') }}" class="text-blue-100 text-decoration-none">
                                     <i class="bi bi-house-door-fill me-1"></i> Beranda
                                 </a>
                             </li>
@@ -28,7 +28,8 @@
                                     </li>
                                 @else
                                     <li class="breadcrumb-item">
-                                        <a href="{{ $url }}" class="text-white text-decoration-none">{{ $label }}</a>
+                                        <a href="{{ $url }}"
+                                            class="text-white text-decoration-none">{{ $label }}</a>
                                     </li>
                                 @endif
                             @endforeach

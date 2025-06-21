@@ -15,10 +15,10 @@
     <!-- Agenda Section -->
     <section id="agenda" class="agenda-section section">
         <div class="container" data-aos="fade-up">
-            <div class="section-title">
+            {{-- <div class="section-title">
                 <h2>Agenda Kegiatan</h2>
                 <p>Jadwal kegiatan terbaru</p>
-            </div>
+            </div> --}}
 
             <div class="row mb-4">
                 <div class="col-12">
