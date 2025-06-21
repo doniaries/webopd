@@ -2,10 +2,9 @@
     @if ($view === 'index') <x-page-header :title="$pageTitle" />
         <div class="container mx-auto px-4 py-8">
 
-            <!-- Removed Filter Section -->
 
             <!-- Jumlah Berita dan Filter -->
-            <div class="flex justify-between items-center mb-6">
+            <div class="flex justify-between items-center mb-8">
                 <h2 class="text-xl font-semibold text-gray-800">
                     @if (isset($tagName))
                         Berita {{ $tagName }}
@@ -40,9 +39,77 @@
                 </div>
             </div>
 
+            @php
+                // Get the latest 5 posts for the slider
+                $featuredPosts = $posts->take(5);
+                // Get the remaining posts for the grid
+                $gridPosts = $posts->skip(5);
+            @endphp
+
+            <!-- Featured News Slider -->
+            <div x-data="{
+                currentSlide: 0,
+                slides: {{ $featuredPosts }},
+                next() {
+                    this.currentSlide = (this.currentSlide + 1) % this.slides.length;
+                },
+                prev() {
+                    this.currentSlide = (this.currentSlide - 1 + this.slides.length) % this.slides.length;
+                },
+                init() {
+                    // Auto-advance slides every 5 seconds
+                    setInterval(() => {
+                        this.next();
+                    }, 5000);
+                }
+            }" class="relative mb-8 rounded-xl overflow-hidden bg-gray-50 shadow-md hover:shadow transition-all duration-200">
+                <div class="relative h-80 md:h-96">
+                    <template x-for="(slide, index) in slides" :key="index">
+                        <div x-show="currentSlide === index" x-transition:enter="transition ease-out duration-1000"
+                            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                            x-transition:leave="transition ease-in duration-1000" x-transition:leave-start="opacity-100"
+                            x-transition:leave-end="opacity-0"
+                            class="absolute inset-0 flex items-center bg-black bg-opacity-50">
+                            <div class="absolute inset-0">
+                                <img :src="slide.foto_utama_url || 'https://via.placeholder.com/1200x600?text=No+Image'"
+                                    :alt="slide.title" class="w-full h-full object-cover">
+                            </div>
+                            <div class="relative z-10 p-8 text-white max-w-3xl">
+                                <span x-show="slide.tag"
+                                    class="inline-block px-3 py-1 mb-4 text-sm font-semibold text-white bg-blue-600 rounded-full">
+                                    <span x-text="slide.tag.name"></span>
+                                </span>
+                                <h2 class="text-2xl md:text-4xl font-bold mb-4 leading-tight">
+                                    <a :href="'{{ url('/posts') }}/' + slide.slug" class="hover:underline"
+                                        x-text="slide.title"></a>
+                                </h2>
+                                <p class="text-gray-200 mb-4 line-clamp-2"
+                                    x-text="slide.excerpt || slide.content.substring(0, 150) + '...'"></p>
+                                <div class="flex items-center text-sm text-gray-200">
+                                    <span
+                                        x-text="new Date(slide.published_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) + ' • ' + (slide.views || 0) + 'x dilihat'"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Slider Indicators -->
+                    <div class="absolute bottom-4 left-0 right-0 text-center text-white text-sm opacity-75">
+                        Geser untuk melihat berita lainnya
+                    </div>
+                    <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
+                        <template x-for="(slide, index) in slides" :key="'indicator-' + index">
+                            <button @click="currentSlide = index" class="w-3 h-3 rounded-full transition-colors"
+                                :class="{ 'bg-white': currentSlide === index, 'bg-white bg-opacity-50': currentSlide !== index }"
+                                :aria-label="'Go to slide ' + (index + 1)"></button>
+                        </template>
+                    </div>
+                </div>
+            </div>
+
             <!-- Posts Grid -->
             <div class="grid grid-cols-1 {{ $layout === 'grid' ? 'md:grid-cols-2 lg:grid-cols-3' : '' }} gap-6">
-                @forelse($posts as $post)
+                @forelse($gridPosts as $post)
                     <div class="border rounded-lg overflow-hidden hover:shadow-md transition-shadow">
                         @if ($post->foto_utama_url)
                             <a href="{{ route('posts.show', $post->slug) }}" class="block">
