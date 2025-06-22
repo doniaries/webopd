@@ -212,19 +212,16 @@
                                                 class="block px-4 py-3 hover:bg-gray-50 transition-all duration-300 group">
                                                 <div class="flex items-start space-x-3">
                                                     <div class="flex-shrink-0">
-                                                        <div
-                                                            class="flex flex-col items-center justify-center w-12 h-12 rounded-lg bg-green-50 text-green-600">
-                                                            <div class="text-lg font-bold">
+                                                        <div class="flex flex-col items-center justify-center w-14 h-14 rounded-lg border-2 border-green-200 bg-white text-center overflow-hidden">
+                                                            <div class="w-full bg-green-600 text-white text-xs font-bold py-0.5">
+                                                                {{ strtoupper(indonesia_date($item->dari_tanggal, false, 'M')) }}
+                                                            </div>
+                                                            <div class="text-gray-800 text-xl font-extrabold leading-tight py-1">
                                                                 {{ indonesia_date($item->dari_tanggal, false, 'd') }}
                                                             </div>
-                                                            <div class="text-green-600 text-xs font-semibold uppercase">
-                                                                {{ indonesia_date($item->dari_tanggal, false, 'M') }}
+                                                            <div class="text-xs text-gray-500 font-medium w-full border-t border-gray-100">
+                                                                {{ $item->dari_tanggal->format('Y') }}
                                                             </div>
-                                                            @if ($item->waktu_mulai)
-                                                                <div class="text-green-600 text-xs font-medium mt-0.5">
-                                                                    {{ indonesia_time($item->waktu_mulai, false) }}
-                                                                </div>
-                                                            @endif
                                                         </div>
                                                     </div>
                                                     <div class="flex-1 min-w-0">
@@ -251,10 +248,16 @@
                                                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
 
                                                                 <div class="bg-blue-50 rounded p-2">
-                                                                    <div
-                                                                        class="flex items-center text-xs text-blue-700">
+                                                                    <div class="flex items-center text-xs text-blue-700">
                                                                         <i class="bi bi-calendar3-fill mr-1.5"></i>
-                                                                        <span>{{ $item->dari_tanggal->translatedFormat('d M Y') }}</span>
+                                                                        <span>
+                                                                            @if($item->sampai_tanggal && $item->dari_tanggal->format('Y-m-d') !== $item->sampai_tanggal->format('Y-m-d'))
+                                                                                {{ $item->dari_tanggal->translatedFormat('d M Y') }} - 
+                                                                                {{ $item->sampai_tanggal->translatedFormat('d M Y') }}
+                                                                            @else
+                                                                                {{ $item->dari_tanggal->translatedFormat('d M Y') }}
+                                                                            @endif
+                                                                        </span>
                                                                     </div>
                                                                 </div>
                                                                 @if ($item->waktu_mulai && $item->waktu_selesai)
