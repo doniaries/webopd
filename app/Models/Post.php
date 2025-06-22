@@ -182,14 +182,6 @@ class Post extends Model
     }
 
     /**
-     * Get the featured images for the post.
-     */
-    public function featuredImages(): HasMany
-    {
-        return $this->images()->where('is_featured', true);
-    }
-
-    /**
      * Get the user that owns the post.
      */
     public function user(): BelongsTo

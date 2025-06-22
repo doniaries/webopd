@@ -2,16 +2,17 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\PostResource\Pages;
-use App\Filament\Resources\PostResource\RelationManagers;
-use App\Models\Post;
+use App\Models\Tag;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use App\Models\Post;
 use Filament\Tables;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\PostResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\PostResource\RelationManagers;
 
 class PostResource extends Resource
 {
@@ -116,7 +117,7 @@ class PostResource extends Resource
                         Forms\Components\Group::make()
                             ->schema([
                                 Forms\Components\Hidden::make('team_id')
-                                    ->default(fn() => auth()->user()->teams->first()?->id)
+                                    ->default(fn() => auth()->check() ? auth()->user()->teams->first()?->id : null)
                                     ->dehydrated(),
 
                                 Forms\Components\Section::make('Status Publikasi')
@@ -139,20 +140,24 @@ class PostResource extends Resource
                                 Forms\Components\Section::make('Informasi Artikel')
                                     ->description('Informasi dasar artikel')
                                     ->schema([
-                                        Forms\Components\Select::make('tag')
-                                            ->relationship('tag', 'name', function ($query) {
-                                                return $query->where('team_id', auth()->user()->current_team_id);
-                                            })
+                                        Forms\Components\Select::make('tags')
+                                            ->relationship('tags', 'name', fn (Builder $query) => 
+                                                $query->where('tags.team_id', auth()->user()->teams->first()?->id)
+                                            )
                                             ->label('Tag')
                                             ->preload()
                                             ->multiple()
-                                            ->searchable()
-                                            ->required()
-                                            ->exists('tag', 'id'),
+                                            ->searchable(),
                                         Forms\Components\Select::make('user_id')
-                                            ->relationship('user', 'name')
-                                            ->default(auth()->id())
-                                            ->visible(fn() => auth()->user()->hasRole('super_admin'))
+                                            ->relationship('user', 'name', function ($query) {
+                                                $user = auth()->user();
+                                                if ($user) {
+                                                    return $query;
+                                                }
+                                                return $query->whereRaw('1 = 0'); // Return an empty query if no user
+                                            })
+                                            ->default(fn() => auth()->check() ? auth()->id() : null)
+                                            ->visible(fn() => auth()->check() && auth()->user()->hasRole('super_admin'))
                                             ->required(),
                                         Forms\Components\Hidden::make('views')
                                             ->required()
@@ -167,8 +172,8 @@ class PostResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('team.name')
-                    ->hidden(),
+                Tables\Columns\TextColumn::make('team.name'),
+                // ->hidden(),
                 Tables\Columns\ImageColumn::make('foto_utama_url')
                     ->label('Foto Utama')
                     ->circular(false)
@@ -188,8 +193,14 @@ class PostResource extends Resource
                     }),
                 Tables\Columns\TextColumn::make('slug')
                     ->hidden(),
-                Tables\Columns\TextColumn::make('tag.name')
+                Tables\Columns\TextColumn::make('tags.name')
                     ->label('Tag')
+                    ->listWithLineBreaks()
+                    ->bulleted()
+                    ->searchable()
+                    ->formatStateUsing(function ($state, $record) {
+                        return $record->tags->pluck('name')->join(', ');
+                    })
                     ->sortable(),
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('Penulis')
@@ -239,10 +250,14 @@ class PostResource extends Resource
                         'published' => 'Dipublikasikan',
                         'archived' => 'Diarsipkan',
                     ]),
-                Tables\Filters\SelectFilter::make('tag')
+                Tables\Filters\SelectFilter::make('tags')
                     ->label('Tag')
-                    ->relationship('tag', 'name', function ($query) {
-                        return $query->where('team_id', auth()->user()->current_team_id);
+                    ->relationship('tags', 'name', function ($query) {
+                        $user = auth()->user();
+                        if ($user && $user->current_team_id) {
+                            return $query->where('team_id', $user->current_team_id);
+                        }
+                        return $query->whereRaw('1 = 0'); // Return an empty query if no team_id
                     })
                     ->multiple()
                     ->searchable(),

@@ -154,15 +154,15 @@ class PostSeeder extends Seeder
                         $width = 1200;
                         $height = 800;
                         $image = imagecreatetruecolor($width, $height);
-                        
+
                         // Warna background acak
-                        $bgColor = imagecolorallocate($image, 
-                            mt_rand(200, 240), 
-                            mt_rand(200, 240), 
+                        $bgColor = imagecolorallocate($image,
+                            mt_rand(200, 240),
+                            mt_rand(200, 240),
                             mt_rand(200, 240)
                         );
                         imagefill($image, 0, 0, $bgColor);
-                        
+
                         // Tambahkan teks
                         $textColor = imagecolorallocate($image, 100, 100, 100);
                         $text = 'Gambar ' . ($index + 1);
@@ -171,20 +171,20 @@ class PostSeeder extends Seeder
                         $textHeight = imagefontheight($fontSize);
                         $x = ($width - $textWidth) / 2;
                         $y = ($height - $textHeight) / 2;
-                        
+
                         imagestring($image, $fontSize, $x, $y, $text, $textColor);
-                        
+
                         // Simpan gambar
                         imagejpeg($image, $imagePath, 90);
                         imagedestroy($image);
-                        
+
                         $this->command->info('Created placeholder image: ' . $imageName);
                     } catch (\Exception $e) {
                         $this->command->error('Failed to create placeholder image: ' . $e->getMessage());
                         continue;
                     }
                 }
-                
+
                 // Salin ke storage jika belum ada
                 if (!Storage::disk('public')->exists($storagePath)) {
                     try {
@@ -194,7 +194,7 @@ class PostSeeder extends Seeder
                         continue;
                     }
                 }
-                
+
                 $availableImages[] = $storagePath;
             }
 
@@ -251,11 +251,11 @@ class PostSeeder extends Seeder
                         // Random date in the past year
                         $postDate = now()->subDays(rand(1, 365))->subHours(rand(1, 24));
 
-                        // Generate title
-                        $title = $this->generateRandomTitle();
+                        // Generate title from predefined Indonesian titles
+                        $title = $this->faker->randomElement($indonesianTitles);
 
-                        // Generate content
-                        $content = $this->generateRandomContent($title);
+                        // Generate content from predefined Indonesian contents
+                        $content = $this->faker->randomElement($indonesianContents);
 
                         // Create post
                         $post = Post::create([
@@ -302,38 +302,5 @@ class PostSeeder extends Seeder
         }
     }
 
-    /**
-     * Generate a random title
-     */
-    protected function generateRandomTitle(): string
-    {
-        $templates = [
-            'Berita: ' . $this->faker->sentence(3),
-            'Update: ' . $this->faker->sentence(4),
-            'Terbaru: ' . $this->faker->sentence(3),
-            $this->faker->sentence(4) . ' - ' . $this->faker->sentence(3),
-            'Mengenal Lebih Jauh Tentang ' . $this->faker->words(2, true),
-            $this->faker->sentence(3) . ': ' . $this->faker->sentence(2),
-            $this->faker->sentence(4),
-            $this->faker->sentence(5),
-            $this->faker->sentence(3) . ' - ' . $this->faker->sentence(2),
-        ];
-        
-        return $this->faker->randomElement($templates);
-    }
-    
-    /**
-     * Generate random content
-     */
-    protected function generateRandomContent(string $title): string
-    {
-        $templates = [
-            '<p>' . $title . '</p><p>' . $this->faker->paragraph(3) . '</p>',
-            '<h2>Pendahuluan</h2><p>' . $this->faker->paragraph(2) . '</p><h2>Pembahasan</h2><p>' . $this->faker->paragraph(3) . '</p>',
-            '<p>' . $this->faker->paragraph(5) . '</p>',
-            '<p>' . $this->faker->paragraph(3) . '</p><p>' . $this->faker->paragraph(3) . '</p>',
-        ];
-        
-        return $this->faker->randomElement($templates);
-    }
+
 }

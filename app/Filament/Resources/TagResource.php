@@ -32,18 +32,22 @@ class TagResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('team_id')
-                    ->required()
-                    ->numeric(),
+                Forms\Components\Hidden::make('team_id')
+                    ->default(fn() => auth()->check() ? auth()->user()->current_team_id : null)
+                    ->required(),
                 Forms\Components\TextInput::make('name')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->live(onBlur: true)
+                    ->afterStateUpdated(function ($state, Forms\Set $set) {
+                        $set('slug', \Illuminate\Support\Str::slug($state));
+                    }),
                 Forms\Components\TextInput::make('slug')
                     ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('color')
+                    ->maxLength(255)
+                    ->unique(ignoreRecord: true),
+                Forms\Components\ColorPicker::make('color')
                     ->required()
-                    ->maxLength(20)
                     ->default('#6c757d'),
             ]);
     }
@@ -52,12 +56,24 @@ class TagResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('team_id')
+                Tables\Columns\TextColumn::make('team.name')
+                    ->label('Team')
                     ->hidden(),
                 Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
+                    ->label('Nama Tag')
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\ColorColumn::make('color')
+                    ->label('Warna')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('slug')
-                    ->searchable(),
+                    ->label('Slug')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('posts_count')
+                    ->label('Jumlah Post')
+                    ->counts('posts')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -72,7 +88,12 @@ class TagResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Tables\Filters\Filter::make('has_posts')
+                    ->label('Memiliki Post')
+                    ->query(fn (Builder $query): Builder => $query->has('posts')),
+                Tables\Filters\Filter::make('no_posts')
+                    ->label('Tidak Memiliki Post')
+                    ->query(fn (Builder $query): Builder => $query->doesntHave('posts')),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -87,7 +108,7 @@ class TagResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\PostsRelationManager::class,
         ];
     }
 
