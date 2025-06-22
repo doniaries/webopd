@@ -23,7 +23,6 @@ return new class extends Migration
             // Add indexes
             $table->index('post_id');
             $table->index('tag_id');
-            $table->index('created_at');
         });
     }
 

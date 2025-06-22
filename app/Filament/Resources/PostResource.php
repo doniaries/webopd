@@ -141,13 +141,28 @@ class PostResource extends Resource
                                     ->description('Informasi dasar artikel')
                                     ->schema([
                                         Forms\Components\Select::make('tags')
-                                            ->relationship('tags', 'name', fn (Builder $query) => 
+                                            ->relationship(
+                                                'tags',
+                                                'name',
+                                                fn(Builder $query) =>
                                                 $query->where('tags.team_id', auth()->user()->teams->first()?->id)
                                             )
                                             ->label('Tag')
                                             ->preload()
                                             ->multiple()
-                                            ->searchable(),
+                                            ->searchable()
+                                            ->saveRelationshipsUsing(function ($record, $state) {
+                                                if (! $state) {
+                                                    $record->tags()->detach();
+                                                    return;
+                                                }
+
+                                                $teamId = auth()->user()->teams->first()?->id;
+                                                $pivotData = array_fill(0, count($state), ['team_id' => $teamId]);
+                                                $syncData = array_combine($state, $pivotData);
+
+                                                $record->tags()->sync($syncData);
+                                            }),
                                         Forms\Components\Select::make('user_id')
                                             ->relationship('user', 'name', function ($query) {
                                                 $user = auth()->user();
@@ -196,11 +211,7 @@ class PostResource extends Resource
                 Tables\Columns\TextColumn::make('tags.name')
                     ->label('Tag')
                     ->listWithLineBreaks()
-                    ->bulleted()
                     ->searchable()
-                    ->formatStateUsing(function ($state, $record) {
-                        return $record->tags->pluck('name')->join(', ');
-                    })
                     ->sortable(),
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('Penulis')

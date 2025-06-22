@@ -3,14 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\Pivot;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Team;
 use App\Models\Post;
 use App\Models\Tag;
 
 class PostTag extends Pivot
 {
-    use SoftDeletes;
     protected $table = 'post_tag';
     
     protected $fillable = [
@@ -19,9 +17,7 @@ class PostTag extends Pivot
         'tag_id',
     ];
     
-    protected $dates = [
-        'deleted_at',
-    ];
+
     
     /**
      * Get the team that owns the pivot.
