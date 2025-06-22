@@ -220,49 +220,72 @@
                                                             <div class="text-green-600 text-xs font-semibold uppercase">
                                                                 {{ $item->dari_tanggal->format('M') }}
                                                             </div>
-                                                            @if($item->waktu_mulai)
-                                                            <div class="text-green-600 text-xs font-medium mt-0.5">
-                                                                {{ $item->waktu_mulai->format('H:i') }}
-                                                            </div>
+                                                            @if ($item->waktu_mulai)
+                                                                <div class="text-green-600 text-xs font-medium mt-0.5">
+                                                                    {{ $item->waktu_mulai->format('H:i') }}
+                                                                </div>
                                                             @endif
                                                         </div>
                                                     </div>
                                                     <div class="flex-1 min-w-0">
-                                                        <h6 class="text-sm font-semibold text-gray-900 mb-1 line-clamp-1">
+                                                        <h6
+                                                            class="text-sm font-semibold text-gray-900 mb-1 line-clamp-1">
                                                             {{ $item->nama_agenda }}
                                                         </h6>
-                                                        @if($item->penyelenggara)
-                                                            <div class="flex items-start text-xs bg-green-50 text-green-800 rounded px-2 py-1 mb-1 w-full">
-                                                                <i class="bi bi-building mr-1.5 mt-0.5 flex-shrink-0"></i>
-                                                                <span class="break-words">{{ $item->nama_penyelenggara }}</span>
-                                                            </div>
-                                                        @endif
-                                                        @if($item->uraian_agenda)
+
+                                                        @if ($item->uraian_agenda)
                                                             <p class="text-xs text-gray-500 mt-1 line-clamp-2">
                                                                 {{ Str::limit(strip_tags($item->uraian_agenda), 100) }}
                                                             </p>
                                                         @endif
-                                                        <div class="grid grid-cols-2 gap-2 mt-1">
-                                                            <div class="flex items-start text-xs text-gray-500">
-                                                                <i class="bi bi-calendar3-fill mr-1.5 mt-0.5"></i>
-                                                                <div>
-                                                                    <div>{{ $item->dari_tanggal->translatedFormat('d M Y') }}</div>
-                                                                    @if($item->waktu_mulai && $item->waktu_selesai)
-                                                                        <div class="text-xs text-gray-400">
-                                                                            {{ $item->waktu_mulai->format('H:i') }} - {{ $item->waktu_selesai->format('H:i') }} WIB
-                                                                        </div>
-                                                                    @endif
-                                                                </div>
+                                                        @if ($item->penyelenggara)
+                                                            <div
+                                                                class="flex items-start text-xs bg-green-50 text-green-800 rounded px-2 py-1 mb-1 w-full">
+                                                                <i
+                                                                    class="bi bi-building mr-1.5 mt-0.5 flex-shrink-0"></i>
+                                                                <span
+                                                                    class="break-words">{{ $item->nama_penyelenggara }}</span>
                                                             </div>
+                                                        @endif
+                                                        <div class="mt-2">
+                                                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+
+                                                                <div class="bg-blue-50 rounded p-2">
+                                                                    <div
+                                                                        class="flex items-center text-xs text-blue-700">
+                                                                        <i class="bi bi-calendar3-fill mr-1.5"></i>
+                                                                        <span>{{ $item->dari_tanggal->translatedFormat('d M Y') }}</span>
+                                                                    </div>
+                                                                </div>
+                                                                @if ($item->waktu_mulai && $item->waktu_selesai)
+                                                                    <div class="bg-green-50 rounded p-2">
+                                                                        <div
+                                                                            class="flex items-center text-xs text-green-700">
+                                                                            <i class="bi bi-clock-fill mr-1.5"></i>
+                                                                            <span>{{ $item->waktu_mulai ? $item->waktu_mulai->format('H:i') : '' }}
+                                                                                -
+                                                                                {{ $item->waktu_selesai ? $item->waktu_selesai->format('H:i') : '' }}
+                                                                                WIB</span>
+                                                                        </div>
+                                                                    </div>
+                                                                @endif
+                                                            </div>
+
                                                             @if ($item->tempat)
-                                                                <div class="flex items-start text-xs text-gray-500">
-                                                                    <i class="bi bi-geo-alt-fill mr-1.5 mt-0.5"></i>
-                                                                    <span class="truncate">{{ $item->tempat }}</span>
+                                                                <div class="mt-2">
+                                                                    <div
+                                                                        class="flex items-start text-xs text-gray-600 bg-gray-50 rounded p-2">
+                                                                        <i
+                                                                            class="bi bi-geo-alt-fill text-gray-500 mr-1.5 mt-0.5"></i>
+                                                                        <span
+                                                                            class="break-words">{{ $item->tempat }}</span>
+                                                                    </div>
                                                                 </div>
                                                             @endif
                                                         </div>
                                                     </div>
-                                                    <div class="text-gray-400 group-hover:text-green-500 transition-colors self-center">
+                                                    <div
+                                                        class="text-gray-400 group-hover:text-green-500 transition-colors self-center">
                                                         <i class="bi bi-chevron-right"></i>
                                                     </div>
                                                 </div>

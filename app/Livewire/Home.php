@@ -97,12 +97,33 @@ class Home extends Component
                 $this->informasi = [];
             }
 
-            // Get upcoming agenda
+            // Get upcoming agenda with time fields
             $this->agenda = \App\Models\AgendaKegiatan::query()
+                ->select([
+                    'id',
+                    'nama_agenda',
+                    'uraian_agenda',
+                    'tempat',
+                    'penyelenggara',
+                    'dari_tanggal',
+                    'sampai_tanggal',
+                    'waktu_mulai',
+                    'waktu_selesai',
+                    'team_id'
+                ])
                 ->where('dari_tanggal', '>=', now())
                 ->orderBy('dari_tanggal')
+                ->orderBy('waktu_mulai')
                 ->take(3)
                 ->get() ?? [];
+                
+            // Debug: Log agenda data
+            if (app()->environment('local')) {
+                \Illuminate\Support\Facades\Log::info('Agenda data:', [
+                    'count' => $this->agenda->count(),
+                    'first_item' => $this->agenda->first()
+                ]);
+            }
         } catch (\Exception $e) {
             LogFacade::error('Error in Home@loadData: ' . $e->getMessage());
             $this->tags = [];

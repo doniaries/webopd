@@ -16,15 +16,18 @@ return new class extends Migration
             $table->foreignId('team_id')->constrained('teams')->onDelete('cascade');
             $table->string('nama_agenda')->nullable();
             $table->text('uraian_agenda')->nullable();
+            $table->string('penyelenggara')->nullable();
             $table->string('tempat')->nullable();
             $table->date('dari_tanggal')->nullable();
             $table->date('sampai_tanggal')->nullable();
+            $table->time('waktu_mulai')->nullable();
+            $table->time('waktu_selesai')->nullable();
             $table->softDeletes();
             $table->timestamps();
 
             // Add composite unique constraint for team_id and nama_agenda
             $table->unique(['team_id', 'nama_agenda']);
-            
+
             // Add indexes for better performance
             $table->index('team_id');
             $table->index('nama_agenda');
