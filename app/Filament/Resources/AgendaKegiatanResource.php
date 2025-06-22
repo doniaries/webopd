@@ -34,13 +34,31 @@ class AgendaKegiatanResource extends Resource
                     ->default(fn() => auth()->user()->teams->first()?->id)
                     ->dehydrated(),
                 Forms\Components\TextInput::make('nama_agenda')
-                    ->maxLength(255),
+                    ->required()
+                    ->maxLength(255)
+                    ->columnSpanFull(),
                 Forms\Components\Textarea::make('uraian_agenda')
                     ->columnSpanFull(),
                 Forms\Components\TextInput::make('tempat')
+                    ->required()
                     ->maxLength(255),
-                Forms\Components\DatePicker::make('dari_tanggal'),
-                Forms\Components\DatePicker::make('sampai_tanggal'),
+                Forms\Components\DatePicker::make('dari_tanggal')
+                    ->required()
+                    ->native(false)
+                    ->displayFormat('d F Y'),
+                Forms\Components\TimePicker::make('waktu_mulai')
+                    ->label('Waktu Mulai')
+                    ->seconds(false)
+                    ->displayFormat('H:i'),
+                Forms\Components\DatePicker::make('sampai_tanggal')
+                    ->required()
+                    ->native(false)
+                    ->displayFormat('d F Y')
+                    ->afterOrEqual('dari_tanggal'),
+                Forms\Components\TimePicker::make('waktu_selesai')
+                    ->label('Waktu Selesai')
+                    ->seconds(false)
+                    ->displayFormat('H:i'),
             ]);
     }
 
@@ -48,18 +66,32 @@ class AgendaKegiatanResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('team_id')
-                    ->hidden(),
                 Tables\Columns\TextColumn::make('nama_agenda')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('nama_penyelenggara')
+                    ->label('Penyelenggara')
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('tempat')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('dari_tanggal')
-                    ->date()
+                    ->label('Tanggal')
+                    ->dateTime('d M Y')
                     ->sortable(),
+                Tables\Columns\TextColumn::make('waktu_mulai')
+                    ->label('Waktu')
+                    ->time('H:i'),
                 Tables\Columns\TextColumn::make('sampai_tanggal')
-                    ->date()
+                    ->label('Sampai')
+                    ->dateTime('d M Y')
                     ->sortable(),
+                Tables\Columns\TextColumn::make('waktu_selesai')
+                    ->label('Selesai')
+                    ->time('H:i'),
+                Tables\Columns\TextColumn::make('team_id')
+                    ->hidden(),
+
                 Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime()
                     ->sortable()

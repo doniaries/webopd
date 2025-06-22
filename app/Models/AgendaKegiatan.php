@@ -13,17 +13,39 @@ class AgendaKegiatan extends Model
         'nama_agenda',
         'uraian_agenda',
         'tempat',
+        'penyelenggara',
         'dari_tanggal',
+        'waktu_mulai',
         'sampai_tanggal',
+        'waktu_selesai',
     ];
 
-    protected $dates = ['published_at'];
+    protected $dates = ['published_at', 'dari_tanggal', 'sampai_tanggal'];
 
     protected $casts = [
         'published_at' => 'datetime',
-        'dari_tanggal' => 'datetime',
-        'sampai_tanggal' => 'datetime',
+        'dari_tanggal' => 'date',
+        'sampai_tanggal' => 'date',
+        'waktu_mulai' => 'datetime:H:i',
+        'waktu_selesai' => 'datetime:H:i',
     ];
+    
+    protected $appends = ['nama_penyelenggara'];
+    
+    public function getNamaPenyelenggaraAttribute()
+    {
+        return $this->penyelenggara ?? ($this->team ? $this->team->name : 'Tidak Diketahui');
+    }
+
+    protected static function booted()
+    {
+        static::saving(function ($model) {
+            // Jika penyelenggara kosong, gunakan nama tim
+            if (empty($model->penyelenggara) && $model->team) {
+                $model->penyelenggara = $model->team->name;
+            }
+        });
+    }
 
     public function team()
     {
