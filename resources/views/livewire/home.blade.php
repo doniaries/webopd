@@ -193,12 +193,14 @@
                                 @php
                                     try {
                                         $agenda = App\Models\AgendaKegiatan::query()
-                                            ->where('is_active', true)
-                                            ->where('tanggal_mulai', '>=', now())
-                                            ->orderBy('tanggal_mulai')
+                                            ->where('dari_tanggal', '>=', now())
+                                            ->orWhere('sampai_tanggal', '>=', now())
+                                            ->orderBy('dari_tanggal')
                                             ->take(3)
                                             ->get();
+                                        \Log::info('Agenda data:', $agenda->toArray()); // Log data untuk debugging
                                     } catch (\Exception $e) {
+                                        \Log::error('Error fetching agenda: ' . $e->getMessage());
                                         $agenda = collect();
                                     }
                                 @endphp
@@ -206,33 +208,36 @@
                                 @if ($agenda->count() > 0)
                                     <div class="divide-y divide-gray-100">
                                         @foreach ($agenda as $item)
-                                            <a href="#"
+                                            <a href="{{ route('agenda.show', $item->id) }}"
                                                 class="block px-4 py-3 hover:bg-gray-50 transition-all duration-300 group">
                                                 <div class="flex items-start space-x-3">
                                                     <div class="flex-shrink-0">
                                                         <div
-                                                            class="bg-green-50 p-2.5 rounded-lg text-center w-16 group-hover:bg-green-100 transition-colors">
-                                                            <i
-                                                                class="bi bi-calendar2-check-fill text-green-600 text-lg"></i>
-                                                            <div class="text-green-700 font-bold text-lg leading-none">
-                                                                {{ $item->tanggal_mulai->format('d') }}
+                                                            class="flex flex-col items-center justify-center w-12 h-12 rounded-lg bg-green-50 text-green-600">
+                                                            <div class="text-lg font-bold">
+                                                                {{ $item->dari_tanggal->format('d') }}
                                                             </div>
                                                             <div
                                                                 class="text-green-600 text-xs font-semibold uppercase mt-0.5">
-                                                                {{ $item->tanggal_mulai->format('M') }}
+                                                                {{ $item->dari_tanggal->format('M') }}
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="flex-1 min-w-0">
                                                         <h6
                                                             class="text-sm font-semibold text-gray-900 mb-1 line-clamp-1">
-                                                            {{ $item->judul }}
+                                                            {{ $item->nama_agenda }}
                                                         </h6>
-                                                        <div class="flex items-center text-xs text-gray-500">
+                                                        @if($item->uraian_agenda)
+                                                            <p class="text-xs text-gray-500 mt-1 line-clamp-2">
+                                                                {{ Str::limit(strip_tags($item->uraian_agenda), 100) }}
+                                                            </p>
+                                                        @endif
+                                                        <div class="flex items-center text-xs text-gray-500 mt-1">
                                                             <i class="bi bi-clock-fill mr-1.5"></i>
                                                             <span>
-                                                                {{ $item->tanggal_mulai->format('H:i') }} -
-                                                                {{ $item->tanggal_selesai->format('H:i') }} WIB
+                                                                {{ $item->dari_tanggal->format('d M Y H:i') }} - 
+                                                                {{ $item->sampai_tanggal->format('d M Y H:i') }}
                                                             </span>
                                                         </div>
                                                         @if ($item->tempat)
@@ -261,7 +266,7 @@
                                 @endif
                             </div>
                             <div class="px-4 py-3 bg-gray-50 text-right border-t border-gray-100">
-                                <a href="#"
+                                <a href="{{ route('agenda.index') }}"
                                     class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-green-600 hover:text-green-800 transition-colors">
                                     <span>Lihat Semua Agenda</span>
                                     <i class="bi bi-arrow-right ml-1.5"></i>

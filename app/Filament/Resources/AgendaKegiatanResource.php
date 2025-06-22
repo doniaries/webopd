@@ -49,8 +49,7 @@ class AgendaKegiatanResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('team_id')
-                    ->numeric()
-                    ->sortable(),
+                    ->hidden(),
                 Tables\Columns\TextColumn::make('nama_agenda')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('tempat')
