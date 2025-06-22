@@ -130,6 +130,7 @@
     
     <div class="menu-container">
         <div class="menu-wrapper">
+            <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
             <nav id="navmenu" class="navmenu">
                 <ul>
                     <li><a href="{{ url('/') }}" class="{{ request()->is('/') ? 'active' : '' }}">Beranda</a></li>
@@ -152,7 +153,6 @@
                     </li>
                     <li><a href="{{ route('kontak') }}" class="{{ request()->routeIs('kontak') ? 'active' : '' }}">Kontak</a></li>
                 </ul>
-                <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
             </nav>
         </div>
     </div>
