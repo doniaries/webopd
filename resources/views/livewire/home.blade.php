@@ -60,7 +60,8 @@
                                                 <i class="bi bi-calendar3 me-1"></i>
                                                 {{ $post->published_at->format('d M Y') }}
                                                 <span class="mx-1">•</span>
-                                                <i class="bi bi-person me-1"></i> {{ $post->user->name ?? 'Admin' }}
+                                                <i class="bi bi-person-fill me-1"></i>
+                                                {{ $post->user->name ?? 'Admin' }}
                                             </p>
                                             <p class="card-text small">
                                                 {{ Str::limit(strip_tags($post->content), 100) }}
@@ -73,7 +74,7 @@
 
                         <div class="text-center mt-4">
                             <a href="{{ route('berita.index') }}" class="btn btn-outline-primary">
-                                Lihat Semua Berita <i class="bi bi-arrow-right ms-1"></i>
+                                Lihat Semua Berita <i class="bi bi-arrow-right-short ms-1"></i>
                             </a>
                         </div>
                     </div>
@@ -85,8 +86,8 @@
                             <div class="border-b border-gray-200 bg-white px-4 py-3">
                                 <h5 class="text-base font-semibold text-gray-800 flex items-center">
                                     <span class="w-1 h-5 bg-blue-600 rounded-full mr-2"></span>
-                                    <i class="bi bi-newspaper text-blue-600 mr-2"></i>
-                                    Pengumuman Terbaru
+                                    <i class="bi bi-megaphone text-blue-600 mr-2"></i>
+                                    Informasi Terbaru
                                 </h5>
                             </div>
                             <div class="card-body p-0">
@@ -104,14 +105,28 @@
 
                                 @if ($informasi->count() > 0)
                                     <div class="divide-y divide-gray-100">
+                                        @php
+                                            $bgColors = [
+                                                'bg-blue-50 hover:bg-blue-50 border-blue-200',
+                                                'bg-purple-50 hover:bg-purple-50 border-purple-200',
+                                                'bg-amber-50 hover:bg-amber-50 border-amber-200',
+                                                'bg-emerald-50 hover:bg-emerald-50 border-emerald-200',
+                                                'bg-rose-50 hover:bg-rose-50 border-rose-200',
+                                            ];
+                                            $bgColorIndex = 0;
+                                        @endphp
                                         @foreach ($informasi as $item)
+                                            @php
+                                                $bgClass = $bgColors[$bgColorIndex % count($bgColors)];
+                                                $bgColorIndex++;
+                                            @endphp
                                             <a href="{{ route('informasi.show', $item->slug) }}"
-                                                class="block px-4 py-3 hover:bg-gray-50 transition-all duration-300 border-l-4 border-transparent hover:border-blue-500 group">
+                                                class="block px-4 py-3 transition-all duration-300 border-l-4 {{ $bgClass }} group">
                                                 <div class="flex items-start space-x-3">
                                                     <div class="flex-shrink-0">
                                                         <div
-                                                            class="bg-blue-50 p-2.5 rounded-lg text-blue-600 transition-all duration-300 group-hover:bg-blue-100 group-hover:scale-105">
-                                                            <i class="bi bi-file-earmark-text text-lg"></i>
+                                                            class="p-2.5 rounded-lg text-blue-600 transition-all duration-300 group-hover:scale-105 {{ str_replace('hover:bg-', 'bg-', str_replace('50', '100', $bgClass)) }}">
+                                                            <i class="bi bi-megaphone-fill text-lg"></i>
                                                         </div>
                                                     </div>
                                                     <div class="flex-1 min-w-0">
@@ -127,12 +142,12 @@
                                                         <div
                                                             class="flex items-center text-xs text-gray-500 mt-2 space-x-2">
                                                             <div class="flex items-center">
-                                                                <i class="bi bi-calendar3 mr-1"></i>
+                                                                <i class="bi bi-calendar3-fill mr-1"></i>
                                                                 <span>{{ $item->published_at->diffForHumans() }}</span>
                                                             </div>
                                                             <span>•</span>
                                                             <div class="flex items-center">
-                                                                <i class="bi bi-clock mr-1"></i>
+                                                                <i class="bi bi-clock-fill mr-1"></i>
                                                                 <span>{{ $item->published_at->format('d M Y') }}</span>
                                                             </div>
                                                         </div>
@@ -149,7 +164,7 @@
                                     <div class="text-center p-6">
                                         <div
                                             class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-blue-50 text-blue-500 mb-3">
-                                            <i class="bi bi-info-circle text-2xl"></i>
+                                            <i class="bi bi-info-circle-fill text-2xl"></i>
                                         </div>
                                         <p class="text-sm text-gray-500">Tidak ada informasi terbaru</p>
                                     </div>
@@ -170,7 +185,7 @@
                             <div class="border-b border-gray-200 bg-white px-4 py-3">
                                 <h5 class="text-base font-semibold text-gray-800 flex items-center">
                                     <span class="w-1 h-5 bg-green-600 rounded-full mr-2"></span>
-                                    <i class="bi bi-calendar3 text-green-600 mr-2"></i>
+                                    <i class="bi bi-calendar2-check-fill text-green-600 mr-2"></i>
                                     Agenda Mendatang
                                 </h5>
                             </div>
@@ -197,6 +212,8 @@
                                                     <div class="flex-shrink-0">
                                                         <div
                                                             class="bg-green-50 p-2.5 rounded-lg text-center w-16 group-hover:bg-green-100 transition-colors">
+                                                            <i
+                                                                class="bi bi-calendar2-check-fill text-green-600 text-lg"></i>
                                                             <div class="text-green-700 font-bold text-lg leading-none">
                                                                 {{ $item->tanggal_mulai->format('d') }}
                                                             </div>
@@ -212,7 +229,7 @@
                                                             {{ $item->judul }}
                                                         </h6>
                                                         <div class="flex items-center text-xs text-gray-500">
-                                                            <i class="bi bi-clock mr-1.5"></i>
+                                                            <i class="bi bi-clock-fill mr-1.5"></i>
                                                             <span>
                                                                 {{ $item->tanggal_mulai->format('H:i') }} -
                                                                 {{ $item->tanggal_selesai->format('H:i') }} WIB
@@ -220,7 +237,7 @@
                                                         </div>
                                                         @if ($item->tempat)
                                                             <div class="flex items-center text-xs text-gray-500 mt-1">
-                                                                <i class="bi bi-geo-alt mr-1.5"></i>
+                                                                <i class="bi bi-geo-alt-fill mr-1.5"></i>
                                                                 <span class="truncate">{{ $item->tempat }}</span>
                                                             </div>
                                                         @endif
@@ -237,7 +254,7 @@
                                     <div class="text-center p-6">
                                         <div
                                             class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-green-50 text-green-500 mb-3">
-                                            <i class="bi bi-calendar-x text-2xl"></i>
+                                            <i class="bi bi-calendar2-x-fill text-2xl"></i>
                                         </div>
                                         <p class="text-sm text-gray-500">Tidak ada agenda mendatang</p>
                                     </div>
@@ -329,12 +346,12 @@
                                             </h5>
                                             <div class="d-flex justify-content-between align-items-center mt-3">
                                                 <small class="text-muted">
-                                                    <i class="bi bi-calendar3 me-1"></i>
+                                                    <i class="bi bi-calendar3-fill me-1"></i>
                                                     {{ $post->published_at->format('d M Y') }}
                                                 </small>
                                                 <a href="{{ route('berita.show', $post->slug) }}"
                                                     class="text-primary small">
-                                                    Baca <i class="bi bi-arrow-right"></i>
+                                                    Baca <i class="bi bi-arrow-right-short"></i>
                                                 </a>
                                             </div>
                                         </div>
@@ -366,7 +383,7 @@
                         <h2 class="h4 fw-bold mb-0">Video Terbaru</h2>
                     </div>
                     <a href="#" class="btn btn-sm btn-outline-primary">
-                        Lihat Semua <i class="bi bi-arrow-right ms-1"></i>
+                        Lihat Semua <i class="bi bi-arrow-right-short ms-1"></i>
                     </a>
                 </div>
 
