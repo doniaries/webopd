@@ -72,7 +72,6 @@ class Home extends Component
             try {
                 $informasiQuery = \App\Models\Informasi::query()
                     ->withoutGlobalScopes() // Temporarily disable global scopes to ensure we get all relevant announcements
-                    ->active()
                     ->published()
                     ->where(function ($query) {
                         $query->where('team_id', 1) // Always include team_id=1
