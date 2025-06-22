@@ -12,8 +12,6 @@ class AgendaKegiatan extends Component
     use WithPagination;
 
     public $search = '';
-    public $view = 'index'; // 'index' or 'show'
-    public $selectedAgenda = null;
     public $perPage = 6;
     public $currentMonth;
     public $currentYear;
@@ -41,14 +39,6 @@ class AgendaKegiatan extends Component
         // Generate years from current year - 5 to current year + 5
         $currentYear = now()->year;
         $this->years = range($currentYear - 5, $currentYear + 5);
-        
-        $this->view = 'index';
-    }
-
-    public function showAgenda($agendaId)
-    {
-        $this->selectedAgenda = \App\Models\AgendaKegiatan::findOrFail($agendaId);
-        $this->view = 'show';
     }
 
     public function nextMonth()
@@ -69,15 +59,6 @@ class AgendaKegiatan extends Component
 
     public function render()
     {
-        if ($this->view === 'show' && $this->selectedAgenda) {
-            return view('livewire.agenda-kegiatan', [
-                'view' => 'show',
-                'selectedAgenda' => $this->selectedAgenda,
-                'pageTitle' => $this->selectedAgenda->nama_agenda,
-                'pageDescription' => \Illuminate\Support\Str::limit(strip_tags($this->selectedAgenda->uraian_agenda), 160)
-            ]);
-        }
-
         // Debug: Tampilkan parameter query
         \Log::info('Query parameters:', [
             'month' => $this->currentMonth,
@@ -90,10 +71,10 @@ class AgendaKegiatan extends Component
             ->orderBy('dari_tanggal', 'asc');
 
         if ($this->search) {
-            $query->where(function($q) {
+            $query->where(function ($q) {
                 $q->where('nama_agenda', 'like', '%' . $this->search . '%')
-                  ->orWhere('uraian_agenda', 'like', '%' . $this->search . '%')
-                  ->orWhere('tempat', 'like', '%' . $this->search . '%');
+                    ->orWhere('uraian_agenda', 'like', '%' . $this->search . '%')
+                    ->orWhere('tempat', 'like', '%' . $this->search . '%');
             });
         }
 
@@ -106,7 +87,6 @@ class AgendaKegiatan extends Component
         ]);
 
         return view('livewire.agenda-kegiatan', [
-            'view' => 'index',
             'agendas' => $agendas,
             'months' => $this->months,
             'currentMonth' => $this->currentMonth,

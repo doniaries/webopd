@@ -86,8 +86,8 @@
                                 class="{{ request()->routeIs('dokumen') ? 'active' : '' }}">Dokumen</a></li>
                         <li><a href="{{ route('produk-hukum') }}"
                                 class="{{ request()->routeIs('produk-hukum') ? 'active' : '' }}">Produk Hukum</a></li>
-                        <li><a href="{{ route('agenda-kegiatan.index') }}"
-                                class="{{ request()->routeIs('agenda-kegiatan.index') || request()->routeIs('agenda.show') ? 'active' : '' }}">Agenda
+                        <li><a href="{{ route('agenda.index') }}"
+                                class="{{ request()->routeIs('agenda.index') || request()->routeIs('agenda.show') ? 'active' : '' }}">Agenda
                                 Kegiatan</a></li>
                         <li><a href="{{ route('informasi.index') }}"
                                 class="{{ request()->routeIs('informasi.index') || request()->routeIs('informasi.show') ? 'active' : '' }}">Informasi</a>

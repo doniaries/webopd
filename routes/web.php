@@ -52,8 +52,8 @@ Route::get('/infografis', Infografis::class)->name('infografis.index');
 Route::get('/infografis', Infografis::class)->name('infografis');
 
 // Agenda Kegiatan
-Route::get('/agenda-kegiatan', AgendaKegiatan::class)->name('agenda-kegiatan.index');
-Route::get('/agenda/{slug}', AgendaKegiatan::class)->name('agenda.show');
+Route::get('/agenda', AgendaKegiatan::class)->name('agenda.index');
+Route::get('/agenda/{id}', \App\Livewire\AgendaDetail::class)->name('agenda.show');
 
 // Dokumen
 Route::get('/dokumen', Dokumen::class)->name('dokumen.index');
@@ -77,8 +77,10 @@ Route::get('/login', function () {
     return redirect('/admin/login');
 })->name('login');
 
+use Illuminate\Support\Facades\Auth;
+
 Route::post('/logout', function () {
-    auth()->logout();
+    Auth::logout();
     request()->session()->invalidate();
     request()->session()->regenerateToken();
     return redirect('/');
