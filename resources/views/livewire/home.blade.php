@@ -78,47 +78,15 @@
                         </div>
                     </div>
 
-                    <!-- Informasi Column -->
+                    <!-- Informasi/pengumuman Column -->
                     <div class="col-lg-4">
-                        <div class="card border-0 shadow-sm">
-                            <style>
-                                .info-card {
-                                    transition: all 0.3s ease;
-                                    border-left: 3px solid transparent;
-                                }
-
-                                .info-card:hover {
-                                    transform: translateX(5px);
-                                    border-left-color: #0d6efd;
-                                    background-color: #f8f9fa;
-                                    box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.1) !important;
-                                }
-
-                                .info-card .info-icon {
-                                    transition: all 0.3s ease;
-                                }
-
-                                .info-card:hover .info-icon {
-                                    transform: scale(1.1);
-                                    background-color: #e7f1ff !important;
-                                }
-
-                                .info-summary {
-                                    display: -webkit-box;
-                                    -webkit-line-clamp: 2;
-                                    -webkit-box-orient: vertical;
-                                    overflow: hidden;
-                                    text-overflow: ellipsis;
-                                    color: #6c757d;
-                                    font-size: 0.875rem;
-                                    margin-top: 0.5rem;
-                                }
-                            </style>
-
-                            <div class="card-header bg-gradient-primary text-white">
-                                <h5 class="mb-0 d-flex align-items-center">
-                                    <i class="bi bi-newspaper me-2"></i>
-                                    Informasi Terbaru
+                        <div
+                            class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-md">
+                            <div class="border-b border-gray-200 bg-white px-4 py-3">
+                                <h5 class="text-base font-semibold text-gray-800 flex items-center">
+                                    <span class="w-1 h-5 bg-blue-600 rounded-full mr-2"></span>
+                                    <i class="bi bi-newspaper text-blue-600 mr-2"></i>
+                                    Pengumuman Terbaru
                                 </h5>
                             </div>
                             <div class="card-body p-0">
@@ -135,61 +103,76 @@
                                 @endphp
 
                                 @if ($informasi->count() > 0)
-                                    <div class="list-group list-group-flush">
+                                    <div class="divide-y divide-gray-100">
                                         @foreach ($informasi as $item)
                                             <a href="{{ route('informasi.show', $item->slug) }}"
-                                                class="info-card list-group-item list-group-item-action border-0 p-3">
-                                                <div class="d-flex gap-3">
+                                                class="block px-4 py-3 hover:bg-gray-50 transition-all duration-300 border-l-4 border-transparent hover:border-blue-500 group">
+                                                <div class="flex items-start space-x-3">
                                                     <div class="flex-shrink-0">
-                                                        <div class="info-icon bg-light rounded p-2 text-primary">
-                                                            <i class="bi bi-file-earmark-text fs-4"></i>
+                                                        <div
+                                                            class="bg-blue-50 p-2.5 rounded-lg text-blue-600 transition-all duration-300 group-hover:bg-blue-100 group-hover:scale-105">
+                                                            <i class="bi bi-file-earmark-text text-lg"></i>
                                                         </div>
                                                     </div>
-                                                    <div class="flex-grow-1">
-                                                        <h6 class="mb-1 fw-semibold text-dark">{{ $item->judul }}</h6>
-                                                        @if($item->isi)
-                                                            <div class="info-summary">
-                                                                {{ Str::limit(strip_tags($item->isi), 120) }}
-                                                            </div>
+                                                    <div class="flex-1 min-w-0">
+                                                        <h6
+                                                            class="text-sm font-semibold text-gray-900 mb-1 line-clamp-1">
+                                                            {{ $item->judul }}
+                                                        </h6>
+                                                        @if ($item->isi)
+                                                            <p class="text-xs text-gray-500 mt-1 line-clamp-2">
+                                                                {{ Str::limit(strip_tags($item->isi), 100) }}
+                                                            </p>
                                                         @endif
-                                                        <div class="d-flex align-items-center text-muted small mt-2">
-                                                            <i class="bi bi-calendar3 me-1"></i>
-                                                            <span>{{ $item->published_at->diffForHumans() }}</span>
-                                                            <span class="mx-2">•</span>
-                                                            <i class="bi bi-clock me-1"></i>
-                                                            <span>{{ $item->published_at->format('d M Y') }}</span>
+                                                        <div
+                                                            class="flex items-center text-xs text-gray-500 mt-2 space-x-2">
+                                                            <div class="flex items-center">
+                                                                <i class="bi bi-calendar3 mr-1"></i>
+                                                                <span>{{ $item->published_at->diffForHumans() }}</span>
+                                                            </div>
+                                                            <span>•</span>
+                                                            <div class="flex items-center">
+                                                                <i class="bi bi-clock mr-1"></i>
+                                                                <span>{{ $item->published_at->format('d M Y') }}</span>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <div class="flex-shrink-0 align-self-center">
-                                                        <i class="bi bi-chevron-right text-muted"></i>
+                                                    <div
+                                                        class="text-gray-400 group-hover:text-blue-500 transition-colors">
+                                                        <i class="bi bi-chevron-right"></i>
                                                     </div>
                                                 </div>
                                             </a>
                                         @endforeach
                                     </div>
                                 @else
-                                    <div class="text-center p-4">
-                                        <div class="bg-soft-primary text-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
-                                            style="width: 64px; height: 64px;">
-                                            <i class="bi bi-info-circle fs-3"></i>
+                                    <div class="text-center p-6">
+                                        <div
+                                            class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-blue-50 text-blue-500 mb-3">
+                                            <i class="bi bi-info-circle text-2xl"></i>
                                         </div>
-                                        <p class="text-muted mb-0">Tidak ada informasi terbaru</p>
+                                        <p class="text-sm text-gray-500">Tidak ada informasi terbaru</p>
                                     </div>
                                 @endif
                             </div>
-                            <div class="card-footer bg-transparent border-top-0 pt-0">
+                            <div class="px-4 py-3 bg-gray-50 text-right border-t border-gray-100">
                                 <a href="{{ route('informasi.index') }}"
-                                    class="btn btn-outline-primary btn-sm d-inline-flex align-items-center">
+                                    class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors">
                                     <span>Lihat Semua Informasi</span>
-                                    <i class="bi bi-arrow-right ms-2"></i>
+                                    <i class="bi bi-arrow-right ml-1.5"></i>
                                 </a>
                             </div>
                         </div>
 
                         <!-- Agenda Section -->
-                        <div class="card border-0 shadow-sm mt-4">
-                            <div class="card-header bg-success text-white">
-                                <h5 class="mb-0">Agenda Mendatang</h5>
+                        <div
+                            class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mt-6 transition-all duration-300 hover:shadow-md">
+                            <div class="border-b border-gray-200 bg-white px-4 py-3">
+                                <h5 class="text-base font-semibold text-gray-800 flex items-center">
+                                    <span class="w-1 h-5 bg-green-600 rounded-full mr-2"></span>
+                                    <i class="bi bi-calendar3 text-green-600 mr-2"></i>
+                                    Agenda Mendatang
+                                </h5>
                             </div>
                             <div class="card-body p-0">
                                 @php
@@ -206,46 +189,65 @@
                                 @endphp
 
                                 @if ($agenda->count() > 0)
-                                    <div class="list-group list-group-flush">
+                                    <div class="divide-y divide-gray-100">
                                         @foreach ($agenda as $item)
-                                            <div class="list-group-item border-0 border-bottom">
-                                                <div class="d-flex align-items-start">
-                                                    <div class="me-3 text-center">
-                                                        <div class="bg-light rounded p-2">
-                                                            <div class="fw-bold text-success">
-                                                                {{ $item->tanggal_mulai->format('d') }}</div>
-                                                            <div class="text-uppercase text-muted small">
-                                                                {{ $item->tanggal_mulai->format('M') }}</div>
+                                            <a href="#"
+                                                class="block px-4 py-3 hover:bg-gray-50 transition-all duration-300 group">
+                                                <div class="flex items-start space-x-3">
+                                                    <div class="flex-shrink-0">
+                                                        <div
+                                                            class="bg-green-50 p-2.5 rounded-lg text-center w-16 group-hover:bg-green-100 transition-colors">
+                                                            <div class="text-green-700 font-bold text-lg leading-none">
+                                                                {{ $item->tanggal_mulai->format('d') }}
+                                                            </div>
+                                                            <div
+                                                                class="text-green-600 text-xs font-semibold uppercase mt-0.5">
+                                                                {{ $item->tanggal_mulai->format('M') }}
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <div>
-                                                        <h6 class="mb-1">{{ $item->judul }}</h6>
-                                                        <small class="text-muted">
-                                                            <i class="bi bi-clock me-1"></i>
-                                                            {{ $item->tanggal_mulai->format('H:i') }} -
-                                                            {{ $item->tanggal_selesai->format('H:i') }} WIB
-                                                        </small>
+                                                    <div class="flex-1 min-w-0">
+                                                        <h6
+                                                            class="text-sm font-semibold text-gray-900 mb-1 line-clamp-1">
+                                                            {{ $item->judul }}
+                                                        </h6>
+                                                        <div class="flex items-center text-xs text-gray-500">
+                                                            <i class="bi bi-clock mr-1.5"></i>
+                                                            <span>
+                                                                {{ $item->tanggal_mulai->format('H:i') }} -
+                                                                {{ $item->tanggal_selesai->format('H:i') }} WIB
+                                                            </span>
+                                                        </div>
                                                         @if ($item->tempat)
-                                                            <div class="small text-muted">
-                                                                <i class="bi bi-geo-alt me-1"></i> {{ $item->tempat }}
+                                                            <div class="flex items-center text-xs text-gray-500 mt-1">
+                                                                <i class="bi bi-geo-alt mr-1.5"></i>
+                                                                <span class="truncate">{{ $item->tempat }}</span>
                                                             </div>
                                                         @endif
                                                     </div>
+                                                    <div
+                                                        class="text-gray-400 group-hover:text-green-500 transition-colors self-center">
+                                                        <i class="bi bi-chevron-right"></i>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            </a>
                                         @endforeach
                                     </div>
                                 @else
-                                    <div class="p-3 text-center text-muted">
-                                        <i class="bi bi-calendar-x fs-4 d-block mb-2"></i>
-                                        Tidak ada agenda mendatang
+                                    <div class="text-center p-6">
+                                        <div
+                                            class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-green-50 text-green-500 mb-3">
+                                            <i class="bi bi-calendar-x text-2xl"></i>
+                                        </div>
+                                        <p class="text-sm text-gray-500">Tidak ada agenda mendatang</p>
                                     </div>
                                 @endif
                             </div>
-                            <div class="card-footer bg-transparent border-0 text-end">
-                                <a href="#" class="btn btn-sm btn-link text-decoration-none p-0">
-                                    <span>Lihat Semua</span>
-                                    <i class="bi bi-arrow-right ms-1"></i>
+                            <div class="px-4 py-3 bg-gray-50 text-right border-t border-gray-100">
+                                <a href="#"
+                                    class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-green-600 hover:text-green-800 transition-colors">
+                                    <span>Lihat Semua Agenda</span>
+                                    <i class="bi bi-arrow-right ml-1.5"></i>
                                 </a>
                             </div>
                         </div>
