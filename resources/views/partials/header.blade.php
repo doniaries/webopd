@@ -9,7 +9,7 @@
             width: 100%;
             padding: 0;
         }
-        
+
         .header-container {
             max-width: 1320px;
             margin: 0 auto;
@@ -18,21 +18,21 @@
             justify-content: space-between;
             align-items: center;
         }
-        
+
         .navmenu {
             margin-left: auto;
         }
-        
+
         .logo {
             display: flex;
             align-items: center;
         }
-        
+
         .menu-container {
             background-color: #f8f9fa;
             padding: 15px 0;
         }
-        
+
         .menu-wrapper {
             max-width: 1320px;
             margin: 0 auto;
@@ -41,31 +41,31 @@
     </style>
     <div class="header-container">
         <a href="{{ url('/') }}" class="logo d-flex align-items-center me-auto me-xl-0">
-        @php
-            $logoUrl = '';
-            $siteName = 'WebOPD'; // Default value
+            @php
+                $logoUrl = '';
+                $siteName = 'WebOPD'; // Default value
 
-            if (class_exists('App\\Models\\Pengaturan') && \App\Models\Pengaturan::exists()) {
-                $pengaturan = \App\Models\Pengaturan::first();
+                if (class_exists('App\\Models\\Pengaturan') && \App\Models\Pengaturan::exists()) {
+                    $pengaturan = \App\Models\Pengaturan::first();
 
-                // Get logo URL
-                if ($pengaturan && $pengaturan->logo_instansi) {
-                    if (str_starts_with($pengaturan->logo_instansi, 'http')) {
-                        $logoUrl = $pengaturan->logo_instansi;
-                    } else {
-                        $logoUrl = asset('storage/' . $pengaturan->logo_instansi);
+                    // Get logo URL
+                    if ($pengaturan && $pengaturan->logo_instansi) {
+                        if (str_starts_with($pengaturan->logo_instansi, 'http')) {
+                            $logoUrl = $pengaturan->logo_instansi;
+                        } else {
+                            $logoUrl = asset('storage/' . $pengaturan->logo_instansi);
+                        }
+                    }
+
+                    // Get site name
+                    if (!empty($pengaturan->nama_website)) {
+                        $siteName = $pengaturan->nama_website;
                     }
                 }
 
-                // Get site name
-                if (!empty($pengaturan->nama_website)) {
-                    $siteName = $pengaturan->nama_website;
+                if (empty($logoUrl) || $logoUrl === asset('storage/')) {
+                    $logoUrl = asset('kabupaten-sijunjung.png');
                 }
-            }
-
-            if (empty($logoUrl) || $logoUrl === asset('storage/')) {
-                $logoUrl = asset('kabupaten-sijunjung.png');
-            }
 
             @endphp
             <img src="{{ $logoUrl }}" alt="Logo" class="img-fluid" style="max-height: 50px;">
@@ -76,7 +76,7 @@
             </div>
         </a>
 
-        <nav id="navmenu" class="navmenu">
+        {{-- <nav id="navmenu" class="navmenu">
             <ul>
                 <li><a href="{{ url('/') }}" class="{{ request()->is('/') ? 'active' : '' }}">Beranda</a></li>
                 <li><a href="{{ route('berita.index') }}"
@@ -117,7 +117,7 @@
                         class="{{ request()->routeIs('kontak') ? 'active' : '' }}">Kontak</a></li>
             </ul>
             <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
-        </nav>
+        </nav> --}}
 
         <div class="d-flex align-items-center">
             {{-- <div id="darkModeToggle" class="dark-mode-toggle me-2">
@@ -127,31 +127,48 @@
             <a class="btn-getstarted" href="{{ route('login') }}">Login</a>
         </div>
     </div>
-    
+
     <div class="menu-container">
         <div class="menu-wrapper">
             <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
             <nav id="navmenu" class="navmenu">
                 <ul>
                     <li><a href="{{ url('/') }}" class="{{ request()->is('/') ? 'active' : '' }}">Beranda</a></li>
-                    <li><a href="{{ route('berita.index') }}" class="{{ request()->routeIs('berita.index') ? 'active' : '' }}">Berita</a></li>
-                    <li class="dropdown"><a href="#"><span>Profil</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                    <li><a href="{{ route('berita.index') }}"
+                            class="{{ request()->routeIs('berita.index') ? 'active' : '' }}">Berita</a></li>
+                    <li class="dropdown"><a href="#"><span>Profil</span> <i
+                                class="bi bi-chevron-down toggle-dropdown"></i></a>
                         <ul>
-                            <li><a href="{{ route('visi-misi') }}" class="{{ request()->routeIs('visi-misi') ? 'active' : '' }}">Visi & Misi</a></li>
-                            <li><a href="{{ route('sambutan-pimpinan') }}" class="{{ request()->routeIs('sambutan-pimpinan') ? 'active' : '' }}">Sambutan Pimpinan</a></li>
-                            <li><a href="{{ route('struktur-organisasi') }}" class="{{ request()->routeIs('struktur-organisasi') ? 'active' : '' }}">Struktur Organisasi</a></li>
+                            <li><a href="{{ route('visi-misi') }}"
+                                    class="{{ request()->routeIs('visi-misi') ? 'active' : '' }}">Visi & Misi</a></li>
+                            <li><a href="{{ route('sambutan-pimpinan') }}"
+                                    class="{{ request()->routeIs('sambutan-pimpinan') ? 'active' : '' }}">Sambutan
+                                    Pimpinan</a></li>
+                            <li><a href="{{ route('struktur-organisasi') }}"
+                                    class="{{ request()->routeIs('struktur-organisasi') ? 'active' : '' }}">Struktur
+                                    Organisasi</a></li>
                         </ul>
                     </li>
-                    <li class="dropdown"><a href="#"><span>Informasi</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                    <li class="dropdown"><a href="#"><span>Informasi</span> <i
+                                class="bi bi-chevron-down toggle-dropdown"></i></a>
                         <ul>
-                            <li><a href="{{ route('infografis') }}" class="{{ request()->routeIs('infografis') ? 'active' : '' }}">Infografis</a></li>
-                            <li><a href="{{ route('dokumen') }}" class="{{ request()->routeIs('dokumen') ? 'active' : '' }}">Dokumen</a></li>
-                            <li><a href="{{ route('produk-hukum') }}" class="{{ request()->routeIs('produk-hukum') ? 'active' : '' }}">Produk Hukum</a></li>
-                            <li><a href="{{ route('agenda.index') }}" class="{{ request()->routeIs('agenda.index') || request()->routeIs('agenda.show') ? 'active' : '' }}">Agenda Kegiatan</a></li>
-                            <li><a href="{{ route('informasi.index') }}" class="{{ request()->routeIs('informasi.index') || request()->routeIs('informasi.show') ? 'active' : '' }}">Informasi</a></li>
+                            <li><a href="{{ route('infografis') }}"
+                                    class="{{ request()->routeIs('infografis') ? 'active' : '' }}">Infografis</a></li>
+                            <li><a href="{{ route('dokumen') }}"
+                                    class="{{ request()->routeIs('dokumen') ? 'active' : '' }}">Dokumen</a></li>
+                            <li><a href="{{ route('produk-hukum') }}"
+                                    class="{{ request()->routeIs('produk-hukum') ? 'active' : '' }}">Produk Hukum</a>
+                            </li>
+                            <li><a href="{{ route('agenda.index') }}"
+                                    class="{{ request()->routeIs('agenda.index') || request()->routeIs('agenda.show') ? 'active' : '' }}">Agenda
+                                    Kegiatan</a></li>
+                            <li><a href="{{ route('informasi.index') }}"
+                                    class="{{ request()->routeIs('informasi.index') || request()->routeIs('informasi.show') ? 'active' : '' }}">Informasi</a>
+                            </li>
                         </ul>
                     </li>
-                    <li><a href="{{ route('kontak') }}" class="{{ request()->routeIs('kontak') ? 'active' : '' }}">Kontak</a></li>
+                    <li><a href="{{ route('kontak') }}"
+                            class="{{ request()->routeIs('kontak') ? 'active' : '' }}">Kontak</a></li>
                 </ul>
             </nav>
         </div>
