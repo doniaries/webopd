@@ -58,7 +58,7 @@
                                             </h5>
                                             <p class="card-text text-muted small">
                                                 <i class="bi bi-calendar3 me-1"></i>
-                                                {{ $post->published_at->format('d M Y') }}
+                                                {{ indonesia_date($post->published_at) }}
                                                 <span class="mx-1">•</span>
                                                 <i class="bi bi-person-fill me-1"></i>
                                                 {{ $post->user->name ?? 'Admin' }}
@@ -215,14 +215,14 @@
                                                         <div
                                                             class="flex flex-col items-center justify-center w-12 h-12 rounded-lg bg-green-50 text-green-600">
                                                             <div class="text-lg font-bold">
-                                                                {{ $item->dari_tanggal->format('d') }}
+                                                                {{ indonesia_date($item->dari_tanggal, false, 'd') }}
                                                             </div>
                                                             <div class="text-green-600 text-xs font-semibold uppercase">
-                                                                {{ $item->dari_tanggal->format('M') }}
+                                                                {{ indonesia_date($item->dari_tanggal, false, 'M') }}
                                                             </div>
                                                             @if ($item->waktu_mulai)
                                                                 <div class="text-green-600 text-xs font-medium mt-0.5">
-                                                                    {{ $item->waktu_mulai->format('H:i') }}
+                                                                    {{ indonesia_time($item->waktu_mulai, false) }}
                                                                 </div>
                                                             @endif
                                                         </div>
@@ -389,7 +389,7 @@
                                             <div class="d-flex justify-content-between align-items-center mt-3">
                                                 <small class="text-muted">
                                                     <i class="bi bi-calendar3-fill me-1"></i>
-                                                    {{ $post->published_at->format('d M Y') }}
+                                                    {{ indonesia_date($post->published_at) }}
                                                 </small>
                                                 <a href="{{ route('berita.show', $post->slug) }}"
                                                     class="text-primary small">

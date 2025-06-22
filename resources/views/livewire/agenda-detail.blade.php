@@ -18,9 +18,9 @@
                                     <div class="d-flex align-items-center text-muted">
                                         <i class="bi bi-calendar-event me-2"></i>
                                         <span>
-                                            {{ \Carbon\Carbon::parse($agenda->dari_tanggal)->translatedFormat('l, d F Y') }}
+                                            {{ indonesia_date($agenda->dari_tanggal, true) }}
                                             @if ($agenda->sampai_tanggal && $agenda->sampai_tanggal != $agenda->dari_tanggal)
-                                                s.d. {{ \Carbon\Carbon::parse($agenda->sampai_tanggal)->translatedFormat('l, d F Y') }}
+                                                s.d. {{ indonesia_date($agenda->sampai_tanggal, true) }}
                                             @endif
                                         </span>
                                     </div>
@@ -29,9 +29,9 @@
                                         <div class="d-flex align-items-center text-muted">
                                             <i class="bi bi-clock me-2"></i>
                                             <span>
-                                                {{ \Carbon\Carbon::parse($agenda->waktu_mulai)->translatedFormat('H:i') }}
+                                                {{ indonesia_time($agenda->waktu_mulai) }}
                                                 @if ($agenda->waktu_selesai)
-                                                    - {{ \Carbon\Carbon::parse($agenda->waktu_selesai)->translatedFormat('H:i') }} WIB
+                                                    - {{ indonesia_time($agenda->waktu_selesai) }} WIB
                                                 @else
                                                     WIB
                                                 @endif

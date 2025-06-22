@@ -79,10 +79,10 @@
                                             </h3>
                                             <div class="text-xs text-gray-500 mb-3">
                                                 <i class="bi bi-calendar3 me-1"></i>
-                                                {{ $item->published_at->translatedFormat('d F Y') }}
+                                                {{ indonesia_date($item->published_at) }}
                                                 <span class="mx-2">•</span>
                                                 <i class="bi bi-clock me-1"></i>
-                                                {{ $item->published_at->format('H:i') }} WIB
+                                                {{ indonesia_time($item->published_at) }} WIB
                                             </div>
                                             <div class="prose prose-sm max-w-none text-gray-600 mb-4">
                                                 {!! $item->isi !!}

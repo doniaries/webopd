@@ -39,10 +39,9 @@
                                         </h5>
                                         <p class="card-text text-muted small">
                                             <i class="bi bi-calendar me-1"></i>
-                                            {{ \Carbon\Carbon::parse($agenda->dari_tanggal)->translatedFormat('l, d F Y') }}
+                                            {{ indonesia_date($agenda->dari_tanggal, true) }}
                                             @if ($agenda->sampai_tanggal && $agenda->sampai_tanggal != $agenda->dari_tanggal)
-                                                -
-                                                {{ \Carbon\Carbon::parse($agenda->sampai_tanggal)->translatedFormat('d F Y') }}
+                                                - {{ indonesia_date($agenda->sampai_tanggal) }}
                                             @endif
                                         </p>
                                         @if ($agenda->tempat)

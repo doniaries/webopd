@@ -20,11 +20,11 @@
                             <div class="d-flex flex-wrap align-items-center gap-4">
                                 <span class="d-flex align-items-center text-muted">
                                     <i class="bi bi-calendar3 me-2"></i>
-                                    {{ $informasi->published_at->translatedFormat('l, j F Y') }}
+                                    {{ indonesia_date($informasi->published_at, true) }}
                                 </span>
                                 <span class="d-flex align-items-center text-muted">
                                     <i class="bi bi-clock me-2"></i>
-                                    {{ $informasi->published_at->format('H:i') }} WIB
+                                    {{ indonesia_time($informasi->published_at) }} WIB
                                 </span>
                             </div>
                         </div>
