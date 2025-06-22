@@ -20,6 +20,8 @@ class AgendaDetail extends Component
     {
         return view('livewire.agenda-detail', [
             'agenda' => $this->agenda,
+            'pageTitle' => $this->agenda->nama_agenda,
+            'pageDescription' => \Illuminate\Support\Str::limit(strip_tags($this->agenda->uraian_agenda), 160)
         ]);
     }
 }
