@@ -217,10 +217,14 @@
                                                             <div class="text-lg font-bold">
                                                                 {{ $item->dari_tanggal->format('d') }}
                                                             </div>
-                                                            <div
-                                                                class="text-green-600 text-xs font-semibold uppercase mt-0.5">
+                                                            <div class="text-green-600 text-xs font-semibold uppercase">
                                                                 {{ $item->dari_tanggal->format('M') }}
                                                             </div>
+                                                            @if($item->waktu_mulai)
+                                                            <div class="text-green-600 text-xs font-medium mt-0.5">
+                                                                {{ $item->waktu_mulai->format('H:i') }}
+                                                            </div>
+                                                            @endif
                                                         </div>
                                                     </div>
                                                     <div class="flex-1 min-w-0">
@@ -228,9 +232,9 @@
                                                             {{ $item->nama_agenda }}
                                                         </h6>
                                                         @if($item->penyelenggara)
-                                                            <div class="flex items-center text-xs text-gray-600 mb-1">
-                                                                <i class="bi bi-building mr-1.5"></i>
-                                                                <span class="truncate">{{ $item->nama_penyelenggara }}</span>
+                                                            <div class="flex items-start text-xs bg-green-50 text-green-800 rounded px-2 py-1 mb-1 w-full">
+                                                                <i class="bi bi-building mr-1.5 mt-0.5 flex-shrink-0"></i>
+                                                                <span class="break-words">{{ $item->nama_penyelenggara }}</span>
                                                             </div>
                                                         @endif
                                                         @if($item->uraian_agenda)
