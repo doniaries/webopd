@@ -45,12 +45,12 @@ class BannerResource extends Resource
                     ->required()
                     ->maxLength(255),
                 Forms\Components\FileUpload::make('gambar')
+                    ->label('Foto banner')
                     ->required()
-                    ->placeholder('Upload foto banner')
                     ->image()
-                    ->optimize('webp')
                     ->acceptedFileTypes(['image/jpeg', 'image/png'])
-                    ->helperText('Format yang diizinkan: JPEG, PNG'),
+                    ->maxSize(1024)
+                    ->helperText('Format yang diizinkan: JPEG, PNG. dan Wajib Potrait'),
                 Forms\Components\Toggle::make('is_active')
                     ->required()
                     ->default(true),
@@ -61,11 +61,11 @@ class BannerResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\ImageColumn::make('gambar')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('judul')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('keterangan')
-                    ->searchable(),
-                Tables\Columns\ImageColumn::make('gambar')
                     ->searchable(),
                 Tables\Columns\ToggleColumn::make('is_active')
                     ->label('Aktif')

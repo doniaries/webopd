@@ -1,101 +1,184 @@
-<section id="hero" class="hero">
+<section id="hero" class="hero py-4">
     @if ($sliders && count($sliders) > 0)
-        <div class="swiper slider-container" id="mainSlider">
-            <div class="swiper-wrapper">
-                @foreach ($sliders as $slider)
-                    @php
-                        // Convert to array if it's an object with public properties
-$slider = is_object($slider) ? (array) $slider : $slider;
-$imageUrl = $slider['gambar_url'] ?? asset('assets/img/hero-img.png');
-$title = $slider['judul'] ?? 'No Title';
-$description = $slider['deskripsi'] ?? '';
-$url = $slider['url'] ?? '#';
-$author = $slider['author_name'] ?? 'Admin';
-$date = isset($slider['published_at'])
-    ? \Carbon\Carbon::parse($slider['published_at'])->translatedFormat('d F Y')
-    : '';
-$tags = $slider['tags'] ?? [];
-                    @endphp
-
-                    <div class="swiper-slide"
-                        style="background-image: url('{{ $imageUrl }}'); 
-                                background-size: cover; 
-                                background-position: center; 
-                                background-repeat: no-repeat;
-                                image-rendering: -webkit-optimize-contrast;
-                                image-rendering: crisp-edges;
-                                -ms-interpolation-mode: nearest-neighbor;
-                                transform: translateZ(0);
-                                backface-visibility: hidden;
-                                -webkit-backface-visibility: hidden;
-                                -webkit-transform: translateZ(0);
-                                -webkit-font-smoothing: subpixel-antialiased;">
-                        <div class="slide-overlay"></div>
-                        <div class="container h-100">
-                            <div class="row h-100 align-items-center">
-                                <div class="col-lg-10 col-md-12 ps-5">
-                                    <div class="slider-content text-white p-4 ps-0" data-aos="fade-up" style="max-width: 800px;">
-                                        @if (!empty($tags))
-                                            <div class="mb-2">
-                                                @foreach (array_slice($tags, 0, 2) as $tag)
-                                                    <span class="badge bg-primary me-1">{{ $tag }}</span>
-                                                @endforeach
-                                            </div>
-                                        @endif
-
-                                        <h1 class="mb-3">
-                                            <a href="{{ $url }}" class="text-white text-decoration-none">
-                                                {{ $title }}
-                                            </a>
-                                        </h1>
-
-                                        <p class="mb-4">{{ $description }}</p>
-
-                                        <div class="d-flex align-items-center">
-                                            {{-- <div class="d-flex align-items-center me-4">
-                                                <i class="bi bi-person me-2"></i>
-                                                <span>{{ $author }}</span>
-                                            </div> --}}
-                                            @if ($date)
-                                                <div class="d-flex align-items-center">
-                                                    <i class="bi bi-calendar3 me-2"></i>
-                                                    <span>{{ $date }}</span>
-                                                </div>
-                                            @endif
-                                        </div>
-
-                                        <div class="mt-4">
-                                            <a href="{{ $url }}" class="btn btn-primary">
-                                                Baca Selengkapnya
-                                                <i class="bi bi-arrow-right ms-2"></i>
-                                            </a>
+        <div class="container-fluid px-0">
+            <div class="row g-0">
+                <!-- Main Slider (wider on large screens) -->
+                <div class="col-lg-9 mb-4 mb-lg-0">
+                    <div class="swiper main-slider"
+                        style="border-radius: 0 10px 10px 0; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                        <div class="swiper-wrapper">
+                            @foreach (array_slice($sliders, 0, 5) as $slider)
+                                @php
+                                    $slider = is_object($slider) ? (array) $slider : $slider;
+                                    $imageUrl = $slider['gambar_url'] ?? asset('assets/img/hero-img.png');
+                                    $title = $slider['judul'] ?? 'No Title';
+                                    $url = $slider['url'] ?? '#';
+                                @endphp
+                                <div class="swiper-slide" style="height: 400px;">
+                                    <div class="position-relative h-100 w-100">
+                                        <img src="{{ $imageUrl }}" alt="{{ $title }}" class="w-100 h-100"
+                                            style="object-fit: cover;">
+                                        <div class="position-absolute bottom-0 start-0 w-100 p-4"
+                                            style="background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);">
+                                            <h3 class="text-white mb-2">
+                                                <a href="{{ $url }}"
+                                                    class="text-white text-decoration-none">{{ Str::limit($title, 70) }}</a>
+                                            </h3>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            @endforeach
                         </div>
+                        <div class="swiper-pagination"></div>
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
                     </div>
-                @endforeach
+                </div>
+
+                <!-- Banner Slider (narrower on large screens) -->
+                <div class="col-lg-3">
+                    <div class="swiper banner-slider h-100"
+                        style="border-radius: 0 0 10px 0; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                        <div class="swiper-wrapper">
+                            @forelse($banners as $banner)
+                                <div class="swiper-slide">
+                                    <a href="{{ $banner['url'] }}" target="_blank">
+                                        <img src="{{ $banner['gambar_url'] }}" alt="{{ $banner['judul'] }}">
+                                        @if (!empty($banner['judul']))
+                                            <div class="banner-caption">
+                                                {{ Str::limit($banner['judul'], 50) }}
+                                            </div>
+                                        @endif
+                                    </a>
+                                </div>
+                            @empty
+                                <div class="swiper-slide bg-light d-flex align-items-center justify-content-center">
+                                    <div class="text-center p-4">
+                                        <i class="bi bi-image fs-1 text-muted mb-2"></i>
+                                        <p class="mb-0 text-muted">Tidak ada banner aktif</p>
+                                    </div>
+                                </div>
+                            @endforelse
+                        </div>
+                        @if (count($banners) > 1)
+                            <div class="swiper-pagination"></div>
+                        @endif
+                    </div>
+                </div>
             </div>
-            <div class="swiper-pagination"></div>
-            <div class="swiper-button-next"></div>
-            <div class="swiper-button-prev"></div>
         </div>
+
+        @push('styles')
+            <style>
+                .main-slider,
+                .banner-slider {
+                    height: 100%;
+                }
+
+                .swiper-slide {
+                    position: relative;
+                    border-radius: 10px;
+                    overflow: hidden;
+                }
+
+                .banner-slider {
+                    width: 100%;
+                    height: 100%;
+                    --banner-height: 200px;
+                    /* Fixed height for banners */
+                }
+
+                .banner-slider .swiper-slide {
+                    width: 100%;
+                    height: var(--banner-height);
+                    margin: 0 0 10px 0;
+                    padding: 0;
+                    position: relative;
+                    overflow: hidden;
+                    border-radius: 8px;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                }
+
+                .banner-slider .swiper-slide:last-child {
+                    margin-bottom: 0;
+                }
+
+                .banner-slider .swiper-slide>a {
+                    display: block;
+                    width: 100%;
+                    height: 100%;
+                }
+
+                .banner-slider .swiper-slide img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    object-position: center;
+                    display: block;
+                }
+
+                /* Title overlay */
+                .banner-slider .swiper-slide .banner-caption {
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    right: 0;
+                    padding: 8px 12px;
+                    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+                    color: white;
+                    font-size: 0.8rem;
+                    line-height: 1.2;
+                }
+
+                .swiper-button-next,
+                .swiper-button-prev {
+                    color: #fff;
+                    background: rgba(0, 0, 0, 0.5);
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 50%;
+                    transition: all 0.3s ease;
+                }
+
+
+                .swiper-button-next:after,
+                .swiper-button-prev:after {
+                    font-size: 1.2rem;
+                }
+
+
+                .swiper-pagination-bullet {
+                    background: #fff;
+                    opacity: 0.7;
+                }
+
+                .swiper-pagination-bullet-active {
+                    background: var(--primary);
+                    opacity: 1;
+                }
+
+                @media (max-width: 991.98px) {
+                    .main-slider {
+                        margin-bottom: 1rem;
+                    }
+
+                    .swiper-slide {
+                        height: 300px !important;
+                    }
+                }
+            </style>
+        @endpush
 
         @push('scripts')
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
-                    const swiper = new Swiper('#mainSlider', {
+                    // Main Slider
+                    new Swiper('.main-slider', {
                         loop: true,
                         autoplay: {
                             delay: 5000,
                             disableOnInteraction: false,
                         },
-                        effect: 'fade',
-                        fadeEffect: {
-                            crossFade: true
-                        },
-                        speed: 1000,
                         pagination: {
                             el: '.swiper-pagination',
                             clickable: true,
@@ -105,12 +188,31 @@ $tags = $slider['tags'] ?? [];
                             prevEl: '.swiper-button-prev',
                         },
                     });
+
+                    // Banner Slider
+                    new Swiper('.banner-slider', {
+                        effect: 'fade',
+                        fadeEffect: {
+                            crossFade: true
+                        },
+                        loop: true,
+                        autoplay: {
+                            delay: 3000,
+                            disableOnInteraction: false,
+                        },
+                        speed: 1000,
+                        pagination: {
+                            el: '.banner-slider .swiper-pagination',
+                            clickable: true,
+                            dynamicBullets: true,
+                        },
+                    });
                 });
             </script>
         @endpush
     @else
         <div class="swiper-slide"
-            style="background-image: url('{{ asset('assets/img/hero-img.png') }}'); background-size: cover; background-position: center; height: 85vh; position: relative; box-shadow: 0 5px 15px rgba(0,0,0,0.1); overflow: hidden;">
+            style="background-image: url('{{ asset('assets/img/hero-img.png') }}'); background-size: contain; background-position: center; background-color: #f8f9fa; height: 85vh; position: relative; box-shadow: 0 5px 15px rgba(0,0,0,0.1); overflow: hidden; transform: scale(0.9);">
             <div
                 style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.5));">
             </div>

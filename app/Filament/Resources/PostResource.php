@@ -83,11 +83,8 @@ class PostResource extends Resource
                                                     ->imageEditor()
                                                     ->imageResizeMode('cover')
                                                     ->imageCropAspectRatio('16:9')
-                                                    ->imageResizeTargetWidth('1200')
-                                                    ->imageResizeTargetHeight('675')
-                                                    ->maxSize(1024)
-                                                    ->optimize('webp')
-                                                    ->resize(80)
+                                                    ->maxSize(2048)
+                                                    ->optimize('webp'),
                                             ])->columnSpan(1),
                                         Forms\Components\Section::make('Gambar Tambahan')
                                             ->description('Gambar tambahan untuk konten artikel')
@@ -100,7 +97,7 @@ class PostResource extends Resource
                                                     ->image()
                                                     ->imageResizeMode('cover')
                                                     ->optimize('webp')
-                                                    ->maxSize(2048)
+                                                    ->maxSize(1024)
                                                     ->openable()
                                                     ->previewable()
                                                     ->afterStateUpdated(function ($state) {

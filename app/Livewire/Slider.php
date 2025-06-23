@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\Slider as SliderModel;
 use App\Models\Post;
 use App\Models\Pengaturan;
+use App\Models\Banner;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log as FacadesLog;
@@ -14,6 +15,7 @@ class Slider extends Component
 {
     /** @var Collection|array */
     public $sliders = [];
+    public $banners = [];
     public $pengaturan;
     public $usePostsAsSliders = true; // Flag untuk menggunakan post sebagai slider
 
@@ -31,12 +33,53 @@ class Slider extends Component
         \Illuminate\Support\Facades\Log::info('Memanggil loadSliders()');
         $this->loadSliders();
         
+        // Load active banners
+        $this->loadBanners();
+        
         // Log the loaded sliders for debugging
         \Illuminate\Support\Facades\Log::info('Loaded sliders:', [
             'count' => count($this->sliders),
             'type' => $this->sliders instanceof Collection ? 'Collection' : gettype($this->sliders),
             'first_item' => !empty($this->sliders) ? get_class(collect($this->sliders)->first()) : 'empty'
         ]);
+    }
+
+    /**
+     * Load active banners for the current team
+     *
+     * @return void
+     */
+    public function loadBanners(): void
+    {
+        try {
+            $teamId = $this->pengaturan->team_id ?? null;
+            
+            if (!$teamId) {
+                \Illuminate\Support\Facades\Log::warning('No active team found in pengaturan');
+                $this->banners = collect();
+                return;
+            }
+
+            $this->banners = Banner::where('is_active', true)
+                ->where('team_id', $teamId)
+                ->latest()
+                ->take(4)
+                ->get()
+                ->map(function($banner) {
+                    return [
+                        'judul' => $banner->judul,
+                        'gambar_url' => $banner->gambar ? asset('storage/' . $banner->gambar) : asset('assets/img/hero-img.png'),
+                        'url' => $banner->keterangan ?: '#',
+                        'is_banner' => true
+                    ];
+                });
+                
+            \Illuminate\Support\Facades\Log::info('Loaded ' . $this->banners->count() . ' banners for team_id: ' . $teamId);
+                
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Error loading banners: ' . $e->getMessage());
+            $this->banners = collect();
+        }
     }
 
     /**
@@ -140,6 +183,12 @@ class Slider extends Component
             $this->loadSliders();
         }
         
-        return view('livewire.slider');
+        if ($this->usePostsAsSliders) {
+            $this->loadSliders();
+        }
+        
+        return view('livewire.slider', [
+            'banners' => $this->banners
+        ]);
     }
 }
