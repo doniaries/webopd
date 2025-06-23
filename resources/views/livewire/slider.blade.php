@@ -17,7 +17,7 @@
                                 <div class="swiper-slide" style="height: 400px;">
                                     <div class="position-relative h-100 w-100">
                                         <img src="{{ $imageUrl }}" alt="{{ $title }}" class="w-100 h-100"
-                                            style="object-fit: cover;">
+                                            style="object-fit: contain;">
                                         <div class="position-absolute bottom-0 start-0 w-100 p-4"
                                             style="background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);">
                                             <h3 class="text-white mb-2">
@@ -43,7 +43,7 @@
                             @forelse($banners as $banner)
                                 <div class="swiper-slide" style="height: 400px;">
                                     <a href="{{ $banner['url'] }}" target="_blank" class="d-block h-100">
-                                        <img src="{{ $banner['gambar_url'] }}" alt="{{ $banner['judul'] }}" class="w-100 h-100" style="object-fit: cover;">
+                                        <img src="{{ $banner['gambar_url'] }}" alt="{{ $banner['judul'] }}" class="w-100 h-100" style="object-fit: contain;">
                                     </a>
                                 </div>
                             @empty
@@ -200,25 +200,16 @@
 
                     // Banner Slider
                     const bannerSwiper = new Swiper('.banner-slider', {
-                        direction: 'vertical',
-                        slidesPerView: 1,
-                        spaceBetween: 0,
                         loop: true,
+                        effect: 'fade',
+                        fadeEffect: {
+                            crossFade: true
+                        },
                         autoplay: {
                             delay: 3000,
                             disableOnInteraction: false,
                         },
                         speed: 800,
-                        height: 400, // Match the container height
-                        autoHeight: false,
-                        effect: 'slide',
-                        breakpoints: {
-                            // When window width is >= 992px (lg breakpoint)
-                            992: {
-                                slidesPerView: 3,
-                                spaceBetween: 0
-                            }
-                        }
                     });
                 });
             </script>
