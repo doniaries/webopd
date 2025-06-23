@@ -6,22 +6,33 @@
             transition: all 0.3s ease-in-out;
         }
 
-        /* State default (ketika di-scroll) */
+        /* Header selalu putih solid */
         .header-container {
-            padding: 0;
+            padding: 10px 0;
+            background-color: #ffffff !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .menu-container {
-            padding: 5px 0;
+            padding: 8px 0;
+            background-color: #ffffff !important;
+            border-top: 1px solid #f0f0f0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         }
 
-        /* State ketika di atas (belum di-scroll) */
-        .at-top .header-container {
-            padding: 10px 0;
+        /* Hapus efek transisi yang tidak diinginkan */
+        .header-container, .menu-container {
+            transition: none !important;
         }
 
-        .at-top .menu-container {
-            padding: 15px 0;
+        /* Pastikan navmenu juga putih */
+        #navmenu {
+            background-color: #ffffff;
+        }
+
+        /* Pastikan dropdown menu juga putih */
+        #navmenu ul ul {
+            background-color: #ffffff;
         }
 
         /* Style untuk menu item saat di atas */
@@ -540,12 +551,9 @@
 
                 <!-- Right side elements -->
                 <div class="d-flex align-items-center">
-                    <div id="current-time" class="d-flex align-items-center me-3">
-                        <div class="text-end me-3" style="line-height: 1.1;">
-                            <div id="date" class="fw-medium" style="font-size: 0.8rem; color: #6c757d;">Selasa, 24 Juni 2025</div>
-                            <div id="time" class="fw-bold" style="font-size: 0.9rem; color: #495057;">00:00:00 WIB</div>
-                        </div>
-                        <i class="bi bi-calendar3" style="font-size: 1.5rem; color: #6c757d;"></i>
+                    <div id="current-time" class="text-end me-3" style="line-height: 1.2;">
+                        <div id="date" class="fw-medium" style="font-size: 0.8rem; color: #6c757d;">Selasa, 24 Juni 2025</div>
+                        <div id="time" class="fw-bold" style="font-size: 0.9rem; color: #495057;">00:00:00 WIB</div>
                     </div>
                     <a href="{{ route('login') }}" class="btn btn-sm btn-primary">
                         <i class="bi bi-box-arrow-in-right me-1"></i> Login
@@ -783,6 +791,9 @@
         // Update waktu setiap detik
         setInterval(updateTime, 1000);
         updateTime(); // Panggil sekali saat pertama kali load
+        
+        // Hapus class at-top yang mungkin menimbulkan efek tidak diinginkan
+        document.getElementById('header').classList.remove('at-top');
 
         document.addEventListener('DOMContentLoaded', function() {
             // Mobile menu toggle
