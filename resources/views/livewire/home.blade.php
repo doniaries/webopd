@@ -37,30 +37,53 @@
                             @endphp
 
                             @foreach ($recentPosts as $post)
-                                <div class="col-md-6 col-lg-4">
-                                    <div class="card h-100 border-0 shadow-sm">
-                                        <div class="position-relative" style="padding-top: 56.25%; overflow: hidden;">
-                                            <img src="{{ $post->foto_utama_url }}" class="position-absolute top-0 start-0 w-100 h-100" style="object-fit: cover;" alt="{{ $post->judul }}">
-                                            <div class="position-absolute bottom-0 start-0 p-2 bg-primary text-white small">
+                                <div class="col-md-6 col-lg-4 mb-4">
+                                    <div class="card h-100 border-1  overflow-hidden"
+                                        style="transition: transform 0.2s ease, box-shadow 0.2s ease;">
+                                        <div class="position-absolute top-0 end-0 p-2">
+                                            <span class="badge bg-white text-dark border border-light-subtle shadow-sm">
+                                                <i class="bi bi-eye me-1"></i>
+                                                {{ $post->views ?? 0 }}
+                                            </span>
+                                        </div>
+                                        <!-- Gambar Utama -->
+                                        <div class="position-relative" style="padding-top: 56.25%;">
+                                            <img src="{{ $post->foto_utama_url }}"
+                                                class="position-absolute top-0 start-0 w-100 h-100"
+                                                style="object-fit: cover; transition: transform 0.3s ease;"
+                                                alt="{{ $post->title }}"
+                                                onmouseover="this.style.transform='scale(1.05)'"
+                                                onmouseout="this.style.transform='scale(1)'">
+                                            <div
+                                                class="position-absolute bottom-0 start-0 p-2 bg-primary text-white small">
                                                 {{ $post->tags->first()->name ?? 'Berita' }}
                                             </div>
                                         </div>
-                                        <div class="card-body">
-                                            <h5 class="card-title">
-                                                <a href="{{ route('berita.show', $post->slug) }}" class="text-dark text-decoration-none">
+                                        <!-- Konten Teks -->
+                                        <div class="card-body d-flex flex-column">
+                                            <h5 class="card-title mb-2">
+                                                <a href="{{ route('berita.show', $post->slug) }}"
+                                                    class="text-dark text-decoration-none hover-text-primary">
                                                     {{ Str::limit($post->title, 60) }}
                                                 </a>
                                             </h5>
-                                            <p class="card-text text-muted small">
-                                                <i class="bi bi-calendar3 me-1"></i>
-                                                {{ indonesia_date($post->published_at) }}
-                                                <span class="mx-1">•</span>
-                                                <i class="bi bi-person-fill me-1"></i>
-                                                {{ $post->user->name ?? 'Admin' }}
-                                            </p>
-                                            <p class="card-text small mt-auto">
+                                            <div class="d-flex align-items-center text-muted small mb-3">
+                                                <span class="d-flex align-items-center me-3">
+                                                    <i class="bi bi-calendar3 me-1"></i>
+                                                    {{ $post->created_at->format('d M Y') }}
+                                                </span>
+                                                <span class="d-flex align-items-center">
+                                                    <i class="bi bi-person-fill me-1"></i>
+                                                    {{ $post->user->name ?? 'Admin' }}
+                                                </span>
+                                            </div>
+                                            <p class="card-text small text-muted mb-0">
                                                 {{ Str::limit(strip_tags($post->content), 100) }}
                                             </p>
+                                            <a href="{{ route('berita.show', $post->slug) }}"
+                                                class="btn btn-link text-primary p-0 mt-2 align-self-start text-decoration-none">
+                                                Baca Selengkapnya <i class="bi bi-arrow-right ms-1"></i>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
@@ -701,6 +724,36 @@
             </div>
         </section><!-- End Produk Hukum Section -->
     </main><!-- End main -->
+
+    @push('styles')
+        <style>
+            /* Card Styles */
+            .card {
+                border-radius: 0.5rem;
+                overflow: hidden;
+                transition: all 0.3s ease;
+                box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            }
+
+            .card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
+            }
+
+            .badge {
+                font-size: 0.75rem;
+                font-weight: 500;
+                padding: 0.35rem 0.65rem;
+                border-radius: 0.375rem;
+                background-color: rgba(255, 255, 255, 0.9);
+                backdrop-filter: blur(4px);
+            }
+
+            .hover-text-primary:hover {
+                color: #0d6efd !important;
+            }
+        </style>
+    @endpush
 
     @push('scripts')
         <script>
