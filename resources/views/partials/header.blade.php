@@ -121,7 +121,7 @@
                 <a href="{{ url('/') }}" class="logo d-flex align-items-center me-auto me-xl-0">
                     @php
                         $logoUrl = '';
-                        $siteName = 'WebOPD'; // Default value
+                        $siteName = 'Web OPD'; // Default value
 
                         if (class_exists('App\\Models\\Pengaturan') && \App\Models\Pengaturan::exists()) {
                             $pengaturan = \App\Models\Pengaturan::first();
@@ -164,12 +164,15 @@
                     </div>
                 </a>
 
-                <div class="text-center my-2">
-                    <div class="d-flex align-items-center justify-content-center">
-                        <i class="bi bi-clock me-1" style="font-size: 0.9rem;"></i>
-                        <span id="jam" style="font-size: 0.9rem; font-weight: 500;"></span>
+                <div class="text-center" style="white-space: nowrap;">
+                    <div class="d-flex align-items-center" style="color: #666666;">
+                        <i class="bi bi-clock me-1" style="font-size: 0.8rem;"></i>
+                        <span id="tanggal" style="font-size: 0.8rem;"></span>
+                        <span class="mx-1">|</span>
+                        <span id="jam" style="font-size: 0.8rem; font-weight: 400;"></span>
+
+
                     </div>
-                    <span id="tanggal" style="font-size: 0.8rem;"></span>
                 </div>
 
                 <script>
@@ -226,8 +229,14 @@
         <div class="menu-wrapper">
             <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
             <nav id="navmenu" class="navmenu">
-                <ul>
-                    <li><a href="{{ url('/') }}" class="{{ request()->is('/') ? 'active' : '' }}">Beranda</a></li>
+                <ul class="flex justify-center items-center">
+                    <li class="flex items-center">
+                        <a href="{{ url('/') }}" class="{{ request()->is('/') ? 'active' : '' }} flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                            </svg>
+                        </a>
+                    </li>
                     <li><a href="{{ route('berita.index') }}"
                             class="{{ request()->routeIs('berita.index') ? 'active' : '' }}">Berita</a></li>
                     <li class="dropdown"><a href="#"><span>Profil</span> <i
