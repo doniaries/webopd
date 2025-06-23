@@ -34,6 +34,7 @@
             width: 100%;
             background-color: white;
             border-bottom: 1px solid #e0e0e0;
+            padding: 2px 0;
         }
 
         .header-content {
@@ -41,7 +42,7 @@
             width: 100%;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 0;
+            padding: 0;
         }
 
         /* Logo */
@@ -49,18 +50,21 @@
             display: flex;
             align-items: center;
             text-decoration: none;
+            padding: 2px 0;
         }
 
         /* Menu container */
         .menu-container {
             background-color: white;
             border-bottom: 1px solid #e0e0e0;
+            padding: 0;
         }
 
         .menu-wrapper {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 0px 0;
         }
 
         /* Navigasi Menu */
@@ -79,14 +83,18 @@
 
         .navmenu>ul>li {
             position: relative;
-            padding: 15px 20px;
+            padding: 2px 8px;
+            margin: 0;
         }
 
         .navmenu>ul>li>a {
             color: #333;
             text-decoration: none;
             font-weight: 500;
+            font-size: 0.8rem;
             transition: color 0.3s;
+            padding: 5px 0;
+            display: block;
         }
 
         .navmenu>ul>li>a:hover,
@@ -139,24 +147,29 @@
 
                     @endphp
                     <div class="d-flex align-items-center">
-                        <img src="{{ $logoUrl }}" alt="Logo" class="img-fluid" style="max-height: 50px;">
+                        <img src="{{ $logoUrl }}" alt="Logo" class="img-fluid" style="max-height: 40px;">
                         <div class="ms-2 d-flex flex-column">
-                            <span class="text-uppercase" style="font-size: 0.8rem; letter-spacing: 1px; color: #6c757d;">WEBSITE</span>
-                            <h1 class="sitename m-0" style="font-size: 1.2rem; line-height: 1.2;">{{ $siteName }}</h1>
+                            <span class="text-uppercase"
+                                style="font-size: 0.7rem; letter-spacing: 0.5px; color: #6c757d;">WEBSITE</span>
+                            <h1 class="sitename m-0" style="font-size: 1rem; line-height: 1.1;">{{ $siteName }}
+                            </h1>
                         </div>
-                        <div class="d-flex align-items-center ms-3" style="border-left: 1px solid #dee2e6; padding-left: 15px;">
-                            <img src="{{ asset('images/bangga.png') }}" alt="Bangga" class="img-fluid me-2" style="max-height: 40px;">
-                            <img src="{{ asset('images/berakhlak.png') }}" alt="Berakhlak" class="img-fluid" style="max-height: 40px;">
+                        <div class="d-flex align-items-center ms-3"
+                            style="border-left: 1px solid #dee2e6; padding-left: 15px;">
+                            <img src="{{ asset('images/bangga.png') }}" alt="Bangga" class="img-fluid me-1"
+                                style="max-height: 32px;">
+                            <img src="{{ asset('images/berakhlak.png') }}" alt="Berakhlak" class="img-fluid"
+                                style="max-height: 32px;">
                         </div>
                     </div>
                 </a>
 
                 <div class="text-center my-2">
                     <div class="d-flex align-items-center justify-content-center">
-                        <i class="bi bi-clock me-2"></i>
-                        <span id="jam" style="font-size: 1.2rem;"></span>
+                        <i class="bi bi-clock me-1" style="font-size: 0.9rem;"></i>
+                        <span id="jam" style="font-size: 0.9rem; font-weight: 500;"></span>
                     </div>
-                    <span id="tanggal" style="font-size: 1.2rem;"></span>
+                    <span id="tanggal" style="font-size: 0.8rem;"></span>
                 </div>
 
                 <script>
