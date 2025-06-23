@@ -1,5 +1,72 @@
 <header id="header" class="header sticky-top">
     <style>
+        /* Transisi untuk efek smooth */
+        .header-container,
+        .menu-container {
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* State default (ketika di-scroll) */
+        .header-container {
+            padding: 0;
+        }
+
+        .menu-container {
+            padding: 5px 0;
+        }
+
+        /* State ketika di atas (belum di-scroll) */
+        .at-top .header-container {
+            padding: 10px 0;
+        }
+
+        .at-top .menu-container {
+            padding: 15px 0;
+        }
+
+        /* Style untuk menu item saat di atas */
+        .at-top #navmenu>ul>li>a {
+            padding: 10px 15px;
+            font-size: 1rem;
+        }
+
+        .at-top #navmenu>ul>li>a svg {
+            width: 1.25rem;
+            height: 1.25rem;
+            margin-right: 6px;
+        }
+
+        /* Style default untuk menu item (saat di-scroll) */
+        #navmenu>ul>li>a {
+            padding: 8px 12px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease-in-out;
+        }
+
+        #navmenu>ul>li>a svg {
+            width: 1.1rem;
+            height: 1.1rem;
+            margin-right: 5px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* Menyesuaikan tinggi menu container */
+        .menu-container {
+            display: flex;
+            align-items: center;
+            height: auto;
+            padding: 0;
+        }
+        
+        .menu-wrapper {
+            width: 100%;
+        }
+        
+        #navmenu ul {
+            margin: 0;
+            padding: 0;
+        }
+
         /* Reset border radius untuk header dan semua elemen di dalamnya */
         header#header,
         header#header *,
@@ -158,7 +225,7 @@
         .mobile-menu-header h3 {
             margin: 0;
         }
-        
+
         /* Menghilangkan tanda X tambahan yang muncul di sebelah teks Menu */
         .mobile-menu-header h3::after {
             display: none;
@@ -351,7 +418,7 @@
         .hamburger-menu:hover .hamburger-icon span {
             background-color: #0a58ca;
         }
-        
+
         /* Sembunyikan hamburger menu pada tampilan desktop */
         .hamburger-menu {
             display: none;
@@ -471,8 +538,22 @@
                     </div>
                 </a>
 
+                <!-- Right side elements -->
+                <div class="d-flex align-items-center">
+                    <div id="current-time" class="d-flex align-items-center me-3">
+                        <div class="text-end me-3" style="line-height: 1.1;">
+                            <div id="date" class="fw-medium" style="font-size: 0.8rem; color: #6c757d;">Selasa, 24 Juni 2025</div>
+                            <div id="time" class="fw-bold" style="font-size: 0.9rem; color: #495057;">00:00:00 WIB</div>
+                        </div>
+                        <i class="bi bi-calendar3" style="font-size: 1.5rem; color: #6c757d;"></i>
+                    </div>
+                    <a href="{{ route('login') }}" class="btn btn-sm btn-primary">
+                        <i class="bi bi-box-arrow-in-right me-1"></i> Login
+                    </a>
+                </div>
+
                 <!-- Hamburger Menu Button inside header content -->
-                <div class="hamburger-menu" id="mobile-menu-toggle">
+                <div class="hamburger-menu ms-3" id="mobile-menu-toggle">
                     <div class="hamburger-icon">
                         <span></span>
                         <span></span>
@@ -655,6 +736,54 @@
     </div>
 
     <script>
+        // Handle scroll untuk mengubah ukuran header
+        function updateHeader() {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.remove('at-top');
+            } else {
+                header.classList.add('at-top');
+            }
+        }
+
+        // Add at-top class by default
+        document.getElementById('header').classList.add('at-top');
+
+        // Update on scroll
+        window.addEventListener('scroll', updateHeader);
+
+        // Check initial scroll position
+        updateHeader();
+
+        // Update waktu dan tanggal secara real-time
+        function updateTime() {
+            const now = new Date();
+            
+            // Format waktu
+            const timeString = now.toLocaleTimeString('id-ID', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            });
+            
+            // Format tanggal
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            };
+            const dateString = now.toLocaleDateString('id-ID', options);
+            
+            document.getElementById('time').textContent = timeString + ' WIB';
+            document.getElementById('date').textContent = dateString;
+        }
+        
+        // Update waktu setiap detik
+        setInterval(updateTime, 1000);
+        updateTime(); // Panggil sekali saat pertama kali load
+
         document.addEventListener('DOMContentLoaded', function() {
             // Mobile menu toggle
             const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
