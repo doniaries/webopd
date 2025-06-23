@@ -33,8 +33,8 @@ $tags = $slider['tags'] ?? [];
                         <div class="slide-overlay"></div>
                         <div class="container h-100">
                             <div class="row h-100 align-items-center">
-                                <div class="col-lg-8 col-md-10 mx-auto">
-                                    <div class="slider-content text-white p-4" data-aos="fade-up">
+                                <div class="col-lg-10 col-md-12 ps-5">
+                                    <div class="slider-content text-white p-4 ps-0" data-aos="fade-up" style="max-width: 800px;">
                                         @if (!empty($tags))
                                             <div class="mb-2">
                                                 @foreach (array_slice($tags, 0, 2) as $tag)
