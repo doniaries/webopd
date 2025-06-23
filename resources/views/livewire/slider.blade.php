@@ -4,8 +4,7 @@
             <div class="row gx-4">
                 <!-- Main Slider (wider on large screens) -->
                 <div class="col-lg-9">
-                    <div class="swiper main-slider"
-                        style="border-radius: 0 10px 10px 0; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                    <div class="swiper main-slider">
                         <div class="swiper-wrapper">
                             @foreach (array_slice($sliders, 0, 5) as $slider)
                                 @php
@@ -17,7 +16,7 @@
                                 <div class="swiper-slide" style="height: 400px;">
                                     <div class="position-relative h-100 w-100">
                                         <img src="{{ $imageUrl }}" alt="{{ $title }}" class="w-100 h-100"
-                                            style="object-fit: contain;">
+                                            style="object-fit: cover;">
                                         <div class="position-absolute bottom-0 start-0 w-100 p-4"
                                             style="background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);">
                                             <h3 class="text-white mb-2">
@@ -37,13 +36,12 @@
 
                 <!-- Banner Slider (narrower on large screens) -->
                 <div class="col-lg-3">
-                    <div class="swiper banner-slider w-100"
-                        style="height: 400px; border-radius: 0; overflow: hidden;">
+                    <div class="swiper banner-slider w-100">
                         <div class="swiper-wrapper">
                             @forelse($banners as $banner)
                                 <div class="swiper-slide" style="height: 400px;">
-                                    <a href="{{ $banner['url'] }}" target="_blank" class="d-block h-100">
-                                        <img src="{{ $banner['gambar_url'] }}" alt="{{ $banner['judul'] }}" class="w-100 h-100" style="object-fit: contain;">
+                                    <a href="#" class="d-block h-100 banner-item" data-bs-toggle="modal" data-bs-target="#bannerModal" data-img-url="{{ $banner['gambar_url'] }}">
+                                        <img src="{{ $banner['gambar_url'] }}" alt="{{ $banner['judul'] }}" class="w-100 h-100" style="object-fit: cover;">
                                     </a>
                                 </div>
                             @empty
@@ -55,6 +53,8 @@
                         </div>
                         @if (count($banners) > 1)
                             <div class="swiper-pagination"></div>
+                            <div class="swiper-button-next banner-button-next"></div>
+                            <div class="swiper-button-prev banner-button-prev"></div>
                         @endif
                     </div>
                 </div>
@@ -63,14 +63,21 @@
 
         @push('styles')
             <style>
-                .main-slider,
+                .main-slider {
+                    height: 400px;
+                    border-radius: 0;
+                    overflow: hidden;
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                }
+
                 .banner-slider {
-                    height: 100%;
+                    height: 400px;
+                    border-radius: 0;
+                    overflow: hidden;
                 }
 
                 .swiper-slide {
                     position: relative;
-                    border-radius: 10px;
                     overflow: hidden;
                 }
 
@@ -88,14 +95,11 @@
 
                 .banner-slider .swiper-slide {
                     width: 100%;
-                    height: 33.333%;
                     margin: 0;
                     padding: 0;
                     position: relative;
                     overflow: hidden;
-                    border-radius: 0;
                     box-shadow: none;
-                    flex-shrink: 0;
                 }
 
                 .banner-slider .swiper-slide:last-child {
@@ -155,6 +159,19 @@
                     font-size: 1.2rem;
                 }
 
+                .banner-slider .swiper-button-next,
+                .banner-slider .swiper-button-prev {
+                    width: 35px;
+                    height: 35px;
+                    background: rgba(0, 0, 0, 0.3);
+                    color: #fff;
+                }
+
+                .banner-slider .swiper-button-next:after,
+                .banner-slider .swiper-button-prev:after {
+                    font-size: 1rem;
+                }
+
 
                 .swiper-pagination-bullet {
                     background: #fff;
@@ -210,6 +227,18 @@
                             disableOnInteraction: false,
                         },
                         speed: 800,
+                        navigation: {
+                            nextEl: '.banner-button-next',
+                            prevEl: '.banner-button-prev',
+                        },
+                    });
+
+                    const bannerModal = document.getElementById('bannerModal');
+                    bannerModal.addEventListener('show.bs.modal', function (event) {
+                        const button = event.relatedTarget;
+                        const imageUrl = button.getAttribute('data-img-url');
+                        const modalImage = bannerModal.querySelector('#modalBannerImage');
+                        modalImage.src = imageUrl;
                     });
                 });
             </script>
@@ -250,6 +279,20 @@
             </div>
         </div>
     @endif
+
+    <!-- Modal -->
+    <div class="modal fade" id="bannerModal" tabindex="-1" aria-labelledby="bannerModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="modalBannerImage" src="" class="img-fluid" alt="Banner Image">
+                </div>
+            </div>
+        </div>
+    </div>
 </section><!-- End Hero -->
 
 @push('styles')
