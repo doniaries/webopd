@@ -80,10 +80,7 @@
                                             <p class="card-text small text-muted mb-0">
                                                 {{ Str::limit(strip_tags($post->content), 100) }}
                                             </p>
-                                            <a href="{{ route('berita.show', $post->slug) }}"
-                                                class="btn btn-link text-primary p-0 mt-2 align-self-start text-decoration-none">
-                                                Baca Selengkapnya <i class="bi bi-arrow-right ms-1"></i>
-                                            </a>
+
                                         </div>
                                     </div>
                                 </div>
@@ -242,7 +239,7 @@
                                                 $bgColorIndex++;
                                             @endphp
                                             <a href="{{ route('informasi.show', $item->slug) }}"
-                                                class="block px-4 py-3 transition-all duration-300 border-l-4 {{ $bgClass }} group">
+                                                class="block px-4 py-3 transition-all duration-300 border-l-4 {{ $bgClass }} group informasi-item">
                                                 <div class="flex items-start space-x-3">
                                                     <div class="flex-shrink-0">
                                                         <div
@@ -330,7 +327,7 @@
                                     <div class="divide-y divide-gray-100">
                                         @foreach ($agenda as $item)
                                             <a href="{{ route('agenda.show', $item->id) }}"
-                                                class="block px-4 py-3 hover:bg-gray-50 transition-all duration-300 group">
+                                                class="block px-4 py-3 hover:bg-gray-50 transition-all duration-300 group informasi-item">
                                                 <div class="flex items-start space-x-3">
                                                     <div class="flex-shrink-0">
                                                         <div
@@ -443,425 +440,180 @@
                     </div>
                 </div>
             </div>
-        </section><!-- End Informasi Section -->
-
-        <!-- Video Terbaru Section -->
-        <section id="video-terbaru" class="py-5 bg-light">
-            <div class="container" data-aos="fade-up">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <div class="d-flex align-items-center">
-                        <div class="border-start border-3 border-danger me-2" style="height: 24px;"></div>
-                        <h2 class="h4 fw-bold mb-0">Video Terbaru</h2>
-                    </div>
-                    <a href="#" class="btn btn-sm btn-outline-primary">
-                        Lihat Semua <i class="bi bi-arrow-right-short ms-1"></i>
-                    </a>
-                </div>
-
-                <div class="position-relative">
-                    <div class="video-scroll-container"
-                        style="overflow-x: auto; scroll-behavior: smooth; -ms-overflow-style: none; scrollbar-width: none;">
-                        <div class="d-flex flex-nowrap pb-4" style="width: max-content;">
-                            @php
-                                // Sample video data - replace with your actual video data
-                                $videos = [
-                                    [
-                                        'title' => 'Pembangunan Jembatan Baru di Pusat Kota',
-                                        'views' => '1.2K',
-                                        'date' => '2 hari yang lalu',
-                                        'thumbnail' =>
-                                            'https://via.placeholder.com/300x169/FF0000/FFFFFF?text=Video+Thumbnail',
-                                        'duration' => '5:30',
-                                    ],
-                                    [
-                                        'title' => 'Pelantikan Pejabat Baru di Lingkungan Pemerintah Daerah',
-                                        'views' => '3.4K',
-                                        'date' => '1 minggu yang lalu',
-                                        'thumbnail' =>
-                                            'https://via.placeholder.com/300x169/0000FF/FFFFFF?text=Video+Thumbnail',
-                                        'duration' => '12:45',
-                                    ],
-                                    [
-                                        'title' => 'Peringatan Hari Kemerdekaan RI Ke-78',
-                                        'views' => '8.7K',
-                                        'date' => '2 minggu yang lalu',
-                                        'thumbnail' =>
-                                            'https://via.placeholder.com/300x169/00FF00/000000?text=Video+Thumbnail',
-                                        'duration' => '8:15',
-                                    ],
-                                    [
-                                        'title' => 'Pembukaan Jalan Tol Baru',
-                                        'views' => '5.1K',
-                                        'date' => '3 minggu yang lalu',
-                                        'thumbnail' =>
-                                            'https://via.placeholder.com/300x169/FFA500/FFFFFF?text=Video+Thumbnail',
-                                        'duration' => '6:22',
-                                    ],
-                                    [
-                                        'title' => 'Rangkaian Acara HUT Kota',
-                                        'views' => '2.9K',
-                                        'date' => '1 bulan yang lalu',
-                                        'thumbnail' =>
-                                            'https://via.placeholder.com/300x169/800080/FFFFFF?text=Video+Thumbnail',
-                                        'duration' => '15:30',
-                                    ],
-                                    [
-                                        'title' => 'Peluncuran Program Baru Pemerintah Daerah',
-                                        'views' => '4.2K',
-                                        'date' => '1 bulan yang lalu',
-                                        'thumbnail' =>
-                                            'https://via.placeholder.com/300x169/FF69B4/FFFFFF?text=Video+Thumbnail',
-                                        'duration' => '9:45',
-                                    ],
-                                ];
-                            @endphp
-
-                            @foreach ($videos as $video)
-                                <div class="me-4" style="width: 280px; flex: 0 0 auto;">
-                                    <div class="card h-100 border-0 shadow-sm">
-                                        <div class="position-relative"
-                                            style="height: 160px; overflow: hidden; background-color: #000;">
-                                            <img src="{{ $video['thumbnail'] }}" class="card-img-top h-100 w-100"
-                                                style="object-fit: cover; opacity: 0.8;" alt="{{ $video['title'] }}">
-                                            <div class="position-absolute top-50 start-50 translate-middle">
-                                                <div class="bg-danger rounded-circle p-3 d-flex align-items-center justify-content-center"
-                                                    style="width: 60px; height: 60px; cursor: pointer;">
-                                                    <i class="bi bi-play-fill text-white"
-                                                        style="font-size: 1.5rem; margin-left: 5px;"></i>
-                                                </div>
-                                            </div>
-                                            <div
-                                                class="position-absolute bottom-0 end-0 m-2 bg-dark text-white px-2 rounded">
-                                                {{ $video['duration'] }}
-                                            </div>
-                                        </div>
-                                        <div class="card-body">
-                                            <h5 class="card-title" style="font-size: 1rem; line-height: 1.4;">
-                                                <a href="#" class="text-dark text-decoration-none">
-                                                    {{ Str::limit($video['title'], 60) }}
-                                                </a>
-                                            </h5>
-                                            <div class="d-flex justify-content-between align-items-center mt-2">
-                                                <small class="text-muted">
-                                                    <i class="bi bi-eye me-1"></i> {{ $video['views'] }} ditonton
-                                                </small>
-                                                <small class="text-muted">
-                                                    {{ $video['date'] }}
-                                                </small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-            </div>
         </section>
-        <!-- End Video Terbaru Section -->
+</div>
 
-        <!-- Infografis Section -->
-        <section id="infografis" class="portfolio">
-            <div class="container" data-aos="fade-up">
-                <header class="section-header">
-                    <h2>Infografis</h2>
-                    <p>Informasi dalam Bentuk Visual</p>
-                </header>
+@push('styles')
+    <style>
+        /* Card Styles */
+        .card {
+            border-radius: 0.5rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        }
 
-                @php
-                    try {
-                        $infografis = App\Models\Infografis::query()
-                            ->where('is_active', true)
-                            ->latest()
-                            ->take(6)
-                            ->get();
-                    } catch (\Exception $e) {
-                        $infografis = collect();
-                    }
-                @endphp
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
+        }
 
-                <div class="row gy-4 portfolio-container" data-aos="fade-up" data-aos-delay="200">
-                    @forelse($infografis as $info)
-                        <div class="col-lg-4 col-md-6 portfolio-item">
-                            <div class="portfolio-wrap">
-                                <img src="{{ $info->gambar_url ?? asset('images/placeholder.jpg') }}"
-                                    class="img-fluid" alt="{{ $info->judul }}">
-                                <div class="portfolio-info">
-                                    <h4>{{ $info->judul }}</h4>
-                                    <p>{{ Str::limit($info->deskripsi, 50) }}</p>
-                                    <div class="portfolio-links">
-                                        <a href="{{ $info->gambar_url ?? asset('images/placeholder.jpg') }}"
-                                            data-gallery="portfolioGallery" class="portfokio-lightbox"
-                                            title="{{ $info->judul }}"><i class="bi bi-plus"></i></a>
-                                        <a href="{{ route('infografis') }}" title="More Details"><i
-                                                class="bi bi-link"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    @empty
-                        <div class="col-12 text-center">
-                            <p>Belum ada infografis yang tersedia.</p>
-                        </div>
-                    @endforelse
-                </div>
+        /* Informasi Item Hover Effect */
+        .informasi-item {
+            transition: all 0.3s ease;
+            border-radius: 0.5rem;
+            margin: 0.5rem;
+            border: 1px solid transparent;
+        }
 
-                <div class="text-center mt-4">
-                    <a href="{{ route('infografis') }}"
-                        class="btn-read-more d-inline-flex align-items-center justify-content-center align-self-center">
-                        <span>Lihat Semua Infografis</span>
-                        <i class="bi bi-arrow-right"></i>
-                    </a>
-                </div>
-            </div>
-        </section><!-- End Infografis Section -->
+        .informasi-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
+            border-color: #93c5fd;
+            background-color: #f8fafc !important;
+        }
 
-        <!-- Dokumen Section -->
-        <section id="dokumen" class="services">
-            <div class="container" data-aos="fade-up">
-                <header class="section-header">
-                    <h2>Dokumen</h2>
-                    <p>Dokumen Publik</p>
-                </header>
+        .informasi-item .flex-shrink-0 div {
+            transition: all 0.3s ease;
+        }
 
-                @php
-                    try {
-                        $dokumen = App\Models\Dokumen::query()->where('is_active', true)->latest()->take(6)->get();
-                    } catch (\Exception $e) {
-                        $dokumen = collect();
-                    }
-                @endphp
+        .informasi-item:hover .flex-shrink-0 div {
+            transform: scale(1.1);
+            background-color: #3b82f6 !important;
+            color: white;
+        }
 
-                <div class="row gy-4">
-                    @forelse($dokumen as $doc)
-                        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
-                            <div class="service-box">
-                                <i class="bi bi-file-earmark-text icon"></i>
-                                <h3>{{ $doc->judul }}</h3>
-                                <p>{{ Str::limit($doc->deskripsi, 100) }}</p>
-                                <a href="{{ $doc->file_url }}" class="read-more"
-                                    target="_blank"><span>Download</span> <i class="bi bi-download"></i></a>
-                            </div>
-                        </div>
-                    @empty
-                        <div class="col-12 text-center">
-                            <p>Belum ada dokumen yang tersedia.</p>
-                        </div>
-                    @endforelse
-                </div>
+        .informasi-item .bi-chevron-right {
+            transition: all 0.3s ease;
+        }
 
-                <div class="text-center mt-4">
-                    <a href="{{ route('dokumen') }}"
-                        class="btn-read-more d-inline-flex align-items-center justify-content-center align-self-center">
-                        <span>Lihat Semua Dokumen</span>
-                        <i class="bi bi-arrow-right"></i>
-                    </a>
-                </div>
-            </div>
-        </section><!-- End Dokumen Section -->
+        .informasi-item:hover .bi-chevron-right {
+            transform: translateX(3px);
+            color: #3b82f6 !important;
+        }
 
-        <!-- Produk Hukum Section -->
-        <section id="produk-hukum" class="faq">
-            <div class="container" data-aos="fade-up">
-                <header class="section-header">
-                    <h2>Produk Hukum</h2>
-                    <p>Peraturan dan Regulasi</p>
-                </header>
+        .badge {
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 0.35rem 0.65rem;
+            border-radius: 0.375rem;
+            background-color: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(4px);
+        }
 
-                @php
-                    try {
-                        $produkHukum = App\Models\ProdukHukum::query()
-                            ->where('is_active', true)
-                            ->latest()
-                            ->take(5)
-                            ->get();
-                    } catch (\Exception $e) {
-                        $produkHukum = collect();
-                    }
-                @endphp
+        .hover-text-primary:hover {
+            color: #0d6efd !important;
+        }
+    </style>
+@endpush
 
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="accordion accordion-flush" id="faqlist">
-                            @forelse($produkHukum as $hukum)
-                                <div class="accordion-item" data-aos="fade-up"
-                                    data-aos-delay="{{ $loop->index * 100 }}">
-                                    <h2 class="accordion-header">
-                                        <button class="accordion-button collapsed" type="button"
-                                            data-bs-toggle="collapse"
-                                            data-bs-target="#faq-content-{{ $loop->index }}">
-                                            {{ $hukum->judul }}
-                                        </button>
-                                    </h2>
-                                    <div id="faq-content-{{ $loop->index }}" class="accordion-collapse collapse"
-                                        data-bs-parent="#faqlist">
-                                        <div class="accordion-body">
-                                            <p>{{ $hukum->deskripsi }}</p>
-                                            <p><strong>Nomor:</strong> {{ $hukum->nomor }}</p>
-                                            <p><strong>Tahun:</strong> {{ $hukum->tahun }}</p>
-                                            <p><strong>Kategori:</strong> {{ $hukum->kategori }}</p>
-                                            <a href="{{ $hukum->file_url }}" class="btn btn-primary btn-sm mt-2"
-                                                target="_blank">Download</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            @empty
-                                <div class="col-12 text-center">
-                                    <p>Belum ada produk hukum yang tersedia.</p>
-                                </div>
-                            @endforelse
-                        </div>
-                    </div>
-                </div>
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize scrolling for news container
+            initHorizontalScroll('.scroll-container', '.scroll-left', '.scroll-right');
 
-                <div class="text-center mt-4">
-                    <a href="{{ route('produk-hukum') }}"
-                        class="btn-read-more d-inline-flex align-items-center justify-content-center align-self-center">
-                        <span>Lihat Semua Produk Hukum</span>
-                        <i class="bi bi-arrow-right"></i>
-                    </a>
-                </div>
-            </div>
-        </section><!-- End Produk Hukum Section -->
-    </main><!-- End main -->
+            // Initialize scrolling for video container
+            initHorizontalScroll('.video-scroll-container');
 
-    @push('styles')
-        <style>
-            /* Card Styles */
-            .card {
-                border-radius: 0.5rem;
-                overflow: hidden;
-                transition: all 0.3s ease;
-                box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-            }
+            // Initialize video modals
+            initVideoModals();
 
-            .card:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
-            }
+            function initHorizontalScroll(containerSelector, prevBtnSelector = null, nextBtnSelector = null) {
+                const container = document.querySelector(containerSelector);
+                if (!container) return;
 
-            .badge {
-                font-size: 0.75rem;
-                font-weight: 500;
-                padding: 0.35rem 0.65rem;
-                border-radius: 0.375rem;
-                background-color: rgba(255, 255, 255, 0.9);
-                backdrop-filter: blur(4px);
-            }
+                const scrollAmount = 300; // Adjust this value to control scroll distance
+                let prevBtn, nextBtn;
 
-            .hover-text-primary:hover {
-                color: #0d6efd !important;
-            }
-        </style>
-    @endpush
-
-    @push('scripts')
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                // Initialize scrolling for news container
-                initHorizontalScroll('.scroll-container', '.scroll-left', '.scroll-right');
-
-                // Initialize scrolling for video container
-                initHorizontalScroll('.video-scroll-container');
-
-                // Initialize video modals
-                initVideoModals();
-
-                function initHorizontalScroll(containerSelector, prevBtnSelector = null, nextBtnSelector = null) {
-                    const container = document.querySelector(containerSelector);
-                    if (!container) return;
-
-                    const scrollAmount = 300; // Adjust this value to control scroll distance
-                    let prevBtn, nextBtn;
-
-                    if (prevBtnSelector && nextBtnSelector) {
-                        prevBtn = document.querySelector(prevBtnSelector);
-                        nextBtn = document.querySelector(nextBtnSelector);
-                    }
-
-
-                    if (prevBtn && nextBtn) {
-                        // Navigation with buttons
-                        prevBtn.addEventListener('click', function() {
-                            container.scrollBy({
-                                left: -scrollAmount,
-                                behavior: 'smooth'
-                            });
-                        });
-
-                        nextBtn.addEventListener('click', function() {
-                            container.scrollBy({
-                                left: scrollAmount,
-                                behavior: 'smooth'
-                            });
-                        });
-
-                        // Hide/show buttons based on scroll position
-                        const updateButtonVisibility = () => {
-                            const {
-                                scrollLeft,
-                                scrollWidth,
-                                clientWidth
-                            } = container;
-                            prevBtn.style.visibility = scrollLeft > 0 ? 'visible' : 'hidden';
-                            nextBtn.style.visibility = scrollLeft < (scrollWidth - clientWidth - 1) ? 'visible' :
-                                'hidden';
-                        };
-
-                        container.addEventListener('scroll', updateButtonVisibility);
-                        window.addEventListener('resize', updateButtonVisibility);
-                        updateButtonVisibility(); // Initial check
-                    } else {
-                        // Touch/swipe support for mobile
-                        let isDown = false;
-                        let startX;
-                        let scrollLeft;
-
-                        container.addEventListener('mousedown', (e) => {
-                            isDown = true;
-                            startX = e.pageX - container.offsetLeft;
-                            scrollLeft = container.scrollLeft;
-                            container.style.cursor = 'grabbing';
-                            container.style.userSelect = 'none';
-                        });
-
-                        container.addEventListener('mouseleave', () => {
-                            isDown = false;
-                            container.style.cursor = 'grab';
-                        });
-
-                        container.addEventListener('mouseup', () => {
-                            isDown = false;
-                            container.style.cursor = 'grab';
-                        });
-
-                        container.addEventListener('mousemove', (e) => {
-                            if (!isDown) return;
-                            e.preventDefault();
-                            const x = e.pageX - container.offsetLeft;
-                            const walk = (x - startX) * 2; // Scroll-fast
-                            container.scrollLeft = scrollLeft - walk;
-                        });
-                    }
+                if (prevBtnSelector && nextBtnSelector) {
+                    prevBtn = document.querySelector(prevBtnSelector);
+                    nextBtn = document.querySelector(nextBtnSelector);
                 }
 
 
-                function initVideoModals() {
-                    // This function can be expanded to handle video modal initialization
-                    // when a video thumbnail is clicked
-                    const videoPlayButtons = document.querySelectorAll('.video-play-button');
-
-                    videoPlayButtons.forEach(button => {
-                        button.addEventListener('click', function(e) {
-                            e.preventDefault();
-                            const videoUrl = this.getAttribute('data-video');
-                            // Here you can implement a modal to play the video
-                            // For example, using Bootstrap's modal or another lightbox solution
-                            console.log('Play video:', videoUrl);
+                if (prevBtn && nextBtn) {
+                    // Navigation with buttons
+                    prevBtn.addEventListener('click', function() {
+                        container.scrollBy({
+                            left: -scrollAmount,
+                            behavior: 'smooth'
                         });
                     });
+
+                    nextBtn.addEventListener('click', function() {
+                        container.scrollBy({
+                            left: scrollAmount,
+                            behavior: 'smooth'
+                        });
+                    });
+
+                    // Hide/show buttons based on scroll position
+                    const updateButtonVisibility = () => {
+                        const {
+                            scrollLeft,
+                            scrollWidth,
+                            clientWidth
+                        } = container;
+                        prevBtn.style.visibility = scrollLeft > 0 ? 'visible' : 'hidden';
+                        nextBtn.style.visibility = scrollLeft < (scrollWidth - clientWidth - 1) ? 'visible' :
+                            'hidden';
+                    };
+
+                    container.addEventListener('scroll', updateButtonVisibility);
+                    window.addEventListener('resize', updateButtonVisibility);
+                    updateButtonVisibility(); // Initial check
+                } else {
+                    // Touch/swipe support for mobile
+                    let isDown = false;
+                    let startX;
+                    let scrollLeft;
+
+                    container.addEventListener('mousedown', (e) => {
+                        isDown = true;
+                        startX = e.pageX - container.offsetLeft;
+                        scrollLeft = container.scrollLeft;
+                        container.style.cursor = 'grabbing';
+                        container.style.userSelect = 'none';
+                    });
+
+                    container.addEventListener('mouseleave', () => {
+                        isDown = false;
+                        container.style.cursor = 'grab';
+                    });
+
+                    container.addEventListener('mouseup', () => {
+                        isDown = false;
+                        container.style.cursor = 'grab';
+                    });
+
+                    container.addEventListener('mousemove', (e) => {
+                        if (!isDown) return;
+                        e.preventDefault();
+                        const x = e.pageX - container.offsetLeft;
+                        const walk = (x - startX) * 2; // Scroll-fast
+                        container.scrollLeft = scrollLeft - walk;
+                    });
                 }
-            });
-        </script>
-    @endpush
+            }
+
+
+            function initVideoModals() {
+                // This function can be expanded to handle video modal initialization
+                // when a video thumbnail is clicked
+                const videoPlayButtons = document.querySelectorAll('.video-play-button');
+
+                videoPlayButtons.forEach(button => {
+                    button.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const videoUrl = this.getAttribute('data-video');
+                        // Here you can implement a modal to play the video
+                        // For example, using Bootstrap's modal or another lightbox solution
+                        console.log('Play video:', videoUrl);
+                    });
+                });
+            }
+        });
+    </script>
+@endpush
 </div>
