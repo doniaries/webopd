@@ -7,7 +7,7 @@
     @endpush
 
     <!-- Hero Slider Section -->
-    @livewire('slider', ['sliders' => $sliders, 'pengaturan' => $pengaturan ?? null])
+    @livewire('slider', ['sliders' => $sliders, 'pengaturan' => $pengaturan ?? null, 'usePostsAsSliders' => true])
     <!-- End Hero Slider -->
 
     <main id="main">

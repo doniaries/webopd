@@ -10,6 +10,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class PostSeeder extends Seeder
 {
@@ -257,7 +258,12 @@ class PostSeeder extends Seeder
                         // Generate content from predefined Indonesian contents
                         $content = $this->faker->randomElement($indonesianContents);
 
-                        // Create post
+                        // Create post with placeholder image
+                        $isFeatured = $i <= 5; // First 5 posts in each month will be featured
+                        
+                        // Use null for foto_utama to trigger the default placeholder
+                        $fotoUtama = null;
+                        
                         $post = Post::create([
                             'title' => $title,
                             'slug' => Str::slug($title) . '-' . Str::random(6),
@@ -267,10 +273,21 @@ class PostSeeder extends Seeder
                             'user_id' => $user->id,
                             'team_id' => $team->id,
                             'views' => $this->faker->numberBetween(10, 1000),
-                            'foto_utama' => $this->faker->randomElement($availableImages),
-                            'gallery_images' => $this->faker->randomElements($availableImages, rand(1, 3)),
+                            'foto_utama' => $fotoUtama, // Will be null to use the default placeholder
+                            'gallery_images' => [], // Empty gallery since we're using placeholder
+                            'is_featured' => $isFeatured,
                             'created_at' => $postDate,
                             'updated_at' => $postDate,
+                        ]);
+                        
+                        // Log the created post details
+                        \Illuminate\Support\Facades\Log::info('Created post', [
+                            'id' => $post->id,
+                            'title' => $post->title,
+                            'is_featured' => $post->is_featured,
+                            'foto_utama' => $post->foto_utama,
+                            'foto_utama_url' => $post->foto_utama_url,
+                            'published_at' => $post->published_at
                         ]);
 
                         // Attach random tags to post

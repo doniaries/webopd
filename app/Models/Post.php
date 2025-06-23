@@ -116,6 +116,7 @@ class Post extends Model
 
     /**
      * Get the URL for the main photo (foto utama).
+     * @return string URL gambar atau gambar default jika tidak ada
      */
     public function getFotoUtamaUrlAttribute()
     {
@@ -143,7 +144,8 @@ class Post extends Model
             }
         }
 
-        return null;
+        // Kembalikan gambar default jika tidak ada foto utama
+        return asset('placeholder.jpg');
     }
 
 
@@ -204,7 +206,9 @@ class Post extends Model
      */
     public function scopePublished($query)
     {
+        // Pastikan status adalah 'published' (case sensitive) dan published_at tidak null dan <= now
         return $query->where('status', 'published')
+            ->whereNotNull('published_at')
             ->where('published_at', '<=', now());
     }
 
