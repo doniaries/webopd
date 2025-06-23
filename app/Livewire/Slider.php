@@ -52,10 +52,9 @@ class Slider extends Component
                 // Debug query to see what's in the database
                 \Illuminate\Support\Facades\Log::info('Checking posts table for featured posts...');
                 
-                // Get featured posts with proper eager loading, ordered by published date (newest first)
+                // Get latest published posts with proper eager loading, ordered by published date (newest first)
                 $rawPosts = Post::query()
                     ->where('status', 'published')
-                    ->where('is_featured', true)
                     ->whereNotNull('published_at')
                     ->where('published_at', '<=', now())
                     ->with(['tags', 'user'])
