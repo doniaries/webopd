@@ -3,7 +3,7 @@
         <div class="container-fluid">
             <div class="row gx-4">
                 <!-- Main Slider (wider on large screens) -->
-                <div class="col-lg-8 pe-4">
+                <div class="col-lg-9">
                     <div class="swiper main-slider"
                         style="border-radius: 0 10px 10px 0; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
                         <div class="swiper-wrapper">
@@ -36,27 +36,20 @@
                 </div>
 
                 <!-- Banner Slider (narrower on large screens) -->
-                <div class="col-lg-4 ps-2 pe-4">
-                    <div class="swiper banner-slider h-100"
-                        style="border-radius: 0 0 10px 0; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                <div class="col-lg-3">
+                    <div class="swiper banner-slider w-100"
+                        style="height: 400px; border-radius: 0; overflow: hidden;">
                         <div class="swiper-wrapper">
                             @forelse($banners as $banner)
-                                <div class="swiper-slide">
-                                    <a href="{{ $banner['url'] }}" target="_blank">
-                                        <img src="{{ $banner['gambar_url'] }}" alt="{{ $banner['judul'] }}">
-                                        @if (!empty($banner['judul']))
-                                            <div class="banner-caption">
-                                                {{ Str::limit($banner['judul'], 50) }}
-                                            </div>
-                                        @endif
+                                <div class="swiper-slide" style="height: 400px;">
+                                    <a href="{{ $banner['url'] }}" target="_blank" class="d-block h-100">
+                                        <img src="{{ $banner['gambar_url'] }}" alt="{{ $banner['judul'] }}" class="w-100 h-100" style="object-fit: cover;">
                                     </a>
                                 </div>
                             @empty
-                                <div class="swiper-slide bg-light d-flex align-items-center justify-content-center">
-                                    <div class="text-center p-4">
-                                        <i class="bi bi-image fs-1 text-muted mb-2"></i>
-                                        <p class="mb-0 text-muted">Tidak ada banner aktif</p>
-                                    </div>
+                                <div class="swiper-slide" style="height: 400px;">
+                                    <img src="{{ asset('placeholder.jpg') }}" alt="Placeholder"
+                                        style="object-fit: cover; width: 100%; height: 100%;">
                                 </div>
                             @endforelse
                         </div>
@@ -82,21 +75,27 @@
                 }
 
                 .banner-slider {
+                    margin: 0;
+                    padding: 0;
                     width: 100%;
                     height: 100%;
-                    --banner-height: 200px;
-                    /* Fixed height for banners */
+                }
+
+                .banner-slider .swiper-wrapper {
+                    height: 100%;
+                    width: 100%;
                 }
 
                 .banner-slider .swiper-slide {
                     width: 100%;
-                    height: var(--banner-height);
-                    margin: 0 0 10px 0;
+                    height: 33.333%;
+                    margin: 0;
                     padding: 0;
                     position: relative;
                     overflow: hidden;
-                    border-radius: 8px;
-                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                    border-radius: 0;
+                    box-shadow: none;
+                    flex-shrink: 0;
                 }
 
                 .banner-slider .swiper-slide:last-child {
@@ -107,6 +106,9 @@
                     display: block;
                     width: 100%;
                     height: 100%;
+                    margin: 0;
+                    padding: 0;
+                    position: relative;
                 }
 
                 .banner-slider .swiper-slide img {
@@ -115,6 +117,13 @@
                     object-fit: cover;
                     object-position: center;
                     display: block;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    margin: 0;
+                    padding: 0;
                 }
 
                 /* Title overlay */
@@ -190,22 +199,26 @@
                     });
 
                     // Banner Slider
-                    new Swiper('.banner-slider', {
-                        effect: 'fade',
-                        fadeEffect: {
-                            crossFade: true
-                        },
+                    const bannerSwiper = new Swiper('.banner-slider', {
+                        direction: 'vertical',
+                        slidesPerView: 1,
+                        spaceBetween: 0,
                         loop: true,
                         autoplay: {
                             delay: 3000,
                             disableOnInteraction: false,
                         },
-                        speed: 1000,
-                        pagination: {
-                            el: '.banner-slider .swiper-pagination',
-                            clickable: true,
-                            dynamicBullets: true,
-                        },
+                        speed: 800,
+                        height: 400, // Match the container height
+                        autoHeight: false,
+                        effect: 'slide',
+                        breakpoints: {
+                            // When window width is >= 992px (lg breakpoint)
+                            992: {
+                                slidesPerView: 3,
+                                spaceBetween: 0
+                            }
+                        }
                     });
                 });
             </script>
