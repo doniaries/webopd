@@ -12,10 +12,10 @@
         <!-- End Hero Slider -->
         <!-- Berita & Informasi Section -->
         <section id="berita-informasi" class="features" style="margin: 1.5rem 0 0 0; padding: 0;">
-            <div class="container-lg px-0">
+            <div class="container-fluid px-4">
                 <div class="row g-4">
                     <!-- Berita Terbaru Column -->
-                    <div class="col-lg-8 pe-lg-4">
+                    <div class="col-lg-9 pe-lg-4">
                         <div class="d-flex align-items-center mb-4">
                             <div class="border-start border-3 border-danger me-2" style="height: 24px;"></div>
                             <h2 class="h4 fw-bold mb-0">Berita Terkini</h2>
@@ -203,7 +203,7 @@
                     </div>
 
                     <!-- Informasi Column -->
-                    <div class="col-lg-4 ps-lg-4">
+                    <div class="col-lg-3 ps-lg-4">
                         <div
                             class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-md">
                             <div class="border-b border-gray-200 bg-white px-4 py-3">
