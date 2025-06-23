@@ -16,7 +16,18 @@
                     @endphp
                     
                     <div class="swiper-slide"
-                         style="background-image: url('{{ $imageUrl }}'); background-size: cover; background-position: center;">
+                         style="background-image: url('{{ $imageUrl }}'); 
+                                background-size: cover; 
+                                background-position: center; 
+                                background-repeat: no-repeat;
+                                image-rendering: -webkit-optimize-contrast;
+                                image-rendering: crisp-edges;
+                                -ms-interpolation-mode: nearest-neighbor;
+                                transform: translateZ(0);
+                                backface-visibility: hidden;
+                                -webkit-backface-visibility: hidden;
+                                -webkit-transform: translateZ(0);
+                                -webkit-font-smoothing: subpixel-antialiased;">
                         <div class="slide-overlay"></div>
                         <div class="container h-100">
                             <div class="row h-100 align-items-center">
@@ -138,6 +149,17 @@
         #hero.hero {
             width: 100%;
             overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        .swiper-slide {
+            transform: translate3d(0,0,0);
+            -webkit-transform: translate3d(0,0,0);
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            -webkit-transform-style: preserve-3d;
+            transform-style: preserve-3d;
         }
 
         .slider-container {
