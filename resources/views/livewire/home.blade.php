@@ -15,7 +15,7 @@
             <div class="container-lg px-0">
                 <div class="row g-4">
                     <!-- Berita Terbaru Column -->
-                    <div class="col-lg-8 pe-lg-5">
+                    <div class="col-lg-8 pe-lg-4">
                         <div class="d-flex align-items-center mb-4">
                             <div class="border-start border-3 border-danger me-2" style="height: 24px;"></div>
                             <h2 class="h4 fw-bold mb-0">Berita Terkini</h2>
@@ -37,11 +37,11 @@
                             @endphp
 
                             @foreach ($recentPosts as $post)
-                                <div class="col-12 col-md-6 col-lg-4 mb-4">
+                                <div class="col-12 col-md-6 col-lg-6 col-xl-4 mb-4">
                                     <a href="{{ route('berita.show', $post->slug) }}"
                                         class="text-decoration-none d-block h-100">
                                         <div class="card h-100 border-1 overflow-hidden mx-auto"
-                                            style="transition: transform 0.2s ease, box-shadow 0.2s ease; max-width: 500px; width: 100%;">
+                                            style="transition: transform 0.2s ease, box-shadow 0.2s ease; width: 100%;">
                                             <div class="position-absolute top-0 end-0 p-2">
                                                 <span
                                                     class="badge bg-white text-dark border border-light-subtle shadow-sm">
@@ -202,8 +202,8 @@
                         </section>
                     </div>
 
-                    <!-- Informasi/pengumuman Column -->
-                    <div class="col-lg-4 ps-lg-5">
+                    <!-- Informasi Column -->
+                    <div class="col-lg-4 ps-lg-4">
                         <div
                             class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-md">
                             <div class="border-b border-gray-200 bg-white px-4 py-3">
