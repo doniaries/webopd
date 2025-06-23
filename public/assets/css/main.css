@@ -1326,6 +1326,10 @@ section,
   color: var(--contrast-color);
 }
 
+.features {
+  margin-top: -70px;
+}
+
 .features .tab-content {
   margin-top: 30px;
 }

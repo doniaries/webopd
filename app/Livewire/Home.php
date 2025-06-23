@@ -26,6 +26,7 @@ class Home extends Component
     public $sliders = [];
     public $informasi = [];
     public $agenda = [];
+    public $popularPosts = [];
 
     public function mount()
     {
@@ -60,6 +61,16 @@ class Home extends Component
                 ->whereHas('tags')
                 ->latest('published_at')
                 ->take(6)
+                ->get() ?? [];
+
+            // Get popular posts (most viewed)
+            $this->popularPosts = Post::where('status', 'published')
+                ->where('published_at', '<=', now())
+                ->with(['categories' => function ($q) {
+                    $q->where('is_active', true);
+                }, 'user'])
+                ->orderBy('views', 'desc')
+                ->take(8)
                 ->get() ?? [];
 
             // Get active banners
@@ -155,7 +166,8 @@ class Home extends Component
             'sliders' => $this->sliders,
             'informasi' => $this->informasi,
             'agenda' => $this->agenda,
-            'pengaturan' => \App\Models\Pengaturan::getFirst()
+            'pengaturan' => \App\Models\Pengaturan::getFirst(),
+            'popularPosts' => $this->popularPosts,
         ]);
     }
 }

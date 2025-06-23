@@ -1,4 +1,4 @@
-<section id="hero" class="hero py-4">
+<section id="hero" class="hero">
     @if ($sliders && count($sliders) > 0)
         <div class="container-fluid">
             <div class="row gx-4">
@@ -40,8 +40,10 @@
                         <div class="swiper-wrapper">
                             @forelse($banners as $banner)
                                 <div class="swiper-slide" style="height: 400px;">
-                                    <a href="#" class="d-block h-100 banner-item" data-bs-toggle="modal" data-bs-target="#bannerModal" data-img-url="{{ $banner['gambar_url'] }}">
-                                        <img src="{{ $banner['gambar_url'] }}" alt="{{ $banner['judul'] }}" class="w-100 h-100" style="object-fit: cover;">
+                                    <a href="#" class="d-block h-100 banner-item" data-bs-toggle="modal"
+                                        data-bs-target="#bannerModal" data-img-url="{{ $banner['gambar_url'] }}">
+                                        <img src="{{ $banner['gambar_url'] }}" alt="{{ $banner['judul'] }}"
+                                            class="w-100 h-100" style="object-fit: cover;">
                                     </a>
                                 </div>
                             @empty
@@ -67,7 +69,7 @@
                     height: 400px;
                     border-radius: 0;
                     overflow: hidden;
-                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                    /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); */
                 }
 
                 .banner-slider {
@@ -77,7 +79,7 @@
                 }
 
                 .swiper-slide {
-                    position: relative;
+                    /* position: relative; */
                     overflow: hidden;
                 }
 
@@ -185,7 +187,7 @@
 
                 @media (max-width: 991.98px) {
                     .main-slider {
-                        margin-bottom: 1rem;
+                        margin-bottom: 0;
                     }
 
                     .swiper-slide {
@@ -234,7 +236,7 @@
                     });
 
                     const bannerModal = document.getElementById('bannerModal');
-                    bannerModal.addEventListener('show.bs.modal', function (event) {
+                    bannerModal.addEventListener('show.bs.modal', function(event) {
                         const button = event.relatedTarget;
                         const imageUrl = button.getAttribute('data-img-url');
                         const modalImage = bannerModal.querySelector('#modalBannerImage');
@@ -297,10 +299,17 @@
 
 @push('styles')
     <style>
+        /* Hide slider pagination */
+        .swiper-pagination {
+            display: none !important;
+        }
+        
         #hero.hero {
             width: 100%;
             overflow: hidden;
             -webkit-font-smoothing: antialiased;
+            padding-bottom: 5px; /* Further reduced from 20px */
+            margin-bottom: -10px; /* Negative margin to pull content up */
             -moz-osx-font-smoothing: grayscale;
         }
 
