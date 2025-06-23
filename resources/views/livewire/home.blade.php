@@ -15,7 +15,7 @@
             <div class="container-lg px-0">
                 <div class="row g-4">
                     <!-- Berita Terbaru Column -->
-                    <div class="col-lg-8 pe-lg-4">
+                    <div class="col-lg-8 pe-lg-5">
                         <div class="d-flex align-items-center mb-4">
                             <div class="border-start border-3 border-danger me-2" style="height: 24px;"></div>
                             <h2 class="h4 fw-bold mb-0">Berita Terkini</h2>
@@ -39,19 +39,15 @@
                             @foreach ($recentPosts as $post)
                                 <div class="col-md-6 col-lg-4">
                                     <div class="card h-100 border-0 shadow-sm">
-                                        <div class="position-relative" style="height: 180px; overflow: hidden;">
-                                            <img src="{{ $post->foto_utama_url ?? asset('images/placeholder.jpg') }}"
-                                                class="card-img-top h-100 w-100" style="object-fit: cover;"
-                                                alt="{{ $post->title }}">
-                                            <div
-                                                class="position-absolute bottom-0 start-0 p-2 bg-primary text-white small">
+                                        <div class="position-relative" style="padding-top: 56.25%; overflow: hidden;">
+                                            <img src="{{ $post->foto_utama_url }}" class="position-absolute top-0 start-0 w-100 h-100" style="object-fit: cover;" alt="{{ $post->judul }}">
+                                            <div class="position-absolute bottom-0 start-0 p-2 bg-primary text-white small">
                                                 {{ $post->tags->first()->name ?? 'Berita' }}
                                             </div>
                                         </div>
                                         <div class="card-body">
                                             <h5 class="card-title">
-                                                <a href="{{ route('berita.show', $post->slug) }}"
-                                                    class="text-dark text-decoration-none">
+                                                <a href="{{ route('berita.show', $post->slug) }}" class="text-dark text-decoration-none">
                                                     {{ Str::limit($post->title, 60) }}
                                                 </a>
                                             </h5>
@@ -62,7 +58,7 @@
                                                 <i class="bi bi-person-fill me-1"></i>
                                                 {{ $post->user->name ?? 'Admin' }}
                                             </p>
-                                            <p class="card-text small">
+                                            <p class="card-text small mt-auto">
                                                 {{ Str::limit(strip_tags($post->content), 100) }}
                                             </p>
                                         </div>
@@ -182,7 +178,7 @@
                     </div>
 
                     <!-- Informasi/pengumuman Column -->
-                    <div class="col-lg-4">
+                    <div class="col-lg-4 ps-lg-5">
                         <div
                             class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-md">
                             <div class="border-b border-gray-200 bg-white px-4 py-3">
