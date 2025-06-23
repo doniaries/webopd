@@ -11,11 +11,11 @@
         @livewire('slider', ['sliders' => $sliders, 'pengaturan' => $pengaturan ?? null, 'usePostsAsSliders' => true])
         <!-- End Hero Slider -->
         <!-- Berita & Informasi Section -->
-        <section id="berita-informasi" class="features" style="padding-top: 100px;">
-            <div class="container">
-                <div class="row">
+        <section id="berita-informasi" class="features" style="margin: 1.5rem 0 0 0; padding: 0;">
+            <div class="container-lg px-0">
+                <div class="row g-4">
                     <!-- Berita Terbaru Column -->
-                    <div class="col-lg-8">
+                    <div class="col-lg-8 pe-lg-4">
                         <div class="d-flex align-items-center mb-4">
                             <div class="border-start border-3 border-danger me-2" style="height: 24px;"></div>
                             <h2 class="h4 fw-bold mb-0">Berita Terkini</h2>
