@@ -1,9 +1,9 @@
 <section id="hero" class="hero py-4">
     @if ($sliders && count($sliders) > 0)
-        <div class="container-fluid px-0">
-            <div class="row g-0">
+        <div class="container-fluid">
+            <div class="row gx-4">
                 <!-- Main Slider (wider on large screens) -->
-                <div class="col-lg-9 mb-4 mb-lg-0">
+                <div class="col-lg-8 pe-4">
                     <div class="swiper main-slider"
                         style="border-radius: 0 10px 10px 0; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
                         <div class="swiper-wrapper">
@@ -36,7 +36,7 @@
                 </div>
 
                 <!-- Banner Slider (narrower on large screens) -->
-                <div class="col-lg-3">
+                <div class="col-lg-4 ps-2 pe-4">
                     <div class="swiper banner-slider h-100"
                         style="border-radius: 0 0 10px 0; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
                         <div class="swiper-wrapper">
