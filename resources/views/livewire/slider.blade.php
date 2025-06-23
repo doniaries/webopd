@@ -5,18 +5,20 @@
                 @foreach ($sliders as $slider)
                     @php
                         // Convert to array if it's an object with public properties
-                        $slider = is_object($slider) ? (array) $slider : $slider;
-                        $imageUrl = $slider['gambar_url'] ?? asset('assets/img/hero-img.png');
-                        $title = $slider['judul'] ?? 'No Title';
-                        $description = $slider['deskripsi'] ?? '';
-                        $url = $slider['url'] ?? '#';
-                        $author = $slider['author_name'] ?? 'Admin';
-                        $date = isset($slider['published_at']) ? \Carbon\Carbon::parse($slider['published_at'])->translatedFormat('d F Y') : '';
-                        $tags = $slider['tags'] ?? [];
+$slider = is_object($slider) ? (array) $slider : $slider;
+$imageUrl = $slider['gambar_url'] ?? asset('assets/img/hero-img.png');
+$title = $slider['judul'] ?? 'No Title';
+$description = $slider['deskripsi'] ?? '';
+$url = $slider['url'] ?? '#';
+$author = $slider['author_name'] ?? 'Admin';
+$date = isset($slider['published_at'])
+    ? \Carbon\Carbon::parse($slider['published_at'])->translatedFormat('d F Y')
+    : '';
+$tags = $slider['tags'] ?? [];
                     @endphp
-                    
+
                     <div class="swiper-slide"
-                         style="background-image: url('{{ $imageUrl }}'); 
+                        style="background-image: url('{{ $imageUrl }}'); 
                                 background-size: cover; 
                                 background-position: center; 
                                 background-repeat: no-repeat;
@@ -33,35 +35,35 @@
                             <div class="row h-100 align-items-center">
                                 <div class="col-lg-8 col-md-10 mx-auto">
                                     <div class="slider-content text-white p-4" data-aos="fade-up">
-                                        @if(!empty($tags))
+                                        @if (!empty($tags))
                                             <div class="mb-2">
-                                                @foreach(array_slice($tags, 0, 2) as $tag)
+                                                @foreach (array_slice($tags, 0, 2) as $tag)
                                                     <span class="badge bg-primary me-1">{{ $tag }}</span>
                                                 @endforeach
                                             </div>
                                         @endif
-                                        
+
                                         <h1 class="mb-3">
                                             <a href="{{ $url }}" class="text-white text-decoration-none">
                                                 {{ $title }}
                                             </a>
                                         </h1>
-                                        
+
                                         <p class="mb-4">{{ $description }}</p>
-                                        
+
                                         <div class="d-flex align-items-center">
-                                            <div class="d-flex align-items-center me-4">
+                                            {{-- <div class="d-flex align-items-center me-4">
                                                 <i class="bi bi-person me-2"></i>
                                                 <span>{{ $author }}</span>
-                                            </div>
-                                            @if($date)
+                                            </div> --}}
+                                            @if ($date)
                                                 <div class="d-flex align-items-center">
                                                     <i class="bi bi-calendar3 me-2"></i>
                                                     <span>{{ $date }}</span>
                                                 </div>
                                             @endif
                                         </div>
-                                        
+
                                         <div class="mt-4">
                                             <a href="{{ $url }}" class="btn btn-primary">
                                                 Baca Selengkapnya
@@ -152,10 +154,10 @@
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
-        
+
         .swiper-slide {
-            transform: translate3d(0,0,0);
-            -webkit-transform: translate3d(0,0,0);
+            transform: translate3d(0, 0, 0);
+            -webkit-transform: translate3d(0, 0, 0);
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
             -webkit-transform-style: preserve-3d;
