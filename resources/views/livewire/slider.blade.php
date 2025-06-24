@@ -34,32 +34,7 @@
                     </div>
                 </div>
 
-                <!-- Banner Slider (narrower on large screens) -->
-                <div class="col-lg-3">
-                    <div class="swiper banner-slider w-100">
-                        <div class="swiper-wrapper">
-                            @forelse($banners as $banner)
-                                <div class="swiper-slide" style="height: 400px;">
-                                    <a href="#" class="d-block h-100 banner-item" data-bs-toggle="modal"
-                                        data-bs-target="#bannerModal" data-img-url="{{ $banner['gambar_url'] }}">
-                                        <img src="{{ $banner['gambar_url'] }}" alt="{{ $banner['judul'] }}"
-                                            class="w-100 h-100" style="object-fit: cover;">
-                                    </a>
-                                </div>
-                            @empty
-                                <div class="swiper-slide" style="height: 400px;">
-                                    <img src="{{ asset('placeholder.jpg') }}" alt="Placeholder"
-                                        style="object-fit: cover; width: 100%; height: 100%;">
-                                </div>
-                            @endforelse
-                        </div>
-                        @if (count($banners) > 1)
-                            <div class="swiper-pagination"></div>
-                            <div class="swiper-button-next banner-button-next"></div>
-                            <div class="swiper-button-prev banner-button-prev"></div>
-                        @endif
-                    </div>
-                </div>
+                <!-- Banner Slider Moved to Home Component -->
             </div>
         </div>
 
@@ -72,77 +47,8 @@
                     /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); */
                 }
 
-                .banner-slider {
-                    height: 400px;
-                    border-radius: 0;
-                    overflow: hidden;
-                }
-
                 .swiper-slide {
-                    /* position: relative; */
                     overflow: hidden;
-                }
-
-                .banner-slider {
-                    margin: 0;
-                    padding: 0;
-                    width: 100%;
-                    height: 100%;
-                }
-
-                .banner-slider .swiper-wrapper {
-                    height: 100%;
-                    width: 100%;
-                }
-
-                .banner-slider .swiper-slide {
-                    width: 100%;
-                    margin: 0;
-                    padding: 0;
-                    position: relative;
-                    overflow: hidden;
-                    box-shadow: none;
-                }
-
-                .banner-slider .swiper-slide:last-child {
-                    margin-bottom: 0;
-                }
-
-                .banner-slider .swiper-slide>a {
-                    display: block;
-                    width: 100%;
-                    height: 100%;
-                    margin: 0;
-                    padding: 0;
-                    position: relative;
-                }
-
-                .banner-slider .swiper-slide img {
-                    width: 100%;
-                    height: 100%;
-                    object-fit: cover;
-                    object-position: center;
-                    display: block;
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    right: 0;
-                    bottom: 0;
-                    margin: 0;
-                    padding: 0;
-                }
-
-                /* Title overlay */
-                .banner-slider .swiper-slide .banner-caption {
-                    position: absolute;
-                    bottom: 0;
-                    left: 0;
-                    right: 0;
-                    padding: 8px 12px;
-                    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
-                    color: white;
-                    font-size: 0.8rem;
-                    line-height: 1.2;
                 }
 
                 .swiper-button-next,
@@ -155,31 +61,15 @@
                     transition: all 0.3s ease;
                 }
 
-
                 .swiper-button-next:after,
                 .swiper-button-prev:after {
                     font-size: 1.2rem;
                 }
 
-                .banner-slider .swiper-button-next,
-                .banner-slider .swiper-button-prev {
-                    width: 35px;
-                    height: 35px;
-                    background: rgba(0, 0, 0, 0.3);
-                    color: #fff;
-                }
-
-                .banner-slider .swiper-button-next:after,
-                .banner-slider .swiper-button-prev:after {
-                    font-size: 1rem;
-                }
-
-
                 .swiper-pagination-bullet {
                     background: #fff;
                     opacity: 0.7;
                 }
-
                 .swiper-pagination-bullet-active {
                     background: var(--primary);
                     opacity: 1;

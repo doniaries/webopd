@@ -21,7 +21,8 @@
         }
 
         /* Hapus efek transisi yang tidak diinginkan */
-        .header-container, .menu-container {
+        .header-container,
+        .menu-container {
             transition: none !important;
         }
 
@@ -68,11 +69,11 @@
             height: auto;
             padding: 0;
         }
-        
+
         .menu-wrapper {
             width: 100%;
         }
-        
+
         #navmenu ul {
             margin: 0;
             padding: 0;
@@ -552,8 +553,10 @@
                 <!-- Right side elements -->
                 <div class="d-flex align-items-center">
                     <div id="current-time" class="text-end me-3" style="line-height: 1.2;">
-                        <div id="date" class="fw-medium" style="font-size: 0.8rem; color: #6c757d;">Selasa, 24 Juni 2025</div>
-                        <div id="time" class="fw-bold" style="font-size: 0.9rem; color: #495057;">00:00:00 WIB</div>
+                        <div id="date" class="fw-medium" style="font-size: 0.8rem; color: #6c757d;">Selasa, 24 Juni
+                            2025</div>
+                        <div id="time" class="fw-bold" style="font-size: 0.9rem; color: #495057;">00:00:00 WIB
+                        </div>
                     </div>
                     <a href="{{ route('login') }}" class="btn btn-sm btn-primary">
                         <i class="bi bi-box-arrow-in-right me-1"></i> Login
@@ -563,8 +566,6 @@
                 <!-- Hamburger Menu Button inside header content -->
                 <div class="hamburger-menu ms-3" id="mobile-menu-toggle">
                     <div class="hamburger-icon">
-                        <span></span>
-                        <span></span>
                         <span></span>
                     </div>
                 </div>
@@ -766,7 +767,7 @@
         // Update waktu dan tanggal secara real-time
         function updateTime() {
             const now = new Date();
-            
+
             // Format waktu
             const timeString = now.toLocaleTimeString('id-ID', {
                 hour: '2-digit',
@@ -774,24 +775,24 @@
                 second: '2-digit',
                 hour12: false
             });
-            
+
             // Format tanggal
-            const options = { 
-                weekday: 'long', 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
+            const options = {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
             };
             const dateString = now.toLocaleDateString('id-ID', options);
-            
+
             document.getElementById('time').textContent = timeString + ' WIB';
             document.getElementById('date').textContent = dateString;
         }
-        
+
         // Update waktu setiap detik
         setInterval(updateTime, 1000);
         updateTime(); // Panggil sekali saat pertama kali load
-        
+
         // Hapus class at-top yang mungkin menimbulkan efek tidak diinginkan
         document.getElementById('header').classList.remove('at-top');
 
@@ -870,6 +871,7 @@
                 });
             }
 
+           
             // Toggle mobile dropdowns
             mobileDropdowns.forEach(dropdown => {
                 const button = dropdown.querySelector('button');

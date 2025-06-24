@@ -202,8 +202,45 @@
                         </section>
                     </div>
 
-                    <!-- Informasi Column -->
+
+                    <!-- Informasi Column with Banner -->
                     <div class="col-lg-3 ps-lg-4">
+                        <!-- Banner Slider Section -->
+                        <div class="mb-6">
+                            <div class="swiper banner-slider w-100">
+                                <div class="swiper-wrapper">
+                                    @forelse($banners as $banner)
+                                        <div class="swiper-slide">
+                                            <a href="{{ $banner->url }}" class="d-block position-relative">
+                                                <img src="{{ $banner->gambar_url }}" class="img-fluid rounded-3"
+                                                    alt="{{ $banner->judul }}"
+                                                    style="height: 200px; width: 100%; object-fit: cover;">
+                                                @if (!empty($banner->judul))
+                                                    <div class="banner-caption">
+                                                        {{ $banner->judul }}
+                                                    </div>
+                                                @endif
+                                            </a>
+                                        </div>
+                                    @empty
+                                        <div class="swiper-slide">
+                                            <div class="bg-light rounded-3 d-flex align-items-center justify-content-center"
+                                                style="height: 200px;">
+                                                <div class="text-center p-3">
+                                                    <i class="bi bi-image fs-1 text-muted"></i>
+                                                    <p class="mb-0 mt-2">Tidak ada banner tersedia</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforelse
+                                </div>
+                                <div class="swiper-pagination"></div>
+                                <div class="swiper-button-next"></div>
+                                <div class="swiper-button-prev"></div>
+                            </div>
+                        </div>
+
+                        <!-- Informasi Terbaru Card -->
                         <div
                             class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-md">
                             <div class="border-b border-gray-200 bg-white px-4 py-3">
@@ -442,14 +479,108 @@
                                 </a>
                             </div>
                         </div>
+
+
                     </div>
                 </div>
             </div>
         </section>
+
+        <!-- Banner Modal -->
+        <div class="modal fade" id="bannerModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content border-0">
+                    <div class="modal-header border-0">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body p-0">
+                        <img id="bannerModalImg" src="#" alt="Banner" class="img-fluid w-100">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
 </div>
 
 @push('styles')
     <style>
+        /* Banner Slider Styles */
+        .banner-slider {
+            height: 200px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
+
+        .banner-slider .swiper-wrapper {
+            height: 100%;
+            width: 100%;
+        }
+
+        .banner-slider .swiper-slide {
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: none;
+        }
+
+        .banner-slider .swiper-slide:last-child {
+            margin-bottom: 0;
+        }
+
+        .banner-slider .swiper-slide>a {
+            display: block;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            position: relative;
+        }
+
+        .banner-slider .swiper-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .banner-slider .swiper-button-next,
+        .banner-slider .swiper-button-prev {
+            width: 30px;
+            height: 30px;
+            background: rgba(0, 0, 0, 0.3);
+            color: #fff;
+            border-radius: 50%;
+        }
+
+        .banner-slider .swiper-button-next:after,
+        .banner-slider .swiper-button-prev:after {
+            font-size: 0.9rem;
+        }
+
+        .banner-slider .swiper-pagination-bullet {
+            background: #fff;
+            opacity: 0.7;
+        }
+
+        .banner-slider .swiper-pagination-bullet-active {
+            background: var(--primary);
+            opacity: 1;
+        }
+
         /* Card Styles */
         .card {
             border-radius: 0.5rem;
@@ -540,6 +671,40 @@
 
 @push('scripts')
     <script>
+        // Initialize banner slider
+        document.addEventListener('DOMContentLoaded', function() {
+            // Banner Slider
+            const bannerSwiper = new Swiper('.banner-slider', {
+                loop: true,
+                autoplay: {
+                    delay: 5000,
+                    disableOnInteraction: false,
+                },
+                pagination: {
+                    el: '.banner-slider .swiper-pagination',
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: '.banner-slider .swiper-button-next',
+                    prevEl: '.banner-slider .swiper-button-prev',
+                },
+            });
+
+            // Banner modal
+            const bannerModal = new bootstrap.Modal(document.getElementById('bannerModal'));
+            const bannerModalImg = document.getElementById('bannerModalImg');
+
+            document.querySelectorAll('.banner-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const imgUrl = this.getAttribute('data-img-url');
+                    if (imgUrl) {
+                        bannerModalImg.src = imgUrl;
+                        bannerModal.show();
+                    }
+                });
+            });
+        });
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize scrolling for news container
             initHorizontalScroll('.scroll-container', '.scroll-left', '.scroll-right');

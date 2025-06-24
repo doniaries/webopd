@@ -22,20 +22,27 @@ class Home extends Component
     public $tags = [];
     public $featuredPosts = [];
     public $latestPosts = [];
-    public $banners = [];
+    /** @var \Illuminate\Support\Collection<object{judul: string, gambar_url: string, url: string, is_banner: bool}> */
+    public $banners;
     public $sliders = [];
     public $informasi = [];
-    public $agenda = [];
+    /** @var \Illuminate\Support\Collection */
+    public $agenda;
     public $popularPosts = [];
 
     public function mount()
     {
+        $this->banners = collect();
+        $this->agenda = collect();
         $this->loadData();
     }
 
     public function loadData()
     {
         try {
+            // Load banners first
+            $this->loadBanners();
+            
             // Get tags with published posts
             $this->tags = Tag::whereHas('posts', function ($query) {
                 $query->where('status', 'published');
@@ -73,8 +80,8 @@ class Home extends Component
                 ->take(8)
                 ->get() ?? [];
 
-            // Get active banners
-            $this->banners = Banner::active()->get() ?? [];
+            // Load active banners for the current team
+            $this->loadBanners();
 
             // Get active sliders
             $this->sliders = Slider::active()->orderBy('urutan')->get() ?? [];
@@ -107,8 +114,10 @@ class Home extends Component
                 $this->informasi = [];
             }
 
-            // Get upcoming agenda with time fields
-            $this->agenda = \App\Models\AgendaKegiatan::query()
+            // Get agenda (events)
+            $agenda = \App\Models\AgendaKegiatan::where('is_published', true)
+                ->where('published_at', '<=', now())
+                ->where('end_date', '>=', now())
                 ->select([
                     'id',
                     'nama_agenda',
@@ -125,8 +134,9 @@ class Home extends Component
                 ->orderBy('dari_tanggal')
                 ->orderBy('waktu_mulai')
                 ->take(3)
-                ->get() ?? [];
-                
+                ->get();
+            $this->agenda = collect($agenda);
+
             // Debug: Log agenda data
             if (app()->environment('local')) {
                 \Illuminate\Support\Facades\Log::info('Agenda data:', [
@@ -145,8 +155,92 @@ class Home extends Component
         }
     }
 
+    /**
+     * Load active banners for the current team
+     *
+     * @return void
+     */
+    /**
+     * @return \Illuminate\Support\Collection<object{judul: string, gambar_url: string, url: string, is_banner: bool}>
+     */
+    protected function loadBannersData()
+    {
+        try {
+            $pengaturan = \App\Models\Pengaturan::first();
+            $teamId = $pengaturan->team_id ?? null;
+
+            \Illuminate\Support\Facades\Log::info('Loading banners', [
+                'team_id' => $teamId,
+                'pengaturan_exists' => $pengaturan ? 'Yes' : 'No'
+            ]);
+
+            $query = Banner::where('is_active', true);
+            
+            if ($teamId) {
+                $query->where('team_id', $teamId);
+            } else {
+                // If no team_id is set, log a warning but still try to load banners
+                \Illuminate\Support\Facades\Log::warning('No team_id found in pengaturan, loading all active banners');
+            }
+
+            $banners = $query->latest()
+                ->take(4)
+                ->get();
+
+            \Illuminate\Support\Facades\Log::info('Raw banners query', [
+                'sql' => $query->toSql(),
+                'bindings' => $query->getBindings(),
+                'count' => $banners->count()
+            ]);
+
+            return $banners->map(function ($banner) {
+                return (object) [
+                    'judul' => $banner->judul,
+                    'gambar_url' => $banner->gambar ? asset('storage/' . $banner->gambar) : asset('assets/img/hero-img.png'),
+                    'url' => $banner->keterangan ?: '#',
+                    'is_banner' => true
+                ];
+            });
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Error in loadBannersData: ' . $e->getMessage(), [
+                'exception' => $e->getTraceAsString()
+            ]);
+            return collect();
+        }
+    }
+
+    public function loadBanners(): void
+    {
+        try {
+            $banners = $this->loadBannersData();
+            $this->banners = $banners;
+            
+            // Debug log
+            \Illuminate\Support\Facades\Log::info('Banners loaded:', [
+                'count' => $banners->count(),
+                'banners' => $banners->toArray(),
+                'team_id' => \App\Models\Pengaturan::first()?->team_id
+            ]);
+            
+            if ($banners->isEmpty()) {
+                \Illuminate\Support\Facades\Log::warning('No active banners found for team');
+            }
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Error loading banners: ' . $e->getMessage(), [
+                'exception' => $e->getTraceAsString()
+            ]);
+            $this->banners = collect();
+        }
+    }
+
     public function render()
     {
+        // Load banners if not already loaded or empty
+        if (!isset($this->banners) || (is_array($this->banners) && empty($this->banners)) || 
+            ($this->banners instanceof \Illuminate\Support\Collection && $this->banners->isEmpty())) {
+            $this->loadBanners();
+        }
+
         // Get all tags with published posts for the menu
         $tags = \App\Models\Tag::whereHas('posts', function ($query) {
             $query->where('status', 'published');
@@ -160,6 +254,7 @@ class Home extends Component
         return view('livewire.home', [
             'pageTitle' => 'Beranda - ' . config('app.name'),
             'pageDescription' => 'Portal resmi ' . config('app.name') . ' untuk informasi terbaru, informasi, dan layanan publik.',
+            'banners' => $this->banners,
             'featuredPosts' => $this->featuredPosts,
             'tags' => $tags,
             'banners' => $this->banners,
