@@ -166,44 +166,59 @@ class Home extends Component
     protected function loadBannersData()
     {
         try {
-            $pengaturan = \App\Models\Pengaturan::first();
+            // Get pengaturan with team relationship
+            $pengaturan = \App\Models\Pengaturan::with('team')->first();
             $teamId = $pengaturan->team_id ?? null;
+            $teamName = $pengaturan->team->name ?? 'No Team';
 
             \Illuminate\Support\Facades\Log::info('Loading banners', [
                 'team_id' => $teamId,
+                'team_name' => $teamName,
                 'pengaturan_exists' => $pengaturan ? 'Yes' : 'No'
             ]);
 
-            $query = Banner::where('is_active', true);
+            // Start building the query
+            $query = \App\Models\Banner::query()
+                ->where('is_active', true);
             
-            if ($teamId) {
+            // Only filter by team_id if it's set and not null
+            if (!is_null($teamId)) {
                 $query->where('team_id', $teamId);
-            } else {
-                // If no team_id is set, log a warning but still try to load banners
-                \Illuminate\Support\Facades\Log::warning('No team_id found in pengaturan, loading all active banners');
+                
+                // If no banners found for this team, include banners with no team_id
+                if ($query->count() === 0) {
+                    $query->orWhereNull('team_id');
+                }
             }
 
+            // Get the banners
             $banners = $query->latest()
                 ->take(4)
                 ->get();
 
-            \Illuminate\Support\Facades\Log::info('Raw banners query', [
-                'sql' => $query->toSql(),
-                'bindings' => $query->getBindings(),
-                'count' => $banners->count()
+            // Log the results for debugging
+            \Illuminate\Support\Facades\Log::info('Banners loaded', [
+                'team_id' => $teamId,
+                'banners_count' => $banners->count(),
+                'banner_ids' => $banners->pluck('id')->toArray()
             ]);
 
+            // Map the banners to the required format
             return $banners->map(function ($banner) {
                 return (object) [
+                    'id' => $banner->id,
                     'judul' => $banner->judul,
                     'gambar_url' => $banner->gambar ? asset('storage/' . $banner->gambar) : asset('assets/img/hero-img.png'),
                     'url' => $banner->keterangan ?: '#',
-                    'is_banner' => true
+                    'is_banner' => true,
+                    'team_id' => $banner->team_id
                 ];
             });
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\Log::error('Error in loadBannersData: ' . $e->getMessage(), [
-                'exception' => $e->getTraceAsString()
+                'exception' => $e->getTraceAsString(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine()
             ]);
             return collect();
         }
