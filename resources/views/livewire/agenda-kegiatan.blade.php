@@ -1,85 +1,126 @@
-<div>
-    <x-page-header title="Agenda Kegiatan" />
-
-    <!-- Agenda Section -->
-    <section id="agenda" class="agenda-section section">
-        <div class="container" data-aos="fade-up">
-            <div class="row mb-4">
-                <div class="col-12">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h3>{{ $months[$currentMonth] }} {{ $currentYear }}</h3>
-                        </div>
-                        <div class="d-flex">
-                            <button wire:click="previousMonth" class="btn btn-outline-primary btn-sm me-2">
-                                <i class="bi bi-chevron-left"></i> Bulan Sebelumnya
-                            </button>
-                            <button wire:click="nextMonth" class="btn btn-outline-primary btn-sm">
-                                Bulan Depan <i class="bi bi-chevron-right"></i>
-                            </button>
-                        </div>
-                    </div>
+<div class="space-y-4">
+    <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-100 bg-gray-50">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                <h4 class="text-sm font-semibold text-gray-700 mb-2 sm:mb-0">
+                    <i class="far fa-calendar-check text-green-600 mr-2"></i>
+                    {{ $months[$currentMonth] }} {{ $currentYear }}
+                </h4>
+                <div class="flex items-center space-x-2">
+                    <button wire:click="previousMonth" 
+                            class="p-1.5 rounded-full hover:bg-gray-100 text-gray-500 hover:text-green-600 transition-colors"
+                            title="Bulan sebelumnya">
+                        <i class="fas fa-chevron-left text-sm"></i>
+                    </button>
+                    <button wire:click="nextMonth" 
+                            class="p-1.5 rounded-full hover:bg-gray-100 text-gray-500 hover:text-green-600 transition-colors"
+                            title="Bulan berikutnya">
+                        <i class="fas fa-chevron-right text-sm"></i>
+                    </button>
                 </div>
             </div>
-
-            <div class="row">
-                @forelse($agendas as $agenda)
-                    <div class="col-md-6 col-lg-4 mb-4">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <div class="d-flex align-items-start">
-                                    <div class="bg-primary bg-opacity-10 p-3 rounded me-3">
-                                        <i class="bi bi-calendar-event text-primary fs-4"></i>
+        </div>
+        
+        @if(count($agendas) > 0)
+            <div class="divide-y divide-gray-100">
+                @foreach($agendas as $agenda)
+                    <div class="p-4 hover:bg-gray-50 transition-colors">
+                        <div class="flex items-start">
+                            <div class="bg-green-50 p-3 rounded-lg mr-4">
+                                <i class="fas fa-calendar-day text-green-600 text-lg"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="text-sm font-semibold text-gray-800 mb-1">
+                                    <a href="{{ route('agenda.show', $agenda->id) }}" 
+                                       class="hover:text-green-600 transition-colors">
+                                        {{ $agenda->nama_agenda }}
+                                    </a>
+                                </h4>
+                                <div class="space-y-1.5 mt-2">
+                                    <div class="flex items-start text-xs text-gray-600">
+                                        <i class="far fa-clock mt-0.5 mr-2 text-green-500"></i>
+                                        <div>
+                                            <span class="font-medium">Waktu:</span>
+                                            <span class="ml-1">
+                                                {{ indonesia_date($agenda->dari_tanggal, true) }}
+                                                @if ($agenda->sampai_tanggal && $agenda->sampai_tanggal != $agenda->dari_tanggal)
+                                                    - {{ indonesia_date($agenda->sampai_tanggal) }}
+                                                @endif
+                                            </span>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <h5 class="card-title">
-                                            <a href="{{ route('agenda.show', $agenda->id) }}" class="text-dark text-decoration-none">
-                                                {{ $agenda->nama_agenda }}
-                                            </a>
-                                        </h5>
-                                        <p class="card-text text-muted small">
-                                            <i class="bi bi-calendar me-1"></i>
-                                            {{ indonesia_date($agenda->dari_tanggal, true) }}
-                                            @if ($agenda->sampai_tanggal && $agenda->sampai_tanggal != $agenda->dari_tanggal)
-                                                - {{ indonesia_date($agenda->sampai_tanggal) }}
-                                            @endif
-                                        </p>
-                                        @if ($agenda->tempat)
-                                            <p class="card-text text-muted small mb-2">
-                                                <i class="bi bi-geo-alt me-1"></i> {{ $agenda->tempat }}
-                                            </p>
-                                        @endif
-                                        <p class="card-text">
-                                            {{ Str::limit($agenda->uraian_agenda, 120) }}
-                                        </p>
-                                        <a href="{{ route('agenda.show', $agenda->id) }}" class="btn btn-link p-0">
-                                            Baca Selengkapnya <i class="bi bi-arrow-right ms-1"></i>
-                                        </a>
-                                    </div>
+                                    @if ($agenda->tempat)
+                                        <div class="flex items-start text-xs text-gray-600">
+                                            <i class="fas fa-map-marker-alt mt-0.5 mr-2 text-green-500"></i>
+                                            <div>
+                                                <span class="font-medium">Lokasi:</span>
+                                                <span class="ml-1">{{ $agenda->tempat }}</span>
+                                            </div>
+                                        </div>
+                                    @endif
+                                    @if ($agenda->uraian_agenda)
+                                        <div class="flex items-start text-xs text-gray-600">
+                                            <i class="fas fa-info-circle mt-0.5 mr-2 text-green-500"></i>
+                                            <div>
+                                                <span class="font-medium">Keterangan:</span>
+                                                <span class="ml-1 line-clamp-2">{{ $agenda->uraian_agenda }}</span>
+                                            </div>
+                                        </div>
+                                    @endif
+                                    
+                                    @if($agenda->peserta)
+                                        <div class="flex items-start text-xs text-gray-600">
+                                            <i class="fas fa-users mt-0.5 mr-2 text-green-500"></i>
+                                            <div>
+                                                <span class="font-medium">Peserta:</span>
+                                                <span class="ml-1">{{ $agenda->peserta }}</span>
+                                            </div>
+                                        </div>
+                                    @endif
+                                    
+                                    @if($agenda->penyelenggara)
+                                        <div class="flex items-start text-xs text-gray-600">
+                                            <i class="fas fa-building mt-0.5 mr-2 text-green-500"></i>
+                                            <div>
+                                                <span class="font-medium">Penyelenggara:</span>
+                                                <span class="ml-1">{{ $agenda->penyelenggara }}</span>
+                                            </div>
+                                        </div>
+                                    @endif
+                                </div>
+                                
+                                <div class="mt-3 flex justify-end">
+                                    <a href="{{ route('agenda.show', $agenda->id) }}" 
+                                       class="inline-flex items-center text-xs font-medium text-green-600 hover:text-green-800">
+                                        Detail Agenda
+                                        <i class="fas fa-arrow-right ml-1 text-xs"></i>
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                @empty
-                    <div class="col-12">
-                        <div class="alert alert-info text-center">
-                            <i class="bi bi-info-circle me-2"></i>
-                            <h5 class="d-inline">Tidak ada agenda</h5>
-                            <p class="mb-0">Tidak ada agenda yang dijadwalkan untuk bulan ini.</p>
-                        </div>
-                    </div>
-                @endforelse
+                @endforeach
             </div>
-
-            @if ($agendas->hasPages())
-                <div class="row mt-4">
-                    <div class="col-12">
-                        <nav aria-label="Page navigation">
-                            {{ $agendas->links() }}
-                        </nav>
-                    </div>
+            
+            <div class="p-4 border-t border-gray-100 text-center">
+                <a href="{{ route('agenda.index') }}" 
+                   class="inline-flex items-center text-sm font-medium text-green-600 hover:text-green-800">
+                    Lihat Semua Agenda
+                    <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                </a>
+            </div>
+        @else
+            <div class="text-center py-8 bg-gray-50">
+                <div class="text-gray-400 mb-2">
+                    <i class="far fa-calendar-times text-4xl"></i>
                 </div>
-            @endif
+                <p class="text-sm text-gray-500">Tidak ada agenda untuk bulan ini</p>
+                <a href="{{ route('agenda.index') }}" 
+                   class="mt-2 inline-flex items-center text-xs text-green-600 hover:text-green-800">
+                    Lihat agenda bulan lainnya
+                </a>
+            </div>
+        @endif
         </div>
-    </section>
+    </div>
 </div>

@@ -619,4 +619,3 @@
         });
     </script>
 @endpush
-</div>

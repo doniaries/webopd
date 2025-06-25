@@ -349,8 +349,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-7xl mx-auto">
                 <!-- Kolom Informasi -->
                 <div class="bg-white shadow-md rounded-lg overflow-hidden border border-gray-200">
-                    <h3
-                        class="text-center text-blue-800 text-lg font-semibold py-3 border-b border-blue-200 bg-blue-50">
+                    <h3 class="text-center text-blue-800 text-lg font-semibold py-3 border-b border-blue-200 bg-blue-50">
                         <i class="fas fa-info-circle text-blue-600 mr-2"></i>
                         Informasi Terbaru
                     </h3>
@@ -358,11 +357,10 @@
                         <livewire:informasi />
                     </div>
                 </div>
-
+                
                 <!-- Kolom Agenda -->
                 <div class="bg-white shadow-md rounded-lg overflow-hidden border border-gray-200">
-                    <h3
-                        class="text-center text-green-800 text-lg font-semibold py-3 border-b border-green-200 bg-green-50">
+                    <h3 class="text-center text-green-800 text-lg font-semibold py-3 border-b border-green-200 bg-green-50">
                         <i class="far fa-calendar-alt text-green-600 mr-2"></i>
                         Agenda Kegiatan
                     </h3>
@@ -374,10 +372,8 @@
         </section>
 
         <!-- Section External Links -->
-        <section id="external-links" class="external-links-section section">
-            <div class="mt-8">
-                @livewire('external-links', ['limit' => 8])
-            </div>
-        </section>
+        <div class="mt-8">
+            @livewire('external-links', ['limit' => 8])
+        </div>
     </div>
 </div>

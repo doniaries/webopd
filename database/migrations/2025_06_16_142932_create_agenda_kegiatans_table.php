@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('team_id')->constrained('teams')->onDelete('cascade');
             $table->string('nama_agenda')->nullable();
+            $table->string('slug')->nullable();
             $table->text('uraian_agenda')->nullable();
             $table->string('penyelenggara')->nullable();
             $table->string('tempat')->nullable();
