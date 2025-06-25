@@ -3,7 +3,7 @@
         <div class="container-fluid">
             <div class="row gx-4">
                 <!-- Main Slider (wider on large screens) -->
-                <div class="col-lg-9">
+                <div class="col-lg-8">
                     <div class="swiper main-slider">
                         <div class="swiper-wrapper">
                             @foreach (array_slice($sliders, 0, 5) as $slider)
@@ -32,6 +32,52 @@
                     </div>
                 </div>
 
+                <!-- Random News Section -->
+                <div class="col-lg-4">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body p-0 h-100" style="overflow-y: auto;">
+                            @php
+                                $randomNews = \App\Models\Post::inRandomOrder()
+                                    ->where('status', 'published')
+                                    ->whereNotNull('foto_utama')
+                                    ->take(6)
+                                    ->get();
+                            @endphp
+                            <div class="news-list">
+                                @foreach ($randomNews as $news)
+                                    <a href="{{ route('posts.show', $news->slug) }}" class="text-decoration-none text-dark d-block">
+                                        <div class="p-3 border-bottom hover-bg">
+                                            <div class="d-flex">
+                                                <div class="flex-shrink-0 me-3" style="width: 80px; height: 60px; overflow: hidden; border-radius: 4px;">
+                                                    <img src="{{ Storage::url($news->foto_utama) }}"
+                                                        alt="{{ $news->title }}" class="w-100 h-100"
+                                                        style="object-fit: cover;">
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="mb-1 fw-semibold" style="font-size: 0.9rem; line-height: 1.3;">
+                                                        {{ $news->title }}
+                                                    </h6>
+                                                    @php
+                                                        $content = strip_tags($news->content);
+                                                        $excerpt = Str::limit($content, 80);
+                                                    @endphp
+                                                    <p class="mb-1 text-muted" style="font-size: 0.8rem; line-height: 1.3;">
+                                                        {{ $excerpt }}
+                                                    </p>
+                                                    <small class="text-muted d-flex align-items-center">
+                                                        <i class="bi bi-calendar3 me-1"></i>
+                                                        <span>{{ $news->created_at->locale('id')->diffForHumans() }}</span>
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Banner Slider Moved to Home Component -->
             </div>
         </div>
@@ -40,13 +86,22 @@
             <style>
                 .main-slider {
                     height: 400px;
-                    border-radius: 0;
+                    border-radius: 8px;
                     overflow: hidden;
-                    /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); */
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
                 }
 
                 .swiper-slide {
                     overflow: hidden;
+                    border-radius: 8px;
+                }
+
+                .text-truncate-2 {
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
                 }
 
                 .swiper-button-next,
@@ -68,14 +123,56 @@
                     background: #fff;
                     opacity: 0.7;
                 }
+
                 .swiper-pagination-bullet-active {
                     background: var(--primary);
                     opacity: 1;
                 }
 
+                .news-list {
+                    height: 100%;
+                    overflow-y: auto;
+                }
+
+                .hover-bg {
+                    transition: background-color 0.2s ease;
+                }
+
+                .hover-bg:hover {
+                    background-color: #f8f9fa;
+                }
+
+                .text-truncate-2 {
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                /* Custom scrollbar */
+                .card-body::-webkit-scrollbar {
+                    width: 4px;
+                }
+
+                .card-body::-webkit-scrollbar-track {
+                    background: #f1f1f1;
+                    border-radius: 10px;
+                }
+
+                .card-body::-webkit-scrollbar-thumb {
+                    background: #888;
+                    border-radius: 10px;
+                }
+
+                .card-body::-webkit-scrollbar-thumb:hover {
+                    background: #555;
+                }
+
                 @media (max-width: 991.98px) {
                     .main-slider {
-                        margin-bottom: 0;
+                        margin-bottom: 1.5rem;
+                        height: 300px !important;
                     }
 
                     .swiper-slide {
@@ -99,6 +196,8 @@
                             clickable: true,
                         },
                     });
+
+                    // Initialize any news-related scripts here if needed
 
                     // Banner Slider
                     const bannerSwiper = new Swiper('.banner-slider', {
@@ -177,8 +276,7 @@
                 </div>
             </div>
         </div>
-    </div>
-</section><!-- End Hero -->
+    </section><!-- End Hero -->
 
 @push('styles')
     <style>
@@ -186,13 +284,15 @@
         .swiper-pagination {
             display: none !important;
         }
-        
+
         #hero.hero {
             width: 100%;
             overflow: hidden;
             -webkit-font-smoothing: antialiased;
-            padding-bottom: 5px; /* Further reduced from 20px */
-            margin-bottom: -10px; /* Negative margin to pull content up */
+            padding-bottom: 5px;
+            /* Further reduced from 20px */
+            margin-bottom: -10px;
+            /* Negative margin to pull content up */
             -moz-osx-font-smoothing: grayscale;
         }
 
@@ -397,6 +497,8 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Set Carbon locale to Indonesian
+            window.Carbon && window.Carbon.setLocale('id');
             new Swiper('.slider.swiper', {
                 speed: 600,
                 loop: true,
