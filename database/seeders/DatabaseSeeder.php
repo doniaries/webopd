@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
             AgendaKegiatanSeeder::class,
             DokumenSeeder::class,
             SambutanPimpinanSeeder::class,
+            ExternalLinkSeeder::class,
         ]);
     }
 }

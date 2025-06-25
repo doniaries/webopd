@@ -19,7 +19,7 @@
                                             style="object-fit: cover; object-position: center; width: 100%; height: 100%;">
                                         <!-- Judul dan tag dipindahkan ke bawah kiri di atas indikator -->
                                         <div class="position-absolute bottom-0 start-0 w-100 p-4"
-                                            style="background: linear-gradient(to top, rgba(46, 87, 211, 0.8), transparent); z-index: 11; transform: translateY(0); height: 120px;">
+                                            style="background: linear-gradient(to top, rgba(46, 87, 211, 0.8), transparent); z-index: 11; transform: translateY(-10%); height: 130px; margin-top: -20px;">
                                             <h3 class="text-white mb-2 fw-bold">
                                                 <a href="{{ $url }}"
                                                     class="text-white text-decoration-none fs-4"

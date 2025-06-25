@@ -492,7 +492,7 @@
             </div>
         </section>
 
-        {{-- <!-- Banner Modal -->
+        <!-- Banner Modal -->
         <div class="modal fade" id="bannerModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content border-0">
@@ -505,7 +505,10 @@
                     </div>
                 </div>
             </div>
-        </div> --}}
+        </div>
+
+        <!-- Section External Links -->
+        @livewire('external-links', ['limit' => 8])
     </main>
 </div>
 
@@ -867,25 +870,25 @@
                 enabled: true,
                 onlyInViewport: true
             };
-            
+
             // Add mousewheel control
             window.bannerSwiper.mousewheel = {
                 forceToAxis: true
             };
-            
+
             // Enable lazy loading
             window.bannerSwiper.lazy = {
                 loadPrevNext: true,
                 loadPrevNextAmount: 2
             };
-            
+
             // Additional settings
             window.bannerSwiper.autoHeight = true;
             window.bannerSwiper.watchSlidesProgress = true;
             window.bannerSwiper.preloadImages = false;
             window.bannerSwiper.resizeObserver = true;
             window.bannerSwiper.parallax = true;
-            
+
             // Pause autoplay on hover
             const slider = bannerSlider;
             if (slider) {
@@ -894,7 +897,7 @@
                         window.bannerSwiper.autoplay.stop();
                     }
                 });
-                
+
                 slider.addEventListener('mouseleave', () => {
                     if (window.bannerSwiper.autoplay && !window.bannerSwiper.autoplay.running && bannerCount > 1) {
                         window.bannerSwiper.autoplay.start();
@@ -912,13 +915,13 @@
         } else {
             initBannerSlider();
         }
-        
+
         // Reinitialize when Livewire navigates
         document.addEventListener('livewire:navigated', function() {
             // Small delay to ensure DOM is ready
             setTimeout(initBannerSlider, 100);
         });
-        
+
         // Re-initialize when Livewire updates the DOM
         document.addEventListener('livewire:initialized', initBannerSlider);
         document.addEventListener('livewire:update', function() {
