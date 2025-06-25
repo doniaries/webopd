@@ -17,17 +17,18 @@
                                     <div class="position-relative h-100 w-100">
                                         <img src="{{ $imageUrl }}" alt="{{ $title }}" class="w-100 h-100"
                                             style="object-fit: cover; object-position: center; width: 100%; height: 100%;">
-                                        <div class="position-absolute top-0 start-0 w-100 p-4"
-                                            style="background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent); z-index: 11;">
+                                        <!-- Judul dan tag dipindahkan ke bawah kiri di atas indikator -->
+                                        <div class="position-absolute bottom-0 start-0 w-100 p-4 mb-5"
+                                            style="background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); z-index: 11;">
                                             <h3 class="text-white mb-2 fw-bold">
                                                 <a href="{{ $url }}"
                                                     class="text-white text-decoration-none fs-4"
                                                     style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">{{ Str::limit($title, 70) }}</a>
                                             </h3>
                                             @if(isset($slider['is_post']) && $slider['is_post'] && isset($slider['tags']) && count($slider['tags']) > 0)
-                                            <div class="post-tags d-flex flex-wrap gap-2 mb-2">
+                                            <div class="post-tags d-flex flex-wrap gap-2 mb-3">
                                                 @foreach($slider['tags'] as $tag)
-                                                    <span class="post-tag bg-primary">{{ $tag }}</span>
+                                                    <a href="{{ route('posts.tag', ['tag' => Str::slug($tag)]) }}" class="post-tag bg-primary text-decoration-none text-white">{{ $tag }}</a>
                                                 @endforeach
                                             </div>
                                             @endif
@@ -68,13 +69,13 @@
                 /* Custom Pagination */
                 .swiper-pagination-container {
                     position: absolute;
-                    bottom: 10px;
+                    bottom: 0;
                     left: 0;
                     right: 0;
                     z-index: 9;
                     display: flex;
                     justify-content: center;
-                    padding: 10px 0;
+                    padding: 15px 0 5px 0;
                 }
 
                 .swiper-pagination {
@@ -424,11 +425,15 @@
             text-shadow: none;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
             transition: all 0.3s ease;
+            color: white;
         }
         
         .post-tag:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            background-color: #0d6efd !important;
+            color: white;
+            opacity: 0.9;
         }
         
         .post-tags {
@@ -489,6 +494,8 @@
                 align-items: flex-start;
             }
 
+
+
             .post-tag .ms-3 {
                 margin-left: 0 !important;
                 margin-top: 0.5rem;
@@ -527,7 +534,7 @@
         }
 
         .swiper-pagination {
-            bottom: 10px !important;
+            bottom: 0 !important;
         }
 
         .slider-content {
