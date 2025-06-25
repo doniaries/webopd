@@ -28,7 +28,7 @@
                                             @if (isset($slider['is_post']) && $slider['is_post'] && isset($slider['tags']) && count($slider['tags']) > 0)
                                                 <div class="post-tags d-flex flex-wrap gap-2 mb-3">
                                                     @foreach ($slider['tags'] as $tag)
-                                                        <a href="{{ route('posts.tag', ['tag' => Str::slug($tag)]) }}"
+                                                        <a href="{{ route('post.tag', ['tag' => Str::slug($tag)]) }}"
                                                             class="post-tag bg-primary text-decoration-none text-white">{{ $tag }}</a>
                                                     @endforeach
                                                 </div>
