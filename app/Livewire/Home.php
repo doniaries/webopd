@@ -11,6 +11,7 @@ use App\Models\Banner;
 use App\Models\Slider;
 use Illuminate\Support\Facades\Log as LogFacade;
 use Illuminate\Support\Str;
+use App\Livewire\RandomNews;
 
 class Home extends Component
 {

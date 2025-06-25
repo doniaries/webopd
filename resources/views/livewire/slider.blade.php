@@ -1,10 +1,10 @@
-<section id="hero" class="hero">
+<section id="hero" class="hero p-0">
     @if ($sliders && count($sliders) > 0)
-        <div class="container-fluid">
-            <div class="row gx-4">
-                <!-- Main Slider (wider on large screens) -->
-                <div class="col-lg-8">
-                    <div class="swiper main-slider">
+        <div class="container-fluid p-0 m-0 w-100">
+            <div class="row g-0 w-100 m-0">
+                <!-- Main Slider (full width) -->
+                <div class="col-12 p-0">
+                    <div class="swiper main-slider w-100">
                         <div class="swiper-wrapper">
                             @foreach (array_slice($sliders, 0, 5) as $slider)
                                 @php
@@ -13,87 +13,155 @@
                                     $title = $slider['judul'] ?? 'No Title';
                                     $url = $slider['url'] ?? '#';
                                 @endphp
-                                <div class="swiper-slide" style="height: 400px;">
+                                <div class="swiper-slide" style="height: 80vh; min-height: 500px; max-height: 800px;">
                                     <div class="position-relative h-100 w-100">
                                         <img src="{{ $imageUrl }}" alt="{{ $title }}" class="w-100 h-100"
-                                            style="object-fit: cover;">
-                                        <div class="position-absolute bottom-0 start-0 w-100 p-4"
-                                            style="background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);">
-                                            <h3 class="text-white mb-2">
+                                            style="object-fit: cover; object-position: center; width: 100%; height: 100%;">
+                                        <div class="position-absolute top-0 start-0 w-100 p-4"
+                                            style="background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent); z-index: 11;">
+                                            <h3 class="text-white mb-2 fw-bold">
                                                 <a href="{{ $url }}"
-                                                    class="text-white text-decoration-none">{{ Str::limit($title, 70) }}</a>
+                                                    class="text-white text-decoration-none fs-4"
+                                                    style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">{{ Str::limit($title, 70) }}</a>
                                             </h3>
+                                            @if(isset($slider['is_post']) && $slider['is_post'] && isset($slider['tags']) && count($slider['tags']) > 0)
+                                            <div class="post-tags d-flex flex-wrap gap-2 mb-2">
+                                                @foreach($slider['tags'] as $tag)
+                                                    <span class="post-tag bg-primary">{{ $tag }}</span>
+                                                @endforeach
+                                            </div>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
                             @endforeach
                         </div>
-                        <div class="swiper-pagination"></div>
-                    </div>
-                </div>
-
-                <!-- Random News Section -->
-                <div class="col-lg-4">
-                    <div class="card border-0 shadow-sm h-100">
-                        <div class="card-body p-0 h-100" style="overflow-y: auto;">
-                            @php
-                                $randomNews = \App\Models\Post::inRandomOrder()
-                                    ->where('status', 'published')
-                                    ->whereNotNull('foto_utama')
-                                    ->take(6)
-                                    ->get();
-                            @endphp
-                            <div class="news-list">
-                                @foreach ($randomNews as $news)
-                                    <a href="{{ route('posts.show', $news->slug) }}" class="text-decoration-none text-dark d-block">
-                                        <div class="p-3 border-bottom hover-bg">
-                                            <div class="d-flex">
-                                                <div class="flex-shrink-0 me-3" style="width: 80px; height: 60px; overflow: hidden; border-radius: 4px;">
-                                                    <img src="{{ Storage::url($news->foto_utama) }}"
-                                                        alt="{{ $news->title }}" class="w-100 h-100"
-                                                        style="object-fit: cover;">
-                                                </div>
-                                                <div class="flex-grow-1">
-                                                    <h6 class="mb-1 fw-semibold" style="font-size: 0.9rem; line-height: 1.3;">
-                                                        {{ $news->title }}
-                                                    </h6>
-                                                    @php
-                                                        $content = strip_tags($news->content);
-                                                        $excerpt = Str::limit($content, 80);
-                                                    @endphp
-                                                    <p class="mb-1 text-muted" style="font-size: 0.8rem; line-height: 1.3;">
-                                                        {{ $excerpt }}
-                                                    </p>
-                                                    <small class="text-muted d-flex align-items-center">
-                                                        <i class="bi bi-calendar3 me-1"></i>
-                                                        <span>{{ $news->created_at->locale('id')->diffForHumans() }}</span>
-                                                    </small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                @endforeach
-                            </div>
+                        <!-- Navigation Buttons -->
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
+                        <!-- Pagination/Indicator -->
+                        <div class="swiper-pagination-container">
+                            <div class="swiper-pagination"></div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Banner Slider Moved to Home Component -->
+
             </div>
         </div>
 
         @push('styles')
             <style>
                 .main-slider {
-                    height: 400px;
-                    border-radius: 8px;
+                    height: 80vh;
+                    min-height: 500px;
+                    max-height: 800px;
+                    width: 100%;
                     overflow: hidden;
-                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
                 }
 
                 .swiper-slide {
-                    overflow: hidden;
                     border-radius: 8px;
+                    position: relative;
+                }
+
+                /* Custom Pagination */
+                .swiper-pagination-container {
+                    position: absolute;
+                    bottom: 10px;
+                    left: 0;
+                    right: 0;
+                    z-index: 9;
+                    display: flex;
+                    justify-content: center;
+                    padding: 10px 0;
+                }
+
+                .swiper-pagination {
+                    position: relative;
+                    display: flex;
+                    justify-content: center;
+                    gap: 8px;
+                    margin: 0;
+                    padding: 5px 10px;
+                    background: transparent;
+                    border-radius: 20px;
+                }
+
+                .swiper-pagination-bullet {
+                    width: 12px;
+                    height: 12px;
+                    background: rgba(255, 255, 255, 0.5);
+                    border-radius: 50%;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    margin: 0 2px !important;
+                    opacity: 0.7;
+                }
+
+                .swiper-pagination-bullet-active {
+                    background: #fff;
+                    opacity: 1;
+                    transform: scale(1.2);
+                    box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+                }
+
+                /* Navigation Buttons */
+                .swiper-button-prev,
+                .swiper-button-next {
+                    width: 44px;
+                    height: 44px;
+                    background: rgba(0, 0, 0, 0.5);
+                    border-radius: 50%;
+                    color: white;
+                    transition: all 0.3s ease;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    position: absolute;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    z-index: 9;
+                    backdrop-filter: blur(4px);
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                }
+
+                .swiper-button-prev {
+                    left: 20px;
+                }
+
+                .swiper-button-next {
+                    right: 20px;
+                }
+
+                .swiper-button-prev:hover,
+                .swiper-button-next:hover {
+                    background: rgba(0, 0, 0, 0.8);
+                    transform: translateY(-50%) scale(1.1);
+                }
+
+                .swiper-button-prev::after,
+                .swiper-button-next::after {
+                    display: none;
+                }
+
+                .spin {
+                    animation: spin 1s linear infinite;
+                }
+
+                @keyframes spin {
+                    from {
+                        transform: rotate(0deg);
+                    }
+
+                    to {
+                        transform: rotate(360deg);
+                    }
+                }
+
+                .opacity-50 {
+                    opacity: 0.5;
+                    transition: opacity 0.3s ease;
                 }
 
                 .text-truncate-2 {
@@ -186,14 +254,22 @@
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
                     // Main Slider
-                    new Swiper('.main-slider', {
+                    const mainSlider = new Swiper('.main-slider', {
                         loop: true,
                         autoplay: {
                             delay: 5000,
                             disableOnInteraction: false,
                         },
                         pagination: {
+                            el: '.swiper-pagination',
                             clickable: true,
+                            type: 'bullets',
+                            bulletClass: 'swiper-pagination-bullet',
+                            bulletActiveClass: 'swiper-pagination-bullet-active',
+                        },
+                        navigation: {
+                            nextEl: '.swiper-button-next',
+                            prevEl: '.swiper-button-prev',
                         },
                     });
 
@@ -276,13 +352,13 @@
                 </div>
             </div>
         </div>
-    </section><!-- End Hero -->
+</section><!-- End Hero -->
 
 @push('styles')
     <style>
-        /* Hide slider pagination */
+        /* Slider pagination styling */
         .swiper-pagination {
-            display: none !important;
+            display: flex !important;
         }
 
         #hero.hero {
@@ -338,22 +414,26 @@
 
         /* Styling untuk tag post di slider */
         .post-tag {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .post-tag .badge {
-            font-size: 0.85rem;
-            font-weight: 600;
-            letter-spacing: 0.5px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            display: inline-block;
+            text-shadow: none;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
         }
-
-        .post-tag .ms-3 {
-            font-size: 0.9rem;
-            opacity: 0.9;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        
+        .post-tag:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .post-tags {
+            margin-top: -5px;
+            margin-bottom: 10px;
         }
 
         .swiper-pagination-bullet {
@@ -373,9 +453,11 @@
             color: white;
             width: 50px;
             height: 50px;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.5);
             border-radius: 50%;
             transition: all 0.3s ease;
+            z-index: 10;
+            opacity: 0.8;
         }
 
         .swiper-button-next:hover,
@@ -445,7 +527,7 @@
         }
 
         .swiper-pagination {
-            bottom: 20px !important;
+            bottom: 10px !important;
         }
 
         .slider-content {
@@ -499,7 +581,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Set Carbon locale to Indonesian
             window.Carbon && window.Carbon.setLocale('id');
-            new Swiper('.slider.swiper', {
+            new Swiper('.main-slider', {
                 speed: 600,
                 loop: true,
                 autoplay: {

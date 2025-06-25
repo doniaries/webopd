@@ -42,7 +42,7 @@ class Slider extends Component
 
     /**
      * Load sliders from posts or fallback to regular sliders
-     * 
+     *
      * @return void
      */
     public function loadSliders(): void
@@ -128,6 +128,8 @@ class Slider extends Component
             $this->sliders = [];
         }
     }
+
+
 
 
     public function render()
