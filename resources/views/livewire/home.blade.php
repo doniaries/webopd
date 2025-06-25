@@ -212,16 +212,16 @@
                                         @forelse($banners as $banner)
                                             <div class="swiper-slide">
                                                 <div class="banner-portrait-container">
-                                                    <a href="{{ $banner->url }}" class="d-block position-relative w-100 h-100">
+                                                    <a href="{{ $banner->url }}"
+                                                        class="d-block position-relative w-100 h-100">
                                                         <div class="banner-image-wrapper">
-                                                            <img src="{{ $banner->gambar_url }}" 
-                                                                class="img-fluid"
-                                                                alt="{{ $banner->judul }}"
-                                                                loading="lazy">
+                                                            <img src="{{ $banner->gambar_url }}" class="img-fluid"
+                                                                alt="{{ $banner->judul }}" loading="lazy">
                                                         </div>
                                                         @if (!empty($banner->judul))
                                                             <div class="banner-caption">
-                                                                <div class="banner-title">{{ Str::limit($banner->judul, 60) }}</div>
+                                                                <div class="banner-title">
+                                                                    {{ Str::limit($banner->judul, 60) }}</div>
                                                             </div>
                                                         @endif
                                                     </a>
@@ -229,7 +229,8 @@
                                             </div>
                                         @empty
                                             <div class="swiper-slide">
-                                                <div class="banner-portrait-container bg-light d-flex align-items-center justify-content-center">
+                                                <div
+                                                    class="banner-portrait-container bg-light d-flex align-items-center justify-content-center">
                                                     <div class="text-center p-3">
                                                         <i class="bi bi-image fs-1 text-muted"></i>
                                                         <p class="mb-0 mt-2">Tidak ada banner tersedia</p>
@@ -238,10 +239,7 @@
                                             </div>
                                         @endforelse
                                     </div>
-                                    <!-- Navigation buttons -->
-                                    @if(count($banners) > 1)
-                                        <div class="swiper-button-next"></div>
-                                        <div class="swiper-button-prev"></div>
+                                    @if (count($banners) > 1)
                                         <div class="swiper-pagination"></div>
                                     @endif
                                 </div>
@@ -494,7 +492,7 @@
             </div>
         </section>
 
-        <!-- Banner Modal -->
+        {{-- <!-- Banner Modal -->
         <div class="modal fade" id="bannerModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content border-0">
@@ -507,7 +505,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
     </main>
 </div>
 
@@ -517,9 +515,11 @@
         .banner-portrait-container {
             position: relative;
             width: 100%;
-            max-width: 300px; /* Adjust based on your preference */
+            max-width: 300px;
+            /* Adjust based on your preference */
             height: auto;
-            min-height: 400px; /* Adjust based on your content */
+            min-height: 400px;
+            /* Adjust based on your content */
             overflow: hidden;
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -527,7 +527,7 @@
             margin: 0 auto;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        
+
         .banner-portrait-container:hover {
             transform: translateY(-4px);
             box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
@@ -537,13 +537,15 @@
             position: relative;
             width: 100%;
             height: 100%;
-            min-height: 400px; /* Match container min-height */
+            min-height: 400px;
+            /* Match container min-height */
         }
 
         .banner-image-wrapper img {
             width: 100%;
             height: 100%;
-            object-fit: contain; /* Changed from cover to contain */
+            object-fit: contain;
+            /* Changed from cover to contain */
             object-position: center;
             transition: transform 0.5s ease;
             display: block;
@@ -580,7 +582,8 @@
         .swiper.banner-slider {
             border-radius: 8px;
             overflow: visible;
-            padding: 10px 0; /* Add some padding to prevent shadow clipping */
+            padding: 10px 0;
+            /* Add some padding to prevent shadow clipping */
         }
 
         .swiper-button-next,
@@ -626,13 +629,16 @@
             width: 20px;
             border-radius: 4px;
         }
+
         .banner-slider {
-            min-height: 450px; /* Increased to accommodate content */
+            min-height: 450px;
+            /* Increased to accommodate content */
             border-radius: 8px;
             overflow: visible;
             box-shadow: none;
             width: 100%;
-            max-width: 320px; /* Match container width */
+            max-width: 320px;
+            /* Match container width */
             margin: 0 auto;
             padding: 10px 0;
         }
@@ -796,87 +802,148 @@
 @endpush
 
 @push('scripts')
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script>
-        // Initialize banner slider
-        document.addEventListener('DOMContentLoaded', function() {
-            // Banner Slider
-            const bannerSwiper = new Swiper('.banner-slider', {
-                // Optional parameters
-                direction: 'horizontal',
+        // Initialize banner slider with smooth transitions
+        function initBannerSlider() {
+            // Only initialize if there are banners
+            const bannerSlider = document.querySelector('.banner-slider');
+            if (!bannerSlider) return;
+
+            // Destroy existing instance if it exists
+            if (window.bannerSwiper) {
+                window.bannerSwiper.destroy(true, true);
+                window.bannerSwiper = null;
+            }
+
+            // Initialize new Swiper instance
+            window.bannerSwiper = new Swiper(bannerSlider, {
                 loop: true,
                 autoplay: {
                     delay: 5000,
                     disableOnInteraction: false,
                 },
+                slidesPerView: 1,
+                spaceBetween: 15,
+                centeredSlides: true,
                 effect: 'fade',
                 fadeEffect: {
                     crossFade: true
                 },
-                speed: 800,
-                grabCursor: true,
-                centeredSlides: true,
-                slidesPerView: 1,
-                spaceBetween: 0,
-
-                // If we need pagination
                 pagination: {
                     el: '.swiper-pagination',
                     clickable: true,
-                    dynamicBullets: true
                 },
-
-                // Navigation arrows
                 navigation: {
                     nextEl: '.swiper-button-next',
                     prevEl: '.swiper-button-prev',
                 },
-
-                // Responsive breakpoints
-                breakpoints: {
-                    // when window width is >= 320px
-                    320: {
-                        slidesPerView: 1,
-                        spaceBetween: 10
+                on: {
+                    init: function() {
+                        // Add active class to first slide
+                        const slides = document.querySelectorAll('.banner-slider .swiper-slide');
+                        if (slides.length > 0) {
+                            slides[0].classList.add('swiper-slide-active');
+                        }
                     },
-                    // when window width is >= 480px
-                    480: {
-                        slidesPerView: 1,
-                        spaceBetween: 15
-                    },
-                    // when window width is >= 768px
-                    768: {
-                        slidesPerView: 1,
-                        spaceBetween: 20
-                    }
-                }
+                },
             });
 
-            // Pause autoplay on hover
-            const bannerSlider = document.querySelector('.banner-slider');
-            if (bannerSlider) {
-                bannerSlider.addEventListener('mouseenter', function() {
-                    bannerSwiper.autoplay.stop();
-                });
-                bannerSlider.addEventListener('mouseleave', function() {
-                    bannerSwiper.autoplay.start();
-                });
+            // Get the number of banners
+            const bannerCount = bannerSlider.querySelectorAll('.swiper-slide').length;
+
+            // Enable autoplay if there are multiple banners
+            if (bannerCount > 1) {
+                window.bannerSwiper.params.autoplay = {
+                    delay: 5000,
+                    disableOnInteraction: false,
+                    waitForTransition: true,
+                    pauseOnMouseEnter: true
+                };
             }
 
-            // Banner modal
-            const bannerModal = new bootstrap.Modal(document.getElementById('bannerModal'));
+            // Add keyboard control
+            window.bannerSwiper.keyboard = {
+                enabled: true,
+                onlyInViewport: true
+            };
+            
+            // Add mousewheel control
+            window.bannerSwiper.mousewheel = {
+                forceToAxis: true
+            };
+            
+            // Enable lazy loading
+            window.bannerSwiper.lazy = {
+                loadPrevNext: true,
+                loadPrevNextAmount: 2
+            };
+            
+            // Additional settings
+            window.bannerSwiper.autoHeight = true;
+            window.bannerSwiper.watchSlidesProgress = true;
+            window.bannerSwiper.preloadImages = false;
+            window.bannerSwiper.resizeObserver = true;
+            window.bannerSwiper.parallax = true;
+            
+            // Pause autoplay on hover
+            const slider = bannerSlider;
+            if (slider) {
+                slider.addEventListener('mouseenter', () => {
+                    if (window.bannerSwiper.autoplay && window.bannerSwiper.autoplay.running) {
+                        window.bannerSwiper.autoplay.stop();
+                    }
+                });
+                
+                slider.addEventListener('mouseleave', () => {
+                    if (window.bannerSwiper.autoplay && !window.bannerSwiper.autoplay.running && bannerCount > 1) {
+                        window.bannerSwiper.autoplay.start();
+                    }
+                });
+            }
+        }
+
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', initBannerSlider);
+
+        // Initialize on page load
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initBannerSlider);
+        } else {
+            initBannerSlider();
+        }
+        
+        // Reinitialize when Livewire navigates
+        document.addEventListener('livewire:navigated', function() {
+            // Small delay to ensure DOM is ready
+            setTimeout(initBannerSlider, 100);
+        });
+        
+        // Re-initialize when Livewire updates the DOM
+        document.addEventListener('livewire:initialized', initBannerSlider);
+        document.addEventListener('livewire:update', function() {
+            setTimeout(initBannerSlider, 100);
+        });
+
+        // Banner modal functionality
+        const bannerModal = document.getElementById('bannerModal');
+        if (bannerModal) {
             const bannerModalImg = document.getElementById('bannerModalImg');
 
-            document.querySelectorAll('.banner-item').forEach(item => {
+            // Handle banner clicks to show modal with full image
+            document.querySelectorAll('.banner-portrait-container a').forEach(item => {
                 item.addEventListener('click', function(e) {
                     e.preventDefault();
-                    const imgUrl = this.getAttribute('data-img-url');
-                    if (imgUrl) {
-                        bannerModalImg.src = imgUrl;
-                        bannerModal.show();
+                    const img = this.querySelector('img');
+                    if (img) {
+                        bannerModalImg.src = img.src;
+                        bannerModalImg.alt = img.alt || 'Banner';
+                        const modal = new bootstrap.Modal(bannerModal);
+                        modal.show();
                     }
                 });
             });
-        });
+        }
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize scrolling for news container
             initHorizontalScroll('.scroll-container', '.scroll-left', '.scroll-right');

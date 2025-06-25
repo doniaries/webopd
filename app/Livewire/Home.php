@@ -177,38 +177,83 @@ class Home extends Component
                 'pengaturan_exists' => $pengaturan ? 'Yes' : 'No'
             ]);
 
-            // Start building the query
-            $query = \App\Models\Banner::query()
-                ->where('is_active', true);
+            // Start building the query for team-specific banners
+            $query = \App\Models\Banner::where('is_active', true);
             
-            // Only filter by team_id if it's set and not null
             if (!is_null($teamId)) {
-                $query->where('team_id', $teamId);
-                
-                // If no banners found for this team, include banners with no team_id
-                if ($query->count() === 0) {
-                    $query->orWhereNull('team_id');
-                }
-            }
+                // First try to get team-specific banners
+                $teamBanners = (clone $query)
+                    ->where('team_id', $teamId)
+                    ->latest()
+                    ->take(4)
+                    ->get();
 
-            // Get the banners
-            $banners = $query->latest()
-                ->take(4)
-                ->get();
+                // If no team-specific banners found, get global banners (where team_id is null)
+                if ($teamBanners->isEmpty()) {
+                    $banners = (clone $query)
+                        ->whereNull('team_id')
+                        ->latest()
+                        ->take(4)
+                        ->get();
+                } else {
+                    $banners = $teamBanners;
+                }
+            } else {
+                // If no team_id is set, only get global banners
+                $banners = $query->whereNull('team_id')
+                    ->latest()
+                    ->take(4)
+                    ->get();
+            }
 
             // Log the results for debugging
             \Illuminate\Support\Facades\Log::info('Banners loaded', [
                 'team_id' => $teamId,
                 'banners_count' => $banners->count(),
-                'banner_ids' => $banners->pluck('id')->toArray()
+                'banner_ids' => $banners->pluck('id')->toArray(),
+                'banners' => $banners->toArray()
             ]);
 
             // Map the banners to the required format
             return $banners->map(function ($banner) {
+                // Ensure the image path is correct
+                $gambarUrl = null;
+                if (!empty($banner->gambar)) {
+                    // Remove any leading slashes or backslashes from the path
+                    $cleanPath = ltrim($banner->gambar, '/\\');
+                    
+                    // Check if the file exists in storage
+                    $storagePath = storage_path('app/public/' . $cleanPath);
+                    
+                    if (file_exists($storagePath)) {
+                        $gambarUrl = asset('storage/' . $cleanPath);
+                    } else {
+                        // Try with the original path if clean path doesn't exist
+                        $storagePath = storage_path('app/public/' . $banner->gambar);
+                        if (file_exists($storagePath)) {
+                            $gambarUrl = asset('storage/' . $banner->gambar);
+                        }
+                    }
+                    
+                    // Log if image not found
+                    if (!$gambarUrl) {
+                        \Illuminate\Support\Facades\Log::warning('Banner image not found', [
+                            'banner_id' => $banner->id,
+                            'gambar' => $banner->gambar,
+                            'storage_path' => $storagePath
+                        ]);
+                    }
+                }
+                
+                // Fallback to default image if no valid image found
+                if (!$gambarUrl) {
+                    $gambarUrl = asset('assets/img/hero-img.png');
+                }
+                
                 return (object) [
                     'id' => $banner->id,
-                    'judul' => $banner->judul,
-                    'gambar_url' => $banner->gambar ? asset('storage/' . $banner->gambar) : asset('assets/img/hero-img.png'),
+                    'judul' => $banner->judul ?? 'Banner ' . $banner->id,
+                    'gambar_url' => $gambarUrl,
                     'url' => $banner->keterangan ?: '#',
                     'is_banner' => true,
                     'team_id' => $banner->team_id

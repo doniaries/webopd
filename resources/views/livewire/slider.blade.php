@@ -29,8 +29,6 @@
                             @endforeach
                         </div>
                         <div class="swiper-pagination"></div>
-                        <div class="swiper-button-next"></div>
-                        <div class="swiper-button-prev"></div>
                     </div>
                 </div>
 
@@ -98,12 +96,7 @@
                             disableOnInteraction: false,
                         },
                         pagination: {
-                            el: '.swiper-pagination',
                             clickable: true,
-                        },
-                        navigation: {
-                            nextEl: '.swiper-button-next',
-                            prevEl: '.swiper-button-prev',
                         },
                     });
 
