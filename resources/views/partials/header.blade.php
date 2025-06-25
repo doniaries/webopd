@@ -98,6 +98,31 @@
             width: 100%;
             padding: 0;
         }
+        
+        /* Flowbite style untuk tombol hamburger */
+        .hamburger-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem;
+            width: 2.5rem;
+            height: 2.5rem;
+            justify-content: center;
+            font-size: 0.875rem;
+            color: #6B7280;
+            background-color: transparent;
+            border-radius: 0.375rem;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .hamburger-button:hover {
+            background-color: #F3F4F6;
+        }
+        
+        .hamburger-button:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+        }
 
         /* Container untuk konten header dan menu */
         .header-wrapper,
@@ -106,6 +131,12 @@
             margin: 0 auto;
             padding: 0 20px;
             width: 100%;
+        }
+        
+        @media (max-width: 576px) {
+            .header-wrapper {
+                padding: 0 12px;
+            }
         }
 
         /* Header utama */
@@ -191,14 +222,19 @@
             height: 100%;
             background-color: rgba(0, 0, 0, 0.5);
             z-index: 1030;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .mobile-menu-container.visible {
+            opacity: 1;
         }
 
         .mobile-menu {
             position: fixed;
             top: 0;
-            right: -320px;
-            /* Start off-screen */
-            width: 320px;
+            right: -280px; /* Lebih kecil untuk tampilan mobile */
+            width: 280px; /* Lebih kecil untuk tampilan mobile */
             height: 100%;
             background-color: white;
             overflow-y: auto;
@@ -209,6 +245,7 @@
 
         .mobile-menu.open {
             right: 0;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
         }
 
         .mobile-menu-overlay {
@@ -217,9 +254,10 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.6);
             z-index: 1025;
             display: none;
+            backdrop-filter: blur(2px);
         }
 
         .mobile-menu-overlay.open {
@@ -232,6 +270,7 @@
             align-items: center;
             padding: 15px;
             border-bottom: 1px solid #e0e0e0;
+            background-color: #f8f9fa;
         }
 
         .mobile-menu-header h3 {
@@ -279,7 +318,11 @@
             text-decoration: none;
             font-weight: 500;
             padding: 8px 0;
-            transition: color 0.3s;
+            transition: color 0.3s, background-color 0.2s ease;
+        }
+        
+        .mobile-menu-content ul li a:active {
+            background-color: #f5f5f5;
         }
 
         .mobile-menu-content ul li a:hover,
@@ -321,10 +364,13 @@
             margin-top: 5px;
             display: none;
             animation: fadeIn 0.3s ease-in-out;
+            background-color: #f9f9f9;
+            overflow: hidden;
         }
 
         .mobile-dropdown-menu.open {
             display: block;
+            max-height: 1000px; /* Nilai yang cukup besar untuk menampung semua item */
         }
 
         /* Memastikan class hidden dan open bekerja dengan benar */
@@ -354,81 +400,37 @@
 
         .mobile-dropdown-icon {
             transition: transform 0.3s;
+            margin-left: auto;
+            font-size: 1.1rem;
         }
 
         .mobile-dropdown-icon.rotate {
             transform: rotate(180deg);
         }
 
-        .hamburger-menu {
-            display: none;
-            cursor: pointer;
-            padding: 10px;
-            z-index: 1040;
-            background-color: transparent;
-            width: 40px;
-            height: 40px;
-            display: flex;
+        /* Hamburger Menu - Flowbite Style */
+        .hamburger-button {
+            display: inline-flex;
             align-items: center;
+            padding: 0.5rem;
+            width: 2.5rem;
+            height: 2.5rem;
             justify-content: center;
-            transition: all 0.3s ease;
+            font-size: 0.875rem;
+            color: #6B7280;
+            background-color: transparent;
+            border-radius: 0.375rem;
+            border: none;
+            cursor: pointer;
         }
-
-        .hamburger-menu:hover {
-            background-color: #f8f9fa;
-            transform: scale(1.05);
+        
+        .hamburger-button:hover {
+            background-color: #F3F4F6;
         }
-
-        .hamburger-icon {
-            width: 24px;
-            height: 18px;
-            position: relative;
-            transform: rotate(0deg);
-            transition: .5s ease-in-out;
-        }
-
-        .hamburger-icon span {
-            display: block;
-            position: absolute;
-            height: 2px;
-            width: 100%;
-            background: #333;
-            border-radius: 9px;
-            opacity: 1;
-            left: 0;
-            transform: rotate(0deg);
-            transition: .25s ease-in-out;
-        }
-
-        .hamburger-icon span:nth-child(1) {
-            top: 0px;
-        }
-
-        .hamburger-icon span:nth-child(2) {
-            top: 8px;
-        }
-
-        .hamburger-icon span:nth-child(3) {
-            top: 16px;
-        }
-
-        .hamburger-icon.open span:nth-child(1) {
-            top: 8px;
-            transform: rotate(135deg);
-        }
-
-        .hamburger-icon.open span:nth-child(2) {
-            opacity: 0;
-            left: -60px;
-        }
-
-        .hamburger-icon.open span:nth-child(3) {
-            top: 8px;
-            transform: rotate(-135deg);
-        }
-
-        .hamburger-menu:hover .hamburger-icon span {
-            background-color: #0a58ca;
+        
+        .hamburger-button:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
         }
 
         /* Sembunyikan hamburger menu pada tampilan desktop */
@@ -436,13 +438,13 @@
             display: none;
         }
 
-        @media (max-width: 1199px) {
-            .hamburger-menu {
-                display: flex;
-            }
-
+        @media (max-width: 768px) {
             .navmenu {
                 display: none;
+            }
+
+            .hamburger-button {
+                display: inline-flex;
             }
         }
 
@@ -463,6 +465,10 @@
             .logo .d-flex:last-child img {
                 max-height: 28px !important;
             }
+            
+            #current-time {
+                display: none !important;
+            }
         }
 
         @media (max-width: 576px) {
@@ -476,10 +482,18 @@
 
             .sitename {
                 font-size: 0.8rem !important;
+                max-width: 150px; /* Batasi lebar teks */
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
 
             .logo .d-flex:last-child {
                 display: none !important;
+            }
+            
+            .hamburger-button {
+                margin-left: 10px !important;
             }
         }
 
@@ -496,6 +510,17 @@
             font-weight: 500;
             transition: background-color 0.3s;
         }
+        
+        @media (max-width: 576px) {
+            .login-button {
+                padding: 6px 10px;
+                font-size: 0.9rem;
+            }
+            
+            .login-button i {
+                margin-right: 4px;
+            }
+        }
 
         .login-button:hover {
             background-color: #0b5ed7;
@@ -504,53 +529,56 @@
     <div class="header-container">
         <div class="header-wrapper">
             <div class="header-content">
-                <a href="{{ url('/') }}" class="logo d-flex align-items-center">
-                    @php
-                        $logoUrl = '';
-                        $siteName = 'Web OPD'; // Default value
+                <!-- Logo dan nama website di kiri -->
+                <div class="d-flex align-items-center">
+                    <a href="{{ url('/') }}" class="logo d-flex align-items-center">
+                        @php
+                            $logoUrl = '';
+                            $siteName = 'Web OPD'; // Default value
 
-                        if (class_exists('App\\Models\\Pengaturan') && \App\Models\Pengaturan::exists()) {
-                            $pengaturan = \App\Models\Pengaturan::first();
+                            if (class_exists('App\\Models\\Pengaturan') && \App\Models\Pengaturan::exists()) {
+                                $pengaturan = \App\Models\Pengaturan::first();
 
-                            // Get logo URL
-                            if ($pengaturan && $pengaturan->logo_instansi) {
-                                if (str_starts_with($pengaturan->logo_instansi, 'http')) {
-                                    $logoUrl = $pengaturan->logo_instansi;
-                                } else {
-                                    $logoUrl = asset('storage/' . $pengaturan->logo_instansi);
+                                // Get logo URL
+                                if ($pengaturan && $pengaturan->logo_instansi) {
+                                    if (str_starts_with($pengaturan->logo_instansi, 'http')) {
+                                        $logoUrl = $pengaturan->logo_instansi;
+                                    } else {
+                                        $logoUrl = asset('storage/' . $pengaturan->logo_instansi);
+                                    }
+                                }
+
+                                // Get site name
+                                if (!empty($pengaturan->nama_website)) {
+                                    $siteName = $pengaturan->nama_website;
                                 }
                             }
 
-                            // Get site name
-                            if (!empty($pengaturan->nama_website)) {
-                                $siteName = $pengaturan->nama_website;
+                            if (empty($logoUrl) || $logoUrl === asset('storage/')) {
+                                $logoUrl = asset('kabupaten-sijunjung.png');
                             }
-                        }
 
-                        if (empty($logoUrl) || $logoUrl === asset('storage/')) {
-                            $logoUrl = asset('kabupaten-sijunjung.png');
-                        }
-
-                    @endphp
-                    <div class="d-flex align-items-center">
-                        <img src="{{ $logoUrl }}" alt="Logo" class="img-fluid" style="max-height: 40px;">
-                        <div class="ms-2 d-flex flex-column">
-                            <span class="text-uppercase"
-                                style="font-size: 0.7rem; letter-spacing: 0.5px; color: #6c757d;">WEBSITE</span>
-                            <h1 class="sitename m-0" style="font-size: 1rem; line-height: 1.1;">{{ $siteName }}
-                            </h1>
+                        @endphp
+                        <div class="d-flex align-items-center">
+                            <img src="{{ $logoUrl }}" alt="Logo" class="img-fluid" style="max-height: 40px;">
+                            <div class="ms-2 d-flex flex-column">
+                                <span class="text-uppercase"
+                                    style="font-size: 0.7rem; letter-spacing: 0.5px; color: #6c757d;">WEBSITE</span>
+                                <h1 class="sitename m-0" style="font-size: 1rem; line-height: 1.1;">{{ $siteName }}
+                                </h1>
+                            </div>
                         </div>
-                        <div class="d-flex align-items-center ms-3"
-                            style="border-left: 1px solid #dee2e6; padding-left: 15px;">
-                            <img src="{{ asset('images/bangga.png') }}" alt="Bangga" class="img-fluid me-1"
-                                style="max-height: 32px;">
-                            <img src="{{ asset('images/berakhlak.png') }}" alt="Berakhlak" class="img-fluid"
-                                style="max-height: 32px;">
-                        </div>
+                    </a>
+                    <div class="d-flex align-items-center ms-3"
+                        style="border-left: 1px solid #dee2e6; padding-left: 15px;">
+                        <img src="{{ asset('images/bangga.png') }}" alt="Bangga" class="img-fluid me-1"
+                            style="max-height: 32px;">
+                        <img src="{{ asset('images/berakhlak.png') }}" alt="Berakhlak" class="img-fluid"
+                            style="max-height: 32px;">
                     </div>
-                </a>
+                </div>
 
-                <!-- Right side elements -->
+                <!-- Elemen di kanan: waktu dan tombol hamburger -->
                 <div class="d-flex align-items-center">
                     <div id="current-time" class="text-end me-3" style="line-height: 1.2;">
                         <div id="date" class="fw-medium" style="font-size: 0.8rem; color: #6c757d;">Selasa, 24 Juni
@@ -558,16 +586,14 @@
                         <div id="time" class="fw-bold" style="font-size: 0.9rem; color: #495057;">00:00:00 WIB
                         </div>
                     </div>
-                    <a href="{{ route('login') }}" class="btn btn-sm btn-primary">
-                        <i class="bi bi-box-arrow-in-right me-1"></i> Login
-                    </a>
-                </div>
-
-                <!-- Hamburger Menu Button inside header content -->
-                <div class="hamburger-menu ms-3" id="mobile-menu-toggle">
-                    <div class="hamburger-icon">
-                        <span></span>
-                    </div>
+                    
+                    <!-- Hamburger Menu Button dengan style Flowbite -->
+                    <button id="mobile-menu-toggle" type="button" class="hamburger-button inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
+                        </svg>
+                    </button>
                 </div>
             </div>
         </div>
@@ -803,7 +829,7 @@
             const mobileMenu = document.getElementById('mobile-menu');
             const closeMobileMenuBtn = document.getElementById('close-mobile-menu');
             const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
-            const hamburgerIcon = document.querySelector('.hamburger-icon');
+            // Tidak lagi menggunakan hamburgerIcon karena kita menggunakan SVG
 
             // Toggle mobile dropdowns
             const mobileDropdowns = document.querySelectorAll('.mobile-dropdown');
@@ -811,8 +837,9 @@
             // Function to close mobile menu
             function closeMobileMenuFunc() {
                 mobileMenu.classList.remove('open');
-                hamburgerIcon.classList.remove('open');
+                // Tidak lagi menggunakan hamburgerIcon
                 mobileMenuOverlay.classList.remove('open');
+                mobileMenuContainer.classList.remove('visible');
                 document.body.style.overflow = ''; // Restore scrolling
 
                 // Reset all dropdowns when menu closes
@@ -836,24 +863,28 @@
                 // Open mobile menu
                 mobileMenuToggle.addEventListener('click', function() {
                     mobileMenuContainer.style.display = 'block';
-                    mobileMenuOverlay.classList.add('open');
-                    document.body.style.overflow = 'hidden'; // Prevent scrolling when menu is open
+                    // Tambahkan delay kecil untuk memastikan transisi berjalan dengan baik
                     setTimeout(function() {
-                        mobileMenu.classList.add('open');
-                        hamburgerIcon.classList.add('open');
+                        mobileMenuContainer.classList.add('visible');
+                        mobileMenuOverlay.classList.add('open');
+                        document.body.style.overflow = 'hidden'; // Prevent scrolling when menu is open
+                        
+                        setTimeout(function() {
+                            mobileMenu.classList.add('open');
+                            // Tidak perlu lagi mengubah kelas hamburger icon karena menggunakan SVG
 
-                        // Tidak perlu auto-open dropdown saat menu dibuka
-                        // Pastikan semua dropdown tertutup saat menu dibuka
-                        mobileDropdowns.forEach(dropdown => {
-                            const menu = dropdown.querySelector('.mobile-dropdown-menu');
-                            const icon = dropdown.querySelector('.mobile-dropdown-icon');
+                            // Pastikan semua dropdown tertutup saat menu dibuka
+                            mobileDropdowns.forEach(dropdown => {
+                                const menu = dropdown.querySelector('.mobile-dropdown-menu');
+                                const icon = dropdown.querySelector('.mobile-dropdown-icon');
 
-                            menu.classList.add('hidden');
-                            menu.classList.remove('open');
-                            if (icon) {
-                                icon.style.transform = 'rotate(0deg)';
-                            }
-                        });
+                                menu.classList.add('hidden');
+                                menu.classList.remove('open');
+                                if (icon) {
+                                    icon.style.transform = 'rotate(0deg)';
+                                }
+                            });
+                        }, 50);
                     }, 10);
                 });
 
@@ -884,14 +915,24 @@
                         e.stopPropagation();
 
                         // Toggle classes for dropdown menu
-                        menu.classList.toggle('hidden');
-                        menu.classList.toggle('open');
-
-                        // Rotate icon based on menu state
-                        if (menu.classList.contains('open')) {
-                            icon.style.transform = 'rotate(180deg)';
+                        if (menu.classList.contains('hidden')) {
+                            // Buka dropdown
+                            menu.classList.remove('hidden');
+                            setTimeout(() => {
+                                menu.classList.add('open');
+                            }, 10); // Delay kecil untuk animasi yang lebih halus
+                            if (icon) {
+                                icon.style.transform = 'rotate(180deg)';
+                            }
                         } else {
-                            icon.style.transform = 'rotate(0deg)';
+                            // Tutup dropdown
+                            menu.classList.remove('open');
+                            setTimeout(() => {
+                                menu.classList.add('hidden');
+                            }, 300); // Sesuaikan dengan durasi transisi
+                            if (icon) {
+                                icon.style.transform = 'rotate(0deg)';
+                            }
                         }
                     });
                 }

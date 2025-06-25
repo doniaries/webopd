@@ -38,8 +38,8 @@
                             @endforeach
                         </div>
                         <!-- Navigation Buttons -->
-                        <div class="swiper-button-next"></div>
-                        <div class="swiper-button-prev"></div>
+                        <div class="swiper-button-next"><i class="bi bi-chevron-right"></i></div>
+                        <div class="swiper-button-prev"><i class="bi bi-chevron-left"></i></div>
                         <!-- Pagination/Indicator -->
                         <div class="swiper-pagination-container">
                             <div class="swiper-pagination"></div>
@@ -53,13 +53,41 @@
 
         @push('styles')
             <style>
-                .main-slider {
-                    height: 80vh;
-                    min-height: 500px;
-                    max-height: 800px;
-                    width: 100%;
-                    overflow: hidden;
-                }
+        .main-slider {
+            height: 80vh;
+            min-height: 500px;
+            max-height: 800px;
+            width: 100%;
+            overflow: hidden;
+        }
+        
+        /* Styling untuk tombol navigasi dengan ikon */
+        .swiper-button-next,
+        .swiper-button-prev {
+            background-color: rgba(0, 0, 0, 0.5);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .swiper-button-next:hover,
+        .swiper-button-prev:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+        
+        .swiper-button-next::after,
+        .swiper-button-prev::after {
+            display: none; /* Menyembunyikan tanda panah default */
+        }
+        
+        .swiper-button-next i,
+        .swiper-button-prev i {
+            font-size: 1.5rem;
+            color: white;
+        }
 
                 .swiper-slide {
                     border-radius: 8px;
