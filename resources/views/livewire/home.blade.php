@@ -50,7 +50,7 @@
                                             <div class="position-absolute top-0 end-0 p-2">
                                                 <span
                                                     class="badge bg-white text-dark border border-light-subtle shadow-sm">
-                                                    <i class="bi bi-eye me-1"></i>
+                                                    <i class="bi bi-eye me-1" style="display: inline-block;"></i>
                                                     {{ $post->views ?? 0 }}
                                                 </span>
                                             </div>
@@ -160,7 +160,7 @@
 
                         <div class="text-center mt-4">
                             <a href="{{ route('berita.index') }}" class="btn btn-outline-primary">
-                                Lihat Semua Berita <i class="bi bi-arrow-right-short ms-1"></i>
+                                Lihat Semua Berita <i class="bi bi-arrow-right-short ms-1" style="display: inline-block;"></i>
                             </a>
                         </div>
 
@@ -176,10 +176,10 @@
                                     <div class="d-flex">
                                         <button class="btn btn-sm btn-outline-secondary me-2 scroll-left"
                                             type="button">
-                                            <i class="bi bi-chevron-left"></i>
+                                            <i class="bi bi-chevron-left" style="display: inline-block;"></i>
                                         </button>
                                         <button class="btn btn-sm btn-outline-secondary scroll-right" type="button">
-                                            <i class="bi bi-chevron-right"></i>
+                                            <i class="bi bi-chevron-right" style="display: inline-block;"></i>
                                         </button>
                                     </div>
                                 </div>
@@ -285,7 +285,8 @@
                                                             @endif
                                                             <div class="position-absolute top-0 end-0 m-2">
                                                                 <span class="badge bg-danger">
-                                                                    <i class="bi bi-fire me-1"></i> Hot
+                                                                    <i class="bi bi-fire me-1"
+                                                                        style="display: inline-block;"></i> Hot
                                                                 </span>
                                                             </div>
                                                         </div>
@@ -295,7 +296,8 @@
                                                                     {{ $post->categories->first()->name ?? 'Berita' }}
                                                                 </span>
                                                                 <small class="text-muted">
-                                                                    <i class="bi bi-eye me-1"></i>
+                                                                    <i class="bi bi-eye me-1"
+                                                                        style="display: inline-block;"></i>
                                                                     {{ number_format($post->views ?? 0) }}
                                                                 </small>
                                                             </div>
@@ -308,12 +310,14 @@
                                                             <div
                                                                 class="d-flex justify-content-between align-items-center mt-3">
                                                                 <small class="text-muted">
-                                                                    <i class="bi bi-calendar3-fill me-1"></i>
+                                                                    <i class="bi bi-calendar3-fill me-1"
+                                                                        style="display: inline-block;"></i>
                                                                     {{ indonesia_date($post->published_at) }}
                                                                 </small>
                                                                 <a href="{{ route('berita.show', $post->slug) }}"
                                                                     class="text-primary small">
-                                                                    Baca <i class="bi bi-arrow-right-short"></i>
+                                                                    Baca <i class="bi bi-arrow-right-short"
+                                                                        style="display: inline-block;"></i>
                                                                 </a>
                                                             </div>
                                                         </div>
@@ -324,7 +328,8 @@
                                             @if ($popularPosts->isEmpty())
                                                 <div class="col-12 text-center py-5">
                                                     <div class="text-muted">
-                                                        <i class="bi bi-newspaper display-6 d-block mb-3"></i>
+                                                        <i class="bi bi-newspaper display-6 d-block mb-3"
+                                                            style="display: inline-block;"></i>
                                                         Belum ada berita populer
                                                     </div>
                                                 </div>
@@ -351,7 +356,7 @@
                 <div class="bg-white shadow-md rounded-lg overflow-hidden border border-gray-200">
                     <h3
                         class="text-center text-blue-800 text-lg font-semibold py-3 border-b border-blue-200 bg-blue-50">
-                        <i class="fas fa-info-circle text-blue-600 mr-2"></i>
+                        <i class="fas fa-info-circle text-blue-600 mr-2" style="display: inline-block;"></i>
                         Informasi Terbaru
                     </h3>
                     <div class="p-6">
@@ -363,12 +368,92 @@
                 <div class="bg-white shadow-md rounded-lg overflow-hidden border border-gray-200">
                     <h3
                         class="text-center text-green-800 text-lg font-semibold py-3 border-b border-green-200 bg-green-50">
-                        <i class="far fa-calendar-alt text-green-600 mr-2"></i>
+                        <i class="far fa-calendar-alt text-green-600 mr-2" style="display: inline-block;"></i>
                         Agenda Kegiatan
                     </h3>
                     <div class="p-6">
                         <livewire:agenda-kegiatan />
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dokumen Terbaru Section -->
+        <section id="dokumen-terbaru" class="py-8 bg-gray-50">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Dokumen Terbaru</h2>
+                    <p class="text-gray-600">Akses dokumen-dokumen penting terbaru</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    @forelse($dokumens as $dokumen)
+                        <div
+                            class="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:shadow-lg hover:-translate-y-1">
+                            <div class="relative">
+                                @if ($dokumen->cover)
+                                    <img src="{{ asset('storage/' . $dokumen->cover) }}"
+                                        class="w-full h-48 object-cover" alt="{{ $dokumen->nama_dokumen }}">
+                                @else
+                                    <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
+                                        <i class="bi bi-file-earmark-text text-gray-400 text-5xl"
+                                            style="display: inline-block;"></i>
+                                    </div>
+                                @endif
+                            </div>
+
+                            <div class="p-4">
+                                <h3 class="text-lg font-semibold text-gray-800 mb-2">{{ $dokumen->nama_dokumen }}</h3>
+                                <p class="text-gray-600 text-sm mb-3">{{ Str::limit($dokumen->deskripsi, 100) }}</p>
+
+                                <div class="flex items-center text-sm text-gray-500 mb-4">
+                                    <span><i class="bi bi-calendar me-1" style="display: inline-block;"></i>
+                                        {{ $dokumen->tahun_terbit }}</span>
+                                </div>
+
+                                <div class="flex justify-between items-center mb-3">
+                                    <span
+                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                        <i class="bi bi-eye me-1" style="display: inline-block;"></i>
+                                        {{ number_format($dokumen->views) }} dilihat
+                                    </span>
+                                    <span
+                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                        <i class="bi bi-download me-1" style="display: inline-block;"></i>
+                                        {{ number_format($dokumen->downloads) }} unduhan
+                                    </span>
+                                </div>
+
+                                <div class="flex justify-between">
+                                    <a href="{{ asset('storage/' . $dokumen->file) }}" target="_blank"
+                                        onclick="Livewire.dispatch('incrementViews', { dokumenId: {{ $dokumen->id }} })"
+                                        class="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                        <i class="bi bi-eye me-1" style="display: inline-block;"></i> Lihat
+                                    </a>
+                                    <a href="{{ asset('storage/' . $dokumen->file) }}" download
+                                        onclick="Livewire.dispatch('incrementDownloads', { dokumenId: {{ $dokumen->id }} })"
+                                        class="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                        <i class="bi bi-download me-1" style="display: inline-block;"></i> Unduh
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="col-span-3 text-center py-8">
+                            <div class="text-gray-500">
+                                <i class="bi bi-file-earmark-text text-5xl mb-3 block"
+                                    style="display: inline-block;"></i>
+                                <p>Belum ada dokumen yang tersedia</p>
+                            </div>
+                        </div>
+                    @endforelse
+                </div>
+
+                <div class="text-center mt-8">
+                    <a href="{{ route('dokumen') }}"
+                        class="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
+                        Lihat Semua Dokumen <i class="bi bi-arrow-right ms-2" style="display: inline-block;"></i>
+                    </a>
                 </div>
             </div>
         </section>

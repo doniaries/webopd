@@ -13,6 +13,8 @@ class Dokumen extends Model
         'slug',
         'deskripsi',
         'cover',
+        'views',
+        'downloads',
         'file',
         'tahun_terbit',
     ];

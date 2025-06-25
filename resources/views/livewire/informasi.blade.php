@@ -17,22 +17,29 @@
                                         <i class="far fa-calendar-alt mr-1 text-blue-500"></i>
                                         {{ $item->created_at->translatedFormat('d M Y') }}
                                     </span>
-                                    @if(isset($item->kategori))
+                                    @if (isset($item->kategori))
                                         <span class="flex items-center">
                                             <i class="fas fa-tag mr-1 text-blue-500"></i>
                                             {{ $item->kategori->nama }}
                                         </span>
                                     @endif
-                                    @if(isset($item->penulis))
+                                    @if (isset($item->penulis))
                                         <span class="flex items-center">
                                             <i class="fas fa-user-edit mr-1 text-blue-500"></i>
                                             {{ $item->penulis->name }}
                                         </span>
                                     @endif
+                                    <span
+                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs bg-white text-dark border border-light-subtle shadow-sm">
+                                        <i class="bi bi-eye me-1" style="display: inline-block;"></i>
+                                        {{ $item->views ?? 0 }}
+                                    </span>
+
                                 </div>
-                                @if(isset($item->dokumen) && $item->dokumen->count() > 0)
+                                @if (isset($item->dokumen) && $item->dokumen->count() > 0)
                                     <div class="mt-2">
-                                        <span class="inline-flex items-center text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded">
+                                        <span
+                                            class="inline-flex items-center text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded">
                                             <i class="far fa-file-pdf mr-1 text-red-500"></i>
                                             {{ $item->dokumen->count() }} Lampiran
                                         </span>
@@ -44,10 +51,10 @@
                 </a>
             </div>
         @endforeach
-        
+
         <div class="mt-4 text-center">
-            <a href="{{ route('informasi.index') }}" 
-               class="inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-800">
+            <a href="{{ route('informasi.index') }}"
+                class="inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-800">
                 Lihat Semua Informasi
                 <i class="fas fa-arrow-right ml-2 text-xs"></i>
             </a>
@@ -58,12 +65,12 @@
                 <i class="fas fa-info-circle text-4xl"></i>
             </div>
             <p class="text-sm text-gray-500">
-                @if(!$informasi)
+                @if (!$informasi)
                     Gagal memuat data informasi
-                        @else
-                            Belum ada informasi terbaru
-                        @endif
-                    </p>
-                </div>
-            @endif
+                @else
+                    Belum ada informasi terbaru
+                @endif
+            </p>
         </div>
+    @endif
+</div>

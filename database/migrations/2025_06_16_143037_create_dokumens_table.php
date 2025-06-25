@@ -26,7 +26,7 @@ return new class extends Migration
 
             // Add composite unique constraints
             $table->unique(['team_id', 'slug']);
-            
+
             // Add indexes for better performance
             $table->index('team_id');
             $table->index('nama_dokumen');

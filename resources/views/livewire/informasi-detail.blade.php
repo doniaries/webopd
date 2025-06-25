@@ -26,6 +26,14 @@
                                     <i class="bi bi-clock me-2"></i>
                                     {{ indonesia_time($informasi->published_at) }} WIB
                                 </span>
+                                <span class="d-flex align-items-center text-muted">
+                                    <i class="bi bi-eye me-2"></i>
+                                    {{ number_format($informasi->views) }} dilihat
+                                </span>
+                                <span class="d-flex align-items-center text-muted">
+                                    <i class="bi bi-download me-2"></i>
+                                    {{ number_format($informasi->downloads) }} diunduh
+                                </span>
                             </div>
                         </div>
 
@@ -36,7 +44,8 @@
                         @if ($informasi->file)
                             <div class="mt-5 d-flex justify-content-center">
                                 <a href="{{ asset('storage/' . $informasi->file) }}" target="_blank"
-                                    class="btn btn-primary btn-lg px-5 d-flex align-items-center">
+                                    class="btn btn-primary btn-lg px-5 d-flex align-items-center"
+                                    onclick="Livewire.dispatch('incrementDownloads')">
                                     <i class="bi bi-cloud-download me-2 fs-5"></i>
                                     Unduh Lampiran
                                 </a>

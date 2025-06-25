@@ -30,6 +30,7 @@ class Home extends Component
     /** @var \Illuminate\Support\Collection */
     public $agenda;
     public $popularPosts = [];
+    public $dokumens = [];
 
     public function mount()
     {
@@ -144,6 +145,23 @@ class Home extends Component
                     'count' => $this->agenda->count(),
                     'first_item' => $this->agenda->first()
                 ]);
+            }
+            
+            // Get latest dokumens with views and downloads
+            try {
+                $this->dokumens = \App\Models\Dokumen::orderBy('created_at', 'desc')
+                    ->select(['id', 'nama_dokumen', 'deskripsi', 'cover', 'file', 'tahun_terbit', 'views', 'downloads'])
+                    ->take(3)
+                    ->get();
+                    
+                if (app()->environment('local')) {
+                    \Illuminate\Support\Facades\Log::info('Dokumen data:', [
+                        'count' => $this->dokumens->count()
+                    ]);
+                }
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error('Error loading dokumens: ' . $e->getMessage());
+                $this->dokumens = collect();
             }
         } catch (\Exception $e) {
             LogFacade::error('Error in Home@loadData: ' . $e->getMessage());
@@ -324,6 +342,7 @@ class Home extends Component
             'agenda' => $this->agenda,
             'pengaturan' => \App\Models\Pengaturan::getFirst(),
             'popularPosts' => $this->popularPosts,
+            'dokumens' => $this->dokumens,
         ]);
     }
 }

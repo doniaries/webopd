@@ -43,6 +43,14 @@ class DokumenResource extends Resource
                 Forms\Components\DatePicker::make('tahun_terbit'),
                 Forms\Components\TextInput::make('file')
                     ->maxLength(255),
+                Forms\Components\TextInput::make('views')
+                    ->numeric()
+                    ->default(0)
+                    ->disabled(),
+                Forms\Components\TextInput::make('downloads')
+                    ->numeric()
+                    ->default(0)
+                    ->disabled(),
             ]);
     }
 
@@ -64,6 +72,16 @@ class DokumenResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('file')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('views')
+                    ->numeric()
+                    ->sortable()
+                    ->badge()
+                    ->color('success'),
+                Tables\Columns\TextColumn::make('downloads')
+                    ->numeric()
+                    ->sortable()
+                    ->badge()
+                    ->color('primary'),
                 Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime()
                     ->sortable()

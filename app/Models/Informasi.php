@@ -22,6 +22,8 @@ class Informasi extends Model
         'slug',
         'isi',
         'file',
+        'views',
+        'downloads',
         'published_at',
     ];
 
