@@ -18,19 +18,20 @@
                                         <img src="{{ $imageUrl }}" alt="{{ $title }}" class="w-100 h-100"
                                             style="object-fit: cover; object-position: center; width: 100%; height: 100%;">
                                         <!-- Judul dan tag dipindahkan ke bawah kiri di atas indikator -->
-                                        <div class="position-absolute bottom-0 start-0 w-100 p-4 mb-5"
-                                            style="background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); z-index: 11;">
+                                        <div class="position-absolute bottom-0 start-0 w-100 p-4"
+                                            style="background: linear-gradient(to top, rgba(46, 87, 211, 0.8), transparent); z-index: 11; transform: translateY(0); height: 120px;">
                                             <h3 class="text-white mb-2 fw-bold">
                                                 <a href="{{ $url }}"
                                                     class="text-white text-decoration-none fs-4"
                                                     style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">{{ Str::limit($title, 70) }}</a>
                                             </h3>
-                                            @if(isset($slider['is_post']) && $slider['is_post'] && isset($slider['tags']) && count($slider['tags']) > 0)
-                                            <div class="post-tags d-flex flex-wrap gap-2 mb-3">
-                                                @foreach($slider['tags'] as $tag)
-                                                    <a href="{{ route('posts.tag', ['tag' => Str::slug($tag)]) }}" class="post-tag bg-primary text-decoration-none text-white">{{ $tag }}</a>
-                                                @endforeach
-                                            </div>
+                                            @if (isset($slider['is_post']) && $slider['is_post'] && isset($slider['tags']) && count($slider['tags']) > 0)
+                                                <div class="post-tags d-flex flex-wrap gap-2 mb-3">
+                                                    @foreach ($slider['tags'] as $tag)
+                                                        <a href="{{ route('posts.tag', ['tag' => Str::slug($tag)]) }}"
+                                                            class="post-tag bg-primary text-decoration-none text-white">{{ $tag }}</a>
+                                                    @endforeach
+                                                </div>
                                             @endif
                                         </div>
                                     </div>
@@ -53,41 +54,42 @@
 
         @push('styles')
             <style>
-        .main-slider {
-            height: 80vh;
-            min-height: 500px;
-            max-height: 800px;
-            width: 100%;
-            overflow: hidden;
-        }
-        
-        /* Styling untuk tombol navigasi dengan ikon */
-        .swiper-button-next,
-        .swiper-button-prev {
-            background-color: rgba(0, 0, 0, 0.5);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .swiper-button-next:hover,
-        .swiper-button-prev:hover {
-            background-color: rgba(0, 0, 0, 0.8);
-        }
-        
-        .swiper-button-next::after,
-        .swiper-button-prev::after {
-            display: none; /* Menyembunyikan tanda panah default */
-        }
-        
-        .swiper-button-next i,
-        .swiper-button-prev i {
-            font-size: 1.5rem;
-            color: white;
-        }
+                .main-slider {
+                    height: 80vh;
+                    min-height: 500px;
+                    max-height: 800px;
+                    width: 100%;
+                    overflow: hidden;
+                }
+
+                /* Styling untuk tombol navigasi dengan ikon */
+                .swiper-button-next,
+                .swiper-button-prev {
+                    background-color: rgba(0, 0, 0, 0.5);
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                .swiper-button-next:hover,
+                .swiper-button-prev:hover {
+                    background-color: rgba(0, 0, 0, 0.8);
+                }
+
+                .swiper-button-next::after,
+                .swiper-button-prev::after {
+                    display: none;
+                    /* Menyembunyikan tanda panah default */
+                }
+
+                .swiper-button-next i,
+                .swiper-button-prev i {
+                    font-size: 1.5rem;
+                    color: white;
+                }
 
                 .swiper-slide {
                     border-radius: 8px;
@@ -455,7 +457,7 @@
             transition: all 0.3s ease;
             color: white;
         }
-        
+
         .post-tag:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
@@ -463,7 +465,7 @@
             color: white;
             opacity: 0.9;
         }
-        
+
         .post-tags {
             margin-top: -5px;
             margin-bottom: 10px;

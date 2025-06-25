@@ -131,6 +131,8 @@
             margin: 0 auto;
             padding: 0 20px;
             width: 100%;
+            display: flex;
+            align-items: center;
         }
         
         @media (max-width: 576px) {
@@ -145,6 +147,9 @@
             background-color: white;
             border-bottom: 1px solid #e0e0e0;
             padding: 2px 0;
+            min-height: 50px; /* Pastikan header memiliki tinggi minimum */
+            display: flex;
+            align-items: center;
         }
 
         .header-content {
@@ -163,6 +168,95 @@
             padding: 2px 0;
             min-width: 40px; /* Pastikan logo memiliki lebar minimum */
             margin-right: auto; /* Pastikan logo selalu di kiri */
+        }
+        
+        /* Pastikan logo terlihat pada semua perangkat */
+        .logo img, .logo-image {
+            display: block;
+            width: auto;
+            height: auto;
+            max-width: none;
+            min-width: 40px;
+            min-height: 40px;
+            object-fit: contain;
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        /* CSS untuk logo container */
+        .logo-container {
+            flex-shrink: 0;
+            display: block;
+            min-width: 40px;
+            width: 40px;
+            height: 40px;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: visible;
+        }
+        
+        /* Tambahan untuk memastikan logo terlihat pada mobile */
+        @media (max-width: 576px) {
+            .logo a {
+                display: flex !important;
+                align-items: center !important;
+            }
+            
+            /* Pastikan container logo memiliki dimensi tetap */
+            .logo a > div:first-child, .logo-container {
+                min-width: 40px !important;
+                width: 40px !important;
+                height: 40px !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                overflow: visible !important;
+                position: relative !important;
+                z-index: 10 !important;
+            }
+            
+            /* Pastikan gambar logo terlihat */
+            .logo a > div:first-child img, .logo-image {
+                display: block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                min-width: 40px !important;
+                min-height: 40px !important;
+                object-fit: contain !important;
+                position: relative !important;
+                z-index: 10 !important;
+                max-width: none !important;
+            }
+            
+            /* CSS khusus untuk logo-container dan logo-image */
+            .logo-container {
+                min-width: 40px !important;
+                width: 40px !important;
+                height: 40px !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                overflow: visible !important;
+                position: relative !important;
+                z-index: 10 !important;
+            }
+            
+            .logo-image {
+                display: block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                min-width: 40px !important;
+                min-height: 40px !important;
+                max-height: 45px !important;
+                width: auto !important;
+                object-fit: contain !important;
+                position: relative !important;
+                z-index: 10 !important;
+                max-width: none !important;
+            }
         }
 
         /* Menu container */
@@ -226,6 +320,7 @@
             z-index: 1030;
             opacity: 0;
             transition: opacity 0.3s ease;
+            <div class="position-absolute bottom-0 start-0 w-100 p-4 mb-5" style="background: linear-gradient(to top, rgba(0, 0, 255, 0.8), transparent); z-index: 11; transform: translateY(20px);">
         }
         
         .mobile-menu-container.visible {
@@ -478,6 +573,13 @@
                 padding: 0 10px;
             }
 
+            .logo {
+                display: flex !important;
+                min-width: 40px !important;
+                max-width: none !important;
+                flex-shrink: 0 !important;
+            }
+            
             .logo img {
                 max-height: 40px !important;
                 min-height: 40px !important;
@@ -485,6 +587,10 @@
                 width: auto !important;
                 margin-right: 5px;
                 display: block !important;
+                flex-shrink: 0 !important;
+                object-fit: contain !important;
+                visibility: visible !important;
+                opacity: 1 !important;
             }
 
             .sitename {
@@ -514,6 +620,7 @@
             .header-content {
                 padding: 0 5px;
                 justify-content: space-between;
+                align-items: center;
             }
             
             /* Kurangi margin pada waktu */
@@ -589,7 +696,9 @@
 
                         @endphp
                         <div class="d-flex align-items-center">
-                            <img src="{{ $logoUrl }}" alt="Logo" class="img-fluid" style="max-height: 45px; min-width: 40px; width: auto; display: block;">
+                            <div class="logo-container" style="flex-shrink: 0 !important; display: block !important; min-width: 40px !important; width: 40px !important; height: 40px !important; position: relative !important; z-index: 10 !important;">
+                                <img src="{{ $logoUrl }}" alt="Logo" class="img-fluid logo-image" style="max-height: 45px !important; min-height: 40px !important; min-width: 40px !important; width: auto !important; display: block !important; object-fit: contain !important; visibility: visible !important; opacity: 1 !important; position: relative !important; z-index: 10 !important;">
+                            </div>
                             <div class="ms-2 d-flex flex-column">
                                 <span class="text-uppercase d-none d-sm-block"
                                     style="font-size: 0.7rem; letter-spacing: 0.5px; color: #6c757d; font-weight: 600;">WEBSITE</span>
