@@ -38,13 +38,25 @@ class ExternalLinkSeeder extends Seeder
             [
                 'name' => 'Kementerian Pendidikan',
                 'url' => 'https://www.kemdikbud.go.id/',
-                'icon' => 'fa-graduation-cap',
+                'icon' => null, // Tidak ada icon
                 'team_id' => $team->id,
             ],
             [
                 'name' => 'BPJS Kesehatan',
                 'url' => 'https://www.bpjsketenagakerjaan.go.id/',
                 'icon' => 'fa-heart-pulse',
+                'team_id' => $team->id,
+            ],
+            [
+                'name' => 'Badan Pusat Statistik',
+                'url' => 'https://www.bps.go.id/',
+                'icon' => null, // Tidak ada icon
+                'team_id' => $team->id,
+            ],
+            [
+                'name' => 'Kementerian Keuangan',
+                'url' => 'https://www.kemenkeu.go.id/',
+                'icon' => null, // Tidak ada icon
                 'team_id' => $team->id,
             ],
             [

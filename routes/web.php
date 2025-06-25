@@ -1,24 +1,28 @@
 <?php
 
-use App\Livewire\Home;
-use App\Livewire\Post;
-use App\Livewire\Kontak;
+use App\Http\Controllers\InformasiController;
+use App\Livewire\AgendaKegiatan;
 use App\Livewire\Dokumen;
-use App\Livewire\VisiMisi;
+use App\Livewire\Home;
 use App\Livewire\Infografis;
 use App\Livewire\Informasi;
+use App\Livewire\InformasiDetail;
+use App\Livewire\Kontak;
+use App\Livewire\Post;
 use App\Livewire\ProdukHukum;
-use App\Livewire\AgendaKegiatan;
 use App\Livewire\SambutanPimpinan;
-use Illuminate\Support\Facades\Route;
 use App\Livewire\Unitkerja as UnitKerja;
+use App\Livewire\VisiMisi;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
+
+
+
 
 // Home/Landing Page
 Route::get('/', Home::class)->name('home');
 
-// Berita Routes
-Route::get('/berita', [Post::class, 'index'])->name('berita.index');
-Route::get('/berita/tag/{tag:slug}', [Post::class, 'tag'])->name('posts.tag');
 
 // Post Routes (Legacy)
 Route::get('/post', [Post::class, 'index'])->name('post.index');
@@ -29,6 +33,7 @@ Route::get('/post/{slug}', Post::class)->name('post.show');
 // Informasi Routes
 Route::get('/informasi', Informasi::class)->name('informasi.index');
 Route::get('/informasi/kategori/{slug}', Informasi::class)->name('informasi.kategori');
+Route::get('/informasi/detail/{slug}', \App\Livewire\InformasiDetail::class)->name('informasi.detail');
 Route::get('/informasi/{slug}', \App\Livewire\InformasiDetail::class)->name('informasi.show');
 
 // Profil Instansi Routes
@@ -39,6 +44,26 @@ Route::get('/visi-misi', VisiMisi::class)->name('visi-misi'); // Alias untuk kom
 Route::get('/profil/unit-kerja', UnitKerja::class)->name('profil.unit-kerja');
 Route::get('/struktur-organisasi', UnitKerja::class)->name('struktur-organisasi'); // Alias untuk kompatibilitas dengan template
 
+
+// Route untuk mengunduh file
+Route::get('/download/{file}', function ($file) {
+    // Hapus awalan 'public/' jika ada
+    $filePath = str_starts_with($file, 'public/') ? $file : 'public/' . $file;
+
+    if (Storage::exists($filePath)) {
+        // Dapatkan nama file asli
+        $originalName = basename($filePath);
+
+        // Unduh file dengan nama asli
+        return Storage::download($filePath, $originalName, [
+            'Content-Type' => Storage::mimeType($filePath),
+            'Content-Length' => Storage::size($filePath),
+            'Content-Disposition' => 'attachment; filename="' . $originalName . '"',
+        ]);
+    }
+
+    return back()->with('error', 'File tidak ditemukan');
+})->name('file.download')->middleware('web');
 
 // Produk Hukum
 Route::get('/produk-hukum', ProdukHukum::class)->name('produk-hukum.index');
@@ -76,8 +101,6 @@ Route::get('/berita/{slug}', Post::class)->name('berita.show');
 Route::get('/login', function () {
     return redirect('/admin/login');
 })->name('login');
-
-use Illuminate\Support\Facades\Auth;
 
 Route::post('/logout', function () {
     Auth::logout();

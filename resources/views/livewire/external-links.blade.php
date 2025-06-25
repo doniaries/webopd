@@ -14,7 +14,13 @@
                             <div class="card h-100 border-0 shadow-sm hover-lift">
                                 <div class="card-body text-center p-3">
                                     <div class="icon-wrapper mb-3">
-                                        <i class="{{ $link->icon }} fa-2x text-primary"></i>
+                                        @if($link->icon)
+                                            <i class="{{ $link->icon }} fa-2x text-primary"></i>
+                                        @else
+                                            <div class="default-logo">
+                                                <span class="text-2xl font-bold text-primary">{{ substr($link->name, 0, 2) }}</span>
+                                            </div>
+                                        @endif
                                     </div>
                                     <h6 class="card-title mb-0">{{ $link->name }}</h6>
                                 </div>

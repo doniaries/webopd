@@ -1,6 +1,6 @@
 <div>
     <!-- Page Header Component -->
-    <x-page-header />
+    <x-page-header title="Daftar Informasi" />
     <!-- End Page Title -->
 
     <div class="container py-4">
@@ -9,181 +9,162 @@
                 <div class="card bg-white shadow-sm border-0">
                     <div class="card-body p-4">
                         @if ($informasi->count() > 0)
-                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                                @foreach ($informasi as $item)
-                                    @php
-                                        $cardStyles = [
-                                            [
-                                                'bg' => 'bg-blue-100',
-                                                'text' => 'text-blue-800',
-                                                'icon_bg' => 'bg-blue-200',
-                                                'icon_text' => 'text-blue-600',
-                                                'button_bg' => 'bg-blue-600',
-                                                'button_hover_bg' => 'bg-blue-700',
-                                                'button_ring' => 'focus:ring-blue-300',
-                                            ],
-                                            [
-                                                'bg' => 'bg-green-100',
-                                                'text' => 'text-green-800',
-                                                'icon_bg' => 'bg-green-200',
-                                                'icon_text' => 'text-green-600',
-                                                'button_bg' => 'bg-green-600',
-                                                'button_hover_bg' => 'bg-green-700',
-                                                'button_ring' => 'focus:ring-green-300',
-                                            ],
-                                            [
-                                                'bg' => 'bg-yellow-100',
-                                                'text' => 'text-yellow-800',
-                                                'icon_bg' => 'bg-yellow-200',
-                                                'icon_text' => 'text-yellow-600',
-                                                'button_bg' => 'bg-yellow-600',
-                                                'button_hover_bg' => 'bg-yellow-700',
-                                                'button_ring' => 'focus:ring-yellow-300',
-                                            ],
-                                            [
-                                                'bg' => 'bg-red-100',
-                                                'text' => 'text-red-800',
-                                                'icon_bg' => 'bg-red-200',
-                                                'icon_text' => 'text-red-600',
-                                                'button_bg' => 'bg-red-600',
-                                                'button_hover_bg' => 'bg-red-700',
-                                                'button_ring' => 'focus:ring-red-300',
-                                            ],
-                                            [
-                                                'bg' => 'bg-purple-100',
-                                                'text' => 'text-purple-800',
-                                                'icon_bg' => 'bg-purple-200',
-                                                'icon_text' => 'text-purple-600',
-                                                'button_bg' => 'bg-purple-600',
-                                                'button_hover_bg' => 'bg-purple-700',
-                                                'button_ring' => 'focus:ring-purple-300',
-                                            ],
-                                            [
-                                                'bg' => 'bg-pink-100',
-                                                'text' => 'text-pink-800',
-                                                'icon_bg' => 'bg-pink-200',
-                                                'icon_text' => 'text-pink-600',
-                                                'button_bg' => 'bg-pink-600',
-                                                'button_hover_bg' => 'bg-pink-700',
-                                                'button_ring' => 'focus:ring-pink-300',
-                                            ],
-                                        ];
-                                        $index = $loop->index % count($cardStyles);
-                                        $style = $cardStyles[$index];
-                                    @endphp
-                                    <div
-                                        class="card-article bg-white rounded-lg overflow-hidden h-full flex flex-col border border-gray-200 hover:shadow-md transition-shadow duration-200">
-                                        <div class="p-5 flex-1 flex flex-col">
-                                            <h3 class="text-base font-semibold text-gray-800 mb-2">
-                                                {{ $item->judul }}
-                                            </h3>
-                                            <div class="text-xs text-gray-500 mb-3">
-                                                <i class="bi bi-calendar3 me-1"></i>
-                                                {{ indonesia_date($item->published_at) }}
-                                                <span class="mx-2">•</span>
-                                                <i class="bi bi-clock me-1"></i>
-                                                {{ indonesia_time($item->published_at) }} WIB
-                                            </div>
-                                            <div class="prose prose-sm max-w-none text-gray-600 mb-4">
-                                                {!! $item->isi !!}
-                                            </div>
+                            <div class="table-responsive">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th scope="col" class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">
+                                                No
+                                            </th>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">
+                                                Judul
+                                            </th>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Deskripsi
+                                            </th>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Dokumen
+                                            </th>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Tanggal
+                                            </th>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Aksi
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        @foreach ($informasi as $index => $item)
+                                            <tr class="hover:bg-gray-50 border-b border-gray-200">
+                                                <td class="px-4 py-4 text-center border-r border-gray-200">
+                                                    {{ $loop->iteration }}
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap border-r border-gray-200">
+                                                    <div class="text-sm font-medium text-gray-900">
+                                                        {{ $item->judul }}
+                                                    </div>
+                                                    <div class="text-sm text-gray-500">
+                                                        {{ $item->user->name ?? 'Admin' }}
+                                                    </div>
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    <div class="text-sm text-gray-900 line-clamp-2">
+                                                        {!! Str::limit(strip_tags($item->isi), 100) !!}
+                                                    </div>
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    @php
+                                                        $files = is_array($item->file) ? $item->file : [$item->file];
+                                                        $hasFiles = !empty(array_filter($files));
+                                                    @endphp
+                                                    @if ($hasFiles)
+                                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                                            {{ count($files) }} Dokumen
+                                                        </span>
+                                                    @else
+                                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                                                            Tidak ada dokumen
+                                                        </span>
+                                                    @endif
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200">
+                                                    {{ indonesia_date($item->published_at) }}
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                                    <div class="flex space-x-2">
+                                                        <a href="{{ route('informasi.detail', $item->slug) }}" 
+                                                           class="group relative inline-flex items-center px-3 py-1.5 text-sm font-medium text-blue-600 border border-blue-200 rounded-md hover:bg-blue-50 hover:text-blue-700 transition-all duration-200">
+                                                            <i class="fas fa-eye mr-1"></i> Detail
+                                                            <span class="absolute -bottom-7 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                                                                Lihat detail informasi
+                                                            </span>
+                                                        </a>
+                                                        @if ($hasFiles)
+                                                            <button type="button"
+                                                               class="group relative inline-flex items-center px-3 py-1.5 text-sm font-medium text-green-600 border border-green-200 rounded-md hover:bg-green-50 hover:text-green-700 transition-all duration-200"
+                                                               data-bs-toggle="modal" 
+                                                               data-bs-target="#dokumenModal{{ $item->id }}">
+                                                                <i class="fas fa-download mr-1"></i> Unduh
+                                                                <span class="absolute -bottom-7 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                                                                    Unduh dokumen
+                                                                </span>
+                                                            </button>
+                                                        @endif
+                                                    </div>
+                                                </td>
+                                            </tr>
 
-                                            {{-- Lampiran File --}}
-                                            @php
-                                                $files = is_array($item->file) ? $item->file : [$item->file];
-                                                $hasFiles = !empty(array_filter($files));
-                                            @endphp
+                                            <!-- Modal Dokumen -->
                                             @if ($hasFiles)
-                                                <div class="mt-4 pt-3 border-t border-gray-100">
-                                                    <div class="space-y-3">
-                                                        <p class="text-sm font-medium text-gray-800 mb-2">Lampiran
-                                                            Dokumen:</p>
-                                                        @foreach ($files as $file)
-                                                            @if ($file)
-                                                                @php
-                                                                    $filePath = str_starts_with($file, 'public/')
-                                                                        ? $file
-                                                                        : 'public/' . $file;
-                                                                    $fileExists = Storage::exists($filePath);
-                                                                    $fileSize = $fileExists
-                                                                        ? number_format(
-                                                                                Storage::size($filePath) / 1024,
-                                                                                1,
-                                                                            ) . ' KB'
-                                                                        : '';
-                                                                    $fileName = basename($file);
-                                                                    $fileUrl = $fileExists ? Storage::url($file) : '#';
-                                                                    $isPdf =
-                                                                        strtolower(
-                                                                            pathinfo($file, PATHINFO_EXTENSION),
-                                                                        ) === 'pdf';
-                                                                @endphp
-                                                                <div
-                                                                    class="border border-gray-200 rounded-lg p-3 hover:bg-gray-50 transition-colors">
-                                                                    <div class="flex items-start">
-                                                                        <div
-                                                                            class="flex-shrink-0 bg-red-50 p-2 rounded-md">
-                                                                            <i
-                                                                                class="bi bi-file-earmark-pdf-fill text-red-500 text-2xl"></i>
-                                                                        </div>
-                                                                        <div class="ml-3 flex-1 min-w-0">
-                                                                            <p
-                                                                                class="text-sm font-medium text-gray-900 truncate">
-                                                                                {{ $fileName }}
-                                                                            </p>
-                                                                            <div class="flex items-center mt-1">
-                                                                                <span
-                                                                                    class="text-xs text-gray-500">{{ $fileSize }}</span>
-                                                                                <span
-                                                                                    class="mx-2 text-gray-300">•</span>
-                                                                                <span
-                                                                                    class="text-xs text-gray-500">PDF</span>
-                                                                            </div>
-                                                                        </div>
-                                                                        @if ($fileExists)
-                                                                            <div class="ml-4 flex-shrink-0">
-                                                                                <div class="group relative">
-                                                                                    <a href="{{ $fileUrl }}"
-                                                                                        target="_blank"
-                                                                                        class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all duration-200 transform hover:-translate-y-0.5 hover:shadow-md"
-                                                                                        download>
-                                                                                        <i
-                                                                                            class="bi bi-download mr-1.5"></i>
-                                                                                        Unduh
-                                                                                    </a>
-                                                                                    <div
-                                                                                        class="absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
-                                                                                        Unduh Dokumen
-                                                                                        <div
-                                                                                            class="absolute bottom-0 left-1/2 w-2 h-2 -mb-1 -translate-x-1/2 transform rotate-45 bg-gray-800">
-                                                                                        </div>
+                                                <div class="modal fade" id="dokumenModal{{ $item->id }}" tabindex="-1" aria-labelledby="dokumenModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog modal-lg">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="dokumenModalLabel">Dokumen Lampiran</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <div class="space-y-4">
+                                                                    @foreach ($files as $file)
+                                                                        @if ($file)
+                                                                            @php
+                                                                                $filePath = str_starts_with($file, 'public/') ? $file : 'public/' . $file;
+                                                                                $fileName = basename($filePath);
+                                                                                $fileExt = pathinfo($fileName, PATHINFO_EXTENSION);
+                                                                                $fileIcon = 'fa-file';
+                                                                                
+                                                                                if (in_array($fileExt, ['pdf'])) {
+                                                                                    $fileIcon = 'fa-file-pdf text-red-500';
+                                                                                } elseif (in_array($fileExt, ['doc', 'docx'])) {
+                                                                                    $fileIcon = 'fa-file-word text-blue-500';
+                                                                                } elseif (in_array($fileExt, ['xls', 'xlsx'])) {
+                                                                                    $fileIcon = 'fa-file-excel text-green-500';
+                                                                                } elseif (in_array($fileExt, ['jpg', 'jpeg', 'png', 'gif'])) {
+                                                                                    $fileIcon = 'fa-file-image text-yellow-500';
+                                                                                }
+                                                                            @endphp
+                                                                            <div class="flex items-center justify-between p-3 border rounded-lg">
+                                                                                <div class="flex items-center">
+                                                                                    <i class="fas {{ $fileIcon }} text-lg mr-3"></i>
+                                                                                    <div>
+                                                                                        <p class="text-sm font-medium text-gray-900">{{ $fileName }}</p>
+                                                                                        <p class="text-xs text-gray-500">{{ Str::upper($fileExt) }} • 
+                                                                                        @php
+                                                                                            $fileSize = Storage::exists($filePath) ? Storage::size($filePath) : 0;
+                                                                                            if ($fileSize >= 1048576) {
+                                                                                                echo round($fileSize / 1048576, 1) . ' MB';
+                                                                                            } else {
+                                                                                                echo round($fileSize / 1024, 1) . ' KB';
+                                                                                            }
+                                                                                        @endphp
+                                                                                        </p>
                                                                                     </div>
                                                                                 </div>
+                                                                                <a href="{{ route('file.download', $file) }}" 
+                                                                                   class="inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                                                                   target="_blank">
+                                                                                    <i class="fas fa-download mr-1"></i> Unduh
+                                                                                </a>
                                                                             </div>
                                                                         @endif
-                                                                    </div>
+                                                                    @endforeach
                                                                 </div>
-                                                            @endif
-                                                        @endforeach
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             @endif
-                                        </div>
-                                        <div class="px-5 py-3 bg-gray-50 border-t border-gray-100 text-right">
-                                            <span class="text-xs text-gray-500">
-                                                Dipublikasikan oleh: {{ $item->user->name ?? 'Admin' }}
-                                            </span>
-                                        </div>
-                                    </div>
-                                @endforeach
+                                        @endforeach
+                                    </tbody>
+                                </table>
                             </div>
-                            <div class="mt-6 text-center">
-                                @if ($informasi->hasMorePages())
-                                    <button wire:click="loadMore"
-                                        class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-colors duration-300">
-                                        Muat Lebih Banyak
-                                    </button>
-                                @endif
+
+                            <!-- Pagination -->
+                            <div class="mt-4">
+                                {{ $informasi->links() }}
                             </div>
                         @else
                             <div class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-md">
