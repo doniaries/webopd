@@ -161,6 +161,8 @@
             align-items: center;
             text-decoration: none;
             padding: 2px 0;
+            min-width: 40px; /* Pastikan logo memiliki lebar minimum */
+            margin-right: auto; /* Pastikan logo selalu di kiri */
         }
 
         /* Menu container */
@@ -477,23 +479,50 @@
             }
 
             .logo img {
-                max-height: 30px !important;
+                max-height: 40px !important;
+                min-height: 40px !important;
+                min-width: 40px !important;
+                width: auto !important;
+                margin-right: 5px;
+                display: block !important;
             }
 
             .sitename {
-                font-size: 0.8rem !important;
-                max-width: 150px; /* Batasi lebar teks */
+                font-size: 0.85rem !important;
+                max-width: 180px; /* Perluas lebar teks karena tidak ada jam */
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
+                font-weight: 700 !important;
             }
 
             .logo .d-flex:last-child {
                 display: none !important;
             }
             
+            /* Mengurangi padding pada header untuk memberi ruang lebih pada logo */
+            .header-container {
+                padding: 4px 0;
+            }
+            
+            /* Sembunyikan elemen yang tidak penting pada mobile */
+            .d-flex.align-items-center.ms-3 {
+                display: none !important; /* Sembunyikan gambar bangga dan berakhlak pada mobile */
+            }
+            
+            /* Pastikan header content memiliki ruang yang cukup */
+            .header-content {
+                padding: 0 5px;
+                justify-content: space-between;
+            }
+            
+            /* Kurangi margin pada waktu */
+            #current-time {
+                margin-right: 5px !important;
+            }
+            
             .hamburger-button {
-                margin-left: 10px !important;
+                margin-left: auto !important;
             }
         }
 
@@ -560,33 +589,26 @@
 
                         @endphp
                         <div class="d-flex align-items-center">
-                            <img src="{{ $logoUrl }}" alt="Logo" class="img-fluid" style="max-height: 40px;">
+                            <img src="{{ $logoUrl }}" alt="Logo" class="img-fluid" style="max-height: 45px; min-width: 40px; width: auto; display: block;">
                             <div class="ms-2 d-flex flex-column">
-                                <span class="text-uppercase"
-                                    style="font-size: 0.7rem; letter-spacing: 0.5px; color: #6c757d;">WEBSITE</span>
-                                <h1 class="sitename m-0" style="font-size: 1rem; line-height: 1.1;">{{ $siteName }}
+                                <span class="text-uppercase d-none d-sm-block"
+                                    style="font-size: 0.7rem; letter-spacing: 0.5px; color: #6c757d; font-weight: 600;">WEBSITE</span>
+                                <h1 class="sitename m-0" style="font-size: 1.1rem; line-height: 1.2; font-weight: 700;">{{ $siteName }}
                                 </h1>
                             </div>
                         </div>
                     </a>
-                    <div class="d-flex align-items-center ms-3"
+                    <div class="d-flex align-items-center ms-3 d-none d-md-flex"
                         style="border-left: 1px solid #dee2e6; padding-left: 15px;">
                         <img src="{{ asset('images/bangga.png') }}" alt="Bangga" class="img-fluid me-1"
-                            style="max-height: 32px;">
+                            style="max-height: 24px;">
                         <img src="{{ asset('images/berakhlak.png') }}" alt="Berakhlak" class="img-fluid"
-                            style="max-height: 32px;">
+                            style="max-height: 24px;">
                     </div>
                 </div>
 
-                <!-- Elemen di kanan: waktu dan tombol hamburger -->
+                <!-- Elemen di kanan: hanya tombol hamburger -->
                 <div class="d-flex align-items-center">
-                    <div id="current-time" class="text-end me-3" style="line-height: 1.2;">
-                        <div id="date" class="fw-medium" style="font-size: 0.8rem; color: #6c757d;">Selasa, 24 Juni
-                            2025</div>
-                        <div id="time" class="fw-bold" style="font-size: 0.9rem; color: #495057;">00:00:00 WIB
-                        </div>
-                    </div>
-                    
                     <!-- Hamburger Menu Button dengan style Flowbite -->
                     <button id="mobile-menu-toggle" type="button" class="hamburger-button inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200">
                         <span class="sr-only">Open main menu</span>
@@ -790,34 +812,7 @@
         // Check initial scroll position
         updateHeader();
 
-        // Update waktu dan tanggal secara real-time
-        function updateTime() {
-            const now = new Date();
-
-            // Format waktu
-            const timeString = now.toLocaleTimeString('id-ID', {
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: false
-            });
-
-            // Format tanggal
-            const options = {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            };
-            const dateString = now.toLocaleDateString('id-ID', options);
-
-            document.getElementById('time').textContent = timeString + ' WIB';
-            document.getElementById('date').textContent = dateString;
-        }
-
-        // Update waktu setiap detik
-        setInterval(updateTime, 1000);
-        updateTime(); // Panggil sekali saat pertama kali load
+        // Fungsi update waktu dihapus karena elemen waktu sudah tidak digunakan
 
         // Hapus class at-top yang mungkin menimbulkan efek tidak diinginkan
         document.getElementById('header').classList.remove('at-top');
