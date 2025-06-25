@@ -11,12 +11,12 @@ use Illuminate\Support\Facades\Storage;
 
 class InfografisSeeder extends Seeder
 {
-    private $imageUrls = [
-        'https://img.freepik.com/free-vector/statistics-infographics-template_23-2149018325.jpg?w=740&t=st=1650000000',
-        'https://img.freepik.com/free-vector/business-presentation-process-infographics_23-2148894676.jpg?w=740&t=st=1650000000',
-        'https://img.freepik.com/free-vector/business-presentation-process-infographics_23-2148894678.jpg?w=740&t=st=1650000000',
-        'https://img.freepik.com/free-vector/business-presentation-process-infographics_23-2148894679.jpg?w=740&t=st=1650000000',
-        'https://img.freepik.com/free-vector/business-presentation-process-infographics_23-2148894680.jpg?w=740&t=st=1650000000',
+    // Simple placeholder data
+    private $placeholderData = [
+        'type' => 'placeholder',
+        'bg_color' => 'bg-gray-200',
+        'text' => 'Tidak ada gambar',
+        'icon' => 'image-x'
     ];
 
     public function run()
@@ -57,31 +57,16 @@ class InfografisSeeder extends Seeder
             ],
         ];
 
-        // Create directory if not exists
-        if (!Storage::disk('public')->exists('infografis')) {
-            Storage::disk('public')->makeDirectory('infografis');
-        }
-
         // Create infografis for each team
         foreach ($teams as $team) {
-            foreach ($infografisData as $index => $data) {
-                $imageUrl = $this->imageUrls[$index % count($this->imageUrls)];
-                $imageName = 'infografis-' . Str::slug($data['judul']) . '.jpg';
-                $imagePath = 'infografis/' . $imageName;
-
-                // Download and save image
-                try {
-                    $image = Http::get($imageUrl);
-                    Storage::disk('public')->put($imagePath, $image->body());
-                } catch (\Exception $e) {
-                    $this->command->error('Failed to download image: ' . $e->getMessage());
-                    continue;
-                }
+            foreach ($infografisData as $data) {
+                // Encode the placeholder data as JSON
+                $placeholderJson = json_encode($this->placeholderData);
 
                 Infografis::create([
                     'team_id' => $team->id,
                     'judul' => $data['judul'],
-                    'gambar' => $imageName,
+                    'gambar' => $placeholderJson,
                     'kategori' => $data['kategori'],
                     'is_active' => $data['is_active'],
                 ]);

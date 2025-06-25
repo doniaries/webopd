@@ -46,7 +46,10 @@ class BannerResource extends Resource
                     ->maxLength(255),
                 Forms\Components\FileUpload::make('gambar')
                     ->label('Foto banner')
+                    ->directory('banner')
+                    ->imageEditor()
                     ->required()
+                    ->optimize('webp')
                     ->image()
                     ->acceptedFileTypes(['image/jpeg', 'image/png'])
                     ->maxSize(1024)

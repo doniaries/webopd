@@ -157,12 +157,12 @@ class PostSeeder extends Seeder
                         // Create post with placeholder image
                         $isFeatured = $i <= 5; // First 5 posts in each month will be featured
                         
-                        // Generate placeholder data with background color
-                        $bgColor = $this->faker->randomElement($backgroundColors);
+                        // Generate simple placeholder data
                         $placeholder = json_encode([
                             'type' => 'placeholder',
-                            'bg_color' => $bgColor,
-                            'text' => 'Gambar tidak tersedia'
+                            'bg_color' => 'bg-gray-200',
+                            'text' => 'Tidak ada gambar',
+                            'icon' => 'image-x'
                         ]);
                         
                         $post = Post::create([

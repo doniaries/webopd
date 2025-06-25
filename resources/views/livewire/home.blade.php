@@ -8,8 +8,13 @@
 
     <main id="main">
         <!-- Hero Slider Section -->
-        @livewire('slider', ['sliders' => $sliders, 'pengaturan' => $pengaturan ?? null, 'usePostsAsSliders' => true])
+        @if(empty($sliders) || count($sliders) === 0)
+            @livewire('slider', ['sliders' => $banners, 'pengaturan' => $pengaturan ?? null, 'usePostsAsSliders' => false])
+        @else
+            @livewire('slider', ['sliders' => $sliders, 'pengaturan' => $pengaturan ?? null, 'usePostsAsSliders' => true])
+        @endif
         <!-- End Hero Slider -->
+        
         <!-- Berita & Informasi Section -->
         <section id="berita-informasi" class="features" style="margin: 1.5rem 0 0 0; padding: 0;">
             <div class="container-fluid px-4">
@@ -275,40 +280,61 @@
                         <!-- Banner Slider Section -->
                         <div class="mb-6">
                             <div class="position-relative" style="max-width: 100%; margin: 0 auto;">
-                                <div class="swiper banner-slider" style="overflow: visible;">
+                                <div class="swiper banner-slider" style="overflow: hidden; border-radius: 0.5rem;">
                                     <div class="swiper-wrapper">
                                         @forelse($banners as $banner)
                                             <div class="swiper-slide">
-                                                <div class="banner-portrait-container">
-                                                    <a href="{{ $banner->url }}"
-                                                        class="d-block position-relative w-100 h-100">
-                                                        <div class="banner-image-wrapper">
-                                                            <img src="{{ $banner->gambar_url }}" class="img-fluid"
-                                                                alt="{{ $banner->judul }}" loading="lazy">
-                                                        </div>
-                                                        @if (!empty($banner->judul))
-                                                            <div class="banner-caption">
-                                                                <div class="banner-title">
-                                                                    {{ Str::limit($banner->judul, 60) }}</div>
+                                                <div class="banner-portrait-container" style="height: 300px;">
+                                                    @php
+                                                        $isPlaceholder = false;
+                                                        $placeholderData = [];
+                                                        if ($banner->gambar_url && str_starts_with($banner->gambar_url, '{"type"')) {
+                                                            $placeholderData = json_decode($banner->gambar_url, true);
+                                                            $isPlaceholder = $placeholderData['type'] === 'placeholder';
+                                                        }
+                                                    @endphp
+                                                    
+                                                    @if($isPlaceholder)
+                                                        <div class="d-flex flex-column align-items-center justify-content-center w-100 h-100 p-4" 
+                                                             style="background-color: #f3f4f6; height: 100%;">
+                                                            <i class="bi bi-{{ $placeholderData['icon'] ?? 'image' }} text-muted mb-2" style="font-size: 2.5rem; opacity: 0.7;"></i>
+                                                            <div class="text-muted text-center" style="font-size: 1rem; font-weight: 500;">
+                                                                {{ $placeholderData['text'] ?? 'Banner tidak tersedia' }}
                                                             </div>
-                                                        @endif
-                                                    </a>
+                                                        </div>
+                                                    @else
+                                                        <a href="{{ $banner->url ?? '#' }}" class="d-block position-relative w-100 h-100">
+                                                            <div class="banner-image-wrapper w-100 h-100">
+                                                                <img src="{{ $banner->gambar_url }}" 
+                                                                    class="w-100 h-100 object-cover"
+                                                                    alt="{{ $banner->judul }}" 
+                                                                    loading="lazy"
+                                                                    onerror="this.onerror=null; this.src='data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22800%22%20height%3D%22400%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20800%20400%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_18e6bfa6f3e%20text%20%7B%20fill%3A%23999%3Bfont-weight%3Anormal%3Bfont-family%3A-apple-system%2CBlinkMacSystemFont%2C%26quot%3BSegoe%20UI%26quot%3B%2CRoboto%2C%26quot%3BHelvetica%20Neue%26quot%3B%2CArial%2C%26quot%3BNoto%20Sans%26quot%3B%2Csans-serif%2C%26quot%3BApple%20Color%20Emoji%26quot%3B%2C%26quot%3BSegoe%20UI%20Emoji%26quot%3B%2C%26quot%3BSegoe%20UI%20Symbol%26quot%3B%2C%20%26quot%3BNoto%20Mono%26quot%3B%2Cmonospace%3Bfont-size%3A40pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_18e6bfa6f3e%22%3E%3Crect%20width%3D%22800%22%20height%3D%22400%22%20fill%3D%22%23f3f4f6%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22290.5625%22%20y%3D%22217.7%22%3EBanner%20Tidak%20Tersedia%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E';">
+                                                            </div>
+                                                            @if (!empty($banner->judul))
+                                                                <div class="banner-caption position-absolute bottom-0 start-0 w-100 p-3" style="background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);">
+                                                                    <div class="banner-title text-white fw-semibold">
+                                                                        {{ Str::limit($banner->judul, 60) }}
+                                                                    </div>
+                                                                </div>
+                                                            @endif
+                                                        </a>
+                                                    @endif
                                                 </div>
                                             </div>
                                         @empty
                                             <div class="swiper-slide">
-                                                <div
-                                                    class="banner-portrait-container bg-light d-flex align-items-center justify-content-center">
+                                                <div class="banner-portrait-container bg-light d-flex align-items-center justify-content-center" style="height: 300px;">
                                                     <div class="text-center p-3">
                                                         <i class="bi bi-image fs-1 text-muted"></i>
-                                                        <p class="mb-0 mt-2">Tidak ada banner tersedia</p>
+                                                        <p class="mb-0 mt-2 text-muted">Tidak ada banner tersedia</p>
                                                     </div>
                                                 </div>
                                             </div>
                                         @endforelse
                                     </div>
                                     @if (count($banners) > 1)
-                                        <div class="swiper-pagination"></div>
+                                        <div class="swiper-pagination position-relative mt-3"></div>
                                     @endif
                                 </div>
                             </div>
@@ -881,34 +907,33 @@
             const bannerSlider = document.querySelector('.banner-slider');
             if (!bannerSlider) return;
 
-            // Destroy existing instance if it exists
-            if (window.bannerSwiper) {
-                window.bannerSwiper.destroy(true, true);
-                window.bannerSwiper = null;
-            }
-
-            // Initialize new Swiper instance
-            window.bannerSwiper = new Swiper(bannerSlider, {
+            // Initialize Swiper with custom pagination
+            const swiper = new Swiper(bannerSlider, {
                 loop: true,
                 autoplay: {
                     delay: 5000,
                     disableOnInteraction: false,
-                },
-                slidesPerView: 1,
-                spaceBetween: 15,
-                centeredSlides: true,
-                effect: 'fade',
-                fadeEffect: {
-                    crossFade: true
+                    pauseOnMouseEnter: true,
                 },
                 pagination: {
                     el: '.swiper-pagination',
                     clickable: true,
+                    bulletClass: 'swiper-pagination-bullet',
+                    bulletActiveClass: 'swiper-pagination-bullet-active',
+                    renderBullet: function (index, className) {
+                        return `<span class="${className}"><i class="bi bi-circle-fill"></i></span>`;
+                    },
                 },
                 navigation: {
                     nextEl: '.swiper-button-next',
                     prevEl: '.swiper-button-prev',
                 },
+                effect: 'slide',
+                speed: 800,
+                grabCursor: true,
+                spaceBetween: 0,
+                centeredSlides: true,
+                slidesPerView: 1,
                 on: {
                     init: function() {
                         // Add active class to first slide
@@ -917,7 +942,21 @@
                             slides[0].classList.add('swiper-slide-active');
                         }
                     },
-                },
+                    slideChange: function() {
+                        const bullets = bannerSlider.querySelectorAll('.swiper-pagination-bullet');
+                        const activeIndex = this.realIndex % bullets.length;
+                        
+                        bullets.forEach((bullet, index) => {
+                            if (index === activeIndex) {
+                                bullet.classList.add('swiper-pagination-bullet-active');
+                                bullet.setAttribute('aria-current', 'true');
+                            } else {
+                                bullet.classList.remove('swiper-pagination-bullet-active');
+                                bullet.removeAttribute('aria-current');
+                            }
+                        });
+                    }
+                }
             });
 
             // Get the number of banners
