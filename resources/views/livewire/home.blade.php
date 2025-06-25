@@ -6,15 +6,15 @@
         <meta name="description" content="{{ $pageDescription }}">
     @endpush
 
-    <main id="main">
+    <div>
         <!-- Hero Slider Section -->
-        @if(empty($sliders) || count($sliders) === 0)
+        @if (empty($sliders) || count($sliders) === 0)
             @livewire('slider', ['sliders' => $banners, 'pengaturan' => $pengaturan ?? null, 'usePostsAsSliders' => false])
         @else
             @livewire('slider', ['sliders' => $sliders, 'pengaturan' => $pengaturan ?? null, 'usePostsAsSliders' => true])
         @endif
         <!-- End Hero Slider -->
-        
+
         <!-- Berita & Informasi Section -->
         <section id="berita-informasi" class="features" style="margin: 1.5rem 0 0 0; padding: 0;">
             <div class="container-fluid px-4">
@@ -59,33 +59,59 @@
                                                 @php
                                                     $isPlaceholder = false;
                                                     $placeholderData = [];
-                                                    
+
                                                     if ($post->foto_utama_url) {
-                                                        if (is_string($post->foto_utama_url) && str_starts_with($post->foto_utama_url, '{"type"')) {
+                                                        if (
+                                                            is_string($post->foto_utama_url) &&
+                                                            str_starts_with($post->foto_utama_url, '{"type"')
+                                                        ) {
                                                             try {
-                                                                $placeholderData = json_decode($post->foto_utama_url, true);
-                                                                $isPlaceholder = isset($placeholderData['type']) && $placeholderData['type'] === 'placeholder';
+                                                                $placeholderData = json_decode(
+                                                                    $post->foto_utama_url,
+                                                                    true,
+                                                                );
+                                                                $isPlaceholder =
+                                                                    isset($placeholderData['type']) &&
+                                                                    $placeholderData['type'] === 'placeholder';
                                                             } catch (\Exception $e) {
                                                                 $isPlaceholder = true;
-                                                                $placeholderData = ['bg_color' => 'bg-gray-200', 'text' => 'Gambar tidak tersedia'];
+                                                                $placeholderData = [
+                                                                    'bg_color' => 'bg-gray-200',
+                                                                    'text' => 'Gambar tidak tersedia',
+                                                                ];
                                                             }
-                                                        } elseif (!filter_var($post->foto_utama_url, FILTER_VALIDATE_URL)) {
+                                                        } elseif (
+                                                            !filter_var($post->foto_utama_url, FILTER_VALIDATE_URL)
+                                                        ) {
                                                             $isPlaceholder = true;
-                                                            $placeholderData = ['bg_color' => 'bg-gray-200', 'text' => 'Gambar tidak tersedia'];
+                                                            $placeholderData = [
+                                                                'bg_color' => 'bg-gray-200',
+                                                                'text' => 'Gambar tidak tersedia',
+                                                            ];
                                                         }
                                                     } else {
                                                         $isPlaceholder = true;
-                                                        $placeholderData = ['bg_color' => 'bg-gray-200', 'text' => 'Gambar tidak tersedia'];
+                                                        $placeholderData = [
+                                                            'bg_color' => 'bg-gray-200',
+                                                            'text' => 'Gambar tidak tersedia',
+                                                        ];
                                                     }
                                                 @endphp
 
-                                                @if($isPlaceholder)
-                                                    <div class="position-absolute top-0 start-0 w-100 h-100 flex items-center justify-center {{ $placeholderData['bg_color'] ?? 'bg-gray-100' }}">
+                                                @if ($isPlaceholder)
+                                                    <div
+                                                        class="position-absolute top-0 start-0 w-100 h-100 flex items-center justify-center {{ $placeholderData['bg_color'] ?? 'bg-gray-100' }}">
                                                         <div class="text-center">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                class="h-12 w-12 mx-auto mb-2 text-gray-400"
+                                                                fill="none" viewBox="0 0 24 24"
+                                                                stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="1"
+                                                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                                             </svg>
-                                                            <span class="text-sm font-medium text-gray-500">{{ $placeholderData['text'] ?? 'Gambar tidak tersedia' }}</span>
+                                                            <span
+                                                                class="text-sm font-medium text-gray-500">{{ $placeholderData['text'] ?? 'Gambar tidak tersedia' }}</span>
                                                         </div>
                                                     </div>
                                                 @else
@@ -93,8 +119,9 @@
                                                         class="position-absolute top-0 start-0 w-100 h-100 card-img-top"
                                                         style="object-fit: cover;" alt="{{ $post->title }}">
                                                 @endif
-                                                
-                                                <div class="position-absolute bottom-0 start-0 p-2 bg-primary text-white small">
+
+                                                <div
+                                                    class="position-absolute bottom-0 start-0 p-2 bg-primary text-white small">
                                                     {{ $post->tags->first()->name ?? 'Berita' }}
                                                 </div>
                                             </div>
@@ -188,39 +215,73 @@
                                                             @php
                                                                 $isPlaceholder = false;
                                                                 $placeholderData = [];
-                                                                
+
                                                                 if ($post->foto_utama_url) {
-                                                                    if (is_string($post->foto_utama_url) && str_starts_with($post->foto_utama_url, '{"type"')) {
+                                                                    if (
+                                                                        is_string($post->foto_utama_url) &&
+                                                                        str_starts_with(
+                                                                            $post->foto_utama_url,
+                                                                            '{"type"',
+                                                                        )
+                                                                    ) {
                                                                         try {
-                                                                            $placeholderData = json_decode($post->foto_utama_url, true);
-                                                                            $isPlaceholder = isset($placeholderData['type']) && $placeholderData['type'] === 'placeholder';
+                                                                            $placeholderData = json_decode(
+                                                                                $post->foto_utama_url,
+                                                                                true,
+                                                                            );
+                                                                            $isPlaceholder =
+                                                                                isset($placeholderData['type']) &&
+                                                                                $placeholderData['type'] ===
+                                                                                    'placeholder';
                                                                         } catch (\Exception $e) {
                                                                             $isPlaceholder = true;
-                                                                            $placeholderData = ['bg_color' => 'bg-gray-200', 'text' => 'Gambar tidak tersedia'];
+                                                                            $placeholderData = [
+                                                                                'bg_color' => 'bg-gray-200',
+                                                                                'text' => 'Gambar tidak tersedia',
+                                                                            ];
                                                                         }
-                                                                    } elseif (!filter_var($post->foto_utama_url, FILTER_VALIDATE_URL)) {
+                                                                    } elseif (
+                                                                        !filter_var(
+                                                                            $post->foto_utama_url,
+                                                                            FILTER_VALIDATE_URL,
+                                                                        )
+                                                                    ) {
                                                                         $isPlaceholder = true;
-                                                                        $placeholderData = ['bg_color' => 'bg-gray-200', 'text' => 'Gambar tidak tersedia'];
+                                                                        $placeholderData = [
+                                                                            'bg_color' => 'bg-gray-200',
+                                                                            'text' => 'Gambar tidak tersedia',
+                                                                        ];
                                                                     }
                                                                 } else {
                                                                     $isPlaceholder = true;
-                                                                    $placeholderData = ['bg_color' => 'bg-gray-200', 'text' => 'Gambar tidak tersedia'];
+                                                                    $placeholderData = [
+                                                                        'bg_color' => 'bg-gray-200',
+                                                                        'text' => 'Gambar tidak tersedia',
+                                                                    ];
                                                                 }
                                                             @endphp
 
-                                                            @if($isPlaceholder)
-                                                                <div class="h-100 w-100 flex items-center justify-center {{ $placeholderData['bg_color'] ?? 'bg-gray-100' }}">
+                                                            @if ($isPlaceholder)
+                                                                <div
+                                                                    class="h-100 w-100 flex items-center justify-center {{ $placeholderData['bg_color'] ?? 'bg-gray-100' }}">
                                                                     <div class="text-center">
-                                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto mb-2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                                            class="h-8 w-8 mx-auto mb-2 text-gray-400"
+                                                                            fill="none" viewBox="0 0 24 24"
+                                                                            stroke="currentColor">
+                                                                            <path stroke-linecap="round"
+                                                                                stroke-linejoin="round" stroke-width="1"
+                                                                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                                                         </svg>
-                                                                        <span class="text-xs font-medium text-gray-500">{{ $placeholderData['text'] ?? 'Gambar tidak tersedia' }}</span>
+                                                                        <span
+                                                                            class="text-xs font-medium text-gray-500">{{ $placeholderData['text'] ?? 'Gambar tidak tersedia' }}</span>
                                                                     </div>
                                                                 </div>
                                                             @else
                                                                 <img src="{{ $post->foto_utama_url }}"
                                                                     class="card-img-top h-100 w-100"
-                                                                    style="object-fit: cover;" alt="{{ $post->title }}">
+                                                                    style="object-fit: cover;"
+                                                                    alt="{{ $post->title }}">
                                                             @endif
                                                             <div class="position-absolute top-0 end-0 m-2">
                                                                 <span class="badge bg-danger">
@@ -279,886 +340,21 @@
                     <div class="col-lg-3 ps-lg-4">
                         <!-- Banner Slider Section -->
                         <div class="mb-6">
-                            <div class="position-relative" style="max-width: 100%; margin: 0 auto;">
-                                <div class="swiper banner-slider" style="overflow: hidden; border-radius: 0.5rem;">
-                                    <div class="swiper-wrapper">
-                                        @forelse($banners as $banner)
-                                            <div class="swiper-slide">
-                                                <div class="banner-portrait-container" style="height: 300px;">
-                                                    @php
-                                                        $isPlaceholder = false;
-                                                        $placeholderData = [];
-                                                        if ($banner->gambar_url && str_starts_with($banner->gambar_url, '{"type"')) {
-                                                            $placeholderData = json_decode($banner->gambar_url, true);
-                                                            $isPlaceholder = $placeholderData['type'] === 'placeholder';
-                                                        }
-                                                    @endphp
-                                                    
-                                                    @if($isPlaceholder)
-                                                        <div class="d-flex flex-column align-items-center justify-content-center w-100 h-100 p-4" 
-                                                             style="background-color: #f3f4f6; height: 100%;">
-                                                            <i class="bi bi-{{ $placeholderData['icon'] ?? 'image' }} text-muted mb-2" style="font-size: 2.5rem; opacity: 0.7;"></i>
-                                                            <div class="text-muted text-center" style="font-size: 1rem; font-weight: 500;">
-                                                                {{ $placeholderData['text'] ?? 'Banner tidak tersedia' }}
-                                                            </div>
-                                                        </div>
-                                                    @else
-                                                        <a href="{{ $banner->url ?? '#' }}" class="d-block position-relative w-100 h-100">
-                                                            <div class="banner-image-wrapper w-100 h-100">
-                                                                <img src="{{ $banner->gambar_url }}" 
-                                                                    class="w-100 h-100 object-cover"
-                                                                    alt="{{ $banner->judul }}" 
-                                                                    loading="lazy"
-                                                                    onerror="this.onerror=null; this.src='data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22800%22%20height%3D%22400%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20800%20400%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_18e6bfa6f3e%20text%20%7B%20fill%3A%23999%3Bfont-weight%3Anormal%3Bfont-family%3A-apple-system%2CBlinkMacSystemFont%2C%26quot%3BSegoe%20UI%26quot%3B%2CRoboto%2C%26quot%3BHelvetica%20Neue%26quot%3B%2CArial%2C%26quot%3BNoto%20Sans%26quot%3B%2Csans-serif%2C%26quot%3BApple%20Color%20Emoji%26quot%3B%2C%26quot%3BSegoe%20UI%20Emoji%26quot%3B%2C%26quot%3BSegoe%20UI%20Symbol%26quot%3B%2C%20%26quot%3BNoto%20Mono%26quot%3B%2Cmonospace%3Bfont-size%3A40pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_18e6bfa6f3e%22%3E%3Crect%20width%3D%22800%22%20height%3D%22400%22%20fill%3D%22%23f3f4f6%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22290.5625%22%20y%3D%22217.7%22%3EBanner%20Tidak%20Tersedia%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E';">
-                                                            </div>
-                                                            @if (!empty($banner->judul))
-                                                                <div class="banner-caption position-absolute bottom-0 start-0 w-100 p-3" style="background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);">
-                                                                    <div class="banner-title text-white fw-semibold">
-                                                                        {{ Str::limit($banner->judul, 60) }}
-                                                                    </div>
-                                                                </div>
-                                                            @endif
-                                                        </a>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        @empty
-                                            <div class="swiper-slide">
-                                                <div class="banner-portrait-container bg-light d-flex align-items-center justify-content-center" style="height: 300px;">
-                                                    <div class="text-center p-3">
-                                                        <i class="bi bi-image fs-1 text-muted"></i>
-                                                        <p class="mb-0 mt-2 text-muted">Tidak ada banner tersedia</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endforelse
-                                    </div>
-                                    @if (count($banners) > 1)
-                                        <div class="swiper-pagination position-relative mt-3"></div>
-                                    @endif
-                                </div>
-                            </div>
+                            @livewire('banner')
                         </div>
 
                         <!-- Informasi Terbaru Card -->
-                        <div
-                            class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-md">
-                            <div class="border-b border-gray-200 bg-white px-4 py-3">
-                                <h5 class="text-base font-semibold text-gray-800 flex items-center">
-                                    <span class="w-1 h-5 bg-blue-600 rounded-full mr-2"></span>
-                                    <i class="bi bi-megaphone text-blue-600 mr-2"></i>
-                                    Informasi Terbaru
-                                </h5>
-                            </div>
-                            <div class="card-body p-0">
-                                @php
-                                    try {
-                                        $informasi = App\Models\Informasi::query()
-                                            ->where('published_at', '<=', now())
-                                            ->latest('published_at')
-                                            ->take(5)
-                                            ->get(['id', 'judul', 'slug', 'isi', 'published_at']);
-                                    } catch (\Exception $e) {
-                                        $informasi = collect();
-                                    }
-                                @endphp
-
-                                @if ($informasi->count() > 0)
-                                    <div class="divide-y divide-gray-100">
-                                        @php
-                                            $bgColors = [
-                                                'bg-blue-50 hover:bg-blue-50 border-blue-200',
-                                                'bg-purple-50 hover:bg-purple-50 border-purple-200',
-                                                'bg-amber-50 hover:bg-amber-50 border-amber-200',
-                                                'bg-emerald-50 hover:bg-emerald-50 border-emerald-200',
-                                                'bg-rose-50 hover:bg-rose-50 border-rose-200',
-                                            ];
-                                            $bgColorIndex = 0;
-                                        @endphp
-                                        @foreach ($informasi as $item)
-                                            @php
-                                                $bgClass = $bgColors[$bgColorIndex % count($bgColors)];
-                                                $bgColorIndex++;
-                                            @endphp
-                                            <a href="{{ route('informasi.show', $item->slug) }}"
-                                                class="block px-4 py-3 transition-all duration-300 border-l-4 {{ $bgClass }} group informasi-item">
-                                                <div class="flex items-start space-x-3">
-                                                    <div class="flex-shrink-0">
-                                                        <div
-                                                            class="p-2.5 rounded-lg text-blue-600 transition-all duration-300 group-hover:scale-105 {{ str_replace('hover:bg-', 'bg-', str_replace('50', '100', $bgClass)) }}">
-                                                            <i class="bi bi-megaphone-fill text-lg"></i>
-                                                        </div>
-                                                    </div>
-                                                    <div class="flex-1 min-w-0">
-                                                        <h6
-                                                            class="text-sm font-semibold text-gray-900 mb-1 line-clamp-1">
-                                                            {{ $item->judul }}
-                                                        </h6>
-                                                        @if ($item->isi)
-                                                            <p class="text-xs text-gray-500 mt-1 line-clamp-2">
-                                                                {{ Str::limit(strip_tags($item->isi), 100) }}
-                                                            </p>
-                                                        @endif
-                                                        <div
-                                                            class="flex items-center text-xs text-gray-500 mt-2 space-x-2">
-                                                            <div class="flex items-center">
-                                                                <i class="bi bi-calendar3-fill mr-1"></i>
-                                                                <span>{{ $item->published_at->diffForHumans() }}</span>
-                                                            </div>
-                                                            <span>•</span>
-                                                            <div class="flex items-center">
-                                                                <i class="bi bi-clock-fill mr-1"></i>
-                                                                <span>{{ $item->published_at->format('d M Y') }}</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div
-                                                        class="text-gray-400 group-hover:text-blue-500 transition-colors">
-                                                        <i class="bi bi-chevron-right"></i>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        @endforeach
-                                    </div>
-                                @else
-                                    <div class="text-center p-6">
-                                        <div
-                                            class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-blue-50 text-blue-500 mb-3">
-                                            <i class="bi bi-info-circle-fill text-2xl"></i>
-                                        </div>
-                                        <p class="text-sm text-gray-500">Tidak ada informasi terbaru</p>
-                                    </div>
-                                @endif
-                            </div>
-                            <div class="px-4 py-3 bg-gray-50 text-right border-t border-gray-100">
-                                <a href="{{ route('informasi.index') }}"
-                                    class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors">
-                                    <span>Lihat Semua Informasi</span>
-                                    <i class="bi bi-arrow-right ml-1.5"></i>
-                                </a>
-                            </div>
-                        </div>
+                        @livewire('informasi')
 
                         <!-- Agenda Section -->
-                        <div
-                            class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mt-6 transition-all duration-300 hover:shadow-md">
-                            <div class="border-b border-gray-200 bg-white px-4 py-3">
-                                <h5 class="text-base font-semibold text-gray-800 flex items-center">
-                                    <span class="w-1 h-5 bg-green-600 rounded-full mr-2"></span>
-                                    <i class="bi bi-calendar2-check-fill text-green-600 mr-2"></i>
-                                    Agenda Mendatang
-                                </h5>
-                            </div>
-                            <div class="card-body p-0">
-                                @php
-                                    try {
-                                        $agenda = App\Models\AgendaKegiatan::query()
-                                            ->where('dari_tanggal', '>=', now())
-                                            ->orWhere('sampai_tanggal', '>=', now())
-                                            ->orderBy('dari_tanggal')
-                                            ->take(3)
-                                            ->get();
-                                        \Log::info('Agenda data:', $agenda->toArray()); // Log data untuk debugging
-                                    } catch (\Exception $e) {
-                                        \Log::error('Error fetching agenda: ' . $e->getMessage());
-                                        $agenda = collect();
-                                    }
-                                @endphp
-
-                                @if ($agenda->count() > 0)
-                                    <div class="divide-y divide-gray-100">
-                                        @foreach ($agenda as $item)
-                                            <a href="{{ route('agenda.show', $item->id) }}"
-                                                class="block px-4 py-3 hover:bg-gray-50 transition-all duration-300 group informasi-item">
-                                                <div class="flex items-start space-x-3">
-                                                    <div class="flex-shrink-0">
-                                                        <div
-                                                            class="flex flex-col items-center justify-center w-14 h-14 rounded-lg border-2 border-green-200 bg-white text-center overflow-hidden">
-                                                            <div
-                                                                class="w-full bg-green-600 text-white text-xs font-bold py-0.5">
-                                                                {{ strtoupper(indonesia_date($item->dari_tanggal, false, 'M')) }}
-                                                            </div>
-                                                            <div
-                                                                class="text-gray-800 text-xl font-extrabold leading-tight py-1">
-                                                                {{ indonesia_date($item->dari_tanggal, false, 'd') }}
-                                                            </div>
-                                                            <div
-                                                                class="text-xs text-gray-500 font-medium w-full border-t border-gray-100">
-                                                                {{ $item->dari_tanggal->format('Y') }}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="flex-1 min-w-0">
-                                                        <h6
-                                                            class="text-sm font-semibold text-gray-900 mb-1 line-clamp-1">
-                                                            {{ $item->nama_agenda }}
-                                                        </h6>
-
-                                                        @if ($item->uraian_agenda)
-                                                            <p class="text-xs text-gray-500 mt-1 line-clamp-2">
-                                                                {{ Str::limit(strip_tags($item->uraian_agenda), 100) }}
-                                                            </p>
-                                                        @endif
-                                                        @if ($item->penyelenggara)
-                                                            <div
-                                                                class="flex items-start text-xs bg-green-50 text-green-800 rounded px-2 py-1 mb-1 w-full">
-                                                                <i
-                                                                    class="bi bi-building mr-1.5 mt-0.5 flex-shrink-0"></i>
-                                                                <span
-                                                                    class="break-words">{{ $item->nama_penyelenggara }}</span>
-                                                            </div>
-                                                        @endif
-                                                        <div class="mt-2">
-                                                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-
-                                                                <div class="bg-blue-50 rounded p-2">
-                                                                    <div
-                                                                        class="flex items-center text-xs text-blue-700">
-                                                                        <i class="bi bi-calendar3-fill mr-1.5"></i>
-                                                                        <span>
-                                                                            @if ($item->sampai_tanggal && $item->dari_tanggal->format('Y-m-d') !== $item->sampai_tanggal->format('Y-m-d'))
-                                                                                {{ $item->dari_tanggal->translatedFormat('d M Y') }}
-                                                                                -
-                                                                                {{ $item->sampai_tanggal->translatedFormat('d M Y') }}
-                                                                            @else
-                                                                                {{ $item->dari_tanggal->translatedFormat('d M Y') }}
-                                                                            @endif
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                                @if ($item->waktu_mulai && $item->waktu_selesai)
-                                                                    <div class="bg-green-50 rounded p-2">
-                                                                        <div
-                                                                            class="flex items-center text-xs text-green-700">
-                                                                            <i class="bi bi-clock-fill mr-1.5"></i>
-                                                                            <span>{{ $item->waktu_mulai ? $item->waktu_mulai->format('H:i') : '' }}
-                                                                                -
-                                                                                {{ $item->waktu_selesai ? $item->waktu_selesai->format('H:i') : '' }}
-                                                                                WIB</span>
-                                                                        </div>
-                                                                    </div>
-                                                                @endif
-                                                            </div>
-
-                                                            @if ($item->tempat)
-                                                                <div class="mt-2">
-                                                                    <div
-                                                                        class="flex items-start text-xs text-gray-600 bg-gray-50 rounded p-2">
-                                                                        <i
-                                                                            class="bi bi-geo-alt-fill text-gray-500 mr-1.5 mt-0.5"></i>
-                                                                        <span
-                                                                            class="break-words">{{ $item->tempat }}</span>
-                                                                    </div>
-                                                                </div>
-                                                            @endif
-                                                        </div>
-                                                    </div>
-                                                    <div
-                                                        class="text-gray-400 group-hover:text-green-500 transition-colors self-center">
-                                                        <i class="bi bi-chevron-right"></i>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        @endforeach
-                                    </div>
-                                @else
-                                    <div class="text-center p-6">
-                                        <div
-                                            class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-green-50 text-green-500 mb-3">
-                                            <i class="bi bi-calendar2-x-fill text-2xl"></i>
-                                        </div>
-                                        <p class="text-sm text-gray-500">Tidak ada agenda mendatang</p>
-                                    </div>
-                                @endif
-                            </div>
-                            <div class="px-4 py-3 bg-gray-50 text-right border-t border-gray-100">
-                                <a href="{{ route('agenda.index') }}"
-                                    class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-green-600 hover:text-green-800 transition-colors">
-                                    <span>Lihat Semua Agenda</span>
-                                    <i class="bi bi-arrow-right ml-1.5"></i>
-                                </a>
-                            </div>
-                        </div>
-
-
+                        @livewire('agenda-kegiatan')
                     </div>
                 </div>
             </div>
+
         </section>
-
-        <!-- Banner Modal -->
-        <div class="modal fade" id="bannerModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
-                <div class="modal-content border-0">
-                    <div class="modal-header border-0">
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body p-0">
-                        <img id="bannerModalImg" src="#" alt="Banner" class="img-fluid w-100">
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <!-- Section External Links -->
         @livewire('external-links', ['limit' => 8])
-    </main>
-</div>
-
-@push('styles')
-    <style>
-        /* Banner Slider Styles */
-        .banner-portrait-container {
-            position: relative;
-            width: 100%;
-            max-width: 300px;
-            /* Adjust based on your preference */
-            height: auto;
-            min-height: 400px;
-            /* Adjust based on your content */
-            overflow: hidden;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            background-color: #f8f9fa;
-            margin: 0 auto;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .banner-portrait-container:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-        }
-
-        .banner-image-wrapper {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            min-height: 400px;
-            /* Match container min-height */
-        }
-
-        .banner-image-wrapper img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            /* Changed from cover to contain */
-            object-position: center;
-            transition: transform 0.5s ease;
-            display: block;
-        }
-
-        .banner-portrait-container:hover .banner-image-wrapper img {
-            transform: scale(1.05);
-        }
-
-        .banner-caption {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 12px 15px;
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
-            color: white;
-            z-index: 2;
-        }
-
-        .banner-title {
-            font-size: 0.85rem;
-            line-height: 1.3;
-            font-weight: 500;
-            margin: 0;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        /* Swiper Navigation */
-        .swiper.banner-slider {
-            border-radius: 8px;
-            overflow: visible;
-            padding: 10px 0;
-            /* Add some padding to prevent shadow clipping */
-        }
-
-        .swiper-button-next,
-        .swiper-button-prev {
-            color: white;
-            background: rgba(0, 0, 0, 0.5);
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            opacity: 0;
-        }
-
-        .swiper-button-next {
-            right: 10px;
-        }
-
-        .swiper-button-prev {
-            left: 10px;
-        }
-
-        .swiper:hover .swiper-button-next,
-        .swiper:hover .swiper-button-prev {
-            opacity: 1;
-        }
-
-        .swiper-button-next:after,
-        .swiper-button-prev:after {
-            font-size: 1rem;
-            font-weight: bold;
-        }
-
-        .swiper-pagination-bullet {
-            background: rgba(255, 255, 255, 0.5);
-            opacity: 1;
-        }
-
-        .swiper-pagination-bullet-active {
-            background: #fff;
-            width: 20px;
-            border-radius: 4px;
-        }
-
-        .banner-slider {
-            min-height: 450px;
-            /* Increased to accommodate content */
-            border-radius: 8px;
-            overflow: visible;
-            box-shadow: none;
-            width: 100%;
-            max-width: 320px;
-            /* Match container width */
-            margin: 0 auto;
-            padding: 10px 0;
-        }
-
-        .banner-slider .swiper-wrapper {
-            height: auto;
-            align-items: stretch;
-            padding: 10px 0 20px;
-        }
-
-        .banner-slider .swiper-slide {
-            height: auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 8px;
-            box-sizing: border-box;
-            position: relative;
-            transition: transform 0.3s ease;
-            box-shadow: none;
-        }
-
-        .banner-slider .swiper-slide:last-child {
-            margin-bottom: 0;
-        }
-
-        .banner-slider .swiper-slide>a {
-            display: block;
-            width: 100%;
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            position: relative;
-        }
-
-        .banner-slider .swiper-slide img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
-            display: block;
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            margin: 0;
-            padding: 0;
-        }
-
-        .banner-slider .swiper-button-next,
-        .banner-slider .swiper-button-prev {
-            width: 30px;
-            height: 30px;
-            background: rgba(0, 0, 0, 0.3);
-            color: #fff;
-            border-radius: 50%;
-        }
-
-        .banner-slider .swiper-button-next:after,
-        .banner-slider .swiper-button-prev:after {
-            font-size: 0.9rem;
-        }
-
-        .banner-slider .swiper-pagination-bullet {
-            background: #fff;
-            opacity: 0.7;
-        }
-
-        .banner-slider .swiper-pagination-bullet-active {
-            background: var(--primary);
-            opacity: 1;
-        }
-
-        /* Card Styles */
-        .card {
-            border-radius: 0.5rem;
-            overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.08);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-        }
-
-        .card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.12) !important;
-            border-color: rgba(13, 110, 253, 0.2);
-        }
-
-        .card-img-top {
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .card:hover .card-img-top {
-            transform: scale(1.05);
-        }
-
-        .card-title a {
-            transition: color 0.3s ease;
-        }
-
-        .card:hover .card-title a {
-            color: #0d6efd !important;
-        }
-
-        /* Informasi Item Hover Effect */
-        .informasi-item {
-            transition: all 0.3s ease;
-            border-radius: 0.5rem;
-            margin: 0.5rem;
-            border: 1px solid transparent;
-        }
-
-        .informasi-item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
-            border-color: #93c5fd;
-            background-color: #f8fafc !important;
-        }
-
-        .informasi-item .flex-shrink-0 div {
-            transition: all 0.3s ease;
-        }
-
-        .informasi-item:hover .flex-shrink-0 div {
-            transform: scale(1.1);
-            background-color: #3b82f6 !important;
-            color: white;
-        }
-
-        .informasi-item .bi-chevron-right {
-            transition: all 0.3s ease;
-        }
-
-        .informasi-item:hover .bi-chevron-right {
-            transform: translateX(3px);
-            color: #3b82f6 !important;
-        }
-
-        .badge {
-            font-size: 0.75rem;
-            font-weight: 500;
-            padding: 0.35rem 0.65rem;
-            border-radius: 0.375rem;
-            background-color: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(4px);
-        }
-
-        .card {
-            cursor: pointer;
-        }
-
-        .card-title {
-            transition: color 0.3s ease;
-        }
-
-        .card:hover .card-title {
-            color: #0d6efd !important;
-        }
-    </style>
-@endpush
-
-@push('scripts')
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-    <script>
-        // Initialize banner slider with smooth transitions
-        function initBannerSlider() {
-            // Only initialize if there are banners
-            const bannerSlider = document.querySelector('.banner-slider');
-            if (!bannerSlider) return;
-
-            // Initialize Swiper with custom pagination
-            const swiper = new Swiper(bannerSlider, {
-                loop: true,
-                autoplay: {
-                    delay: 5000,
-                    disableOnInteraction: false,
-                    pauseOnMouseEnter: true,
-                },
-                pagination: {
-                    el: '.swiper-pagination',
-                    clickable: true,
-                    bulletClass: 'swiper-pagination-bullet',
-                    bulletActiveClass: 'swiper-pagination-bullet-active',
-                    renderBullet: function (index, className) {
-                        return `<span class="${className}"><i class="bi bi-circle-fill"></i></span>`;
-                    },
-                },
-                navigation: {
-                    nextEl: '.swiper-button-next',
-                    prevEl: '.swiper-button-prev',
-                },
-                effect: 'slide',
-                speed: 800,
-                grabCursor: true,
-                spaceBetween: 0,
-                centeredSlides: true,
-                slidesPerView: 1,
-                on: {
-                    init: function() {
-                        // Add active class to first slide
-                        const slides = document.querySelectorAll('.banner-slider .swiper-slide');
-                        if (slides.length > 0) {
-                            slides[0].classList.add('swiper-slide-active');
-                        }
-                    },
-                    slideChange: function() {
-                        const bullets = bannerSlider.querySelectorAll('.swiper-pagination-bullet');
-                        const activeIndex = this.realIndex % bullets.length;
-                        
-                        bullets.forEach((bullet, index) => {
-                            if (index === activeIndex) {
-                                bullet.classList.add('swiper-pagination-bullet-active');
-                                bullet.setAttribute('aria-current', 'true');
-                            } else {
-                                bullet.classList.remove('swiper-pagination-bullet-active');
-                                bullet.removeAttribute('aria-current');
-                            }
-                        });
-                    }
-                }
-            });
-
-            // Get the number of banners
-            const bannerCount = bannerSlider.querySelectorAll('.swiper-slide').length;
-
-            // Enable autoplay if there are multiple banners
-            if (bannerCount > 1) {
-                window.bannerSwiper.params.autoplay = {
-                    delay: 5000,
-                    disableOnInteraction: false,
-                    waitForTransition: true,
-                    pauseOnMouseEnter: true
-                };
-            }
-
-            // Add keyboard control
-            window.bannerSwiper.keyboard = {
-                enabled: true,
-                onlyInViewport: true
-            };
-
-            // Add mousewheel control
-            window.bannerSwiper.mousewheel = {
-                forceToAxis: true
-            };
-
-            // Enable lazy loading
-            window.bannerSwiper.lazy = {
-                loadPrevNext: true,
-                loadPrevNextAmount: 2
-            };
-
-            // Additional settings
-            window.bannerSwiper.autoHeight = true;
-            window.bannerSwiper.watchSlidesProgress = true;
-            window.bannerSwiper.preloadImages = false;
-            window.bannerSwiper.resizeObserver = true;
-            window.bannerSwiper.parallax = true;
-
-            // Pause autoplay on hover
-            const slider = bannerSlider;
-            if (slider) {
-                slider.addEventListener('mouseenter', () => {
-                    if (window.bannerSwiper.autoplay && window.bannerSwiper.autoplay.running) {
-                        window.bannerSwiper.autoplay.stop();
-                    }
-                });
-
-                slider.addEventListener('mouseleave', () => {
-                    if (window.bannerSwiper.autoplay && !window.bannerSwiper.autoplay.running && bannerCount > 1) {
-                        window.bannerSwiper.autoplay.start();
-                    }
-                });
-            }
-        }
-
-        // Initialize when DOM is ready
-        document.addEventListener('DOMContentLoaded', initBannerSlider);
-
-        // Initialize on page load
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initBannerSlider);
-        } else {
-            initBannerSlider();
-        }
-
-        // Reinitialize when Livewire navigates
-        document.addEventListener('livewire:navigated', function() {
-            // Small delay to ensure DOM is ready
-            setTimeout(initBannerSlider, 100);
-        });
-
-        // Re-initialize when Livewire updates the DOM
-        document.addEventListener('livewire:initialized', initBannerSlider);
-        document.addEventListener('livewire:update', function() {
-            setTimeout(initBannerSlider, 100);
-        });
-
-        // Banner modal functionality
-        const bannerModal = document.getElementById('bannerModal');
-        if (bannerModal) {
-            const bannerModalImg = document.getElementById('bannerModalImg');
-
-            // Handle banner clicks to show modal with full image
-            document.querySelectorAll('.banner-portrait-container a').forEach(item => {
-                item.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const img = this.querySelector('img');
-                    if (img) {
-                        bannerModalImg.src = img.src;
-                        bannerModalImg.alt = img.alt || 'Banner';
-                        const modal = new bootstrap.Modal(bannerModal);
-                        modal.show();
-                    }
-                });
-            });
-        }
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize scrolling for news container
-            initHorizontalScroll('.scroll-container', '.scroll-left', '.scroll-right');
-
-            // Initialize scrolling for video container
-            initHorizontalScroll('.video-scroll-container');
-
-            // Initialize video modals
-            initVideoModals();
-
-            function initHorizontalScroll(containerSelector, prevBtnSelector = null, nextBtnSelector = null) {
-                const container = document.querySelector(containerSelector);
-                if (!container) return;
-
-                const scrollAmount = 300; // Adjust this value to control scroll distance
-                let prevBtn, nextBtn;
-
-                if (prevBtnSelector && nextBtnSelector) {
-                    prevBtn = document.querySelector(prevBtnSelector);
-                    nextBtn = document.querySelector(nextBtnSelector);
-                }
-
-
-                if (prevBtn && nextBtn) {
-                    // Navigation with buttons
-                    prevBtn.addEventListener('click', function() {
-                        container.scrollBy({
-                            left: -scrollAmount,
-                            behavior: 'smooth'
-                        });
-                    });
-
-                    nextBtn.addEventListener('click', function() {
-                        container.scrollBy({
-                            left: scrollAmount,
-                            behavior: 'smooth'
-                        });
-                    });
-
-                    // Hide/show buttons based on scroll position
-                    const updateButtonVisibility = () => {
-                        const {
-                            scrollLeft,
-                            scrollWidth,
-                            clientWidth
-                        } = container;
-                        prevBtn.style.visibility = scrollLeft > 0 ? 'visible' : 'hidden';
-                        nextBtn.style.visibility = scrollLeft < (scrollWidth - clientWidth - 1) ? 'visible' :
-                            'hidden';
-                    };
-
-                    container.addEventListener('scroll', updateButtonVisibility);
-                    window.addEventListener('resize', updateButtonVisibility);
-                    updateButtonVisibility(); // Initial check
-                } else {
-                    // Touch/swipe support for mobile
-                    let isDown = false;
-                    let startX;
-                    let scrollLeft;
-
-                    container.addEventListener('mousedown', (e) => {
-                        isDown = true;
-                        startX = e.pageX - container.offsetLeft;
-                        scrollLeft = container.scrollLeft;
-                        container.style.cursor = 'grabbing';
-                        container.style.userSelect = 'none';
-                    });
-
-                    container.addEventListener('mouseleave', () => {
-                        isDown = false;
-                        container.style.cursor = 'grab';
-                    });
-
-                    container.addEventListener('mouseup', () => {
-                        isDown = false;
-                        container.style.cursor = 'grab';
-                    });
-
-                    container.addEventListener('mousemove', (e) => {
-                        if (!isDown) return;
-                        e.preventDefault();
-                        const x = e.pageX - container.offsetLeft;
-                        const walk = (x - startX) * 2; // Scroll-fast
-                        container.scrollLeft = scrollLeft - walk;
-                    });
-                }
-            }
-
-
-            function initVideoModals() {
-                // This function can be expanded to handle video modal initialization
-                // when a video thumbnail is clicked
-                const videoPlayButtons = document.querySelectorAll('.video-play-button');
-
-                videoPlayButtons.forEach(button => {
-                    button.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        const videoUrl = this.getAttribute('data-video');
-                        // Here you can implement a modal to play the video
-                        // For example, using Bootstrap's modal or another lightbox solution
-                        console.log('Play video:', videoUrl);
-                    });
-                });
-            }
-        });
-    </script>
-@endpush
+    </div>
 </div>

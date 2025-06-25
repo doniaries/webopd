@@ -1,53 +1,45 @@
-<div>
-    <!-- Page Header Component -->
-    <x-page-header title="Daftar Informasi" />
-    <!-- End Page Title -->
-
-    <div class="container py-4">
-        <div class="row justify-content-center">
-            <div class="col-12">
-                <div class="card bg-white shadow-sm border-0">
-                    <div class="card-body p-4">
-                        @if ($informasi->count() > 0)
-                            <div class="table-responsive">
-                                <table class="min-w-full divide-y divide-gray-200">
-                                    <thead class="bg-gray-50">
-                                        <tr>
-                                            <th scope="col" class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">
-                                                No
-                                            </th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">
-                                                Judul
-                                            </th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                Deskripsi
-                                            </th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                Dokumen
-                                            </th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                Tanggal
-                                            </th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                Aksi
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="bg-white divide-y divide-gray-200">
-                                        @foreach ($informasi as $index => $item)
-                                            <tr class="hover:bg-gray-50 border-b border-gray-200">
-                                                <td class="px-4 py-4 text-center border-r border-gray-200">
-                                                    {{ $loop->iteration }}
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap border-r border-gray-200">
-                                                    <div class="text-sm font-medium text-gray-900">
-                                                        {{ $item->judul }}
-                                                    </div>
-                                                    <div class="text-sm text-gray-500">
-                                                        {{ $item->user->name ?? 'Admin' }}
-                                                    </div>
-                                                </td>
-                                                <td class="px-6 py-4">
+<div class="mb-6">
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <div class="bg-gradient-to-r from-blue-600 to-blue-800 px-4 py-3">
+            <h3 class="text-white text-sm font-semibold flex items-center">
+                <i class="fas fa-info-circle mr-2"></i>
+                INFORMASI TERBARU
+            </h3>
+        </div>
+        <div class="p-4">
+            @if ($informasi->count() > 0)
+                <div class="space-y-4">
+                    @foreach ($informasi as $item)
+                        <div class="border-b border-gray-100 pb-3 last:border-0 last:pb-0">
+                            <a href="{{ route('informasi.detail', $item->slug) }}" 
+                               class="block group">
+                                <h4 class="text-sm font-medium text-gray-800 group-hover:text-blue-600 transition-colors line-clamp-2">
+                                    {{ $item->judul }}
+                                </h4>
+                                <div class="flex items-center justify-between mt-1">
+                                    <span class="text-xs text-gray-500">
+                                        <i class="far fa-calendar-alt mr-1"></i>
+                                        {{ $item->created_at->translatedFormat('d M Y') }}
+                                    </span>
+                                    @if($item->dokumen->count() > 0)
+                                        <span class="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded">
+                                            <i class="far fa-file-alt mr-1"></i>
+                                            {{ $item->dokumen->count() }}
+                                        </span>
+                                    @endif
+                                </div>
+                            </a>
+                        </div>
+                    @endforeach
+                </div>
+                
+                <div class="mt-4 text-center">
+                    <a href="{{ route('informasi') }}" 
+                       class="inline-flex items-center text-xs font-medium text-blue-600 hover:text-blue-800">
+                        Lihat Semua Informasi
+                        <i class="fas fa-chevron-right ml-1 text-xs"></i>
+                    </a>
+                </div>
                                                     <div class="text-sm text-gray-900 line-clamp-2">
                                                         {!! Str::limit(strip_tags($item->isi), 100) !!}
                                                     </div>
