@@ -127,6 +127,13 @@ class Post extends Model
                 return $this->foto_utama;
             }
 
+            // Cek jika ini adalah placeholder data
+            $placeholderData = json_decode($this->foto_utama, true);
+            if (json_last_error() === JSON_ERROR_NONE && is_array($placeholderData) && isset($placeholderData['type']) && $placeholderData['type'] === 'placeholder') {
+                // Return the placeholder data as is, it will be handled by the frontend
+                return $this->foto_utama;
+            }
+
             // Pastikan path relatif ke storage
             $imagePath = trim($this->foto_utama, '/');
 
@@ -144,8 +151,12 @@ class Post extends Model
             }
         }
 
-        // Kembalikan gambar default jika tidak ada foto utama
-        return asset('placeholder.jpg');
+        // Kembalikan data placeholder default jika tidak ada foto utama
+        return json_encode([
+            'type' => 'placeholder',
+            'bg_color' => 'bg-gray-200',
+            'text' => 'Gambar tidak tersedia'
+        ]);
     }
 
 

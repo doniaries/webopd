@@ -33,56 +33,14 @@ class PostSeeder extends Seeder
     public function run(): void
     {
         try {
-            // Hapus data lama dari database
-            $this->command->info('Menghapus data post lama...');
-
-            // Ambil semua post untuk menghapus gambar terkait
-            $oldPosts = Post::all();
-            foreach ($oldPosts as $oldPost) {
-                // Hapus file gambar jika ada
-                if ($oldPost->foto_utama) {
-                    $imagePath = 'foto-utama/' . $oldPost->foto_utama;
-                    if (Storage::disk('public')->exists($imagePath)) {
-                        Storage::disk('public')->delete($imagePath);
-                        $this->command->info("Menghapus gambar: {$imagePath}");
-                    }
-                }
-            }
-
             // Hapus semua post dari database
+            $this->command->info('Menghapus data post lama...');
             $deletedCount = Post::query()->delete();
             $this->command->info("Berhasil menghapus {$deletedCount} post lama.");
-
-            // Hapus semua file di folder public/foto-utama
-            $this->command->info('Menghapus semua file di folder public/foto-utama...');
-            $publicFotoUtamaPath = public_path('foto-utama');
-            $deletedFilesCount = 0;
-
-            // Pastikan folder public/foto-utama ada
-            if (!file_exists($publicFotoUtamaPath)) {
-                mkdir($publicFotoUtamaPath, 0777, true);
-                $this->command->info("Folder public/foto-utama dibuat karena belum ada.");
-            }
-
-            // Hapus semua file di folder
-            $files = glob($publicFotoUtamaPath . '/*');
-            foreach ($files as $file) {
-                if (is_file($file)) {
-                    unlink($file);
-                    $deletedFilesCount++;
-                }
-            }
-
-            $this->command->info("Berhasil menghapus {$deletedFilesCount} file dari folder public/foto-utama.");
 
             // Pastikan direktori penyimpanan ada
             if (!Storage::disk('public')->exists('posts')) {
                 Storage::disk('public')->makeDirectory('posts');
-            }
-
-            // Pastikan direktori images ada di public
-            if (!file_exists(public_path('images'))) {
-                mkdir(public_path('images'), 0777, true);
             }
             // Get or create a team
             $team = Team::first();
@@ -123,81 +81,19 @@ class PostSeeder extends Seeder
                 Storage::disk('public')->makeDirectory('foto-tambahan');
             }
 
-            // Daftar nama file gambar placeholder lokal
-            $localImages = [
-                'placeholder1.jpg',
-                'placeholder2.jpg',
-                'placeholder3.jpg',
-                'placeholder4.jpg',
-                'placeholder5.jpg',
-                'placeholder6.jpg',
-                'placeholder7.jpg',
-                'placeholder8.jpg',
-                'placeholder9.jpg',
-                'placeholder10.jpg'
+            // Array warna latar belakang untuk placeholder
+            $backgroundColors = [
+                'bg-gray-200',
+                'bg-blue-100',
+                'bg-green-100',
+                'bg-yellow-100',
+                'bg-pink-100',
+                'bg-purple-100',
+                'bg-indigo-100',
+                'bg-red-100',
+                'bg-teal-100',
+                'bg-orange-100'
             ];
-
-            // Pastikan direktori placeholder ada
-            $placeholderDir = public_path('images/placeholders');
-            if (!file_exists($placeholderDir)) {
-                mkdir($placeholderDir, 0777, true);
-            }
-
-            // Buat gambar placeholder sederhana jika belum ada
-            $availableImages = [];
-            foreach ($localImages as $index => $imageName) {
-                $imagePath = public_path('images/placeholders/' . $imageName);
-                $storagePath = 'foto-utama/' . $imageName;
-
-                if (!file_exists($imagePath)) {
-                    try {
-                        // Buat gambar placeholder sederhana
-                        $width = 1200;
-                        $height = 800;
-                        $image = imagecreatetruecolor($width, $height);
-
-                        // Warna background acak
-                        $bgColor = imagecolorallocate($image,
-                            mt_rand(200, 240),
-                            mt_rand(200, 240),
-                            mt_rand(200, 240)
-                        );
-                        imagefill($image, 0, 0, $bgColor);
-
-                        // Tambahkan teks
-                        $textColor = imagecolorallocate($image, 100, 100, 100);
-                        $text = 'Gambar ' . ($index + 1);
-                        $fontSize = 5;
-                        $textWidth = imagefontwidth($fontSize) * strlen($text);
-                        $textHeight = imagefontheight($fontSize);
-                        $x = ($width - $textWidth) / 2;
-                        $y = ($height - $textHeight) / 2;
-
-                        imagestring($image, $fontSize, $x, $y, $text, $textColor);
-
-                        // Simpan gambar
-                        imagejpeg($image, $imagePath, 90);
-                        imagedestroy($image);
-
-                        $this->command->info('Created placeholder image: ' . $imageName);
-                    } catch (\Exception $e) {
-                        $this->command->error('Failed to create placeholder image: ' . $e->getMessage());
-                        continue;
-                    }
-                }
-
-                // Salin ke storage jika belum ada
-                if (!Storage::disk('public')->exists($storagePath)) {
-                    try {
-                        Storage::disk('public')->put($storagePath, file_get_contents($imagePath));
-                    } catch (\Exception $e) {
-                        $this->command->error('Failed to copy placeholder image to storage: ' . $e->getMessage());
-                        continue;
-                    }
-                }
-
-                $availableImages[] = $storagePath;
-            }
 
             // Judul berita Indonesia
             $indonesianTitles = [
@@ -261,8 +157,13 @@ class PostSeeder extends Seeder
                         // Create post with placeholder image
                         $isFeatured = $i <= 5; // First 5 posts in each month will be featured
                         
-                        // Use null for foto_utama to trigger the default placeholder
-                        $fotoUtama = null;
+                        // Generate placeholder data with background color
+                        $bgColor = $this->faker->randomElement($backgroundColors);
+                        $placeholder = json_encode([
+                            'type' => 'placeholder',
+                            'bg_color' => $bgColor,
+                            'text' => 'Gambar tidak tersedia'
+                        ]);
                         
                         $post = Post::create([
                             'title' => $title,
@@ -273,8 +174,8 @@ class PostSeeder extends Seeder
                             'user_id' => $user->id,
                             'team_id' => $team->id,
                             'views' => $this->faker->numberBetween(10, 1000),
-                            'foto_utama' => $fotoUtama, // Will be null to use the default placeholder
-                            'gallery_images' => [], // Empty gallery since we're using placeholder
+                            'foto_utama' => $placeholder, // Simpan placeholder SVG
+                            'gallery_images' => [], // Kosongkan gallery
                             'is_featured' => $isFeatured,
                             'created_at' => $postDate,
                             'updated_at' => $postDate,

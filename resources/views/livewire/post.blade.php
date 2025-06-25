@@ -75,7 +75,28 @@
                                  x-transition:leave-end="opacity-0" 
                                  class="absolute inset-0">
                                 <!-- Slide Image -->
-                                <img :src="slide.foto_utama_url" :alt="slide.title" class="w-full h-full object-cover">
+                                <template x-if="!slide.foto_utama_url || typeof slide.foto_utama_url !== 'string' || !slide.foto_utama_url.startsWith('http')">
+                                    <div x-data="{ 
+                                        placeholderData: (() => { 
+                                            try { 
+                                                return typeof slide.foto_utama_url === 'string' ? JSON.parse(slide.foto_utama_url) : slide.foto_utama_url; 
+                                            } catch(e) { 
+                                                return { type: 'placeholder', bg_color: 'bg-gray-200', text: 'Gambar tidak tersedia' }; 
+                                            } 
+                                        })()
+                                    }" class="w-full h-full flex items-center justify-center" :class="placeholderData.bg_color || 'bg-gray-200'">
+                                        <div class="text-center">
+                                            <svg class="w-12 h-12 mx-auto mb-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                            </svg>
+                                            <span class="text-sm font-medium text-gray-500" x-text="placeholderData.text || 'Gambar tidak tersedia'"></span>
+                                        </div>
+                                    </div>
+                                </template>
+                                <img x-show="slide.foto_utama_url && typeof slide.foto_utama_url === 'string' && slide.foto_utama_url.startsWith('http')" 
+                                     :src="slide.foto_utama_url" 
+                                     :alt="slide.title" 
+                                     class="w-full h-full object-cover">
                                 
                                 <!-- Gradient Overlay -->
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
@@ -151,19 +172,42 @@
             <div class="grid grid-cols-1 {{ $layout === 'grid' ? 'md:grid-cols-2 lg:grid-cols-3' : '' }} gap-6">
                 @forelse($gridPosts as $post)
                     <div class="border rounded-lg overflow-hidden hover:shadow-md transition-shadow">
-                        @if ($post->foto_utama_url)
-                            <a href="{{ route('posts.show', $post->slug) }}" class="block">
-                                <img src="{{ $post->foto_utama_url }}" alt="{{ $post->title }}"
-                                    class="w-full h-48 object-cover">
-                            </a>
-                        @else
-                            <div class="w-full h-48 bg-gray-100 flex items-center justify-center text-gray-400">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
-                                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
+                        @php
+                            $isPlaceholder = false;
+                            $placeholderData = [];
+                            
+                            if ($post->foto_utama_url) {
+                                if (is_string($post->foto_utama_url) && str_starts_with($post->foto_utama_url, '{"type"')) {
+                                    try {
+                                        $placeholderData = json_decode($post->foto_utama_url, true);
+                                        $isPlaceholder = isset($placeholderData['type']) && $placeholderData['type'] === 'placeholder';
+                                    } catch (\Exception $e) {
+                                        $isPlaceholder = true;
+                                        $placeholderData = ['bg_color' => 'bg-gray-200', 'text' => 'Gambar tidak tersedia'];
+                                    }
+                                } elseif (!filter_var($post->foto_utama_url, FILTER_VALIDATE_URL)) {
+                                    $isPlaceholder = true;
+                                    $placeholderData = ['bg_color' => 'bg-gray-200', 'text' => 'Gambar tidak tersedia'];
+                                }
+                            } else {
+                                $isPlaceholder = true;
+                                $placeholderData = ['bg_color' => 'bg-gray-200', 'text' => 'Gambar tidak tersedia'];
+                            }
+                        @endphp
+
+                        @if($isPlaceholder)
+                            <div class="w-full h-48 {{ $placeholderData['bg_color'] ?? 'bg-gray-100' }} flex items-center justify-center">
+                                <div class="text-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                    <span class="text-sm font-medium text-gray-500">{{ $placeholderData['text'] ?? 'Gambar tidak tersedia' }}</span>
+                                </div>
                             </div>
+                        @else
+                            <a href="{{ route('posts.show', $post->slug) }}" class="block">
+                                <img src="{{ $post->foto_utama_url }}" alt="{{ $post->title }}" class="w-full h-48 object-cover">
+                            </a>
                         @endif
                         <div class="p-4">
                             @if ($post->tag)

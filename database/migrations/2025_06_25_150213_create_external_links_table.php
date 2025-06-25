@@ -13,11 +13,15 @@ return new class extends Migration
     {
         Schema::create('external_links', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->unique()->nullable();
             $table->string('url');
-            $table->string('icon');
+            $table->string('icon')->nullable();
             $table->foreignId('team_id')->constrained()->onDelete('cascade');
             $table->timestamps();
+
+            $table->index('team_id');
+            $table->index('url');
+            $table->index('name');
         });
     }
 

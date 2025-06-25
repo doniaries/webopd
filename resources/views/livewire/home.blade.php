@@ -51,11 +51,45 @@
                                             </div>
                                             <!-- Gambar Utama -->
                                             <div class="position-relative" style="padding-top: 56.25%;">
-                                                <img src="{{ $post->foto_utama_url }}"
-                                                    class="position-absolute top-0 start-0 w-100 h-100 card-img-top"
-                                                    style="object-fit: cover;" alt="{{ $post->title }}">
-                                                <div
-                                                    class="position-absolute bottom-0 start-0 p-2 bg-primary text-white small">
+                                                @php
+                                                    $isPlaceholder = false;
+                                                    $placeholderData = [];
+                                                    
+                                                    if ($post->foto_utama_url) {
+                                                        if (is_string($post->foto_utama_url) && str_starts_with($post->foto_utama_url, '{"type"')) {
+                                                            try {
+                                                                $placeholderData = json_decode($post->foto_utama_url, true);
+                                                                $isPlaceholder = isset($placeholderData['type']) && $placeholderData['type'] === 'placeholder';
+                                                            } catch (\Exception $e) {
+                                                                $isPlaceholder = true;
+                                                                $placeholderData = ['bg_color' => 'bg-gray-200', 'text' => 'Gambar tidak tersedia'];
+                                                            }
+                                                        } elseif (!filter_var($post->foto_utama_url, FILTER_VALIDATE_URL)) {
+                                                            $isPlaceholder = true;
+                                                            $placeholderData = ['bg_color' => 'bg-gray-200', 'text' => 'Gambar tidak tersedia'];
+                                                        }
+                                                    } else {
+                                                        $isPlaceholder = true;
+                                                        $placeholderData = ['bg_color' => 'bg-gray-200', 'text' => 'Gambar tidak tersedia'];
+                                                    }
+                                                @endphp
+
+                                                @if($isPlaceholder)
+                                                    <div class="position-absolute top-0 start-0 w-100 h-100 flex items-center justify-center {{ $placeholderData['bg_color'] ?? 'bg-gray-100' }}">
+                                                        <div class="text-center">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                            </svg>
+                                                            <span class="text-sm font-medium text-gray-500">{{ $placeholderData['text'] ?? 'Gambar tidak tersedia' }}</span>
+                                                        </div>
+                                                    </div>
+                                                @else
+                                                    <img src="{{ $post->foto_utama_url }}"
+                                                        class="position-absolute top-0 start-0 w-100 h-100 card-img-top"
+                                                        style="object-fit: cover;" alt="{{ $post->title }}">
+                                                @endif
+                                                
+                                                <div class="position-absolute bottom-0 start-0 p-2 bg-primary text-white small">
                                                     {{ $post->tags->first()->name ?? 'Berita' }}
                                                 </div>
                                             </div>
@@ -146,9 +180,43 @@
                                                     <div class="card h-100 border-0 shadow-sm">
                                                         <div class="position-relative"
                                                             style="height: 160px; overflow: hidden;">
-                                                            <img src="{{ $post->foto_utama_url ?? asset('images/placeholder.jpg') }}"
-                                                                class="card-img-top h-100 w-100"
-                                                                style="object-fit: cover;" alt="{{ $post->title }}">
+                                                            @php
+                                                                $isPlaceholder = false;
+                                                                $placeholderData = [];
+                                                                
+                                                                if ($post->foto_utama_url) {
+                                                                    if (is_string($post->foto_utama_url) && str_starts_with($post->foto_utama_url, '{"type"')) {
+                                                                        try {
+                                                                            $placeholderData = json_decode($post->foto_utama_url, true);
+                                                                            $isPlaceholder = isset($placeholderData['type']) && $placeholderData['type'] === 'placeholder';
+                                                                        } catch (\Exception $e) {
+                                                                            $isPlaceholder = true;
+                                                                            $placeholderData = ['bg_color' => 'bg-gray-200', 'text' => 'Gambar tidak tersedia'];
+                                                                        }
+                                                                    } elseif (!filter_var($post->foto_utama_url, FILTER_VALIDATE_URL)) {
+                                                                        $isPlaceholder = true;
+                                                                        $placeholderData = ['bg_color' => 'bg-gray-200', 'text' => 'Gambar tidak tersedia'];
+                                                                    }
+                                                                } else {
+                                                                    $isPlaceholder = true;
+                                                                    $placeholderData = ['bg_color' => 'bg-gray-200', 'text' => 'Gambar tidak tersedia'];
+                                                                }
+                                                            @endphp
+
+                                                            @if($isPlaceholder)
+                                                                <div class="h-100 w-100 flex items-center justify-center {{ $placeholderData['bg_color'] ?? 'bg-gray-100' }}">
+                                                                    <div class="text-center">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto mb-2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                                        </svg>
+                                                                        <span class="text-xs font-medium text-gray-500">{{ $placeholderData['text'] ?? 'Gambar tidak tersedia' }}</span>
+                                                                    </div>
+                                                                </div>
+                                                            @else
+                                                                <img src="{{ $post->foto_utama_url }}"
+                                                                    class="card-img-top h-100 w-100"
+                                                                    style="object-fit: cover;" alt="{{ $post->title }}">
+                                                            @endif
                                                             <div class="position-absolute top-0 end-0 m-2">
                                                                 <span class="badge bg-danger">
                                                                     <i class="bi bi-fire me-1"></i> Hot
