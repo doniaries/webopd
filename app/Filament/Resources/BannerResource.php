@@ -12,6 +12,10 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Http\File;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Str;
+use Livewire\Features\FileUploads\TemporaryUploadedFile;
 
 class BannerResource extends Resource
 {
@@ -46,14 +50,18 @@ class BannerResource extends Resource
                     ->maxLength(255),
                 Forms\Components\FileUpload::make('gambar')
                     ->label('Foto banner')
-                    ->directory('banner')
+                    ->directory('banners')
                     ->imageEditor()
                     ->required()
-                    ->optimize('webp')
                     ->image()
                     ->acceptedFileTypes(['image/jpeg', 'image/png'])
                     ->maxSize(1024)
-                    ->helperText('Format yang diizinkan: JPEG, PNG. dan Wajib Potrait'),
+                    ->preserveFilenames()
+                    ->visibility('public')
+                    ->helperText('Format yang diizinkan: JPEG, PNG. dan Wajib Potrait')
+                    ->getUploadedFileNameForStorageUsing(
+                        fn ($file): string => (string) Str::of($file->getClientOriginalName())
+                            ->prepend(now()->timestamp . '_')),
                 Forms\Components\Toggle::make('is_active')
                     ->required()
                     ->default(true),

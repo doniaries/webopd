@@ -10,28 +10,31 @@ class UnitKerjaSeeder extends Seeder
 {
     public function run()
     {
-
-        $teams = Team::all();
+        $teamId = Team::first()->id;
+        
         $unitKerjas = [
             [
-                'team_id' => $teams->first()->id,
                 'nama_unit' => 'Bidang Sekretariat',
                 'slug' => 'bidang-sekretariat',
             ],
             [
-                'team_id' => $teams->first()->id,
                 'nama_unit' => 'Bidang PIKP',
                 'slug' => 'bidang-pikp',
             ],
             [
-                'team_id' => $teams->first()->id,
                 'nama_unit' => 'Bidang TI',
                 'slug' => 'bidang-ti',
             ],
         ];
 
         foreach ($unitKerjas as $unit) {
-            UnitKerja::create($unit);
+            UnitKerja::firstOrCreate(
+                ['nama_unit' => $unit['nama_unit']],
+                [
+                    'team_id' => $teamId,
+                    'slug' => $unit['slug']
+                ]
+            );
         }
     }
 }

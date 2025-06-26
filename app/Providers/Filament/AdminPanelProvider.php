@@ -119,7 +119,6 @@ class AdminPanelProvider extends PanelProvider
                     ]),
                 \Hasnayeen\Themes\ThemesPlugin::make(),
                 FilamentBackgroundsPlugin::make(),
-                \A21ns1g4ts\FilamentShortUrl\FilamentShortUrlPlugin::make(),
             ])
             // ->tenantRegistration(RegisterTeam::class)
             ->tenant(

@@ -17,10 +17,16 @@
                                     <div class="position-relative h-100 w-100">
                                         <img src="{{ $imageUrl }}" alt="{{ $title }}" class="w-100 h-100"
                                             style="object-fit: cover; object-position: center; width: 100%; height: 100%;">
-                                        <!-- Judul dan tag dipindahkan ke bawah kiri di atas indikator -->
+                                        <!-- Latar belakang gradient -->
+                                        <div class="position-absolute bottom-0 start-0 w-100 p-4"
+                                            style="background: linear-gradient(to top, rgba(46, 87, 211, 0.8), transparent); z-index: 10; height: 150px;">
+                                        </div>
+                                        
+                                        <!-- Judul dan tag dengan efek fade -->
                                         <div class="position-absolute bottom-0 start-0 w-100 p-4 slide-text"
-                                            style="background: linear-gradient(to top, rgba(46, 87, 211, 0.8), transparent); z-index: 11; transform: translateY(0); height: 150px; margin-top: 0; opacity: 0; animation: slideInFromTop 0.8s ease-out 0.5s forwards;">
-                                            <h3 class="text-white mb-2 fw-bold">
+                                            style="z-index: 11;">
+                                            <h3 class="text-white mb-2 fw-bold" 
+                                                style="opacity: 0; animation: slideInFromTop 0.8s ease-out 0.5s forwards;">
                                                 <a href="{{ $url }}"
                                                     class="text-white text-decoration-none fs-4"
                                                     style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">{{ Str::limit($title, 70) }}</a>
