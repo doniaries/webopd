@@ -18,8 +18,8 @@
                                         <img src="{{ $imageUrl }}" alt="{{ $title }}" class="w-100 h-100"
                                             style="object-fit: cover; object-position: center; width: 100%; height: 100%;">
                                         <!-- Judul dan tag dipindahkan ke bawah kiri di atas indikator -->
-                                        <div class="position-absolute bottom-0 start-0 w-100 p-4"
-                                            style="background: linear-gradient(to top, rgba(46, 87, 211, 0.8), transparent); z-index: 11; transform: translateY(0); height: 150px; margin-top: 0;">
+                                        <div class="position-absolute bottom-0 start-0 w-100 p-4 slide-text"
+                                            style="background: linear-gradient(to top, rgba(46, 87, 211, 0.8), transparent); z-index: 11; transform: translateY(0); height: 150px; margin-top: 0; opacity: 0; animation: slideInFromTop 0.8s ease-out 0.5s forwards;">
                                             <h3 class="text-white mb-2 fw-bold">
                                                 <a href="{{ $url }}"
                                                     class="text-white text-decoration-none fs-4"
@@ -387,6 +387,18 @@
 
 @push('styles')
     <style>
+        /* Animation for slider text */
+        @keyframes slideInFromTop {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
         /* Slider pagination styling */
         .swiper-pagination {
             display: flex !important;
