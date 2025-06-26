@@ -1,5 +1,5 @@
 <div class="w-full max-w-[320px] mx-auto rounded-lg shadow-md overflow-hidden relative bg-gray-100 group"
-    style="aspect-ratio: 4/5;">
+    style="aspect-ratio: 4/5; width: 100%; height: 100%;">
     <!-- Debug Info (can be removed later) -->
     @if (env('APP_DEBUG'))
         <div class="absolute top-0 left-0 bg-black/70 text-white text-xs p-2 z-50">
@@ -7,15 +7,14 @@
         </div>
     @endif
 
-    <div class="swiper banner-slider h-full">
-        <div class="swiper-wrapper h-full">
+    <div class="swiper banner-slider w-full h-full">
+        <div class="swiper-wrapper">
             @forelse ($banners as $banner)
-                <div class="swiper-slide h-full">
-                    <div class="relative w-full h-full overflow-hidden">
-                        <a href="{{ $banner->url ?? '#' }}" class="block w-full h-full">
+                <div class="swiper-slide">
+                    <div class="relative w-full h-full" style="padding-bottom: 125%;">
+                        <a href="{{ $banner->url ?? '#' }}" class="block absolute inset-0 w-full h-full">
                             <img src="{{ $banner->gambar_url }}" alt="{{ $banner->judul ?? 'Banner' }}"
-                                class="w-full h-full object-cover rounded-lg transition-all duration-300 ease-in-out hover:scale-105"
-                                style="aspect-ratio: 4/5; object-fit: cover;"
+                                class="absolute inset-0 w-full h-full object-cover transition-all duration-300 ease-in-out hover:scale-105"
                                 onerror="this.onerror=null; this.src='{{ asset('assets/images/placeholder.jpg') }}'"
                                 loading="lazy">
                         </a>
