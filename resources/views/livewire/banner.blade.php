@@ -14,7 +14,7 @@
                     <div class="relative w-full h-full">
                         <a href="{{ $banner->url ?? '#' }}" class="block w-full h-full">
                             <img src="{{ $banner->gambar_url }}" alt="{{ $banner->judul ?? 'Banner' }}"
-                                class="absolute inset-0 w-full h-full object-cover transition-all duration-300 ease-in-out hover:scale-105"
+                                class="absolute inset-0 w-full h-full object-cover"
                                 onerror="this.onerror=null; this.src='{{ asset('assets/images/placeholder.jpg') }}'"
                                 loading="lazy">
                         </a>
@@ -76,14 +76,14 @@
         .swiper-button-next {
             width: 36px;
             height: 36px;
-            background: rgba(255, 255, 255, 0.021);
+            background: rgba(255, 255, 255, 0.7);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #080808;
             transition: all 0.3s ease;
-            opacity: 0;
+            opacity: 0.2;
         }
 
         .swiper:hover .swiper-button-prev,
@@ -93,8 +93,7 @@
 
         .swiper-button-prev:hover,
         .swiper-button-next:hover {
-            background: rgba(51, 50, 50, 0.842);
-            transform: scale(1.1);
+            background: rgba(51, 50, 50, 0.7);
         }
 
         .swiper-button-prev {
@@ -113,7 +112,8 @@
                 width: 30px;
                 height: 30px;
                 font-size: 14px;
-                opacity: 0.7;
+                opacity: 1;
+                display: flex !important;
             }
 
             .swiper-button-prev {
@@ -178,21 +178,7 @@
                 preventClicksPropagation: true,
             });
 
-            // Pause autoplay when hovering over the banner
-            const bannerContainer = document.querySelector('.banner-slider');
-            if (bannerContainer) {
-                bannerContainer.addEventListener('mouseenter', () => {
-                    if (bannerSwiper.autoplay && bannerSwiper.autoplay.running) {
-                        bannerSwiper.autoplay.stop();
-                    }
-                });
-
-                bannerContainer.addEventListener('mouseleave', () => {
-                    if (bannerSwiper.autoplay && !bannerSwiper.autoplay.running) {
-                        bannerSwiper.autoplay.start();
-                    }
-                });
-            }
+            // Autoplay will continue regardless of hover state
         });
     </script>
 @endpush
