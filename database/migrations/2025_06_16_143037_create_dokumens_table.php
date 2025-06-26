@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('cover')->nullable();
             $table->date('tahun_terbit')->nullable();
             $table->string('file')->nullable();
+            $table->integer('views')->default(0)->index();
+            $table->integer('downloads')->default(0)->index();
             $table->softDeletes();
 
             $table->timestamps();
@@ -31,6 +33,9 @@ return new class extends Migration
             $table->index('team_id');
             $table->index('nama_dokumen');
             $table->index('slug');
+            $table->index('tahun_terbit');
+            $table->index('views');
+            $table->index('downloads');
         });
     }
 

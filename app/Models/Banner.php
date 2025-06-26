@@ -15,6 +15,8 @@ class Banner extends Model
         'is_active',
     ];
 
+    protected $appends = ['image_url']; // Menambahkan accessor ke JSON output
+
     protected $dates = ['published_at'];
 
     protected $casts = [
@@ -25,6 +27,58 @@ class Banner extends Model
     public function team()
     {
         return $this->belongsTo(Team::class);
+    }
+
+    /**
+     * Get the URL of the banner image
+     *
+     * @return string
+     */
+    public function getImageUrlAttribute()
+    {
+        // Jika tidak ada gambar atau string kosong, kembalikan gambar default
+        if (empty($this->gambar) || $this->gambar === '') {
+            return $this->getDefaultImageUrl();
+        }
+
+        // Jika gambar adalah JSON (data lama), kembalikan gambar default
+        if (is_string($this->gambar) && is_array(json_decode($this->gambar, true))) {
+            return $this->getDefaultImageUrl();
+        }
+
+        // Jika gambar adalah URL lengkap
+        if (filter_var($this->gambar, FILTER_VALIDATE_URL)) {
+            return $this->gambar;
+        }
+
+        // Cek di storage
+        $filename = basename($this->gambar);
+        $storagePath = 'public/banners/' . $filename;
+        
+        if (file_exists(storage_path('app/' . $storagePath))) {
+            return asset('storage/banners/' . $filename);
+        }
+
+        // Coba URL storage default
+        if (str_starts_with($this->gambar, 'banners/')) {
+            $filename = basename($this->gambar);
+            if (file_exists(storage_path('app/public/banners/' . $filename))) {
+                return asset('storage/banners/' . $filename);
+            }
+        }
+
+        // Fallback ke gambar default
+        return $this->getDefaultImageUrl();
+    }
+
+    /**
+     * Get the default image URL
+     *
+     * @return string
+     */
+    protected function getDefaultImageUrl()
+    {
+        return asset('assets/images/default-banner.jpg');
     }
 
     // Scope untuk banner aktif

@@ -75,9 +75,7 @@ class Home extends Component
             // Get popular posts (most viewed)
             $this->popularPosts = Post::where('status', 'published')
                 ->where('published_at', '<=', now())
-                ->with(['categories' => function ($q) {
-                    $q->where('is_active', true);
-                }, 'user'])
+                ->with(['tags', 'user'])
                 ->orderBy('views', 'desc')
                 ->take(8)
                 ->get() ?? [];
@@ -117,9 +115,8 @@ class Home extends Component
             }
 
             // Get agenda (events)
-            $agenda = \App\Models\AgendaKegiatan::where('is_published', true)
-                ->where('published_at', '<=', now())
-                ->where('end_date', '>=', now())
+            $agenda = \App\Models\AgendaKegiatan::where('dari_tanggal', '>=', now()->toDateString())
+                ->where('sampai_tanggal', '>=', now()->toDateString())
                 ->select([
                     'id',
                     'nama_agenda',

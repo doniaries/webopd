@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('team_id')->constrained('teams')->onDelete('cascade');
             $table->string('judul');
             $table->string('keterangan');
-            $table->text('gambar');
+            $table->string('gambar')->default('')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
