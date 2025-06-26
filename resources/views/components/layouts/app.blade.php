@@ -44,6 +44,14 @@
     <link href="{{ asset('assets/css/dark-mode.css') }}" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
     @vite('resources/css/app.css')
+    <style>
+        @media (max-width: 576px) {
+            .main {
+                padding-top: 15px !important;
+                margin-top: 5px !important;
+            }
+        }
+    </style>
     @stack('styles')
 
     <!-- =======================================================
@@ -59,7 +67,7 @@
 
     @include('partials.header')
 
-    <main class="main">
+    <main class="main" style="padding-top: 10px;">
         {{ $slot }}
     </main>
 

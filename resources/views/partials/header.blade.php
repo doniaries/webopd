@@ -11,6 +11,8 @@
             padding: 10px 0;
             background-color: #ffffff !important;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 999 !important; /* Pastikan header selalu di atas konten lain */
+            position: relative;
         }
 
         .menu-container {
@@ -136,6 +138,14 @@
         }
         
         @media (max-width: 576px) {
+            .header {
+                height: auto !important;
+                min-height: 50px !important;
+                position: sticky !important;
+                top: 0 !important;
+                z-index: 1000 !important;
+            }
+            
             .header-wrapper {
                 padding: 0 12px;
             }

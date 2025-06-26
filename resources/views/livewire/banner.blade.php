@@ -33,16 +33,16 @@
         </div>
 
     </div>
-    
+
     <!-- Navigation Buttons -->
-    @if(count($banners) > 1)
+    @if (count($banners) > 1)
         <div class="swiper-button-prev">
             <i class="bi bi-chevron-left"></i>
         </div>
         <div class="swiper-button-next">
             <i class="bi bi-chevron-right"></i>
         </div>
-        
+
         <!-- Pagination -->
         <div class="swiper-pagination"></div>
     @endif
@@ -56,13 +56,13 @@
             position: relative;
             overflow: hidden;
         }
-        
+
         .swiper-slide a {
             display: block;
             width: 100%;
             height: 100%;
         }
-        
+
         .swiper-slide img {
             width: 100%;
             height: 100%;
@@ -70,43 +70,44 @@
             object-position: center;
             display: block;
         }
-        
+
         /* Navigation buttons */
         .swiper-button-prev,
         .swiper-button-next {
             width: 36px;
             height: 36px;
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.021);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #333;
+            color: #080808;
             transition: all 0.3s ease;
             opacity: 0;
         }
-        
+
         .swiper:hover .swiper-button-prev,
         .swiper:hover .swiper-button-next {
             opacity: 1;
         }
-        
+
         .swiper-button-prev:hover,
         .swiper-button-next:hover {
-            background: white;
+            background: rgba(51, 50, 50, 0.842);
             transform: scale(1.1);
         }
-        
+
         .swiper-button-prev {
             left: 10px;
         }
-        
+
         .swiper-button-next {
             right: 10px;
         }
-        
+
         /* Mobile responsiveness */
         @media (max-width: 768px) {
+
             .swiper-button-prev,
             .swiper-button-next {
                 width: 30px;
@@ -114,22 +115,24 @@
                 font-size: 14px;
                 opacity: 0.7;
             }
-            
+
             .swiper-button-prev {
                 left: 5px;
             }
-            
+
             .swiper-button-next {
                 right: 5px;
             }
-            
+
             /* Tambahkan CSS berikut untuk responsivitas mobile */
-            .banner-slider, .swiper-slide {
+            .banner-slider,
+            .swiper-slide {
                 width: 100% !important;
                 height: auto !important;
             }
-            
-            .swiper-slide a, .swiper-slide img {
+
+            .swiper-slide a,
+            .swiper-slide img {
                 position: relative !important;
                 height: auto !important;
                 aspect-ratio: 4/5;
