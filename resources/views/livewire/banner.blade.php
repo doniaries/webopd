@@ -1,5 +1,5 @@
 <div class="w-full max-w-[320px] mx-auto rounded-lg shadow-md overflow-hidden relative bg-gray-100 group"
-    style="aspect-ratio: 4/5; width: 100%; height: 100%;">
+    style="width: 100%; max-width: 320px; height: 400px; position: relative;">
     <!-- Debug Info (can be removed later) -->
     @if (env('APP_DEBUG'))
         <div class="absolute top-0 left-0 bg-black/70 text-white text-xs p-2 z-50">
@@ -7,22 +7,18 @@
         </div>
     @endif
 
-    <div class="swiper banner-slider w-full h-full">
+    <div class="swiper banner-slider absolute inset-0 w-full h-full">
         <div class="swiper-wrapper">
             @forelse ($banners as $banner)
                 <div class="swiper-slide">
-                    <div class="relative w-full h-full" style="padding-bottom: 125%;">
-                        <a href="{{ $banner->url ?? '#' }}" class="block absolute inset-0 w-full h-full">
+                    <div class="relative w-full h-full">
+                        <a href="{{ $banner->url ?? '#' }}" class="block w-full h-full">
                             <img src="{{ $banner->gambar_url }}" alt="{{ $banner->judul ?? 'Banner' }}"
                                 class="absolute inset-0 w-full h-full object-cover transition-all duration-300 ease-in-out hover:scale-105"
                                 onerror="this.onerror=null; this.src='{{ asset('assets/images/placeholder.jpg') }}'"
                                 loading="lazy">
                         </a>
-                        {{-- @if (!empty($banner->judul))
-                            <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent text-white">
-                                <h3 class="font-semibold text-sm line-clamp-2">{{ $banner->judul }}</h3>
-                            </div>
-                        @endif --}}
+
                     </div>
                 </div>
             @empty
@@ -35,65 +31,108 @@
                 </div>
             @endforelse
         </div>
-        <!-- Navigation buttons - Only show when there are banners -->
-        @if (count($banners ?? []) > 1)
-            <div
-                class="swiper-button-next opacity-0 group-hover:opacity-100 bg-black/50 hover:bg-black/70 w-10 h-10 md:w-12 md:h-12 rounded-full transition-all duration-300">
-            </div>
-            <div
-                class="swiper-button-prev opacity-0 group-hover:opacity-100 bg-black/50 hover:bg-black/70 w-10 h-10 md:w-12 md:h-12 rounded-full transition-all duration-300">
-            </div>
-            <!-- Pagination -->
-            <div class="swiper-pagination !bottom-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            </div>
-        @endif
+
     </div>
+    
+    <!-- Navigation Buttons -->
+    @if(count($banners) > 1)
+        <div class="swiper-button-prev">
+            <i class="bi bi-chevron-left"></i>
+        </div>
+        <div class="swiper-button-next">
+            <i class="bi bi-chevron-right"></i>
+        </div>
+        
+        <!-- Pagination -->
+        <div class="swiper-pagination"></div>
+    @endif
 </div>
 
 @push('styles')
     <style>
-        /* Swiper Navigation Customization */
-        .swiper-button-next,
-        .swiper-button-prev {
-            transform: translateY(-50%) scale(0.8);
+        .swiper-slide {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .swiper-slide a {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .swiper-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+        }
+        
+        /* Navigation buttons */
+        .swiper-button-prev,
+        .swiper-button-next {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
             transition: all 0.3s ease;
+            opacity: 0;
         }
-
-        .swiper-button-next:after,
-        .swiper-button-prev:after {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: white;
-        }
-
-        .swiper-button-next:hover,
-        .swiper-button-prev:hover {
-            transform: translateY(-50%) scale(0.9);
-        }
-
-        /* Pagination Bullets */
-        .swiper-pagination-bullet {
-            background: rgba(255, 255, 255, 0.5);
+        
+        .swiper:hover .swiper-button-prev,
+        .swiper:hover .swiper-button-next {
             opacity: 1;
-            width: 8px;
-            height: 8px;
-            margin: 0 4px !important;
-            transition: all 0.3s ease;
         }
-
-        .swiper-pagination-bullet-active {
-            background: #fff;
-            width: 30px;
-            border-radius: 5px;
+        
+        .swiper-button-prev:hover,
+        .swiper-button-next:hover {
+            background: white;
+            transform: scale(1.1);
         }
-
-        /* Responsive Adjustments */
+        
+        .swiper-button-prev {
+            left: 10px;
+        }
+        
+        .swiper-button-next {
+            right: 10px;
+        }
+        
+        /* Mobile responsiveness */
         @media (max-width: 768px) {
-
-            .swiper-button-next,
+            .swiper-button-prev,
+            .swiper-button-next {
+                width: 30px;
+                height: 30px;
+                font-size: 14px;
+                opacity: 0.7;
+            }
+            
             .swiper-button-prev {
-                width: 32px !important;
-                height: 32px !important;
+                left: 5px;
+            }
+            
+            .swiper-button-next {
+                right: 5px;
+            }
+            
+            /* Tambahkan CSS berikut untuk responsivitas mobile */
+            .banner-slider, .swiper-slide {
+                width: 100% !important;
+                height: auto !important;
+            }
+            
+            .swiper-slide a, .swiper-slide img {
+                position: relative !important;
+                height: auto !important;
+                aspect-ratio: 4/5;
             }
         }
     </style>
@@ -104,25 +143,30 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize Swiper
             const bannerSwiper = new Swiper('.banner-slider', {
-                loop: {{ count($banners ?? []) > 1 ? 'true' : 'false' }},
-                effect: 'fade',
-                fadeEffect: {
-                    crossFade: true
-                },
-                autoplay: {
-                    delay: 3000,
-                    disableOnInteraction: false,
-                    pauseOnMouseEnter: true,
-                },
-                speed: 800,
-                pagination: {
-                    el: '.swiper-pagination',
-                    clickable: true,
-                },
+                // Navigation
                 navigation: {
                     nextEl: '.swiper-button-next',
                     prevEl: '.swiper-button-prev',
                 },
+                // Pagination
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                // Effects
+                effect: 'fade',
+                fadeEffect: {
+                    crossFade: true
+                },
+                // Autoplay
+                autoplay: {
+                    delay: 5000,
+                    disableOnInteraction: false,
+                },
+                // General settings
+                loop: {{ count($banners ?? []) > 1 ? 'true' : 'false' }},
+                speed: 800,
+
                 grabCursor: true,
                 preloadImages: true,
                 updateOnWindowResize: true,
