@@ -47,10 +47,8 @@
                         <!-- Navigation Buttons -->
                         <div class="swiper-button-next"><i class="bi bi-chevron-right"></i></div>
                         <div class="swiper-button-prev"><i class="bi bi-chevron-left"></i></div>
-                        <!-- Pagination/Indicator -->
-                        <div class="swiper-pagination-container">
-                            <div class="swiper-pagination"></div>
-                        </div>
+                        <!-- Pagination -->
+                        <div class="swiper-pagination"></div>
                     </div>
                 </div>
 
@@ -65,24 +63,37 @@
                     min-height: 500px;
                     max-height: 800px;
                     width: 100%;
-                    overflow: hidden;
+                    overflow: visible; /* Mengubah dari hidden ke visible agar pagination terlihat */
+                    position: relative; /* Memastikan posisi relatif untuk pagination absolut */
+                    margin-bottom: 60px; /* Memberikan ruang untuk pagination di luar frame */
                 }
 
                 /* Styling untuk tombol navigasi dengan ikon */
                 .swiper-button-next,
                 .swiper-button-prev {
                     background-color: rgba(0, 0, 0, 0.5);
-                    width: 40px;
-                    height: 40px;
+                    width: 44px;
+                    height: 44px;
                     border-radius: 50%;
                     display: flex;
                     align-items: center;
                     justify-content: center;
+                    position: absolute;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    z-index: 9;
+                    backdrop-filter: blur(4px);
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    color: white;
+                    transition: all 0.3s ease;
+                    opacity: 0.8;
                 }
 
                 .swiper-button-next:hover,
                 .swiper-button-prev:hover {
-                    background-color: rgba(0, 0, 0, 0.8);
+                    background: rgba(0, 0, 0, 0.8);
+                    transform: translateY(-50%) scale(1.1);
+                    opacity: 1;
                 }
 
                 .swiper-button-next::after,
@@ -97,72 +108,6 @@
                     color: white;
                 }
 
-                .swiper-slide {
-                    border-radius: 8px;
-                    position: relative;
-                }
-
-                /* Custom Pagination */
-                .swiper-pagination-container {
-                    position: absolute;
-                    bottom: 0;
-                    left: 0;
-                    right: 0;
-                    z-index: 9;
-                    display: flex;
-                    justify-content: center;
-                    padding: 15px 0 5px 0;
-                }
-
-                .swiper-pagination {
-                    position: relative;
-                    display: flex;
-                    justify-content: center;
-                    gap: 8px;
-                    margin: 0;
-                    padding: 5px 10px;
-                    background: transparent;
-                    border-radius: 20px;
-                }
-
-                .swiper-pagination-bullet {
-                    width: 12px;
-                    height: 12px;
-                    background: rgba(255, 255, 255, 0.5);
-                    border-radius: 50%;
-                    cursor: pointer;
-                    transition: all 0.3s ease;
-                    margin: 0 2px !important;
-                    opacity: 0.7;
-                }
-
-                .swiper-pagination-bullet-active {
-                    background: #fff;
-                    opacity: 1;
-                    transform: scale(1.2);
-                    box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
-                }
-
-                /* Navigation Buttons */
-                .swiper-button-prev,
-                .swiper-button-next {
-                    width: 44px;
-                    height: 44px;
-                    background: rgba(0, 0, 0, 0.5);
-                    border-radius: 50%;
-                    color: white;
-                    transition: all 0.3s ease;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    position: absolute;
-                    top: 50%;
-                    transform: translateY(-50%);
-                    z-index: 9;
-                    backdrop-filter: blur(4px);
-                    border: 1px solid rgba(255, 255, 255, 0.1);
-                }
-
                 .swiper-button-prev {
                     left: 20px;
                 }
@@ -171,16 +116,21 @@
                     right: 20px;
                 }
 
-                .swiper-button-prev:hover,
-                .swiper-button-next:hover {
-                    background: rgba(0, 0, 0, 0.8);
-                    transform: translateY(-50%) scale(1.1);
+                .swiper-slide {
+                    border-radius: 8px;
+                    position: relative;
+                    background-size: cover;
+                    background-position: center;
+                    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+                    transform: translate3d(0, 0, 0);
+                    -webkit-transform: translate3d(0, 0, 0);
+                    backface-visibility: hidden;
+                    -webkit-backface-visibility: hidden;
+                    -webkit-transform-style: preserve-3d;
+                    transform-style: preserve-3d;
                 }
 
-                .swiper-button-prev::after,
-                .swiper-button-next::after {
-                    display: none;
-                }
+
 
                 .spin {
                     animation: spin 1s linear infinite;
@@ -209,31 +159,6 @@
                     text-overflow: ellipsis;
                 }
 
-                .swiper-button-next,
-                .swiper-button-prev {
-                    color: #fff;
-                    background: rgba(0, 0, 0, 0.5);
-                    width: 40px;
-                    height: 40px;
-                    border-radius: 50%;
-                    transition: all 0.3s ease;
-                }
-
-                .swiper-button-next:after,
-                .swiper-button-prev:after {
-                    font-size: 1.2rem;
-                }
-
-                .swiper-pagination-bullet {
-                    background: #fff;
-                    opacity: 0.7;
-                }
-
-                .swiper-pagination-bullet-active {
-                    background: var(--primary);
-                    opacity: 1;
-                }
-
                 .news-list {
                     height: 100%;
                     overflow-y: auto;
@@ -245,14 +170,6 @@
 
                 .hover-bg:hover {
                     background-color: #f8f9fa;
-                }
-
-                .text-truncate-2 {
-                    display: -webkit-box;
-                    -webkit-line-clamp: 2;
-                    -webkit-box-orient: vertical;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
                 }
 
                 /* Custom scrollbar */
@@ -274,6 +191,69 @@
                     background: #555;
                 }
 
+                /* Animation for slider text */
+                @keyframes slideInFromTop {
+                    from {
+                        opacity: 0;
+                        transform: translateY(-50px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+
+                /* Efek fade untuk slide */
+                @keyframes fadeIn {
+                    from {
+                        opacity: 0;
+                    }
+                    to {
+                        opacity: 1;
+                    }
+                }
+
+                .swiper-slide-active .slide-text {
+                    animation: fadeIn 1s ease forwards;
+                }
+
+                /* Styling untuk tag post di slider */
+                .post-tag {
+                    font-size: 0.75rem;
+                    font-weight: 500;
+                    padding: 0.25rem 0.5rem;
+                    border-radius: 4px;
+                    margin-right: 5px;
+                    margin-bottom: 5px;
+                    display: inline-block;
+                    text-shadow: none;
+                    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+                    transition: all 0.3s ease;
+                    color: white;
+                }
+
+                .post-tag:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+                    background-color: #0d6efd !important;
+                    color: white;
+                    opacity: 0.9;
+                }
+
+                .post-tags {
+                    margin-top: -5px;
+                    margin-bottom: 10px;
+                }
+
+                #hero.hero {
+                    width: 100%;
+                    overflow: hidden;
+                    -webkit-font-smoothing: antialiased;
+                    padding-bottom: 5px;
+                    margin-bottom: -10px;
+                    -moz-osx-font-smoothing: grayscale;
+                }
+
                 @media (max-width: 991.98px) {
                     .main-slider {
                         margin-bottom: 1.5rem;
@@ -282,6 +262,56 @@
 
                     .swiper-slide {
                         height: 300px !important;
+                    }
+                    
+                    .swiper-pagination-bullet {
+                        width: 28px !important;
+                        height: 28px !important;
+                        font-size: 12px !important;
+                        display: flex !important;
+                        align-items: center !important;
+                        justify-content: center !important;
+                        opacity: 1 !important;
+                        visibility: visible !important;
+                        margin: 0 5px !important;
+                        border: 2px solid rgba(0, 0, 0, 0.3) !important;
+                    }
+                }
+
+                @media (max-width: 768px) {
+                    .slider-content {
+                        margin-left: 2rem;
+                        margin-right: 2rem;
+                    }
+
+                    .slider-content h2 {
+                        font-size: 2rem !important;
+                    }
+
+                    .slider-content p {
+                        font-size: 1rem !important;
+                    }
+
+                    .post-tag {
+                        flex-direction: column;
+                        align-items: flex-start;
+                    }
+
+                    .swiper-pagination-bullet {
+                        width: 30px !important;
+                        height: 30px !important;
+                        font-size: 14px !important;
+                        margin: 0 5px !important;
+                        border: 2px solid rgba(0, 0, 0, 0.5) !important;
+                    }
+                    
+                    .main-slider {
+                        margin-bottom: 50px; /* Memberikan ruang untuk pagination di luar frame pada layar kecil */
+                    }
+
+                    .post-tag .ms-3 {
+                        margin-left: 0 !important;
+                        margin-top: 0.5rem;
                     }
                 }
             </style>
@@ -293,6 +323,10 @@
                     // Main Slider
                     const mainSlider = new Swiper('.main-slider', {
                         loop: true,
+                        effect: 'fade',
+                        fadeEffect: {
+                            crossFade: true
+                        },
                         autoplay: {
                             delay: 5000,
                             disableOnInteraction: false,
@@ -303,14 +337,28 @@
                             type: 'bullets',
                             bulletClass: 'swiper-pagination-bullet',
                             bulletActiveClass: 'swiper-pagination-bullet-active',
+                            renderBullet: function (index, className) {
+                                return '<span class="' + className + '">' + (index + 1) + '</span>';
+                            },
                         },
                         navigation: {
                             nextEl: '.swiper-button-next',
                             prevEl: '.swiper-button-prev',
                         },
+                        speed: 800,
+                        on: {
+                            slideChangeTransitionStart: function () {
+                                const activeSlide = this.slides[this.activeIndex];
+                                const slideText = activeSlide.querySelector('.slide-text');
+                                if (slideText) {
+                                    slideText.style.opacity = '0';
+                                    setTimeout(() => {
+                                        slideText.style.opacity = '1';
+                                    }, 300);
+                                }
+                            }
+                        }
                     });
-
-                    // Initialize any news-related scripts here if needed
 
                     // Banner Slider
                     const bannerSwiper = new Swiper('.banner-slider', {
@@ -331,12 +379,14 @@
                     });
 
                     const bannerModal = document.getElementById('bannerModal');
-                    bannerModal.addEventListener('show.bs.modal', function(event) {
-                        const button = event.relatedTarget;
-                        const imageUrl = button.getAttribute('data-img-url');
-                        const modalImage = bannerModal.querySelector('#modalBannerImage');
-                        modalImage.src = imageUrl;
-                    });
+                    if (bannerModal) {
+                        bannerModal.addEventListener('show.bs.modal', function(event) {
+                            const button = event.relatedTarget;
+                            const imageUrl = button.getAttribute('data-img-url');
+                            const modalImage = bannerModal.querySelector('#modalBannerImage');
+                            modalImage.src = imageUrl;
+                        });
+                    }
                 });
             </script>
         @endpush
@@ -345,38 +395,6 @@
             <div class="text-center">
                 <i class="bi bi-image text-4xl mb-4" style="font-size: 3rem; color: #6c757d;"></i>
                 <p class="text-lg text-muted">Tidak ada slider tersedia</p>
-            </div>
-        </div>
-        <div class="swiper-slide d-none" style="display: none;">
-            <div>
-            </div>
-            <div style="position: relative; z-index: 2; height: 100%; display: flex; align-items: center;">
-                <div class="row" style="width: 100%; margin: 0;">
-                    <div class="col-lg-8 ml-5" style="text-align: left; margin-left: 5rem;">
-                        <div class="slider-content" style="color: #ffffff; padding: 0 20px; text-align: left;">
-                            <h2 data-aos="fade-up"
-                                style="font-size: 3rem; font-weight: 700; color: #ffffff; text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">
-                                Selamat Datang di Portal Resmi</h2>
-                            <h1 data-aos="fade-up"
-                                style="color: #ffffff; font-size: 3.5rem; font-weight: 700; text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">
-                                {{ $pengaturan->nama_instansi ?? 'WebOPD' }}</h1>
-                            <p data-aos="fade-up" data-aos-delay="400"
-                                style="font-size: 1.2rem; color: #ffffff; text-shadow: 1px 1px 3px rgba(0,0,0,0.8);">
-                                {{ $pengaturan->deskripsi_singkat ?? 'Portal resmi untuk informasi dan layanan publik.' }}
-                            </p>
-                            <div data-aos="fade-up" data-aos-delay="600">
-                                <div>
-                                    <a href="{{ route('berita.index') }}"
-                                        class="btn-get-started scrollto d-inline-flex align-items-center justify-content-center align-self-center">
-                                        <span>Lihat Berita</span>
-                                        <i class="bi bi-arrow-right"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
             </div>
         </div>
     @endif
@@ -393,10 +411,50 @@
                 </div>
             </div>
         </div>
+    </div>
 </section><!-- End Hero -->
 
 @push('styles')
     <style>
+        /* Swiper Pagination Custom Centered and Transparent */
+        .swiper-pagination {
+            position: absolute;
+            left: 0;
+            right: 0;
+            margin-left: auto;
+            margin-right: auto;
+            bottom: 30px;
+            width: fit-content;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 8px 16px;
+            z-index: 20;
+        }
+        .swiper-pagination-bullet {
+            background: rgba(255,255,255,0.7);
+            color: #222;
+            border: 1px solid #888;
+            width: 32px;
+            height: 32px;
+            margin: 0 4px;
+            font-size: 16px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 1;
+            transition: all 0.2s;
+        }
+        .swiper-pagination-bullet-active {
+            background: #2e57d3;
+            color: #fff;
+            border: 2px solid #fff;
+            transform: scale(1.15);
+        }
+
         /* Animation for slider text */
         @keyframes slideInFromTop {
             from {
@@ -493,17 +551,7 @@
             margin-bottom: 10px;
         }
 
-        .swiper-pagination-bullet {
-            width: 12px;
-            height: 12px;
-            background: rgba(255, 255, 255, 0.5);
-            opacity: 1;
-        }
-
-        .swiper-pagination-bullet-active {
-            background: #fff;
-            transform: scale(1.2);
-        }
+        /* Pagination styling sudah didefinisikan di bagian atas */
 
         .swiper-button-next,
         .swiper-button-prev {
@@ -554,20 +602,14 @@
             }
         }
 
-        padding: 0;
-        margin: 0;
-        margin-top: 0 !important;
-        padding-top: 0 !important;
-        width: 100%;
-        overflow: hidden;
-        position: relative;
-        top: -10px;
-        }
-
+        /* Slider configuration */
         .slider.swiper {
             width: 100%;
             height: 100%;
             margin: 0 auto;
+            position: relative;
+            overflow: visible;
+            border-radius: 0;
         }
 
         .slider .swiper-slide {
@@ -576,17 +618,20 @@
             border-radius: 0;
         }
 
-        .slider.swiper {
-            border-radius: 0;
-        }
-
         .swiper-button-next,
         .swiper-button-prev {
             margin: 0 20px;
         }
 
-        .swiper-pagination {
-            bottom: 0 !important;
+        /* Ensuring pagination visibility */
+        .swiper-container, .swiper {
+            overflow: visible !important;
+            position: relative !important;
+        }
+        
+        /* Preventing container from clipping pagination */
+        .container-fluid, .row, .col-12 {
+            overflow: visible !important;
         }
 
         .slider-content {
@@ -640,24 +685,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Set Carbon locale to Indonesian
             window.Carbon && window.Carbon.setLocale('id');
-            new Swiper('.main-slider', {
-                speed: 600,
-                loop: true,
-                autoplay: {
-                    delay: 5000,
-                    disableOnInteraction: false
-                },
-                slidesPerView: 1,
-                pagination: {
-                    el: '.swiper-pagination',
-                    type: 'bullets',
-                    clickable: true
-                },
-                navigation: {
-                    nextEl: '.swiper-button-next',
-                    prevEl: '.swiper-button-prev',
-                }
-            });
+            // Inisialisasi Swiper sudah dilakukan di bagian atas, tidak perlu diinisialisasi lagi di sini
         });
     </script>
 @endpush
