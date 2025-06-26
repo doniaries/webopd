@@ -85,7 +85,7 @@
             transition: all 0.3s ease;
             opacity: 0.2;
         }
-
+        
         .swiper:hover .swiper-button-prev,
         .swiper:hover .swiper-button-next {
             opacity: 1;
@@ -112,8 +112,13 @@
                 width: 30px;
                 height: 30px;
                 font-size: 14px;
-                opacity: 1;
+                opacity: 0.2;
                 display: flex !important;
+            }
+            
+            .swiper:hover .swiper-button-prev,
+            .swiper:hover .swiper-button-next {
+                opacity: 1;
             }
 
             .swiper-button-prev {
