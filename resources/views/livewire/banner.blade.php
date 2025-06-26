@@ -1,32 +1,29 @@
 <div class="w-full max-w-[320px] mx-auto rounded-lg shadow-md overflow-hidden relative bg-gray-100 group"
     style="aspect-ratio: 4/5;">
     <!-- Debug Info (can be removed later) -->
-    @if(env('APP_DEBUG'))
-    <div class="absolute top-0 left-0 bg-black/70 text-white text-xs p-2 z-50">
-        Banners: {{ count($banners) }}
-    </div>
+    @if (env('APP_DEBUG'))
+        <div class="absolute top-0 left-0 bg-black/70 text-white text-xs p-2 z-50">
+            Banners: {{ count($banners) }}
+        </div>
     @endif
-    
+
     <div class="swiper banner-slider h-full">
         <div class="swiper-wrapper h-full">
             @forelse ($banners as $banner)
                 <div class="swiper-slide h-full">
                     <div class="relative w-full h-full overflow-hidden">
                         <a href="{{ $banner->url ?? '#' }}" class="block w-full h-full">
-                            <img 
-                                src="{{ $banner->gambar_url }}" 
-                                alt="{{ $banner->judul ?? 'Banner' }}"
+                            <img src="{{ $banner->gambar_url }}" alt="{{ $banner->judul ?? 'Banner' }}"
                                 class="w-full h-full object-cover rounded-lg transition-all duration-300 ease-in-out hover:scale-105"
                                 style="aspect-ratio: 4/5; object-fit: cover;"
                                 onerror="this.onerror=null; this.src='{{ asset('assets/images/placeholder.jpg') }}'"
-                                loading="lazy"
-                            >
+                                loading="lazy">
                         </a>
-                        @if (!empty($banner->judul))
+                        {{-- @if (!empty($banner->judul))
                             <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent text-white">
                                 <h3 class="font-semibold text-sm line-clamp-2">{{ $banner->judul }}</h3>
                             </div>
-                        @endif
+                        @endif --}}
                     </div>
                 </div>
             @empty
