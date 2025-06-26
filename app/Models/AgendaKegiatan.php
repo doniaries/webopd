@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class AgendaKegiatan extends Model
 {
@@ -11,6 +12,7 @@ class AgendaKegiatan extends Model
     protected $fillable = [
         'team_id',
         'nama_agenda',
+        'slug',
         'uraian_agenda',
         'tempat',
         'penyelenggara',
@@ -29,9 +31,9 @@ class AgendaKegiatan extends Model
         'waktu_mulai' => 'datetime:H:i',
         'waktu_selesai' => 'datetime:H:i',
     ];
-    
+
     protected $appends = ['nama_penyelenggara'];
-    
+
     public function getNamaPenyelenggaraAttribute()
     {
         return $this->penyelenggara ?? ($this->team ? $this->team->name : 'Tidak Diketahui');
@@ -50,5 +52,15 @@ class AgendaKegiatan extends Model
     public function team()
     {
         return $this->belongsTo(Team::class);
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
+    public function getSlugAttribute()
+    {
+        return Str::slug($this->nama_agenda);
     }
 }

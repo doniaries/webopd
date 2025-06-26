@@ -83,8 +83,8 @@ class PostResource extends Resource
                                                     ->imageEditor()
                                                     ->imageResizeMode('cover')
                                                     ->imageCropAspectRatio('16:9')
-                                                    ->maxSize(2048)
-                                                    ->optimize('webp'),
+                                                    ->maxSize(2048),
+
                                             ])->columnSpan(1),
                                         Forms\Components\Section::make('Gambar Tambahan')
                                             ->description('Gambar tambahan untuk konten artikel')
@@ -161,16 +161,20 @@ class PostResource extends Resource
                                                 $record->tags()->sync($syncData);
                                             }),
                                         Forms\Components\Select::make('user_id')
-                                            ->relationship('user', 'name', function ($query) {
+                                            ->relationship('user', 'name')
+                                            ->default(function () {
                                                 $user = auth()->user();
-                                                if ($user) {
-                                                    return $query;
+                                                if (!$user) return null;
+
+                                                if ($user->hasRole('admin_opd')) {
+                                                    return $user->id;
                                                 }
-                                                return $query->whereRaw('1 = 0'); // Return an empty query if no user
+                                                return $user->id;
                                             })
-                                            ->default(fn() => auth()->check() ? auth()->id() : null)
-                                            ->visible(fn() => auth()->check() && auth()->user()->hasRole('super_admin'))
-                                            ->required(),
+                                            ->disabled(fn() => auth()->user()?->hasRole('admin_opd'))
+                                            // ->visible(fn() => auth()->check() && (auth()->user()->hasRole('super_admin') || auth()->user()->hasRole('admin_opd')))
+                                            ->required()
+                                            ->dehydrated(),
                                         Forms\Components\Hidden::make('views')
                                             ->required()
                                             ->default(0),
