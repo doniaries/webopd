@@ -15,7 +15,7 @@ class Banner extends Model
         'is_active',
     ];
 
-    protected $appends = ['image_url']; // Menambahkan accessor ke JSON output
+    protected $appends = ['image_url', 'gambar_url']; // Menambahkan accessor ke JSON output
 
     protected $dates = ['published_at'];
 
@@ -30,9 +30,32 @@ class Banner extends Model
     }
 
     /**
-     * Get the URL of the banner image
+     * Get the default image URL
      *
      * @return string
+     */
+    protected function getDefaultImageUrl()
+    {
+        return asset('assets/images/placeholder.jpg');
+    }
+
+    // Scope untuk banner aktif
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    /**
+     * Get the URL for the banner image
+     *
+     * Metode ini menangani berbagai format penyimpanan gambar banner:
+     * - Gambar kosong atau null
+     * - URL lengkap
+     * - JSON placeholder
+     * - Nama file di storage
+     * - Path relatif dengan awalan 'banners/'
+     *
+     * @return string URL gambar banner atau gambar default jika tidak ditemukan
      */
     public function getImageUrlAttribute()
     {
@@ -41,25 +64,25 @@ class Banner extends Model
             return $this->getDefaultImageUrl();
         }
 
-        // Jika gambar adalah JSON (data lama), kembalikan gambar default
-        if (is_string($this->gambar) && is_array(json_decode($this->gambar, true))) {
-            return $this->getDefaultImageUrl();
-        }
-
-        // Jika gambar adalah URL lengkap
+        // Jika gambar adalah URL lengkap, kembalikan langsung
         if (filter_var($this->gambar, FILTER_VALIDATE_URL)) {
             return $this->gambar;
         }
 
-        // Cek di storage
+        // Cek apakah gambar adalah JSON placeholder
+        if (is_string($this->gambar) && $this->isJsonPlaceholder($this->gambar)) {
+            return $this->getDefaultImageUrl();
+        }
+
+        // Cek di storage dengan path lengkap
         $filename = basename($this->gambar);
         $storagePath = 'public/banners/' . $filename;
-        
+
         if (file_exists(storage_path('app/' . $storagePath))) {
             return asset('storage/banners/' . $filename);
         }
 
-        // Coba URL storage default
+        // Cek jika path dimulai dengan 'banners/'
         if (str_starts_with($this->gambar, 'banners/')) {
             $filename = basename($this->gambar);
             if (file_exists(storage_path('app/public/banners/' . $filename))) {
@@ -72,50 +95,26 @@ class Banner extends Model
     }
 
     /**
-     * Get the default image URL
+     * Alias untuk getImageUrlAttribute untuk kompatibilitas dengan kode yang ada
      *
-     * @return string
-     */
-    protected function getDefaultImageUrl()
-    {
-        return asset('assets/images/default-banner.jpg');
-    }
-
-    // Scope untuk banner aktif
-    public function scopeActive($query)
-    {
-        return $query->where('is_active', true);
-    }
-
-    /**
-     * Get the URL for the banner image
-     *
-     * @return string
+     * @return string URL gambar banner
      */
     public function getGambarUrlAttribute()
     {
-        if (empty($this->gambar)) {
-            // Return a default placeholder if no image is set
-            return json_encode([
-                'type' => 'placeholder',
-                'bg_color' => 'bg-gray-200',
-                'text' => 'Banner tidak tersedia',
-                'icon' => 'image'
-            ]);
-        }
+        return $this->getImageUrlAttribute();
+    }
 
-        // If the image is a full URL, return it directly
-        if (filter_var($this->gambar, FILTER_VALIDATE_URL)) {
-            return $this->gambar;
-        }
-
-        // Check if the image is a placeholder JSON
-        $placeholderData = json_decode($this->gambar, true);
-        if (json_last_error() === JSON_ERROR_NONE && is_array($placeholderData) && isset($placeholderData['type']) && $placeholderData['type'] === 'placeholder') {
-            return $this->gambar;
-        }
-
-        // Return the full URL for the stored image
-        return asset('storage/banners/' . $this->gambar);
+    /**
+     * Memeriksa apakah string adalah JSON placeholder
+     *
+     * @param string $string String yang akan diperiksa
+     * @return bool True jika string adalah JSON placeholder
+     */
+    protected function isJsonPlaceholder($string)
+    {
+        $data = json_decode($string, true);
+        return json_last_error() === JSON_ERROR_NONE &&
+            is_array($data) &&
+            (isset($data['type']) && $data['type'] === 'placeholder');
     }
 }

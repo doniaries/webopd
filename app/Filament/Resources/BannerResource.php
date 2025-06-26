@@ -50,21 +50,15 @@ class BannerResource extends Resource
                     ->maxLength(255),
                 Forms\Components\FileUpload::make('gambar')
                     ->label('Foto Banner')
-                    ->helperText('Ukuran rekomendasi: 800x1000px (4:5), Maks 2MB')
-                    ->directory('public/banners')
+                    ->directory('banners')
                     ->image()
                     ->imageEditor()
-                    ->imageResizeMode('cover')
                     ->imageCropAspectRatio('4:5')
                     ->imageResizeTargetWidth(800)
                     ->imageResizeTargetHeight(1000)
-                    ->maxSize(2048)
-                    ->visibility('public')
-                    ->preserveFilenames()
-                    ->getUploadedFileNameForStorageUsing(
-                        fn (\Livewire\Features\SupportFileUploads\TemporaryUploadedFile $file): string => 
-                            'banners/' . md5($file->getClientOriginalName() . time()) . '.' . $file->getClientOriginalExtension()
-                    ),
+                    ->maxSize(2048),
+
+
                 Forms\Components\Toggle::make('is_active')
                     ->required()
                     ->default(true),

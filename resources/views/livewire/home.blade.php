@@ -8,11 +8,11 @@
 
     <div class="space-y-8">
         <!-- Hero Slider Section -->
-        @if (empty($sliders) || count($sliders) === 0)
-            @livewire('slider', ['sliders' => $banners, 'pengaturan' => $pengaturan ?? null, 'usePostsAsSliders' => false])
-        @else
-            @livewire('slider', ['sliders' => $sliders, 'pengaturan' => $pengaturan ?? null, 'usePostsAsSliders' => true])
-        @endif
+        @livewire('slider', [
+            'sliders' => !empty($sliders) && count($sliders) > 0 ? $sliders : ($banners ?? []),
+            'pengaturan' => $pengaturan ?? null,
+            'usePostsAsSliders' => !empty($sliders) && count($sliders) > 0
+        ])
         <!-- End Hero Slider -->
 
         <!-- Berita & Informasi Section -->
@@ -170,8 +170,11 @@
 
                     <!-- Sidebar -->
                     <div class="col-lg-3 ps-lg-4">
-                        <!-- Hanya menampilkan banner di sidebar -->
-                        <livewire:banner />
+                        <!-- Banner Section -->
+                        <div class="mb-6">
+                            @livewire('banner')
+                        </div>
+                        <!-- End Banner Section -->
                     </div>
                 </div>
             </div>
