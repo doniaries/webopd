@@ -63,13 +63,25 @@ class InfografisSeeder extends Seeder
                 // Encode the placeholder data as JSON
                 $placeholderJson = json_encode($this->placeholderData);
 
-                Infografis::create([
-                    'team_id' => $team->id,
-                    'judul' => $data['judul'],
-                    'gambar' => $placeholderJson,
-                    'kategori' => $data['kategori'],
-                    'is_active' => $data['is_active'],
-                ]);
+                // Check if an infographic with the same title already exists for this team
+                $exists = Infografis::where('team_id', $team->id)
+                    ->where('judul', $data['judul'])
+                    ->exists();
+                
+                // Only create if it doesn't exist
+                if (!$exists) {
+                    Infografis::firstOrCreate(
+                        [
+                            'team_id' => $team->id,
+                            'judul' => $data['judul']
+                        ],
+                        [
+                            'gambar' => $placeholderJson,
+                            'kategori' => $data['kategori'],
+                            'is_active' => $data['is_active']
+                        ]
+                    );
+                }
             }
         }
         

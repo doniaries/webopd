@@ -2,17 +2,25 @@
 
 namespace App\Filament\Resources;
 
-use App\Models\Tag;
-use Filament\Forms;
-use App\Models\Post;
-use Filament\Tables;
-use Filament\Forms\Form;
-use Filament\Tables\Table;
-use Filament\Resources\Resource;
-use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\PostResource\Pages;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\PostResource\RelationManagers;
+use App\Models\Post;
+use App\Models\Tag;
+use App\Models\Team;
+use App\Models\User;
+use Spatie\Permission\Traits\HasRoles;
+use Filament\Forms;
+use Filament\Forms\Form;
+use Filament\Resources\Resource;
+use Filament\Tables;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Str;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
+use Illuminate\Support\Facades\Auth;
+use Filament\Facades\Filament;
 
 class PostResource extends Resource
 {
@@ -160,21 +168,15 @@ class PostResource extends Resource
 
                                                 $record->tags()->sync($syncData);
                                             }),
+                                        // User selection - only visible and changeable by super admin
                                         Forms\Components\Select::make('user_id')
                                             ->relationship('user', 'name')
-                                            ->default(function () {
-                                                $user = auth()->user();
-                                                if (!$user) return null;
-
-                                                if ($user->hasRole('admin_opd')) {
-                                                    return $user->id;
-                                                }
-                                                return $user->id;
-                                            })
-                                            ->disabled(fn() => auth()->user()?->hasRole('admin_opd'))
-                                            // ->visible(fn() => auth()->check() && (auth()->user()->hasRole('super_admin') || auth()->user()->hasRole('admin_opd')))
-                                            ->required()
+                                            ->default(fn () => auth()->id())
+                                            ->disabled(fn () => !in_array('super_admin', auth()->user()?->roles->pluck('name')->toArray() ?? []))
+                                            ->visible(fn () => in_array('super_admin', auth()->user()?->roles->pluck('name')->toArray() ?? []))
                                             ->dehydrated(),
+
+
                                         Forms\Components\Hidden::make('views')
                                             ->required()
                                             ->default(0),

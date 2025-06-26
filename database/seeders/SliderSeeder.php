@@ -50,13 +50,20 @@ class SliderSeeder extends Seeder
             ],
         ];
         
-        // Create sliders for the team
+        // Create sliders for the team if they don't exist
         foreach ($sliderData as $data) {
-            Slider::create(array_merge($data, [
-                'team_id' => $team->id,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]));
+            // Check if slider with this urutan already exists for the team
+            $exists = Slider::where('team_id', $team->id)
+                ->where('urutan', $data['urutan'])
+                ->exists();
+                
+            if (!$exists) {
+                Slider::create(array_merge($data, [
+                    'team_id' => $team->id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]));
+            }
         }
         
         $this->command->info('Sliders seeded successfully!');

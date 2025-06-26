@@ -55,8 +55,19 @@ class ProdukHukumSeeder extends Seeder
                     'updated_at' => now(),
                 ]);
 
-                // Create the legal product
-                ProdukHukum::create($produkHukum);
+                // Check if a product with the same slug already exists for this team
+                $exists = ProdukHukum::where('team_id', $team->id)
+                    ->where('slug', $uniqueSlug)
+                    ->exists();
+                
+                // Only create if it doesn't exist
+                if (!$exists) {
+                    // Create the legal product using firstOrCreate to be extra safe
+                    ProdukHukum::firstOrCreate(
+                        ['slug' => $uniqueSlug, 'team_id' => $team->id],
+                        $produkHukum
+                    );
+                }
             }
         }
     }

@@ -49,19 +49,14 @@ class BannerResource extends Resource
                     ->required()
                     ->maxLength(255),
                 Forms\Components\FileUpload::make('gambar')
-                    ->label('Foto banner')
+                    ->label('Foto Banner')
+                    ->helperText('Foto ini akan ditampilkan sebagai banner')
                     ->directory('banners')
-                    ->imageEditor()
-                    ->required()
                     ->image()
-                    ->acceptedFileTypes(['image/jpeg', 'image/png'])
-                    ->maxSize(1024)
-                    ->preserveFilenames()
-                    ->visibility('public')
-                    ->helperText('Format yang diizinkan: JPEG, PNG. dan Wajib Potrait')
-                    ->getUploadedFileNameForStorageUsing(
-                        fn ($file): string => (string) Str::of($file->getClientOriginalName())
-                            ->prepend(now()->timestamp . '_')),
+                    ->imageEditor()
+                    ->imageResizeMode('cover')
+                    ->imageCropAspectRatio('4:5')
+                    ->maxSize(2048),
                 Forms\Components\Toggle::make('is_active')
                     ->required()
                     ->default(true),

@@ -34,9 +34,17 @@ class AgendaKegiatanResource extends Resource
                     ->default(fn() => auth()->user()->teams->first()?->id)
                     ->dehydrated(),
                 Forms\Components\TextInput::make('nama_agenda')
+                    ->label('Nama Agenda')
                     ->required()
                     ->maxLength(255)
-                    ->columnSpanFull(),
+                    ->live(onBlur: true)
+                    ->placeholder('Masukkan judul artikel di sini')
+                    ->afterStateUpdated(function ($state, Forms\Set $set) {
+                        $set('slug', \Illuminate\Support\Str::slug($state));
+                    }),
+                Forms\Components\Hidden::make('slug')
+                    ->required()
+                    ->unique(ignoreRecord: true),
                 Forms\Components\Textarea::make('uraian_agenda')
                     ->columnSpanFull(),
                 Forms\Components\TextInput::make('tempat')

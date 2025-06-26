@@ -341,10 +341,14 @@
             </script>
         @endpush
     @else
-        <div class="swiper-slide"
-            style="background-image: url('{{ asset('assets/img/hero-img.png') }}'); background-size: contain; background-position: center; background-color: #f8f9fa; height: 85vh; position: relative; box-shadow: 0 5px 15px rgba(0,0,0,0.1); overflow: hidden; transform: scale(0.9);">
-            <div
-                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.5));">
+        <div class="d-flex justify-content-center align-items-center" style="height: 50vh; background-color: #f8f9fa;">
+            <div class="text-center">
+                <i class="bi bi-image text-4xl mb-4" style="font-size: 3rem; color: #6c757d;"></i>
+                <p class="text-lg text-muted">Tidak ada slider tersedia</p>
+            </div>
+        </div>
+        <div class="swiper-slide d-none" style="display: none;">
+            <div>
             </div>
             <div style="position: relative; z-index: 2; height: 100%; display: flex; align-items: center;">
                 <div class="row" style="width: 100%; margin: 0;">
