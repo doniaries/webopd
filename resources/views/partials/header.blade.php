@@ -139,8 +139,8 @@
         
         @media (max-width: 576px) {
             .header {
-                height: auto !important;
-                min-height: 50px !important;
+                height: 60px !important; /* Tinggi tetap untuk nav */
+                min-height: 60px !important;
                 position: sticky !important;
                 top: 0 !important;
                 z-index: 1000 !important;
@@ -148,6 +148,7 @@
             
             .header-wrapper {
                 padding: 0 12px;
+                height: 100%;
             }
         }
 
@@ -160,6 +161,15 @@
             min-height: 50px; /* Pastikan header memiliki tinggi minimum */
             display: flex;
             align-items: center;
+        }
+        
+        @media (max-width: 576px) {
+            .header-container {
+                padding: 0;
+                height: 60px;
+                display: flex;
+                align-items: center;
+            }
         }
 
         .header-content {
@@ -217,9 +227,9 @@
             
             /* Pastikan container logo memiliki dimensi tetap */
             .logo a > div:first-child, .logo-container {
-                min-width: 40px !important;
-                width: 40px !important;
-                height: 40px !important;
+                min-width: 35px !important;
+                width: 35px !important;
+                height: 35px !important;
                 display: flex !important;
                 align-items: center !important;
                 justify-content: center !important;
@@ -233,8 +243,8 @@
                 display: block !important;
                 visibility: visible !important;
                 opacity: 1 !important;
-                min-width: 40px !important;
-                min-height: 40px !important;
+                min-width: 35px !important;
+                min-height: 35px !important;
                 object-fit: contain !important;
                 position: relative !important;
                 z-index: 10 !important;
@@ -243,9 +253,9 @@
             
             /* CSS khusus untuk logo-container dan logo-image */
             .logo-container {
-                min-width: 40px !important;
-                width: 40px !important;
-                height: 40px !important;
+                min-width: 35px !important;
+                width: 35px !important;
+                height: 35px !important;
                 display: flex !important;
                 align-items: center !important;
                 justify-content: center !important;
@@ -258,9 +268,9 @@
                 display: block !important;
                 visibility: visible !important;
                 opacity: 1 !important;
-                min-width: 40px !important;
-                min-height: 40px !important;
-                max-height: 45px !important;
+                min-width: 35px !important;
+                min-height: 35px !important;
+                max-height: 35px !important;
                 width: auto !important;
                 object-fit: contain !important;
                 position: relative !important;
@@ -581,19 +591,20 @@
         @media (max-width: 576px) {
             .header-wrapper {
                 padding: 0 10px;
+                height: 100%;
             }
 
             .logo {
                 display: flex !important;
-                min-width: 40px !important;
+                min-width: 35px !important;
                 max-width: none !important;
                 flex-shrink: 0 !important;
             }
             
             .logo img {
-                max-height: 40px !important;
-                min-height: 40px !important;
-                min-width: 40px !important;
+                max-height: 35px !important;
+                min-height: 35px !important;
+                min-width: 35px !important;
                 width: auto !important;
                 margin-right: 5px;
                 display: block !important;
@@ -618,7 +629,10 @@
             
             /* Mengurangi padding pada header untuk memberi ruang lebih pada logo */
             .header-container {
-                padding: 4px 0;
+                padding: 0;
+                height: 60px;
+                display: flex;
+                align-items: center;
             }
             
             /* Sembunyikan elemen yang tidak penting pada mobile */
@@ -706,8 +720,8 @@
 
                         @endphp
                         <div class="d-flex align-items-center">
-                            <div class="logo-container" style="flex-shrink: 0 !important; display: block !important; min-width: 40px !important; width: 40px !important; height: 40px !important; position: relative !important; z-index: 10 !important;">
-                                <img src="{{ $logoUrl }}" alt="Logo" class="img-fluid logo-image" style="max-height: 45px !important; min-height: 40px !important; min-width: 40px !important; width: auto !important; display: block !important; object-fit: contain !important; visibility: visible !important; opacity: 1 !important; position: relative !important; z-index: 10 !important;">
+                            <div class="logo-container" style="flex-shrink: 0 !important; display: block !important; min-width: 35px !important; width: 35px !important; height: 35px !important; position: relative !important; z-index: 10 !important; overflow: visible !important;">
+                <img src="{{ $logoUrl }}" alt="Logo" class="img-fluid logo-image" style="max-height: 35px !important; min-height: 35px !important; min-width: 35px !important; width: 35px !important; height: 35px !important; display: block !important; object-fit: contain !important; visibility: visible !important; opacity: 1 !important; position: relative !important; z-index: 10 !important;">
                             </div>
                             <div class="ms-2 d-flex flex-column">
                                 <span class="text-uppercase d-none d-sm-block"
@@ -725,6 +739,8 @@
                             style="max-height: 24px;">
                     </div>
                 </div>
+
+                
 
                 <!-- Elemen di kanan: hanya tombol hamburger -->
                 <div class="d-flex align-items-center">

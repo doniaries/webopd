@@ -237,8 +237,9 @@
                 }
 
                 .post-tag {
-                    flex-direction: column;
-                    align-items: flex-start;
+                    display: inline-block;
+                    padding: 4px 12px;
+                    font-size: 13px;
                 }
 
                 .post-tag .ms-3 {
@@ -452,6 +453,43 @@
             .post-tags {
                 margin-top: -5px;
                 margin-bottom: 10px;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                justify-content: flex-start;
+            }
+            
+            @media (max-width: 768px) {
+                .post-tags {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 5px;
+                }
+            }
+
+            .post-tag {
+                display: inline-block;
+                padding: 5px 15px;
+                border-radius: 999px;
+                background: #2563eb;
+                color: #fff;
+                font-size: 14px;
+                font-weight: 500;
+                white-space: nowrap;
+                min-width: 0;
+                max-width: fit-content;
+                box-sizing: border-box;
+                margin-bottom: 0;
+                margin-right: 0;
+                transition: background 0.2s;
+            }
+
+            .post-tag:hover {
+                background: #1d4ed8 !important;
+                color: #fff;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                transform: translateY(-2px);
+                opacity: 0.95;
             }
 
             #hero.hero {
@@ -489,8 +527,10 @@
                 }
 
                 .post-tag {
-                    flex-direction: column;
-                    align-items: flex-start;
+                    padding: 4px 12px;
+                    font-size: 13px;
+                    max-width: fit-content;
+                    width: auto;
                 }
 
                 .main-slider {
@@ -499,7 +539,7 @@
 
                 .post-tag .ms-3 {
                     margin-left: 0 !important;
-                    margin-top: 0.5rem;
+                    margin-top: 0 !important;
                 }
             }
         </style>
@@ -538,7 +578,8 @@
                                     setTimeout(() => {
                                         slideText.style.opacity = '1';
                                         slideText.style.transform = 'translateY(0)';
-                                        slideText.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                                        slideText.style.transition =
+                                            'opacity 0.5s ease, transform 0.5s ease';
                                     }, 50);
                                 }
                             }
