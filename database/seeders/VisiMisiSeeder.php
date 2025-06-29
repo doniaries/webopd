@@ -24,9 +24,9 @@ class VisiMisiSeeder extends Seeder
                 'visi' => 'Mewujudkan Pemerintahan yang Bersih, Melayani, dan Berintegritas untuk Kesejahteraan Masyarakat',
                 'misi' => '1. Meningkatkan kualitas pelayanan publik yang prima dan berkeadilan
                             2. Mewujudkan tata kelola pemerintahan yang baik dan bersih
-3. Mendorong pertumbuhan ekonomi yang inklusif dan berkelanjutan
-4. Meningkatkan kualitas sumber daya manusia yang unggul dan berdaya saing
-5. Mewujudkan pembangunan yang berwawasan lingkungan dan berkelanjutan',
+                            3. Mendorong pertumbuhan ekonomi yang inklusif dan berkelanjutan
+                            4. Meningkatkan kualitas sumber daya manusia yang unggul dan berdaya saing
+                            5. Mewujudkan pembangunan yang berwawasan lingkungan dan berkelanjutan',
             ],
         ];
 
