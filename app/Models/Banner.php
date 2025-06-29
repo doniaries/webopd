@@ -8,7 +8,6 @@ class Banner extends Model
 {
     protected $table = 'banners';
     protected $fillable = [
-        'team_id',
         'judul',
         'keterangan',
         'gambar',
@@ -24,10 +23,6 @@ class Banner extends Model
         'is_active' => 'boolean',
     ];
 
-    public function team()
-    {
-        return $this->belongsTo(Team::class);
-    }
 
     /**
      * Get the default image URL

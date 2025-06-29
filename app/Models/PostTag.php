@@ -10,23 +10,23 @@ use App\Models\Tag;
 class PostTag extends Pivot
 {
     protected $table = 'post_tag';
-    
+
     protected $fillable = [
-        'team_id',
+        // 'team_id',
         'post_id',
         'tag_id',
     ];
-    
 
-    
+
+
     /**
      * Get the team that owns the pivot.
      */
-    public function team()
-    {
-        return $this->belongsTo(Team::class);
-    }
-    
+    // public function team()
+    // {
+    //     return $this->belongsTo(Team::class);
+    // }
+
     /**
      * Get the post that owns the pivot.
      */
@@ -34,7 +34,7 @@ class PostTag extends Pivot
     {
         return $this->belongsTo(Post::class);
     }
-    
+
     /**
      * Get the tag that owns the pivot.
      */

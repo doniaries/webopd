@@ -13,7 +13,7 @@ class Infografis extends Model
 
     protected $table = 'infografis';
     protected $fillable = [
-        'team_id',
+        // 'team_id',
         'judul',
         'gambar',
         'kategori',
@@ -33,8 +33,8 @@ class Infografis extends Model
         return $query->where('is_active', true);
     }
 
-    public function team(): BelongsTo
-    {
-        return $this->belongsTo(Team::class);
-    }
+    // public function team(): BelongsTo
+    // {
+    //     return $this->belongsTo(Team::class);
+    // }
 }

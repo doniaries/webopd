@@ -12,9 +12,7 @@ class UnitKerja extends Component
 
     public function mount()
     {
-        $teamId = Auth::check() ? Auth::user()->current_team_id : 1; // Default to team ID 1 if not authenticated
-        $this->unitKerjas = UnitKerjaModel::where('team_id', $teamId)
-            ->get();
+        $this->unitKerjas = UnitKerjaModel::all();
     }
 
     public function render()

@@ -12,13 +12,13 @@ class VisiMisi extends Model
     protected $table = 'visi_misis';
 
     protected $fillable = [
-        'team_id',
+        // 'team_id',
         'visi',
         'misi'
     ];
 
-    public function team()
-    {
-        return $this->belongsTo(Team::class);
-    }
+    // public function team()
+    // {
+    //     return $this->belongsTo(Team::class);
+    // }
 }

@@ -119,11 +119,11 @@ class AdminPanelProvider extends PanelProvider
                     ]),
                 \Hasnayeen\Themes\ThemesPlugin::make(),
                 FilamentBackgroundsPlugin::make(),
-            ])
-            // ->tenantRegistration(RegisterTeam::class)
-            ->tenant(
-                Team::class,
-                slugAttribute: 'slug'
-            );
+            ]);
+        // ->tenantRegistration(RegisterTeam::class)
+        // ->tenant(
+        //     Team::class,
+        //     slugAttribute: 'slug'
+        // );
     }
 }

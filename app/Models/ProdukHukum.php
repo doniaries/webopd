@@ -13,17 +13,17 @@ class ProdukHukum extends Model
     protected $table = 'produk_hukums';
 
     protected $fillable = [
-        'team_id',
+        // 'team_id',
         'judul',
         'slug',
         'deskripsi',
         'file',
     ];
 
-    public function team()
-    {
-        return $this->belongsTo(Team::class);
-    }
+    // public function team()
+    // {
+    //     return $this->belongsTo(Team::class);
+    // }
 
     public function getRouteKeyName()
     {

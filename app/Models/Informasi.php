@@ -17,7 +17,7 @@ class Informasi extends Model
     protected $table = 'informasis';
 
     protected $fillable = [
-        'team_id',
+        // 'team_id',
         'judul',
         'slug',
         'isi',
@@ -35,10 +35,10 @@ class Informasi extends Model
         'published_at' => 'datetime',
     ];
 
-    public function team(): BelongsTo
-    {
-        return $this->belongsTo(Team::class);
-    }
+    // public function team(): BelongsTo
+    // {
+    //     return $this->belongsTo(Team::class);
+    // }
 
     /**
      * Scope a query to only include published information.
@@ -49,6 +49,6 @@ class Informasi extends Model
     public function scopePublished($query)
     {
         return $query->where('published_at', '<=', now())
-                    ->whereNotNull('published_at');
+            ->whereNotNull('published_at');
     }
 }

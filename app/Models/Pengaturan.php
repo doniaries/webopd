@@ -10,7 +10,7 @@ class Pengaturan extends Model
     protected $table = 'pengaturans';
 
     protected $fillable = [
-        'team_id',
+        // 'team_id',
         'nama_website',
         'logo_instansi',
         'favicon_instansi',
@@ -27,16 +27,11 @@ class Pengaturan extends Model
     /**
      * Get the team that owns the pengaturan.
      */
-    public function team(): BelongsTo
-    {
-        return $this->belongsTo(Team::class);
-    }
+    // public function team(): BelongsTo
+    // {
+    //     return $this->belongsTo(Team::class);
+    // }
 
-    /**
-     * Get the first pengaturan record
-     *
-     * @return \App\Models\Pengaturan|null
-     */
     public static function getFirst()
     {
         return static::first();

@@ -8,9 +8,9 @@ class UnitKerja extends Model
 {
     protected $table = 'unit_kerjas';
     protected $fillable = [
-        'team_id',
         'nama_unit',
         'slug',
+        'deskripsi',
     ];
 
     protected $dates = ['published_at'];
@@ -18,11 +18,6 @@ class UnitKerja extends Model
     protected $casts = [
         'published_at' => 'datetime',
     ];
-
-    public function team()
-    {
-        return $this->belongsTo(Team::class);
-    }
 
     public function getRouteKeyName()
     {

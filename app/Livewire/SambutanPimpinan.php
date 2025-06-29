@@ -12,9 +12,7 @@ class SambutanPimpinan extends Component
 
     public function mount()
     {
-        $teamId = Auth::check() ? Auth::user()->current_team_id : 1; // Default to team ID 1 if not authenticated
-        $this->sambutan = SambutanPimpinanModel::where('team_id', $teamId)
-            ->first();
+        $this->sambutan = SambutanPimpinanModel::first();
     }
 
     public function render()

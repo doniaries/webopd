@@ -13,8 +13,8 @@ class ExternalLink extends Model
         'team_id',
     ];
 
-    public function team()
-    {
-        return $this->belongsTo(Team::class);
-    }
+    // public function team()
+    // {
+    //     return $this->belongsTo(Team::class);
+    // }
 }

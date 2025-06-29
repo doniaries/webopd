@@ -11,7 +11,7 @@ class Tag extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'team_id',
+        // 'team_id',
         'name',
         'slug',
     ];
@@ -27,10 +27,10 @@ class Tag extends Model
     /**
      * Get the team that owns the tag.
      */
-    public function team()
-    {
-        return $this->belongsTo(Team::class);
-    }
+    // public function team()
+    // {
+    //     return $this->belongsTo(Team::class);
+    // }
 
     /**
      * The posts that belong to the tag.

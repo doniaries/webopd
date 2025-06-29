@@ -11,18 +11,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Run seeders in order
         $this->call([
-            TeamSeeder::class,
-            ShieldSeeder::class,
             UserSeeder::class,
             UnitKerjaSeeder::class,
+            VisiMisiSeeder::class,
+            SambutanPimpinanSeeder::class,
+            ShieldSeeder::class,
             PengaturanSeeder::class,
             TagSeeder::class,
             PostSeeder::class,
             BannerSeeder::class,
             SliderSeeder::class,
             InformasiSeeder::class,
-            VisiMisiSeeder::class,
             ProdukHukumSeeder::class,
             InfografisSeeder::class,
             AgendaKegiatanSeeder::class,

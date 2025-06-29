@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Slider extends Model
 {
     protected $fillable = [
-        'team_id',
+        // 'team_id',
         'judul',
         'deskripsi',
         'gambar',
@@ -21,10 +21,10 @@ class Slider extends Model
         'urutan' => 'integer',
     ];
 
-    public function team()
-    {
-        return $this->belongsTo(Team::class);
-    }
+    // public function team()
+    // {
+    //     return $this->belongsTo(Team::class);
+    // }
 
     // Scope untuk slider aktif
     public function scopeActive($query)

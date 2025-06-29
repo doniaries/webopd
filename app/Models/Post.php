@@ -19,7 +19,7 @@ class Post extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'team_id',
+        // 'team_id',
         'title',
         'slug',
         'content',
@@ -49,10 +49,10 @@ class Post extends Model
     /**
      * Get the team that owns the post.
      */
-    public function team(): BelongsTo
-    {
-        return $this->belongsTo(Team::class);
-    }
+    // public function team(): BelongsTo
+    // {
+    //     return $this->belongsTo(Team::class);
+    // }
 
     protected static function boot()
     {

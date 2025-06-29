@@ -38,17 +38,17 @@ class User extends Authenticatable implements FilamentUser, HasTenants
     ];
 
 
-    public function team()
-    {
-        return $this->teams()
-            ->where('teams.id', Filament::getTenant()?->id);
-    }
+    // public function team()
+    // {
+    //     return $this->teams()
+    //         ->where('teams.id', Filament::getTenant()?->id);
+    // }
 
 
-    public function teams(): BelongsToMany
-    {
-        return $this->belongsToMany(Team::class);
-    }
+    // public function teams(): BelongsToMany
+    // {
+    //     return $this->belongsToMany(Team::class);
+    // }
 
     public function getTenants(Panel $panel): Collection
     {

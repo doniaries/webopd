@@ -10,7 +10,6 @@ class AgendaKegiatan extends Model
     protected $table = 'agenda_kegiatans';
 
     protected $fillable = [
-        'team_id',
         'nama_agenda',
         'slug',
         'uraian_agenda',
@@ -49,10 +48,7 @@ class AgendaKegiatan extends Model
         });
     }
 
-    public function team()
-    {
-        return $this->belongsTo(Team::class);
-    }
+
 
     public function getRouteKeyName()
     {

@@ -13,9 +13,9 @@ class SambutanPimpinan extends Model
     use HasFactory, SoftDeletes;
 
     protected $table = 'sambutan_pimpinans';
-    
+
     protected $fillable = [
-        'team_id',
+        // 'team_id',
         'isi_sambutan',
     ];
 
@@ -28,10 +28,10 @@ class SambutanPimpinan extends Model
     /**
      * Get the team that owns the sambutan pimpinan.
      */
-    public function team()
-    {
-        return $this->belongsTo(Team::class);
-    }
+    // public function team()
+    // {
+    //     return $this->belongsTo(Team::class);
+    // }
 
     /**
      * Get the active sambutan pimpinan for the current team.
@@ -41,11 +41,11 @@ class SambutanPimpinan extends Model
     public static function getActive()
     {
         $teamId = Auth::check() ? Auth::user()->current_team_id : null;
-        
+
         if (!$teamId) {
             return null;
         }
-        
+
         return static::where('team_id', $teamId)
             ->latest()
             ->first();
