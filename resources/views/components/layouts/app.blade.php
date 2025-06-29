@@ -68,7 +68,13 @@
     @include('partials.header')
 
     <main class="main" style="padding-top: 10px;">
-        {{ $slot }}
+        @if(request()->is('/'))
+            {{ $slot }}
+        @else
+            <x-layouts.container>
+                {{ $slot }}
+            </x-layouts.container>
+        @endif
     </main>
 
     @include('partials.footer')

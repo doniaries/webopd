@@ -1,5 +1,32 @@
-<footer id="footer" class="footer">
+<!-- Pre-Footer Section -->
+<div class="bg-gray-100 border-t border-gray-200 py-8">
+    <div class="container">
+        <div class="text-center">
+            <h3 class="text-xl font-semibold text-gray-800 mb-4">Tetap Terhubung</h3>
+            <div class="flex justify-center space-x-6">
+                <a href="{{ $pengaturan->facebook_url ?? '#' }}"
+                    class="text-gray-600 hover:text-blue-600 transition-colors duration-300">
+                    <i class="bi bi-facebook text-2xl"></i>
+                </a>
+                <a href="{{ $pengaturan->twitter_url ?? '#' }}"
+                    class="text-gray-600 hover:text-blue-400 transition-colors duration-300">
+                    <i class="bi bi-twitter-x text-2xl"></i>
+                </a>
+                <a href="{{ $pengaturan->instagram_url ?? '#' }}"
+                    class="text-gray-600 hover:text-pink-500 transition-colors duration-300">
+                    <i class="bi bi-instagram text-2xl"></i>
+                </a>
+                <a href="{{ $pengaturan->youtube_url ?? '#' }}"
+                    class="text-gray-600 hover:text-red-600 transition-colors duration-300">
+                    <i class="bi bi-youtube text-2xl"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
 
+<!-- Main Footer -->
+<footer id="footer" class="footer" style="border-top: 1px solid #e1e1e1; background-color: #f8f9fa;">
     <div class="container footer-top">
         <div class="row gy-4">
             <div class="col-lg-4 col-md-6 footer-about">
@@ -8,19 +35,21 @@
                 </a>
                 <div class="footer-contact pt-3">
                     <p>{{ $pengaturan->alamat_instansi ?? 'Jl. Contoh No. 123' }}</p>
-                    <p>{{ $pengaturan->kota_instansi ?? 'Kota' }}, {{ $pengaturan->kode_pos_instansi ?? '12345' }}</p>
+                    <p>{{ $pengaturan->kota_instansi ?? 'Kota' }}, {{ $pengaturan->kode_pos_instansi ?? '12345' }}
+                    </p>
                     <p class="mt-3"><strong>Telepon:</strong>
                         <span>{{ $pengaturan->no_telp_instansi ?? '+62 123 4567 890' }}</span>
                     </p>
-                    <p><strong>Email:</strong> <span>{{ $pengaturan->email_instansi ?? 'info@webopd.com' }}</span></p>
+                    <p><strong>Email:</strong> <span>{{ $pengaturan->email_instansi ?? 'info@webopd.com' }}</span>
+                    </p>
                 </div>
-                <div class="social-links d-flex mt-4">
+                {{-- <div class="social-links d-flex mt-4">
                     <a href="{{ $pengaturan->twitter_url ?? '#' }}" target="_blank"><i class="bi bi-twitter-x"></i></a>
                     <a href="{{ $pengaturan->facebook_url ?? '#' }}" target="_blank"><i class="bi bi-facebook"></i></a>
                     <a href="{{ $pengaturan->instagram_url ?? '#' }}" target="_blank"><i
                             class="bi bi-instagram"></i></a>
                     <a href="{{ $pengaturan->youtube_url ?? '#' }}" target="_blank"><i class="bi bi-youtube"></i></a>
-                </div>
+                </div> --}}
             </div>
 
             <div class="col-lg-2 col-md-3 footer-links">

@@ -33,14 +33,17 @@ class PengaturanResource extends Resource
                         Forms\Components\TextInput::make('name')
                             ->label('Nama Instansi')
                             ->required()
-                            ->maxLength(255)
+                            ->dehydrated()
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(function ($state, Forms\Set $set) {
+                                $set('slug', \Illuminate\Support\Str::slug($state));
+                            })
                             ->unique(ignoreRecord: true),
 
-                        Forms\Components\TextInput::make('slug')
+                        Forms\Components\Hidden::make('slug')
                             ->label('Slug')
                             ->required()
                             ->unique(ignoreRecord: true)
-                            ->maxLength(255)
                             ->hint('URL-friendly version of the name (auto-generated if empty)'),
 
                         Forms\Components\Textarea::make('alamat_instansi')

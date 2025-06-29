@@ -18,6 +18,10 @@ class ExternalLinkResource extends Resource
     protected static ?string $model = ExternalLink::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationLabel = 'Link Web Terkait';
+    protected static ?string $modelLabel = 'Link Web Terkait';
+    protected static ?string $navigationGroup = 'Konten';
+    protected static ?int $navigationSort = 5;
 
     public static function form(Form $form): Form
     {
@@ -123,7 +127,7 @@ class ExternalLinkResource extends Resource
             'edit' => Pages\EditExternalLink::route('/{record}/edit'),
         ];
     }
-    
+
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
