@@ -4,53 +4,63 @@ namespace Database\Seeders;
 
 use App\Models\Slider;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\DB;
 
 class SliderSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
-        // Create sliders if they don't exist
+        // Clear existing data
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        Slider::truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
+        // Create sliders
         $sliders = [
             [
                 'judul' => 'Selamat Datang di Website Resmi',
                 'deskripsi' => 'Website resmi Pemerintah Daerah Kabupaten Sijunjung',
+                'gambar' => 'image/placeholder.jpg',
+                'url' => '#',
+                'button_text' => 'Selengkapnya',
+                'button_url' => '#',
                 'urutan' => 1,
-                'status' => 'aktif',
-                'gambar' => 'slider1.jpg',
-                'tautan' => '#',
+                'is_active' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'judul' => 'Layanan Publik Terpadu',
                 'deskripsi' => 'Satu pintu pelayanan publik yang cepat dan transparan',
+                'gambar' => 'image/placeholder.jpg',
+                'url' => '#layanan',
+                'button_text' => 'Lihat Layanan',
+                'button_url' => '#layanan',
                 'urutan' => 2,
-                'status' => 'aktif',
-                'gambar' => 'slider2.jpg',
-                'tautan' => '#',
+                'is_active' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'judul' => 'Informasi Terkini',
                 'deskripsi' => 'Dapatkan informasi terbaru seputar Pemerintah Kabupaten Sijunjung',
+                'gambar' => 'image/placeholder.jpg',
+                'url' => '#berita',
+                'button_text' => 'Baca Berita',
+                'button_url' => '#berita',
                 'urutan' => 3,
-                'status' => 'aktif',
-                'gambar' => 'slider3.jpg',
-                'tautan' => '#',
+                'is_active' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
         ];
 
+        // Insert sliders
         foreach ($sliders as $slider) {
-            // Check if slider with this order already exists
-            $exists = Slider::where('urutan', $slider['urutan'])->exists();
-
-            if (!$exists) {
-                Slider::create($slider);
-            }
+            Slider::firstOrCreate(
+                ['judul' => $slider['judul']],
+                $slider
+            );
         }
 
         $this->command->info('Sliders seeded successfully!');

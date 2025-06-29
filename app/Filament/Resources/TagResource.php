@@ -53,9 +53,6 @@ class TagResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('team.name')
-                    ->label('Team')
-                    ->hidden(),
                 Tables\Columns\TextColumn::make('name')
                     ->label('Nama Tag')
                     ->searchable()

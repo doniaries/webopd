@@ -21,9 +21,9 @@ return new class extends Migration
             $table->string('file')->nullable();
             $table->integer('views')->default(0);
             $table->integer('downloads')->default(0);
-            $table->softDeletes();
-
+            $table->datetime('published_at')->nullable();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->index('nama_dokumen');
             $table->index('slug');

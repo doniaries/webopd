@@ -19,35 +19,18 @@ class Banner extends Component
     public function loadBanners()
     {
         try {
-            // Get current team ID
-            $teamId = Auth::check() ? Auth::user()->current_team_id : 1;
-            
-            // Try to get team-specific banners first
-            $teamBanners = BannerModel::where('is_active', true)
-                ->where('team_id', $teamId)
+            $this->banners = BannerModel::where('is_active', true)
                 ->latest()
                 ->take(5)
                 ->get();
-                
-            // If no team-specific banners, get global banners
-            if ($teamBanners->isEmpty()) {
-                $this->banners = BannerModel::where('is_active', true)
-                    ->whereNull('team_id')
-                    ->latest()
-                    ->take(5)
-                    ->get();
-            } else {
-                $this->banners = $teamBanners;
-            }
             
             // Log for debugging
             Log::info('Banners loaded in Banner component', [
-                'count' => count($this->banners),
-                'team_id' => $teamId
+                'count' => count($this->banners)
             ]);
         } catch (\Exception $e) {
-            Log::error('Error loading banners in Banner component: ' . $e->getMessage());
-            $this->banners = [];
+            // If there's an error (e.g., table doesn't exist), return empty collection
+            $this->banners = collect();
         }
     }
     

@@ -21,8 +21,6 @@ class AgendaKegiatanResource extends Resource
     protected static ?string $modelLabel = 'Agenda Kegiatan';
     protected static ?string $navigationGroup = 'Konten';
     protected static ?int $navigationSort = 3;
-    // Define the tenant ownership relationship name
-    protected static ?string $tenantOwnershipRelationshipName = 'team';
 
 
 

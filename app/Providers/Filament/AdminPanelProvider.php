@@ -2,8 +2,7 @@
 
 namespace App\Providers\Filament;
 
-use App\Filament\Pages\Tenancy\RegisterTeam;
-use App\Models\Team;
+
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -120,10 +119,5 @@ class AdminPanelProvider extends PanelProvider
                 \Hasnayeen\Themes\ThemesPlugin::make(),
                 FilamentBackgroundsPlugin::make(),
             ]);
-        // ->tenantRegistration(RegisterTeam::class)
-        // ->tenant(
-        //     Team::class,
-        //     slugAttribute: 'slug'
-        // );
     }
 }

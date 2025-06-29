@@ -10,30 +10,42 @@ class BannerSeeder extends Seeder
 {
     public function run(): void
     {
-        // Hapus semua banner yang ada
+        // Clear existing data
         Banner::truncate();
         
         // Create banners with default placeholder image
-        $bannerTitles = [
-            'Selamat Datang di Website Resmi',
-            'Layanan Publik Terpadu',
-            'Informasi Terkini',
-            'Pengumuman Penting',
-            'Berita Terbaru'
+        $banners = [
+            [
+                'judul' => 'Selamat Datang di Website Resmi',
+                'keterangan' => 'Situs resmi Pemerintah Kabupaten Sijunjung',
+                'gambar' => 'image/placeholder.jpg',
+                'is_active' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'judul' => 'Layanan Publik Terpadu',
+                'keterangan' => 'Layanan terpadu untuk masyarakat',
+                'gambar' => 'image/placeholder.jpg',
+                'is_active' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'judul' => 'Informasi Terkini',
+                'keterangan' => 'Update informasi terbaru dari kami',
+                'gambar' => 'image/placeholder.jpg',
+                'is_active' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
         ];
 
-        foreach ($bannerTitles as $index => $title) {
+        // Insert banners
+        foreach ($banners as $banner) {
             Banner::firstOrCreate(
-                ['judul' => $title],
-                [
-                    'deskripsi' => 'Deskripsi untuk banner ' . ($index + 1),
-                    'gambar' => 'image/placeholder.jpg',
-                    'link' => '#',
-                    'urutan' => $index + 1,
-                    'status' => 'aktif',
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]
+                ['judul' => $banner['judul']],
+                $banner
             );
         }
 

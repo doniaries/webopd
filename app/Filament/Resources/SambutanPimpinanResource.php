@@ -5,7 +5,6 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\SambutanPimpinanResource\Pages;
 use App\Filament\Resources\SambutanPimpinanResource\RelationManagers;
 use App\Models\SambutanPimpinan;
-use App\Models\Team;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;

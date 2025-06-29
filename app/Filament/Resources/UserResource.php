@@ -36,10 +36,6 @@ class UserResource extends Resource
         return 'Pengaturan';
     }
 
-    public static function isScopedToTenant(): bool
-    {
-        return false; // Disable tenant scoping
-    }
 
     public static function shouldRegister(): bool
     {
@@ -131,11 +127,6 @@ class UserResource extends Resource
             ])
             ->defaultSort('created_at', 'desc')
             ->filters([
-                Tables\Filters\SelectFilter::make('teams')
-                    ->relationship('teams', 'name')
-                    ->multiple()
-                    ->preload()
-                    ->visible(fn() => auth()->user()->hasRole('super_admin')),
                 Tables\Filters\SelectFilter::make('roles')
                     ->relationship('roles', 'name')
                     ->multiple()
@@ -202,7 +193,7 @@ class UserResource extends Resource
         // Start with parent query
         $query = parent::getEloquentQuery()
             ->select('users.*')
-            ->with(['roles', 'teams']);
+            ->with(['roles']);
 
         // Super admin bisa melihat semua user
         if (auth()->user()->hasRole('super_admin')) {

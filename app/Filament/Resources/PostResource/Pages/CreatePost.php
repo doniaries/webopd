@@ -12,7 +12,6 @@ class CreatePost extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $data['team_id'] = auth()->user()->teams()->first()->id;
         return $data;
     }
 

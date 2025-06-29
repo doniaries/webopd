@@ -21,9 +21,6 @@ class PostsRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                Forms\Components\Hidden::make('team_id')
-                    ->default(fn() => auth()->user()->current_team_id)
-                    ->dehydrated(),
                 Forms\Components\TextInput::make('title')
                     ->label('Judul')
                     ->required()
@@ -116,7 +113,7 @@ class PostsRelationManager extends RelationManager
                 Tables\Actions\AttachAction::make()
                     ->preloadRecordSelect()
                     ->recordSelectSearchColumns(['title'])
-                    ->form(fn (Tables\Actions\AttachAction $action): array => [
+                    ->form(fn(Tables\Actions\AttachAction $action): array => [
                         $action->getRecordSelect(),
                         Forms\Components\Hidden::make('team_id')
                             ->default(fn() => auth()->user()->current_team_id),
@@ -124,7 +121,7 @@ class PostsRelationManager extends RelationManager
             ])
             ->actions([
                 Tables\Actions\EditAction::make()
-                    ->url(fn (Post $record): string => route('filament.admin.resources.posts.edit', $record)),
+                    ->url(fn(Post $record): string => route('filament.admin.resources.posts.edit', $record)),
                 Tables\Actions\DetachAction::make(),
             ])
             ->bulkActions([

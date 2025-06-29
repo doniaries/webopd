@@ -13,13 +13,16 @@ return new class extends Migration
     {
         Schema::create('external_links', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique()->nullable();
-            $table->string('url');
+            $table->string('nama');
+            $table->string('url')->nullable();
             $table->string('icon')->nullable();
+            $table->text('deskripsi')->nullable();
+            $table->enum('status', ['aktif', 'tidak aktif'])->default('aktif');
+            $table->integer('urutan')->default(0);
             $table->timestamps();
 
             $table->index('url');
-            $table->index('name');
+            $table->index('nama');
         });
     }
 

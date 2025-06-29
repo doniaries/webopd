@@ -14,7 +14,7 @@ class SambutanPimpinanSeeder extends Seeder
             'judul' => 'Sambutan Kepala Dinas',
             'slug' => 'sambutan-kepala-dinas',
             'isi_sambutan' => '<p>Assalamu\'alaikum Warahmatullahi Wabarakatuh,</p><p>Selamat datang di website resmi kami. Kami berkomitmen untuk memberikan pelayanan terbaik kepada masyarakat.</p>',
-            'foto' => 'kepala-dinas.jpg',
+            'foto' => 'image/placeholder.jpg',
             'nama' => 'Dr. John Doe, M.Si',
             'jabatan' => 'Kepala Dinas Komunikasi dan Informatika',
             'created_at' => now(),

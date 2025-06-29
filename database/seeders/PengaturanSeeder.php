@@ -4,86 +4,34 @@ namespace Database\Seeders;
 
 use App\Models\Pengaturan;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class PengaturanSeeder extends Seeder
 {
     public function run(): void
     {
-        // Base settings data
+        // Clear existing data
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        Pengaturan::truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
+        // Create default settings
         $settings = [
-            [
-                'key' => 'nama_aplikasi',
-                'value' => 'Sistem Informasi Pemerintahan',
-                'keterangan' => 'Nama aplikasi yang ditampilkan di header',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'key' => 'nama_instansi',
-                'value' => 'Pemerintah Kabupaten Sijunjung',
-                'keterangan' => 'Nama instansi pemilik aplikasi',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'key' => 'alamat_instansi',
-                'value' => 'Jl. Lintas Sumatra No. 1, Muaro Sijunjung, Sumatera Barat',
-                'keterangan' => 'Alamat lengkap instansi',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'key' => 'telepon_instansi',
-                'value' => '(0754) 12345',
-                'keterangan' => 'Nomor telepon instansi',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'key' => 'email_instansi',
-                'value' => 'info@sijunjung.go.id',
-                'keterangan' => 'Alamat email resmi instansi',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'key' => 'website_instansi',
-                'value' => 'https://sijunjung.go.id',
-                'keterangan' => 'Website resmi instansi',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'key' => 'logo_instansi',
-                'value' => 'logo.png',
-                'keterangan' => 'Logo instansi',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'key' => 'favicon',
-                'value' => 'favicon.ico',
-                'keterangan' => 'Favicon website',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'key' => 'footer_text',
-                'value' => ' ' . date('Y') . ' Pemerintah Kabupaten Sijunjung. Semua Hak Dilindungi.',
-                'keterangan' => 'Teks yang ditampilkan di footer',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+            'nama_website' => 'Website Pemerintah',
+            'logo_instansi' => 'logo.png',
+            'favicon_instansi' => 'favicon.ico',
+            'kepala_instansi' => 'Dr. John Doe, M.Si',
+            'alamat_instansi' => 'Jl. Lintas Sumatra No. 1, Muaro Sijunjung, Sumatera Barat',
+            'no_telp_instansi' => '(0754) 12345',
+            'email_instansi' => 'info@sijunjung.go.id',
+            'facebook' => 'https://facebook.com/pemkabsijunjung',
+            'twitter' => 'https://twitter.com/pemkabsijunjung',
+            'instagram' => 'https://instagram.com/pemkabsijunjung',
+            'youtube' => 'https://youtube.com/c/pemkabsijunjung',
         ];
 
-        // Create settings if they don't exist
-        foreach ($settings as $setting) {
-            Pengaturan::firstOrCreate(
-                ['key' => $setting['key']],
-                $setting
-            );
-        }
+        // Create the settings record
+        Pengaturan::create($settings);
 
         $this->command->info('Successfully created settings!');
     }

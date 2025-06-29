@@ -20,9 +20,6 @@ class ImagesRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                Forms\Components\Hidden::make('team_id')
-                    ->default(fn() => auth()->user()->teams->first()?->id)
-                    ->dehydrated(),
                 Forms\Components\FileUpload::make('image_path')
                     ->label('Gambar')
                     ->image()
