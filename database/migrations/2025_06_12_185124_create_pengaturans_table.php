@@ -13,12 +13,13 @@ return new class extends Migration
     {
         Schema::create('pengaturans', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_website')->unique()->nullable();
-            $table->string('logo_instansi')->nullable();
-            $table->string('favicon_instansi')->nullable();
+            $table->string('name');
+            $table->string('slug')->unique();
+            $table->string('logo')->nullable();
+            $table->string('favicon')->nullable();
             $table->string('kepala_instansi')->nullable();
-            $table->string('alamat_instansi')->nullable();
-            $table->string('no_telp_instansi')->nullable();
+            $table->text('alamat_instansi')->nullable();
+            $table->string('no_telp_instansi', 20)->nullable();
             $table->string('email_instansi')->unique()->nullable();
             $table->string('facebook')->nullable();
             $table->string('twitter')->nullable();
@@ -26,8 +27,10 @@ return new class extends Migration
             $table->string('youtube')->nullable();
             $table->timestamps();
 
-            $table->index('nama_website');
+            // Add indexes
+            $table->index('name');
             $table->index('email_instansi');
+            $table->index('slug');
         });
     }
 

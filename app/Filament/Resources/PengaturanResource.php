@@ -28,42 +28,90 @@ class PengaturanResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Informasi Instansi')
+                Forms\Components\Section::make('Informasi Website')
                     ->schema([
-                        Forms\Components\Hidden::make('nama_website')
-                            ->placeholder('Nama Website')
-                            ->dehydrated()
-                            ->required(),
-                        Forms\Components\Textarea::make('alamat_instansi')
+                        Forms\Components\TextInput::make('name')
+                            ->label('Nama Instansi')
                             ->required()
+                            ->maxLength(255)
+                            ->unique(ignoreRecord: true),
+
+                        Forms\Components\TextInput::make('slug')
+                            ->label('Slug')
+                            ->required()
+                            ->unique(ignoreRecord: true)
+                            ->maxLength(255)
+                            ->hint('URL-friendly version of the name (auto-generated if empty)'),
+
+                        Forms\Components\Textarea::make('alamat_instansi')
                             ->label('Alamat Instansi')
+                            ->required()
                             ->columnSpanFull(),
 
+                        Forms\Components\TextInput::make('kepala_instansi')
+                            ->label('Nama Kepala Instansi')
+                            ->maxLength(255),
+
                         Forms\Components\TextInput::make('no_telp_instansi')
-                            ->required()
+                            ->label('Nomor Telepon')
                             ->tel()
-                            ->label('Nomor Telepon'),
+                            ->maxLength(20),
 
                         Forms\Components\TextInput::make('email_instansi')
-                            ->required()
+                            ->label('Email Instansi')
                             ->email()
                             ->unique(ignoreRecord: true)
-                            ->label('Email Instansi'),
+                            ->maxLength(255),
 
-                        Forms\Components\FileUpload::make('logo_instansi')
-                            ->image()
-                            ->optimize('webp')
-                            ->directory('logo')
-                            ->default('images/kabupaten-sijunjung.png')
-                            ->required()
-                            ->label('Logo Instansi'),
+                        // Sosial Media
+                        Forms\Components\TextInput::make('facebook')
+                            ->label('Facebook')
+                            ->url()
+                            ->maxLength(255),
 
-                        Forms\Components\FileUpload::make('favicon_instansi')
+                        Forms\Components\TextInput::make('twitter')
+                            ->label('Twitter')
+                            ->url()
+                            ->maxLength(255),
+
+                        Forms\Components\TextInput::make('instagram')
+                            ->label('Instagram')
+                            ->url()
+                            ->maxLength(255),
+
+                        Forms\Components\TextInput::make('youtube')
+                            ->label('YouTube')
+                            ->url()
+                            ->maxLength(255),
+                    ])
+                    ->columns(2),
+
+                // File Uploads Section
+                Forms\Components\Section::make('File Upload')
+                    ->schema([
+                        Forms\Components\FileUpload::make('logo')
+                            ->label('Logo Instansi')
                             ->image()
-                            ->directory('favicon')
-                            ->default('images/favicon.png')
-                            ->required()
-                            ->label('Favicon Instansi'),
+                            ->directory('pengaturan/logo')
+                            ->disk('public')
+                            ->visibility('public')
+                            ->preserveFilenames()
+                            ->imageResizeTargetWidth(300)
+                            ->imageResizeTargetHeight(300)
+                            ->imageResizeMode('contain')
+                            ->helperText('Ukuran disarankan: 300x300px, format: PNG/JPG'),
+
+                        Forms\Components\FileUpload::make('favicon')
+                            ->label('Favicon')
+                            ->image()
+                            ->directory('pengaturan/favicon')
+                            ->disk('public')
+                            ->visibility('public')
+                            ->preserveFilenames()
+                            ->imageResizeTargetWidth(64)
+                            ->imageResizeTargetHeight(64)
+                            ->imageResizeMode('contain')
+                            ->helperText('Ukuran disarankan: 64x64px, format: ICO/PNG')
                     ])
                     ->columns(2),
             ]);
@@ -73,10 +121,16 @@ class PengaturanResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('nama_website')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('nama_instansi')
-                    ->hidden(),
+                Tables\Columns\TextColumn::make('name')
+                    ->label('Nama Website')
+                    ->searchable()
+                    ->sortable(),
+
+                Tables\Columns\TextColumn::make('email_instansi')
+                    ->label('Email')
+                    ->searchable()
+                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('no_telp_instansi')
                     ->searchable()
                     ->label('No. Telp'),

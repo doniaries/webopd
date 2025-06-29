@@ -104,43 +104,72 @@ class Post extends Model
      */
     public function getFotoUtamaUrlAttribute()
     {
-        // Gunakan foto_utama dari tabel posts
-        if ($this->foto_utama) {
-            // Jika sudah full URL, langsung kembalikan
-            if (filter_var($this->foto_utama, FILTER_VALIDATE_URL)) {
-                return $this->foto_utama;
-            }
+        // Jika tidak ada foto_utama, kembalikan placeholder
+        if (empty($this->foto_utama)) {
+            return $this->getDefaultPlaceholder();
+        }
 
-            // Cek jika ini adalah placeholder data
-            $placeholderData = json_decode($this->foto_utama, true);
-            if (json_last_error() === JSON_ERROR_NONE && is_array($placeholderData) && isset($placeholderData['type']) && $placeholderData['type'] === 'placeholder') {
-                // Return the placeholder data as is, it will be handled by the frontend
-                return $this->foto_utama;
-            }
+        // Jika sudah full URL, langsung kembalikan
+        if (filter_var($this->foto_utama, FILTER_VALIDATE_URL)) {
+            return $this->foto_utama;
+        }
 
-            // Pastikan path relatif ke storage
-            $imagePath = trim($this->foto_utama, '/');
+        // Cek jika ini adalah placeholder data
+        $placeholderData = json_decode($this->foto_utama, true);
+        if (json_last_error() === JSON_ERROR_NONE && is_array($placeholderData) && isset($placeholderData['type']) && $placeholderData['type'] === 'placeholder') {
+            return $this->foto_utama;
+        }
 
-            // Periksa apakah file ada di storage
-            if (Storage::disk('public')->exists($imagePath)) {
-                return asset('storage/' . $imagePath);
-            }
+        // Pastikan path relatif ke storage
+        $imagePath = ltrim($this->foto_utama, '/');
+        
+        // Coba berbagai lokasi penyimpanan
+        $possiblePaths = [
+            $imagePath,
+            'foto-utama/' . basename($imagePath),
+            'storage/' . $imagePath,
+            'storage/foto-utama/' . basename($imagePath)
+        ];
 
-            // Jika tidak ditemukan, coba di foto-utama
-            if (strpos($imagePath, 'foto-utama/') === false) {
-                $imagePath = 'foto-utama/' . $imagePath;
-                if (Storage::disk('public')->exists($imagePath)) {
-                    return asset('storage/' . $imagePath);
-                }
+        foreach ($possiblePaths as $path) {
+            $fullPath = public_path($path);
+            if (file_exists($fullPath)) {
+                return asset($path);
             }
         }
 
-        // Kembalikan data placeholder default jika tidak ada foto utama
+        // Jika tidak ditemukan di storage, coba cek di direktori public
+        if (strpos($imagePath, 'public/') === 0) {
+            $publicPath = str_replace('public/', '', $imagePath);
+            if (file_exists(public_path($publicPath))) {
+                return asset($publicPath);
+            }
+        }
+
+        // Jika masih tidak ditemukan, kembalikan placeholder
+        return $this->getDefaultPlaceholder();
+    }
+    
+    /**
+     * Get default placeholder data
+     */
+    protected function getDefaultPlaceholder()
+    {
         return json_encode([
             'type' => 'placeholder',
-            'bg_color' => 'bg-gray-200',
-            'text' => 'Gambar tidak tersedia'
-        ]);
+            'html' => '
+                <div style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background-color: #f3f4f6; color: #6b7280; padding: 1rem; text-align: center;">
+                    <svg class="w-16 h-16 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                    <span class="text-sm font-medium">Tidak ada gambar</span>
+                </div>
+            ',
+            'bg_color' => '#f3f4f6',
+            'text' => 'Tidak ada gambar',
+            'color' => '#6b7280',
+            'class' => 'w-full h-full'
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     }
 
 

@@ -13,8 +13,9 @@ class DatabaseSeeder extends Seeder
     {
         // Run seeders in order
         $this->call([
-            ShieldSeeder::class,  // Must come before UserSeeder
-            UserSeeder::class,
+            ShieldSeeder::class,  // Must come first to set up roles and permissions
+            UserSeeder::class,    // Then create users
+            // Other seeders
             UnitKerjaSeeder::class,
             VisiMisiSeeder::class,
             SambutanPimpinanSeeder::class,

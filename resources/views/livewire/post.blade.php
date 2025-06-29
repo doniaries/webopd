@@ -279,12 +279,28 @@
         <div class="container mx-auto px-4 py-8">
             <article class="max-w-4xl mx-auto">
                 <!-- Foto Utama -->
-                @if ($post->foto_utama)
-                    <div class="mb-8 rounded-lg overflow-hidden">
-                        <img src="{{ asset('storage/foto-utama/' . $post->foto_utama) }}" alt="{{ $post->title }}"
-                            class="w-full h-auto max-h-96 object-cover">
-                    </div>
-                @endif
+                <div class="mb-8 rounded-lg overflow-hidden">
+                    @php
+                        $fotoUtama = json_decode($post->foto_utama_url, true);
+                        $isPlaceholder = is_array($fotoUtama) && isset($fotoUtama['type']) && $fotoUtama['type'] === 'placeholder';
+                    @endphp
+                    
+                    @if($isPlaceholder && isset($fotoUtama['html']))
+                        {!! $fotoUtama['html'] !!}
+                    @elseif($isPlaceholder)
+                        <div class="w-full h-64 flex flex-col items-center justify-center bg-gray-100 text-gray-600 p-4 text-center">
+                            <svg class="w-16 h-16 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            <span class="text-sm font-medium">{{ $fotoUtama['text'] ?? 'Tidak ada gambar' }}</span>
+                        </div>
+                    @else
+                        <img src="{{ $post->foto_utama_url }}" 
+                             alt="{{ $post->title }}"
+                             class="w-full h-auto max-h-96 object-cover"
+                             onerror="this.onerror=null; this.parentElement.innerHTML = '<div class=\'w-full h-64 flex flex-col items-center justify-center bg-gray-100 text-gray-600 p-4 text-center\'><svg class=\'w-16 h-16 text-gray-400 mb-2\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\' xmlns=\'http://www.w3.org/2000/svg\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1\' d=\'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z\'></path></svg><span class=\'text-sm font-medium\'>Tidak ada gambar</span></div>'">
+                    @endif
+                </div>
 
                 <!-- Post Header -->
                 <header class="mb-8">
@@ -327,13 +343,31 @@
                         <h2 class="text-2xl font-bold text-gray-900 mb-6">Baca Juga</h2>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                             @foreach ($relatedPosts as $related)
-                                <div class="border rounded-lg overflow-hidden hover:shadow-md transition-shadow">
-                                    @if ($related->foto_utama)
-                                        <a href="{{ route('posts.show', $related->slug) }}" class="block">
-                                            <img src="{{ asset('storage/foto-utama/' . $related->foto_utama) }}"
-                                                alt="{{ $related->title }}" class="w-full h-48 object-cover">
-                                        </a>
-                                    @endif
+                                <div class="border rounded-lg overflow-hidden hover:shadow-md transition-shadow bg-white">
+                                    @php
+                                        $relatedFoto = $related->foto_utama_url;
+                                        $relatedPlaceholder = is_string($relatedFoto) ? json_decode($relatedFoto, true) : [];
+                                        $isRelatedPlaceholder = is_array($relatedPlaceholder) && isset($relatedPlaceholder['type']) && $relatedPlaceholder['type'] === 'placeholder';
+                                    @endphp
+                                    
+                                    <div class="w-full h-48 bg-gray-100 overflow-hidden">
+                                        @if($isRelatedPlaceholder)
+                                            <div class="w-full h-full flex items-center justify-center" style="background-color: {{ $relatedPlaceholder['bg_color'] ?? '#f3f4f6' }}; color: {{ $relatedPlaceholder['color'] ?? '#6b7280' }};">
+                                                <div class="text-center p-4">
+                                                    <svg class="w-10 h-10 mx-auto mb-2 text-current" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        @else
+                                            <a href="{{ route('posts.show', $related->slug) }}" class="block h-full">
+                                                <img src="{{ $related->foto_utama_url }}" 
+                                                     alt="{{ $related->title }}" 
+                                                     class="w-full h-full object-cover"
+                                                     onerror="this.onerror=null; this.parentNode.innerHTML='<div class=\'w-full h-full flex items-center justify-center bg-gray-100\'><svg class=\'w-10 h-10 text-gray-400\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\' xmlns=\'http://www.w3.org/2000/svg\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1\' d=\'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z\'></path></svg></div>'">
+                                            </a>
+                                        @endif
+                                    </div>
                                     <div class="p-4">
                                         @if ($related->category)
                                             <a href="{{ route('posts.index', ['category' => $related->category_id]) }}"

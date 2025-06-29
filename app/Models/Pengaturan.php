@@ -10,10 +10,10 @@ class Pengaturan extends Model
     protected $table = 'pengaturans';
 
     protected $fillable = [
-        // 'team_id',
-        'nama_website',
-        'logo_instansi',
-        'favicon_instansi',
+        'name',
+        'slug',
+        'logo',
+        'favicon',
         'kepala_instansi',
         'alamat_instansi',
         'no_telp_instansi',
@@ -23,6 +23,28 @@ class Pengaturan extends Model
         'instagram',
         'youtube',
     ];
+
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (empty($model->slug)) {
+                $model->slug = \Illuminate\Support\Str::slug($model->name);
+            }
+        });
+
+        static::updating(function ($model) {
+            if ($model->isDirty('name') && empty($model->slug)) {
+                $model->slug = \Illuminate\Support\Str::slug($model->name);
+            }
+        });
+    }
 
     /**
      * Get the team that owns the pengaturan.

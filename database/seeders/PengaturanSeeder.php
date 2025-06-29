@@ -17,21 +17,22 @@ class PengaturanSeeder extends Seeder
 
         // Create default settings
         $settings = [
-            'nama_website' => 'Website Pemerintah',
-            'logo_instansi' => 'assets/img/logo.png',
-            'favicon_instansi' => 'assets/img/favicon.png',
-            'kepala_instansi' => 'Dr. John Doe, M.Si',
-            'alamat_instansi' => 'Jl. Lintas Sumatra No. 1, Muaro Sijunjung, Sumatera Barat',
-            'no_telp_instansi' => '(0754) 12345',
-            'email_instansi' => 'info@sijunjung.go.id',
-            'facebook' => 'https://facebook.com/pemkabsijunjung',
-            'twitter' => 'https://twitter.com/pemkabsijunjung',
-            'instagram' => 'https://instagram.com/pemkabsijunjung',
-            'youtube' => 'https://youtube.com/c/pemkabsijunjung',
+            'name' => 'Sistem Informasi Pemerintahan',
+            'slug' => 'sistem-informasi-pemerintahan',
+            'logo' => null, // Akan diisi melalui admin
+            'favicon' => null, // Akan diisi melalui admin
+            'kepala_instansi' => 'Kepala Dinas',
+            'alamat_instansi' => 'Jl. Raya No. 1, Kota Anda',
+            'no_telp_instansi' => '021-12345678',
+            'email_instansi' => 'info@example.com',
+            'facebook' => 'https://facebook.com',
+            'twitter' => 'https://twitter.com',
+            'instagram' => 'https://instagram.com',
+            'youtube' => 'https://youtube.com',
         ];
-
+        
         // Create the settings record
-        Pengaturan::create($settings);
+        \App\Models\Pengaturan::create($settings);
 
         $this->command->info('Successfully created settings!');
     }
