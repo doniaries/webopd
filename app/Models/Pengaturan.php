@@ -22,11 +22,15 @@ class Pengaturan extends Model
         'twitter',
         'instagram',
         'youtube',
+        'latitude',
+        'longitude',
     ];
 
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'latitude' => 'decimal:8',
+        'longitude' => 'decimal:8',
     ];
 
     protected static function boot()
@@ -46,13 +50,6 @@ class Pengaturan extends Model
         });
     }
 
-    /**
-     * Get the team that owns the pengaturan.
-     */
-    // public function team(): BelongsTo
-    // {
-    //     return $this->belongsTo(Team::class);
-    // }
 
     public static function getFirst()
     {

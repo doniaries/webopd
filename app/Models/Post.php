@@ -47,50 +47,8 @@ class Post extends Model
 
     /**
      * Get the team that owns the post.
-    {
-        parent::boot();
+   
 
-        static::creating(function ($post) {
-            // Generate slug if not provided
-            if (empty($post->slug)) {
-                $post->slug = \Illuminate\Support\Str::slug($post->title);
-                
-                // Make slug unique if needed
-                $count = 1;
-                $originalSlug = $post->slug;
-                
-                // Check if the slug already exists
-                while (static::where('slug', $post->slug)->exists()) {
-                    $post->slug = $originalSlug . '-' . $count++;
-                }
-            }
-
-            if ($post->status === 'published' && !$post->published_at) {
-                $post->published_at = now();
-            }
-        });
-
-        static::updating(function ($post) {
-            // If slug is being updated, ensure it's unique
-            if ($post->isDirty('slug')) {
-                $count = 1;
-                $originalSlug = $post->slug;
-                
-                // Check if the slug already exists (excluding current post)
-                while (static::where('slug', $post->slug)
-                           ->where('id', '!=', $post->id)
-                           ->exists()) {
-                    $post->slug = $originalSlug . '-' . $count++;
-                }
-            }
-
-            if ($post->isDirty('status') && $post->status === 'published' && !$post->published_at) {
-                $post->published_at = now();
-            }
-        });
-    }
-
-    /**
      * Get the excerpt attribute.
      */
     public function getExcerptAttribute()
@@ -122,7 +80,7 @@ class Post extends Model
 
         // Pastikan path relatif ke storage
         $imagePath = ltrim($this->foto_utama, '/');
-        
+
         // Coba berbagai lokasi penyimpanan
         $possiblePaths = [
             $imagePath,
@@ -149,7 +107,7 @@ class Post extends Model
         // Jika masih tidak ditemukan, kembalikan placeholder
         return $this->getDefaultPlaceholder();
     }
-    
+
     /**
      * Get default placeholder data
      */

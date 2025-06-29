@@ -66,6 +66,21 @@ class PengaturanResource extends Resource
                             ->unique(ignoreRecord: true)
                             ->maxLength(255),
 
+                        Forms\Components\TextInput::make('alamat_instansi')
+                            ->label('Alamat Instansi')
+                            ->required()
+                            ->maxLength(255),
+
+                        // Add these inside the Informasi Website section, before the columns(2) call
+                        Forms\Components\TextInput::make('latitude')
+                            ->label('Latitude')
+                            ->maxLength(20)
+                            ->helperText('Contoh: -0.6638828813218716'),
+
+                        Forms\Components\TextInput::make('longitude')
+                            ->label('Longitude')
+                            ->helperText('Contoh: 100.93693581443286'),
+
                         // Sosial Media
                         Forms\Components\TextInput::make('facebook')
                             ->label('Facebook')
@@ -86,6 +101,7 @@ class PengaturanResource extends Resource
                             ->label('YouTube')
                             ->url()
                             ->maxLength(255),
+
                     ])
                     ->columns(2),
 
@@ -137,10 +153,16 @@ class PengaturanResource extends Resource
                 Tables\Columns\TextColumn::make('no_telp_instansi')
                     ->searchable()
                     ->label('No. Telp'),
-
-                Tables\Columns\TextColumn::make('email_instansi')
+                Tables\Columns\TextColumn::make('alamat_instansi')
                     ->searchable()
-                    ->label('Email'),
+                    ->label('Alamat'),
+                Tables\Columns\TextColumn::make('latitude')
+                    ->searchable()
+                    ->label('Latitude'),
+                Tables\Columns\TextColumn::make('longitude')
+                    ->searchable()
+                    ->label('Longitude'),
+
                 Tables\Columns\TextColumn::make('logo_instansi')
                     ->searchable()
                     ->label('Logo'),

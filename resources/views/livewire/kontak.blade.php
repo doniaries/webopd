@@ -1,5 +1,6 @@
 <div>
     <x-page-header title="Kontak Kami" />
+    
     <div class="bg-gray-50 py-6">
         <div class="xl:container mx-auto px-3 sm:px-4 xl:px-2">
             <div class="flex flex-wrap">
@@ -86,10 +87,21 @@
                         <div class="mb-7">
                             <h3 class="text-2xl font-bold mb-4">Lokasi Kami</h3>
                             <div class="rounded-lg overflow-hidden h-96 bg-gray-100">
-                                <!-- Placeholder for map, can be replaced with actual map embed -->
-                                <div class="w-full h-full flex items-center justify-center">
-                                    <p class="text-gray-500">Peta lokasi akan ditampilkan di sini</p>
-                                </div>
+                                @if($pengaturan && $pengaturan->latitude && $pengaturan->longitude)
+                                    <iframe 
+                                        width="100%" 
+                                        height="100%" 
+                                        frameborder="0" 
+                                        style="border:0" 
+                                        referrerpolicy="no-referrer-when-downgrade"
+                                        src="https://www.google.com/maps/embed/v1/place?key={{ config('services.google.maps_key') }}&q={{ $pengaturan->latitude }},{{ $pengaturan->longitude }}&zoom=15&maptype=roadmap"
+                                        allowfullscreen>
+                                    </iframe>
+                                @else
+                                    <div class="w-full h-full flex items-center justify-center">
+                                        <p class="text-gray-500">Koordinat lokasi belum diatur</p>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -97,4 +109,6 @@
             </div>
         </div>
     </div>
+
+    <!-- Google Maps API is loaded via the iframe embed -->
 </div>

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('nama_layanan')->unique();
             $table->string('slug')->unique();
             $table->string('syarat')->nullable();
+            $table->string('biaya')->nullable();
             $table->string('file')->nullable();
             $table->timestamps();
         });

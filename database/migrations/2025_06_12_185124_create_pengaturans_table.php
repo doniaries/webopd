@@ -25,6 +25,8 @@ return new class extends Migration
             $table->string('twitter')->nullable();
             $table->string('instagram')->nullable();
             $table->string('youtube')->nullable();
+            $table->decimal('latitude', 10, 8)->nullable()->comment('Koordinat latitude untuk peta');
+            $table->decimal('longitude', 11, 8)->nullable()->comment('Koordinat longitude untuk peta');
             $table->timestamps();
 
             // Add indexes
