@@ -23,15 +23,37 @@ class ExternalLinkResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
+                Forms\Components\TextInput::make('nama')
+                    ->label('Nama ')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('url')
+                    ->label('URL')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\Textarea::make('deskripsi')
+                    ->label('Deskripsi')
+                    ->nullable(),
+                Forms\Components\Select::make('status')
+                    ->label('Status')
+                    ->options([
+                        'aktif' => 'Aktif',
+                        'tidak aktif' => 'Tidak Aktif'
+                    ])
+                    ->default('aktif')
+                    ->required()
+                    ->searchable()
+                    ->preload(false),
+                Forms\Components\TextInput::make('urutan')
+                    ->label('Urutan')
+                    ->numeric()
+                    ->default(0),
                 Forms\Components\FileUpload::make('icon')
+                    ->label('Icon')
+                    ->directory('external-links')
+                    ->image()
+                    ->imageEditor()
                     ->required(),
-
             ]);
     }
 
@@ -39,12 +61,31 @@ class ExternalLinkResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
+                Tables\Columns\TextColumn::make('nama')
+                    ->label('Nama')
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('url')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('icon')
-                    ->searchable(),
+                    ->label('URL')
+                    ->searchable()
+                    ->wrap()
+                    ->url(fn($record) => $record->url, true),
+                Tables\Columns\TextColumn::make('status')
+                    ->label('Status')
+                    ->badge()
+                    ->color(fn(string $state): string => match ($state) {
+                        'aktif' => 'success',
+                        'tidak aktif' => 'danger',
+                        default => 'gray',
+                    })
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('urutan')
+                    ->label('Urutan')
+                    ->sortable(),
+                Tables\Columns\ImageColumn::make('icon')
+                    ->label('Icon')
+                    ->circular()
+                    ->height(40),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -81,5 +122,13 @@ class ExternalLinkResource extends Resource
             'create' => Pages\CreateExternalLink::route('/create'),
             'edit' => Pages\EditExternalLink::route('/{record}/edit'),
         ];
+    }
+    
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
     }
 }

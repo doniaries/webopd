@@ -8,7 +8,6 @@ class Dokumen extends Model
 {
     protected $table = 'dokumens';
     protected $fillable = [
-        // 'team_id',
         'nama_dokumen',
         'slug',
         'deskripsi',
@@ -24,9 +23,4 @@ class Dokumen extends Model
     protected $casts = [
         'published_at' => 'datetime',
     ];
-
-    // public function team()
-    // {
-    //     return $this->belongsTo(Team::class);
-    // }
 }

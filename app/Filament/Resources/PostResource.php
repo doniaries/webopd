@@ -156,7 +156,7 @@ class PostResource extends Resource
                                             }),
                                         // User selection - only visible and changeable by super admin
                                         Forms\Components\Select::make('user_id')
-                                            ->relationship('author', 'name')
+                                            ->relationship('user', 'name')
                                             ->default(fn() => \Filament\Facades\Filament::auth()->id())
                                             ->dehydrated(),
 

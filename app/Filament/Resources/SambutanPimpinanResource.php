@@ -64,7 +64,6 @@ class SambutanPimpinanResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn(Builder $query) => $query->where('team_id', Auth::user()->current_team_id))
             ->columns([
                 Tables\Columns\TextColumn::make('isi_sambutan')
                     ->label('Isi Sambutan')

@@ -190,26 +190,18 @@ class UserResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        // Start with parent query
         $query = parent::getEloquentQuery()
             ->select('users.*')
             ->with(['roles']);
 
-        // Super admin bisa melihat semua user
-        if (auth()->user()->hasRole('super_admin')) {
-            return $query;
-        }
-
-        // Admin hanya bisa melihat user di team mereka sendiri dan bukan super_admin
-        $teamIds = auth()->user()->teams->pluck('id')->toArray();
-
-        return $query
-            ->whereHas('teams', function (Builder $q) use ($teamIds) {
-                $q->whereIn('teams.id', $teamIds);
-            })
-            ->whereDoesntHave('roles', function (Builder $q) {
+        // Non-super admin tidak bisa melihat super admin
+        if (!auth()->user()->hasRole('super_admin')) {
+            $query->whereDoesntHave('roles', function (Builder $q) {
                 $q->where('name', 'super_admin');
             });
+        }
+
+        return $query;
     }
 
     public static function getNavigationBadge(): ?string

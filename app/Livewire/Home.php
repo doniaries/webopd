@@ -44,7 +44,7 @@ class Home extends Component
         try {
             // Load banners first
             $this->loadBanners();
-            
+
             // Get tags with published posts
             $this->tags = Tag::whereHas('posts', function ($query) {
                 $query->where('status', 'published');
@@ -138,14 +138,14 @@ class Home extends Component
                     'first_item' => $this->agenda->first()
                 ]);
             }
-            
+
             // Get latest dokumens with views and downloads
             try {
                 $this->dokumens = \App\Models\Dokumen::orderBy('created_at', 'desc')
                     ->select(['id', 'nama_dokumen', 'deskripsi', 'cover', 'file', 'tahun_terbit', 'views', 'downloads'])
                     ->take(3)
                     ->get();
-                    
+
                 if (app()->environment('local')) {
                     \Illuminate\Support\Facades\Log::info('Dokumen data:', [
                         'count' => $this->dokumens->count()
@@ -166,24 +166,8 @@ class Home extends Component
         }
     }
 
-    /**
-     * Load active banners for the current team
-     *
-     * @return void
-     */
-    /**
-     * @return \Illuminate\Support\Collection<object{judul: string, gambar_url: string, url: string, is_banner: bool}>
-     */
-    /**
-     * Load active banners
-     *
-     * @return \Illuminate\Support\Collection<object{judul: string, gambar_url: string, url: string, is_banner: bool}>
-     */
-    /**
-     * Load active banners
-     *
-     * @return \Illuminate\Support\Collection<object{judul: string, gambar_url: string, url: string, is_banner: bool}>
-     */
+
+
     protected function loadBannersData()
     {
         try {
@@ -192,8 +176,8 @@ class Home extends Component
                 ->latest()
                 ->take(5)
                 ->get();
-                
-            return $banners->map(function($banner) {
+
+            return $banners->map(function ($banner) {
                 return (object)[
                     'id' => $banner->id,
                     'judul' => $banner->judul ?? 'Banner ' . $banner->id,
@@ -219,8 +203,10 @@ class Home extends Component
     public function render()
     {
         // Load banners if not already loaded or empty
-        if (!isset($this->banners) || (is_array($this->banners) && empty($this->banners)) || 
-            ($this->banners instanceof \Illuminate\Support\Collection && $this->banners->isEmpty())) {
+        if (
+            !isset($this->banners) || (is_array($this->banners) && empty($this->banners)) ||
+            ($this->banners instanceof \Illuminate\Support\Collection && $this->banners->isEmpty())
+        ) {
             $this->loadBanners();
         }
 

@@ -34,6 +34,14 @@ class User extends Authenticatable implements FilamentUser
         'is_active' => 'boolean',
     ];
 
+    /**
+     * Get the external links for the user.
+     */
+    public function externalLinks()
+    {
+        return $this->hasMany(ExternalLink::class);
+    }
+
 
     public function canAccessPanel(Panel $panel): bool
     {

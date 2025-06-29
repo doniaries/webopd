@@ -7,14 +7,24 @@ use Illuminate\Database\Eloquent\Model;
 class ExternalLink extends Model
 {
     protected $fillable = [
-        'name',
+        'nama',
         'url',
         'icon',
-        'team_id',
+        'deskripsi',
+        'status',
+        'urutan'
     ];
 
-    // public function team()
-    // {
-    //     return $this->belongsTo(Team::class);
-    // }
+    protected $casts = [
+        'status' => 'string',
+        'urutan' => 'integer'
+    ];
+
+    /**
+     * Get the user that owns the external link.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

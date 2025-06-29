@@ -18,8 +18,8 @@ class PengaturanSeeder extends Seeder
         // Create default settings
         $settings = [
             'nama_website' => 'Website Pemerintah',
-            'logo_instansi' => 'logo.png',
-            'favicon_instansi' => 'favicon.ico',
+            'logo_instansi' => 'assets/img/logo.png',
+            'favicon_instansi' => 'assets/img/favicon.png',
             'kepala_instansi' => 'Dr. John Doe, M.Si',
             'alamat_instansi' => 'Jl. Lintas Sumatra No. 1, Muaro Sijunjung, Sumatera Barat',
             'no_telp_instansi' => '(0754) 12345',

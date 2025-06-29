@@ -13,7 +13,6 @@ class Infografis extends Model
 
     protected $table = 'infografis';
     protected $fillable = [
-        // 'team_id',
         'judul',
         'gambar',
         'kategori',

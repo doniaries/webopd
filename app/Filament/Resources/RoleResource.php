@@ -139,7 +139,10 @@ class RoleResource extends Resource implements HasShieldPermissions
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make()
-                        ->hidden(fn() => ! auth()->user()->can('delete_any_roles')),
+                        ->hidden(function () {
+                            $user = auth()->user();
+                            return !$user || !method_exists($user, 'can') || !$user->can('delete_any_roles');
+                        }),
                 ]),
             ]);
     }

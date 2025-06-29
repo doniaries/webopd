@@ -114,9 +114,7 @@ class PostsRelationManager extends RelationManager
                     ->preloadRecordSelect()
                     ->recordSelectSearchColumns(['title'])
                     ->form(fn(Tables\Actions\AttachAction $action): array => [
-                        $action->getRecordSelect(),
-                        Forms\Components\Hidden::make('team_id')
-                            ->default(fn() => auth()->user()->current_team_id),
+                        $action->getRecordSelect()
                     ]),
             ])
             ->actions([

@@ -93,7 +93,6 @@ class ImagesRelationManager extends RelationManager
             ->headerActions([
                 Tables\Actions\CreateAction::make()
                     ->mutateFormDataUsing(function (array $data): array {
-                        $data['team_id'] = auth()->user()->teams->first()?->id;
                         return $data;
                     }),
             ])
