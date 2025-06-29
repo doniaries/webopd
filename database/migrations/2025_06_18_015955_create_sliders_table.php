@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('sliders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('team_id')->constrained('teams')->onDelete('cascade');
             $table->string('judul');
             $table->text('deskripsi')->nullable();
             $table->string('gambar');

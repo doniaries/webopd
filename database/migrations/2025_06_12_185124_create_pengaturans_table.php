@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('pengaturans', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('team_id')->constrained('teams')->onDelete('cascade');
             $table->string('nama_website')->unique()->nullable();
             $table->string('logo_instansi')->nullable();
             $table->string('favicon_instansi')->nullable();
@@ -27,7 +26,6 @@ return new class extends Migration
             $table->string('youtube')->nullable();
             $table->timestamps();
 
-            $table->index('team_id');
             $table->index('nama_website');
             $table->index('email_instansi');
         });

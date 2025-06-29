@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('infografis', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('team_id')->constrained()->onDelete('cascade');
             $table->string('judul')->nullable();
             $table->string('gambar')->nullable();
             $table->string('kategori')->nullable();
@@ -21,10 +20,6 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            // Add composite unique constraint for team_id and judul
-            $table->unique(['team_id', 'judul']);
-            
-            // Add indexes for better performance
             $table->index('judul');
             $table->index('kategori');
             $table->index('is_active');

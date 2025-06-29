@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('produk_hukums', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('team_id')->constrained('teams')->onDelete('cascade');
             $table->string('judul');
             $table->string('slug')->unique()->nullable();
             $table->text('uraian')->nullable();
@@ -21,7 +20,7 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->index(['team_id', 'judul', 'file', 'slug']);
+            $table->index(['judul', 'file', 'slug']);
         });
     }
 

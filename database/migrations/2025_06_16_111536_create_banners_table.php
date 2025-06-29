@@ -13,14 +13,12 @@ return new class extends Migration
     {
         Schema::create('banners', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('team_id')->constrained('teams')->onDelete('cascade');
             $table->string('judul');
             $table->string('keterangan')->nullable();
             $table->string('gambar')->default('')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
 
-            $table->index('team_id');
             $table->index('judul');
             $table->index('keterangan');
             $table->index('gambar');

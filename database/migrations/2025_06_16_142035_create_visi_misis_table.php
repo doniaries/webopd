@@ -13,13 +13,10 @@ return new class extends Migration
     {
         Schema::create('visi_misis', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('team_id')->constrained('teams')->onDelete('cascade');
             $table->text('visi')->nullable();
             $table->text('misi')->nullable();
             $table->timestamps();
             $table->softDeletes();
-
-            $table->index(['team_id']);
         });
     }
 

@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('agenda_kegiatans', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('team_id')->constrained('teams')->onDelete('cascade');
             $table->string('nama_agenda')->nullable();
             $table->string('slug')->nullable();
             $table->text('uraian_agenda')->nullable();
@@ -26,11 +25,6 @@ return new class extends Migration
             $table->softDeletes();
             $table->timestamps();
 
-            // Add composite unique constraint for team_id and nama_agenda
-            $table->unique(['team_id', 'nama_agenda']);
-
-            // Add indexes for better performance
-            $table->index('team_id');
             $table->index('nama_agenda');
         });
     }

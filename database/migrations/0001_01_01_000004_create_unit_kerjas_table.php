@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('unit_kerjas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('team_id')->constrained('teams')->cascadeOnDelete();
             $table->string('nama_unit')->unique();
             $table->string('slug')->unique();
             $table->timestamps();

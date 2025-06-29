@@ -13,14 +13,10 @@ return new class extends Migration
     {
         Schema::create('sambutan_pimpinans', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('team_id')->constrained('teams')->onDelete('cascade');
             $table->text('isi_sambutan')->nullable();
             $table->timestamps();
             $table->softDeletes();
 
-            $table->index('team_id');
-
-            // Add indexes for better performance
             $table->index('created_at');
             $table->index('updated_at');
         });

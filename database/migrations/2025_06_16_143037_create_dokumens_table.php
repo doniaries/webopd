@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('dokumens', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('team_id')->constrained('teams')->onDelete('cascade');
             $table->string('nama_dokumen')->nullable();
             $table->string('slug')->nullable();
             $table->text('deskripsi')->nullable();
@@ -26,11 +25,6 @@ return new class extends Migration
 
             $table->timestamps();
 
-            // Add composite unique constraints
-            $table->unique(['team_id', 'slug']);
-
-            // Add indexes for better performance
-            $table->index('team_id');
             $table->index('nama_dokumen');
             $table->index('slug');
             $table->index('tahun_terbit');

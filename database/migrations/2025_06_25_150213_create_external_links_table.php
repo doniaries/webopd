@@ -16,10 +16,8 @@ return new class extends Migration
             $table->string('name')->unique()->nullable();
             $table->string('url');
             $table->string('icon')->nullable();
-            $table->foreignId('team_id')->constrained()->onDelete('cascade');
             $table->timestamps();
 
-            $table->index('team_id');
             $table->index('url');
             $table->index('name');
         });

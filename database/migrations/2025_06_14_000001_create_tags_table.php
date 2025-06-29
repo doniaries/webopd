@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('tags', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('team_id')->constrained('teams')->onDelete('cascade');
             $table->string('name');
             $table->string('slug');
             $table->timestamps();
@@ -23,9 +22,6 @@ return new class extends Migration
             $table->index('name');
             $table->index('slug');
             $table->index('created_at');
-
-            // Make slug unique per team
-            $table->unique(['team_id', 'slug']);
         });
     }
 

@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('team_id')->constrained('teams')->onDelete('cascade');
             $table->string('title');
             $table->string('slug');
             $table->text('content');
@@ -28,7 +27,6 @@ return new class extends Migration
             $table->softDeletes();
 
             // Add composite unique constraint for team_id and slug
-            $table->unique(['team_id', 'slug']);
 
             // Add indexes for better performance
             $table->index('status');
