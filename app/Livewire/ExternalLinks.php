@@ -18,8 +18,7 @@ class ExternalLinks extends Component
 
     public function loadLinks()
     {
-        $this->links = ExternalLink::with('team')
-            ->orderBy('name')
+        $this->links = ExternalLink::orderBy('nama')
             ->limit($this->limit)
             ->get();
     }

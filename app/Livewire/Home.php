@@ -91,10 +91,6 @@ class Home extends Component
                 $informasiQuery = \App\Models\Informasi::query()
                     ->withoutGlobalScopes() // Temporarily disable global scopes to ensure we get all relevant announcements
                     ->published()
-                    ->where(function ($query) {
-                        $query->where('team_id', 1) // Always include team_id=1
-                            ->orWhere('team_id', Auth::check() ? Auth::user()->current_team_id : 1);
-                    })
                     ->orderBy('published_at', 'desc')
                     ->take(5);
 
@@ -126,8 +122,7 @@ class Home extends Component
                     'dari_tanggal',
                     'sampai_tanggal',
                     'waktu_mulai',
-                    'waktu_selesai',
-                    'team_id'
+                    'waktu_selesai'
                 ])
                 ->where('dari_tanggal', '>=', now())
                 ->orderBy('dari_tanggal')
@@ -179,134 +174,46 @@ class Home extends Component
     /**
      * @return \Illuminate\Support\Collection<object{judul: string, gambar_url: string, url: string, is_banner: bool}>
      */
+    /**
+     * Load active banners
+     *
+     * @return \Illuminate\Support\Collection<object{judul: string, gambar_url: string, url: string, is_banner: bool}>
+     */
+    /**
+     * Load active banners
+     *
+     * @return \Illuminate\Support\Collection<object{judul: string, gambar_url: string, url: string, is_banner: bool}>
+     */
     protected function loadBannersData()
     {
         try {
-            // Get pengaturan with team relationship
-            $pengaturan = \App\Models\Pengaturan::with('team')->first();
-            $teamId = $pengaturan->team_id ?? null;
-            $teamName = $pengaturan->team->name ?? 'No Team';
-
-            \Illuminate\Support\Facades\Log::info('Loading banners', [
-                'team_id' => $teamId,
-                'team_name' => $teamName,
-                'pengaturan_exists' => $pengaturan ? 'Yes' : 'No'
-            ]);
-
-            // Start building the query for team-specific banners
-            $query = \App\Models\Banner::where('is_active', true);
-            
-            if (!is_null($teamId)) {
-                // First try to get team-specific banners
-                $teamBanners = (clone $query)
-                    ->where('team_id', $teamId)
-                    ->latest()
-                    ->take(4)
-                    ->get();
-
-                // If no team-specific banners found, get global banners (where team_id is null)
-                if ($teamBanners->isEmpty()) {
-                    $banners = (clone $query)
-                        ->whereNull('team_id')
-                        ->latest()
-                        ->take(4)
-                        ->get();
-                } else {
-                    $banners = $teamBanners;
-                }
-            } else {
-                // If no team_id is set, only get global banners
-                $banners = $query->whereNull('team_id')
-                    ->latest()
-                    ->take(4)
-                    ->get();
-            }
-
-            // Log the results for debugging
-            \Illuminate\Support\Facades\Log::info('Banners loaded', [
-                'team_id' => $teamId,
-                'banners_count' => $banners->count(),
-                'banner_ids' => $banners->pluck('id')->toArray(),
-                'banners' => $banners->toArray()
-            ]);
-
-            // Map the banners to the required format
-            return $banners->map(function ($banner) {
-                // Ensure the image path is correct
-                $gambarUrl = null;
-                if (!empty($banner->gambar)) {
-                    // Remove any leading slashes or backslashes from the path
-                    $cleanPath = ltrim($banner->gambar, '/\\');
-                    
-                    // Check if the file exists in storage
-                    $storagePath = storage_path('app/public/' . $cleanPath);
-                    
-                    if (file_exists($storagePath)) {
-                        $gambarUrl = asset('storage/' . $cleanPath);
-                    } else {
-                        // Try with the original path if clean path doesn't exist
-                        $storagePath = storage_path('app/public/' . $banner->gambar);
-                        if (file_exists($storagePath)) {
-                            $gambarUrl = asset('storage/' . $banner->gambar);
-                        }
-                    }
-                    
-                    // Log if image not found
-                    if (!$gambarUrl) {
-                        \Illuminate\Support\Facades\Log::warning('Banner image not found', [
-                            'banner_id' => $banner->id,
-                            'gambar' => $banner->gambar,
-                            'storage_path' => $storagePath
-                        ]);
-                    }
-                }
+            // Get active banners
+            $banners = \App\Models\Banner::where('is_active', true)
+                ->latest()
+                ->take(5)
+                ->get();
                 
-                // Fallback to default image if no valid image found
-                if (!$gambarUrl) {
-                    $gambarUrl = asset('assets/img/hero-img.png');
-                }
-                
-                return (object) [
+            return $banners->map(function($banner) {
+                return (object)[
                     'id' => $banner->id,
                     'judul' => $banner->judul ?? 'Banner ' . $banner->id,
-                    'gambar_url' => $gambarUrl,
-                    'url' => $banner->keterangan ?: '#',
-                    'is_banner' => true,
-                    'team_id' => $banner->team_id
+                    'gambar_url' => $banner->gambar_url,
+                    'url' => $banner->url ?: '#',
+                    'is_banner' => true
                 ];
             });
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('Error in loadBannersData: ' . $e->getMessage(), [
-                'exception' => $e->getTraceAsString(),
-                'file' => $e->getFile(),
-                'line' => $e->getLine()
-            ]);
+            \Illuminate\Support\Facades\Log::error('Error loading banners: ' . $e->getMessage());
             return collect();
         }
     }
 
+    /**
+     * Load banners and update the component state
+     */
     public function loadBanners(): void
     {
-        try {
-            $banners = $this->loadBannersData();
-            $this->banners = $banners;
-            
-            // Debug log
-            \Illuminate\Support\Facades\Log::info('Banners loaded:', [
-                'count' => $banners->count(),
-                'banners' => $banners->toArray(),
-                'team_id' => \App\Models\Pengaturan::first()?->team_id
-            ]);
-            
-            if ($banners->isEmpty()) {
-                \Illuminate\Support\Facades\Log::warning('No active banners found for team');
-            }
-        } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('Error loading banners: ' . $e->getMessage(), [
-                'exception' => $e->getTraceAsString()
-            ]);
-            $this->banners = collect();
-        }
+        $this->banners = $this->loadBannersData();
     }
 
     public function render()
@@ -330,14 +237,13 @@ class Home extends Component
         return view('livewire.home', [
             'pageTitle' => 'Beranda - ' . config('app.name'),
             'pageDescription' => 'Portal resmi ' . config('app.name') . ' untuk informasi terbaru, informasi, dan layanan publik.',
-            'banners' => $this->banners,
             'featuredPosts' => $this->featuredPosts,
             'tags' => $tags,
             'banners' => $this->banners,
             'sliders' => $this->sliders,
             'informasi' => $this->informasi,
             'agenda' => $this->agenda,
-            'pengaturan' => \App\Models\Pengaturan::getFirst(),
+            'pengaturan' => \App\Models\Pengaturan::first(),
             'popularPosts' => $this->popularPosts,
             'dokumens' => $this->dokumens,
         ]);

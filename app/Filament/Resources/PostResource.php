@@ -151,13 +151,13 @@ class PostResource extends Resource
                                                     $record->tags()->detach();
                                                     return;
                                                 }
-                                                
+
                                                 $record->tags()->sync($state);
                                             }),
                                         // User selection - only visible and changeable by super admin
                                         Forms\Components\Select::make('user_id')
                                             ->relationship('author', 'name')
-                                            ->default(fn () => \Filament\Facades\Filament::auth()->id())
+                                            ->default(fn() => \Filament\Facades\Filament::auth()->id())
                                             ->dehydrated(),
 
                                         Forms\Components\Hidden::make('views')
@@ -248,15 +248,10 @@ class PostResource extends Resource
                     ]),
                 Tables\Filters\SelectFilter::make('tags')
                     ->label('Tag')
-                    ->relationship('tags', 'name', function ($query) {
-                        $user = auth()->user();
-                        if ($user && $user->current_team_id) {
-                            return $query->where('team_id', $user->current_team_id);
-                        }
-                        return $query->whereRaw('1 = 0'); // Return an empty query if no team_id
-                    })
+                    ->relationship('tags', 'name')
                     ->multiple()
-                    ->searchable(),
+                    ->searchable()
+                    ->preload(),
                 Tables\Filters\Filter::make('published_at')
                     ->label('Tanggal Publikasi')
                     ->form([
@@ -306,10 +301,10 @@ class PostResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         $query = parent::getEloquentQuery();
-        
+
         if (Filament::auth()->check()) {
             $user = Filament::auth()->user();
-            
+
             // If user is not super admin, only show their own posts
             if ($user) {
                 $isSuperAdmin = method_exists($user, 'hasRole') ? $user->hasRole('super_admin') : false;
