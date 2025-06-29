@@ -65,11 +65,21 @@ class SambutanPimpinanResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('nama')
+                    ->label('Nama')
+                    ->limit(100),
+                Tables\Columns\TextColumn::make('jabatan')
+                    ->label('Jabatan')
+                    ->default('Kepala Dinas')
+                    ->limit(100),
                 Tables\Columns\TextColumn::make('isi_sambutan')
                     ->label('Isi Sambutan')
                     ->limit(100)
                     ->html()
                     ->wrap(),
+                Tables\Columns\ImageColumn::make('foto')
+                    ->label('Foto Pimpinan'),
+
 
                 Tables\Columns\TextColumn::make('updated_at')
                     ->label('Terakhir Diperbarui')

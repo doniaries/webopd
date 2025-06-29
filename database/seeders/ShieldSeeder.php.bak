@@ -1,0 +1,154 @@
+<?php
+
+namespace Database\Seeders;
+
+use BezhanSalleh\FilamentShield\Support\Utils;
+use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
+
+class ShieldSeeder extends Seeder
+{
+    public function run(): void
+    {
+        // Reset cached roles and permissions
+        app()[PermissionRegistrar::class]->forgetCachedPermissions();
+
+        // Get or create roles
+        $superAdminRole = Role::firstOrCreate([
+            'name' => 'super_admin',
+            'guard_name' => 'web'
+        ]);
+
+        $adminRole = Role::firstOrCreate([
+            'name' => 'admin',
+            'guard_name' => 'web'
+        ]);
+
+        $editorRole = Role::firstOrCreate([
+            'name' => 'editor',
+            'guard_name' => 'web'
+        ]);
+
+        // Define all resources that need permissions
+        $resources = [
+            'user',
+            'role',
+            'permission',
+            'agenda_kegiatan',
+            'banner',
+            'slider',
+            'informasi',
+            'produk_hukum',
+            'infografis',
+            'dokumen',
+            'external_link',
+            'post',
+            'tag',
+            'pengaturan',
+            'unit_kerja',
+            'visi_misi',
+            'sambutan_pimpinan',
+        ];
+
+        // Define all permissions for each resource
+        $permissions = [];
+        $permissionTypes = [
+            'view_any_',
+            'view_',
+            'create_',
+            'update_',
+            'delete_',
+            'delete_any_',
+            'restore_',
+            'restore_any_',
+            'force_delete_',
+            'force_delete_any_',
+            'replicate_',
+            'reorder_',
+        ];
+
+        // Generate permissions for each resource
+        foreach ($resources as $resource) {
+            foreach ($permissionTypes as $type) {
+                // Skip invalid permission combinations
+                if (
+                    in_array($type, ['restore_', 'restore_any_', 'force_delete_', 'force_delete_any_', 'replicate_']) &&
+                    in_array($resource, ['role', 'permission'])
+                ) {
+                    continue;
+                }
+
+                $permissions[] = $type . $resource;
+            }
+        }
+
+        // Add special page permissions
+        $pagePermissions = [
+            'page_Themes',
+            'view_settings',
+            'view_navigation-menus',
+            'view_filament-shield',
+            'view_filament-pages',
+            'view_filament-widgets',
+        ];
+
+        $permissions = array_merge($permissions, $pagePermissions);
+        $permissions = array_unique($permissions);
+
+        // Create all permissions
+        foreach ($permissions as $permission) {
+            Permission::firstOrCreate([
+                'name' => $permission,
+                'guard_name' => 'web',
+            ]);
+        }
+
+        // Assign all permissions to super admin
+        $allPermissions = array_merge($permissions, $pagePermissions);
+        $superAdminRole->givePermissionTo($allPermissions);
+
+        // Assign limited permissions to admin
+        $adminPermissions = array_filter($permissions, function ($permission) {
+            return !in_array($permission, [
+                'view_any_role',
+                'view_role',
+                'create_role',
+                'update_role',
+                'delete_role',
+                'view_any_permission',
+                'view_permission',
+                'create_permission',
+                'update_permission',
+                'delete_permission',
+            ]);
+        });
+        $adminRole->givePermissionTo($adminPermissions);
+
+        // Assign limited permissions to editor
+        $editorPermissions = array_filter($permissions, function ($permission) {
+            return !in_array($permission, [
+                'view_any_role',
+                'view_role',
+                'create_role',
+                'update_role',
+                'delete_role',
+                'view_any_permission',
+                'view_permission',
+                'create_permission',
+                'update_permission',
+                'delete_permission',
+                'view_any_user',
+                'view_user',
+                'create_user',
+                'update_user',
+                'delete_user',
+            ]);
+        });
+        $editorRole->givePermissionTo($editorPermissions);
+        $editorRole->syncPermissions($editorPermissions);
+
+        $this->command->info('Shield Seeding Completed.');
+    }
+}

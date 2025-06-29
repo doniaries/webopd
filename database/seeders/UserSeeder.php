@@ -32,7 +32,7 @@ class UserSeeder extends Seeder
         ]);
         $superAdmin->syncRoles(['super_admin']);
 
-        // Create Admin User
+        // Create Admin User with super_admin role
         $admin = User::create([
             'name' => 'Admin',
             'email' => 'admin@gmail.com',
@@ -40,7 +40,7 @@ class UserSeeder extends Seeder
             'is_active' => true,
             'email_verified_at' => now(),
         ]);
-        $admin->syncRoles(['admin']);
+        $admin->syncRoles(['super_admin']);
 
         $this->command->info('User seeding completed!');
     }
