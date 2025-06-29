@@ -19,7 +19,6 @@ class Post extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        // 'team_id',
         'title',
         'slug',
         'content',
@@ -48,31 +47,22 @@ class Post extends Model
 
     /**
      * Get the team that owns the post.
-     */
-    // public function team(): BelongsTo
-    // {
-    //     return $this->belongsTo(Team::class);
-    // }
-
-    protected static function boot()
     {
         parent::boot();
 
         static::creating(function ($post) {
+            // Generate slug if not provided
             if (empty($post->slug)) {
-                $post->slug = Str::slug($post->title);
-            }
-
-            // Check if slug exists for this team and make it unique if needed
-            $originalSlug = $post->slug;
-            $count = 1;
-
-            // Check if the slug already exists for this team
-            while (static::where('team_id', $post->team_id)
-                ->where('slug', $post->slug)
-                ->exists()
-            ) {
-                $post->slug = $originalSlug . '-' . $count++;
+                $post->slug = \Illuminate\Support\Str::slug($post->title);
+                
+                // Make slug unique if needed
+                $count = 1;
+                $originalSlug = $post->slug;
+                
+                // Check if the slug already exists
+                while (static::where('slug', $post->slug)->exists()) {
+                    $post->slug = $originalSlug . '-' . $count++;
+                }
             }
 
             if ($post->status === 'published' && !$post->published_at) {
@@ -81,21 +71,15 @@ class Post extends Model
         });
 
         static::updating(function ($post) {
-            if ($post->isDirty('title') && empty($post->slug)) {
-                $post->slug = Str::slug($post->title);
-            }
-
-            // If slug is being updated, ensure it's unique for this team
+            // If slug is being updated, ensure it's unique
             if ($post->isDirty('slug')) {
-                $originalSlug = $post->slug;
                 $count = 1;
-
-                // Check if the slug already exists for this team (excluding current post)
-                while (static::where('team_id', $post->team_id)
-                    ->where('slug', $post->slug)
-                    ->where('id', '!=', $post->id)
-                    ->exists()
-                ) {
+                $originalSlug = $post->slug;
+                
+                // Check if the slug already exists (excluding current post)
+                while (static::where('slug', $post->slug)
+                           ->where('id', '!=', $post->id)
+                           ->exists()) {
                     $post->slug = $originalSlug . '-' . $count++;
                 }
             }
@@ -203,11 +187,9 @@ class Post extends Model
     }
 
 
-    public function tags(): BelongsToMany
+    public function tags()
     {
         return $this->belongsToMany(Tag::class, 'post_tag')
-            ->using(PostTag::class)
-            ->withPivot('team_id')
             ->withTimestamps();
     }
 

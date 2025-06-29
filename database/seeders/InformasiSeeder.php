@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Informasi;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -35,14 +36,14 @@ class InformasiSeeder extends Seeder
             ],
         ];
 
-        \App\Models\Team::all()->each(function ($team) use ($informasiData) {
-            foreach ($informasiData as $data) {
-                \App\Models\Informasi::create(array_merge($data, [
+        foreach ($informasiData as $data) {
+            Informasi::firstOrCreate(
+                ['judul' => $data['judul']],
+                array_merge($data, [
                     'published_at' => now(),
-                    'team_id' => $team->id,
                     'slug' => \Illuminate\Support\Str::slug($data['judul']),
-                ]));
-            }
-        });
+                ])
+            );
+        }
     }
 }

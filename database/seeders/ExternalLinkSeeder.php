@@ -4,89 +4,107 @@
 namespace Database\Seeders;
 
 use App\Models\ExternalLink;
-use App\Models\Team;
 use Illuminate\Database\Seeder;
 
 class ExternalLinkSeeder extends Seeder
 {
     public function run()
     {
-        // Pastikan ada minimal satu team
-        $team = Team::first();
-
-        if (!$team) {
-            $team = Team::create([
-                'name' => 'Pemerintah Pusat',
-                'slug' => 'pemerintah-pusat',
-                'description' => 'Lembaga Pemerintah Pusat'
-            ]);
-        }
-
         $links = [
             [
-                'name' => 'Kementerian Dalam Negeri',
-                'url' => 'https://www.kemendagri.go.id/',
-                'icon' => 'fa-building-columns',
-                'team_id' => $team->id,
+                'nama' => 'Sistem Informasi Kepegawaian',
+                'url' => 'https://sipkd.sijunjung.go.id',
+                'icon' => 'fas fa-users',
+                'deskripsi' => 'Akses sistem informasi kepegawaian daerah',
+                'status' => 'aktif',
+                'urutan' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
-                'name' => 'Kementerian Kesehatan',
-                'url' => 'https://www.kemkes.go.id/',
-                'icon' => 'fa-hospital',
-                'team_id' => $team->id,
+                'nama' => 'E-Planning',
+                'url' => 'https://eplanning.sijunjung.go.id',
+                'icon' => 'fas fa-project-diagram',
+                'deskripsi' => 'Sistem perencanaan pembangunan daerah',
+                'status' => 'aktif',
+                'urutan' => 2,
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
-                'name' => 'Kementerian Pendidikan',
-                'url' => 'https://www.kemdikbud.go.id/',
-                'icon' => null, // Tidak ada icon
-                'team_id' => $team->id,
+                'nama' => 'E-Budgeting',
+                'url' => 'https://ebudgeting.sijunjung.go.id',
+                'icon' => 'fas fa-money-bill-wave',
+                'deskripsi' => 'Sistem penganggaran berbasis elektronik',
+                'status' => 'aktif',
+                'urutan' => 3,
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
-                'name' => 'BPJS Kesehatan',
-                'url' => 'https://www.bpjsketenagakerjaan.go.id/',
-                'icon' => 'fa-heart-pulse',
-                'team_id' => $team->id,
+                'nama' => 'Sistem Informasi Kependudukan',
+                'url' => 'https://dukcapil.sijunjung.go.id',
+                'icon' => 'fas fa-id-card',
+                'deskripsi' => 'Layanan administrasi kependudukan online',
+                'status' => 'aktif',
+                'urutan' => 4,
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
-                'name' => 'Badan Pusat Statistik',
-                'url' => 'https://www.bps.go.id/',
-                'icon' => null, // Tidak ada icon
-                'team_id' => $team->id,
+                'nama' => 'Sistem Informasi Pengadaan',
+                'url' => 'https://lpse.sijunjung.go.id',
+                'icon' => 'fas fa-shopping-cart',
+                'deskripsi' => 'Layanan pengadaan barang/jasa pemerintah',
+                'status' => 'aktif',
+                'urutan' => 5,
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
-                'name' => 'Kementerian Keuangan',
-                'url' => 'https://www.kemenkeu.go.id/',
-                'icon' => null, // Tidak ada icon
-                'team_id' => $team->id,
+                'nama' => 'E-Surat',
+                'url' => 'https://surat.sijunjung.go.id',
+                'icon' => 'fas fa-envelope',
+                'deskripsi' => 'Sistem surat menyurat elektronik',
+                'status' => 'aktif',
+                'urutan' => 6,
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
-                'name' => 'BPN RI',
-                'url' => 'https://www.atrbpn.go.id/',
-                'icon' => 'fa-landmark',
-                'team_id' => $team->id,
+                'nama' => 'Sistem Informasi Kinerja Pegawai',
+                'url' => 'https://sikp.sijunjung.go.id',
+                'icon' => 'fas fa-chart-line',
+                'deskripsi' => 'Monitoring dan evaluasi kinerja pegawai',
+                'status' => 'aktif',
+                'urutan' => 7,
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
-                'name' => 'Kemenkumham',
-                'url' => 'https://www.kemenkumham.go.id/',
-                'icon' => 'fa-scale-balanced',
-                'team_id' => $team->id,
+                'nama' => 'Sistem Informasi Aset Daerah',
+                'url' => 'https://siad.sijunjung.go.id',
+                'icon' => 'fas fa-building',
+                'deskripsi' => 'Manajemen aset daerah',
+                'status' => 'aktif',
+                'urutan' => 8,
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
-                'name' => 'Kemenkeu RI',
-                'url' => 'https://www.kemenkeu.go.id/',
-                'icon' => 'fa-sack-dollar',
-                'team_id' => $team->id,
-            ],
-            [
-                'name' => 'BKN',
-                'url' => 'https://www.bkn.go.id/',
-                'icon' => 'fa-users',
-                'team_id' => $team->id,
+                'nama' => 'Sistem Informasi Keuangan Daerah',
+                'url' => 'https://sikd.sijunjung.go.id',
+                'icon' => 'fas fa-wallet',
+                'deskripsi' => 'Manajemen keuangan daerah',
+                'status' => 'aktif',
+                'urutan' => 9,
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
         ];
 
         foreach ($links as $link) {
-            ExternalLink::updateOrCreate(
+            ExternalLink::firstOrCreate(
                 ['url' => $link['url']],
                 $link
             );

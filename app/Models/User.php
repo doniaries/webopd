@@ -5,19 +5,16 @@ namespace App\Models;
 use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
 use Filament\Facades\Filament;
 use Filament\Models\Contracts\FilamentUser;
-use Filament\Models\Contracts\HasTenants;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable implements FilamentUser, HasTenants
+class User extends Authenticatable implements FilamentUser
 {
-    use Notifiable, HasFactory, HasRoles, HasPanelShield;
+    use HasFactory, Notifiable, HasRoles, HasPanelShield;
 
     protected $fillable = [
         'name',
@@ -38,31 +35,9 @@ class User extends Authenticatable implements FilamentUser, HasTenants
     ];
 
 
-    // public function team()
-    // {
-    //     return $this->teams()
-    //         ->where('teams.id', Filament::getTenant()?->id);
-    // }
-
-
-    // public function teams(): BelongsToMany
-    // {
-    //     return $this->belongsToMany(Team::class);
-    // }
-
-    public function getTenants(Panel $panel): Collection
-    {
-        return $this->teams;
-    }
-
-    public function canAccessTenant(Model $tenant): bool
-    {
-        return $this->teams()->whereKey($tenant)->exists();
-    }
-
     public function canAccessPanel(Panel $panel): bool
     {
-        return true;
+        return true; // All users can access the panel by default
     }
 
     public function isActive(): bool

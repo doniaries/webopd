@@ -30,9 +30,6 @@ class AgendaKegiatanResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Hidden::make('team_id')
-                    ->default(fn() => auth()->user()->teams->first()?->id)
-                    ->dehydrated(),
                 Forms\Components\TextInput::make('nama_agenda')
                     ->label('Nama Agenda')
                     ->required()
@@ -97,8 +94,6 @@ class AgendaKegiatanResource extends Resource
                 Tables\Columns\TextColumn::make('waktu_selesai')
                     ->label('Selesai')
                     ->time('H:i'),
-                Tables\Columns\TextColumn::make('team_id')
-                    ->hidden(),
 
                 Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime()

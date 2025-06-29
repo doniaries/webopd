@@ -13,7 +13,12 @@ return new class extends Migration
     {
         Schema::create('sambutan_pimpinans', function (Blueprint $table) {
             $table->id();
+            $table->string('judul');
+            $table->string('slug')->unique();
             $table->text('isi_sambutan')->nullable();
+            $table->string('foto')->nullable();
+            $table->string('nama')->nullable();
+            $table->string('jabatan')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

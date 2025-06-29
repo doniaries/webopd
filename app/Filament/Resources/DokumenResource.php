@@ -29,9 +29,6 @@ class DokumenResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('team_id')
-                    ->required()
-                    ->numeric(),
                 Forms\Components\TextInput::make('nama_dokumen')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('slug')
@@ -58,9 +55,6 @@ class DokumenResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('team_id')
-                    ->numeric()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('nama_dokumen')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('slug')

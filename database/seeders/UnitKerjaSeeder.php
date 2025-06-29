@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\Team;
 use App\Models\UnitKerja;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class UnitKerjaSeeder extends Seeder
 {
@@ -13,18 +13,16 @@ class UnitKerjaSeeder extends Seeder
         $unitKerjas = [
             [
                 'nama_unit' => 'Bidang Sekretariat',
+                'slug' => Str::slug('Bidang Sekretariat'),
                 'slug' => 'bidang-sekretariat',
-                'deskripsi' => 'Bertanggung jawab atas administrasi dan tata kelola organisasi',
             ],
             [
                 'nama_unit' => 'Bidang PIKP',
                 'slug' => 'bidang-pikp',
-                'deskripsi' => 'Bertanggung jawab atas pengelolaan informasi dan komunikasi publik',
             ],
             [
                 'nama_unit' => 'Bidang TI',
                 'slug' => 'bidang-ti',
-                'deskripsi' => 'Bertanggung jawab atas pengembangan dan pemeliharaan teknologi informasi',
             ],
         ];
 

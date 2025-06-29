@@ -23,8 +23,6 @@ class ExternalLinkResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Hidden::make('team_id')
-                    ->default(fn() => auth()->user()->teams->first()?->id),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
@@ -47,9 +45,6 @@ class ExternalLinkResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('icon')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('team_id')
-                    ->numeric()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

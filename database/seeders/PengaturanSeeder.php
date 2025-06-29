@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Pengaturan;
-use App\Models\Team;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
@@ -11,33 +10,81 @@ class PengaturanSeeder extends Seeder
 {
     public function run(): void
     {
-        $teams = Team::all();
+        // Base settings data
+        $settings = [
+            [
+                'key' => 'nama_aplikasi',
+                'value' => 'Sistem Informasi Pemerintahan',
+                'keterangan' => 'Nama aplikasi yang ditampilkan di header',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'key' => 'nama_instansi',
+                'value' => 'Pemerintah Kabupaten Sijunjung',
+                'keterangan' => 'Nama instansi pemilik aplikasi',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'key' => 'alamat_instansi',
+                'value' => 'Jl. Lintas Sumatra No. 1, Muaro Sijunjung, Sumatera Barat',
+                'keterangan' => 'Alamat lengkap instansi',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'key' => 'telepon_instansi',
+                'value' => '(0754) 12345',
+                'keterangan' => 'Nomor telepon instansi',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'key' => 'email_instansi',
+                'value' => 'info@sijunjung.go.id',
+                'keterangan' => 'Alamat email resmi instansi',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'key' => 'website_instansi',
+                'value' => 'https://sijunjung.go.id',
+                'keterangan' => 'Website resmi instansi',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'key' => 'logo_instansi',
+                'value' => 'logo.png',
+                'keterangan' => 'Logo instansi',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'key' => 'favicon',
+                'value' => 'favicon.ico',
+                'keterangan' => 'Favicon website',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'key' => 'footer_text',
+                'value' => ' ' . date('Y') . ' Pemerintah Kabupaten Sijunjung. Semua Hak Dilindungi.',
+                'keterangan' => 'Teks yang ditampilkan di footer',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ];
 
-        if ($teams->isEmpty()) {
-            $this->command->warn('No teams found. Please run TeamSeeder first!');
-            return;
-        }
-
-        foreach ($teams as $team) {
-            $domain = Str::slug($team->name) . '.localhost';
-
-            Pengaturan::updateOrCreate(
-                ['team_id' => $team->id],
-                [
-                    'nama_website' => $team->name,
-                    'alamat_instansi' => 'Jl. Contoh No. 123, ' . $team->name,
-                    'no_telp_instansi' => '+62 123 4567 890',
-                    'email_instansi' => 'info@' . $domain,
-                    'logo_instansi' => null,
-                    'favicon_instansi' => null,
-                    'facebook' => 'https://facebook.com/' . Str::slug($team->name),
-                    'twitter' => 'https://twitter.com/' . Str::slug($team->name),
-                    'instagram' => 'https://instagram.com/' . Str::slug($team->name),
-                    'youtube' => 'https://youtube.com/' . Str::slug($team->name),
-                ]
+        // Create settings if they don't exist
+        foreach ($settings as $setting) {
+            Pengaturan::firstOrCreate(
+                ['key' => $setting['key']],
+                $setting
             );
         }
 
-        $this->command->info('Successfully created settings for all teams!');
+        $this->command->info('Successfully created settings!');
     }
 }

@@ -31,14 +31,34 @@ class SambutanPimpinanResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Hidden::make('team_id')
-                    ->default(fn() => Auth::user()->current_team_id),
+                Forms\Components\Hidden::make('judul')
+                    ->default('Sambutan Pimpinan')
+                    ->dehydrated()
+                    ->afterStateUpdated(function ($state, Forms\Set $set) {
+                        $set('slug', \Illuminate\Support\Str::slug($state));
+                    }),
+                Forms\Components\Hidden::make('slug')
+                    ->required()
+                    ->unique(ignoreRecord: true),
 
                 Forms\Components\RichEditor::make('isi_sambutan')
                     ->label('Isi Sambutan')
                     ->required()
                     ->columnSpanFull()
                     ->hint('Tuliskan sambutan pimpinan di sini'),
+                Forms\Components\TextInput::make('nama')
+                    ->required()
+                    ->maxLength(255),
+
+                Forms\Components\TextInput::make('jabatan')
+                    ->required()
+                    ->maxLength(255),
+
+                Forms\Components\FileUpload::make('foto')
+                    ->image()
+                    ->required(),
+
+
             ]);
     }
 

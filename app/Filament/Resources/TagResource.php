@@ -32,9 +32,6 @@ class TagResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Hidden::make('team_id')
-                    ->default(fn() => auth()->check() ? auth()->user()->current_team_id : null)
-                    ->required(),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255)
@@ -90,10 +87,10 @@ class TagResource extends Resource
             ->filters([
                 Tables\Filters\Filter::make('has_posts')
                     ->label('Memiliki Post')
-                    ->query(fn (Builder $query): Builder => $query->has('posts')),
+                    ->query(fn(Builder $query): Builder => $query->has('posts')),
                 Tables\Filters\Filter::make('no_posts')
                     ->label('Tidak Memiliki Post')
-                    ->query(fn (Builder $query): Builder => $query->doesntHave('posts')),
+                    ->query(fn(Builder $query): Builder => $query->doesntHave('posts')),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

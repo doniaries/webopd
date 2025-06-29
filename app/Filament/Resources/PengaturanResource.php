@@ -31,7 +31,7 @@ class PengaturanResource extends Resource
                 Forms\Components\Section::make('Informasi Instansi')
                     ->schema([
                         Forms\Components\Hidden::make('nama_website')
-                            ->default(fn($livewire) => 'Website ' . $livewire->record?->team?->name ?? 'Website')
+                            ->placeholder('Nama Website')
                             ->dehydrated()
                             ->required(),
                         Forms\Components\Textarea::make('alamat_instansi')

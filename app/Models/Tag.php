@@ -5,18 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use App\Models\Post;
 
 class Tag extends Model
 {
     use SoftDeletes;
 
     protected $fillable = [
-        // 'team_id',
         'name',
         'slug',
     ];
-
-
 
     protected $casts = [
         'created_at' => 'datetime',
@@ -25,26 +23,21 @@ class Tag extends Model
     ];
 
     /**
-     * Get the team that owns the tag.
-     */
-    // public function team()
-    // {
-    //     return $this->belongsTo(Team::class);
-    // }
-
-    /**
      * The posts that belong to the tag.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function posts(): BelongsToMany
     {
         return $this->belongsToMany(Post::class, 'post_tag')
-            ->using(PostTag::class)
-            ->withPivot('team_id')
             ->withTimestamps();
     }
 
     /**
-     * Scope a query to only include tags with posts.
+     * Scope a query to only include tags with published posts.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeHasPosts($query)
     {
@@ -55,6 +48,10 @@ class Tag extends Model
 
     /**
      * Scope a query to order tags by name.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  string  $direction
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeOrderByName($query, $direction = 'asc')
     {

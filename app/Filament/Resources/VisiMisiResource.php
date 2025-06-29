@@ -29,9 +29,6 @@ class VisiMisiResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('team_id')
-                    ->required()
-                    ->numeric(),
                 Forms\Components\Textarea::make('visi')
                     ->columnSpanFull(),
                 Forms\Components\Textarea::make('misi')
@@ -43,9 +40,6 @@ class VisiMisiResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('team_id')
-                    ->numeric()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Team;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -18,7 +17,6 @@ class UserSeeder extends Seeder
         // Clear existing data
         DB::table('model_has_roles')->truncate();
         DB::table('model_has_permissions')->truncate();
-        DB::table('team_user')->truncate();
         DB::table('users')->truncate();
 
         // Enable foreign key checks
@@ -34,31 +32,15 @@ class UserSeeder extends Seeder
         ]);
         $superAdmin->syncRoles(['super_admin']);
 
-        // Get all organizations
-        $teams = Team::all();
-
-        // Give super admin access to all organizations
-        $superAdmin->teams()->sync($teams->pluck('id'));
-
-        // Get all teams
-        $teams = Team::all();
-
-
-        // Create Admin OPD for each team
-        foreach ($teams as $team) {
-            $adminOpd = User::create([
-                'name' => "Admin OPD " . $team->name,
-                'email' => 'admin.' . $team->slug . '@gmail.com',
-                'password' => Hash::make('password'),
-                'is_active' => true,
-                'email_verified_at' => now(),
-            ]);
-
-            $adminOpd->syncRoles(['admin_opd']);
-            $adminOpd->teams()->attach($team->id);
-
-            $this->command->info("Admin OPD for {$team->name} created successfully!");
-        }
+        // Create Admin User
+        $admin = User::create([
+            'name' => 'Admin',
+            'email' => 'admin@gmail.com',
+            'password' => Hash::make('password'),
+            'is_active' => true,
+            'email_verified_at' => now(),
+        ]);
+        $admin->syncRoles(['admin']);
 
         $this->command->info('User seeding completed!');
     }

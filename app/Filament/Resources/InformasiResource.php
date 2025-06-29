@@ -30,9 +30,6 @@ class InformasiResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Hidden::make('team_id')
-                    ->default(fn() => auth()->user()->teams->first()?->id)
-                    ->dehydrated(),
                 Forms\Components\TextInput::make('judul')
                     ->label('Judul')
                     ->required()
@@ -66,10 +63,6 @@ class InformasiResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('team.name')
-                    ->numeric()
-                    ->hidden()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('judul')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('slug')

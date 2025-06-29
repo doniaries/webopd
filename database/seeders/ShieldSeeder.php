@@ -21,8 +21,8 @@ class ShieldSeeder extends Seeder
             'guard_name' => 'web'
         ]);
 
-        $adminOpdRole = Role::firstOrCreate([
-            'name' => 'admin_opd',
+        $adminRole = Role::firstOrCreate([
+            'name' => 'admin',
             'guard_name' => 'web'
         ]);
 
@@ -43,20 +43,10 @@ class ShieldSeeder extends Seeder
             'produk_hukum',
             'infografis',
             'dokumen',
-            'sambutan_pimpinan',
-            'unit_kerja',
-            'visi_misi',
-            'pengaturan',
+            'external_link',
             'post',
             'tag',
-            'team',
             'comment',
-            'theme',
-            'satuan',
-            'ukuran',
-            'tentang',
-            'external_link',
-
         ];
 
         // Define all permissions for each resource
@@ -107,70 +97,27 @@ class ShieldSeeder extends Seeder
             ]);
         }
 
-        // Define admin_opd permissions first
-        $adminOpdPermissions = [];
-        $allowedAdminResources = [
-            'agenda_kegiatan',
-            'banner',
-            'slider',
-            'informasi',
-            'produk_hukum',
-            'infografis',
-            'dokumen',
-            'sambutan_pimpinan',
-            'unit_kerja',
-            'visi_misi',
-            'external_link',
-            'kategori_informasi',
-            'kategori_produk_hukum',
-            'kategori_agenda',
-            'kategori_dokumen',
-            'post',
-            'tag',
-            'comment',
-        ];
+        // Assign all permissions to super admin
+        $superAdminRole->givePermissionTo($permissions);
 
-        foreach ($allowedAdminResources as $resource) {
-            $adminOpdPermissions = array_merge($adminOpdPermissions, array_filter($permissions, function ($permission) use ($resource) {
-                return (str_starts_with($permission, 'view_') ||
-                    str_starts_with($permission, 'create_') ||
-                    str_starts_with($permission, 'update_') ||
-                    str_starts_with($permission, 'delete_') ||
-                    str_starts_with($permission, 'restore_') ||
-                    str_starts_with($permission, 'force_delete_') ||
-                    str_starts_with($permission, 'replicate_') ||
-                    str_starts_with($permission, 'reorder_')) &&
-                    str_contains($permission, $resource);
-            }));
-        }
+        // Assign limited permissions to admin
+        $adminPermissions = array_filter($permissions, function($permission) {
+            return !in_array($permission, [
+                'view_any_role', 'view_role', 'create_role', 'update_role', 'delete_role',
+                'view_any_permission', 'view_permission', 'create_permission', 'update_permission', 'delete_permission',
+            ]);
+        });
+        $adminRole->givePermissionTo($adminPermissions);
 
-        // Assign all permissions to super admin (must be done last)
-        $superAdminRole->syncPermissions(Permission::all());
-
-        // Define editor permissions (more restricted than admin_opd)
-        $editorPermissions = [];
-        $allowedEditorResources = [
-            'post',
-            'comment',
-            'agenda_kegiatan',
-            'informasi',
-            'dokumen',
-        ];
-
-        foreach ($allowedEditorResources as $resource) {
-            $editorPermissions = array_merge($editorPermissions, array_filter($permissions, function ($permission) use ($resource) {
-                return (str_starts_with($permission, 'view_') ||
-                    str_starts_with($permission, 'create_') ||
-                    str_starts_with($permission, 'update_')) &&
-                    str_contains($permission, $resource) &&
-                    !str_contains($permission, 'delete_') &&
-                    !str_contains($permission, 'force_') &&
-                    !str_contains($permission, 'restore_');
-            }));
-        }
-
-        // Assign permissions to roles
-        $adminOpdRole->syncPermissions($adminOpdPermissions);
+        // Assign limited permissions to editor
+        $editorPermissions = array_filter($permissions, function($permission) {
+            return !in_array($permission, [
+                'view_any_role', 'view_role', 'create_role', 'update_role', 'delete_role',
+                'view_any_permission', 'view_permission', 'create_permission', 'update_permission', 'delete_permission',
+                'view_any_user', 'view_user', 'create_user', 'update_user', 'delete_user',
+            ]);
+        });
+        $editorRole->givePermissionTo($editorPermissions);
         $editorRole->syncPermissions($editorPermissions);
 
         $this->command->info('Shield Seeding Completed.');

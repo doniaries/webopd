@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Dokumen;
-use App\Models\Team;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
@@ -11,60 +10,44 @@ class DokumenSeeder extends Seeder
 {
     public function run()
     {
-        // Get all teams
-        $teams = Team::all();
-        
-        if ($teams->isEmpty()) {
-            $this->command->warn('No teams found. Please run TeamSeeder first!');
-            return;
-        }
-
-        // Base data for documents
+        // Sample document data
         $dokumenData = [
-            [
-                'nama_dokumen' => 'Laporan Kinerja Pemerintah Daerah 2024',
-                'slug' => Str::slug('Laporan Kinerja Pemerintah Daerah 2024'),
-                'deskripsi' => 'Laporan kinerja Pemerintah Daerah tahun 2024 yang berisi capaian-capaian pembangunan selama tahun berjalan.',
-                'cover' => 'cover-lkjp-2024.jpg',
-                'tahun_terbit' => '2024-12-31',
-                'file' => 'lkjp-2024.pdf',
-            ],
-            [
-                'nama_dokumen' => 'Laporan Keuangan Pemerintah Daerah 2024',
-                'slug' => Str::slug('Laporan Keuangan Pemerintah Daerah 2024'),
-                'deskripsi' => 'Laporan keuangan Pemerintah Daerah tahun 2024 yang telah diaudit oleh BPK.',
-                'cover' => 'cover-lkpd-2024.jpg',
-                'tahun_terbit' => '2024-12-31',
-                'file' => 'lkpd-2024.pdf',
-            ],
-            [
-                'nama_dokumen' => 'Rencana Kerja Pemerintah Daerah 2025',
-                'slug' => Str::slug('Rencana Kerja Pemerintah Daerah 2025'),
-                'deskripsi' => 'Dokumen perencanaan pembangunan daerah tahun 2025 yang berisi program dan kegiatan pembangunan.',
-                'cover' => 'cover-rkpd-2025.jpg',
-                'tahun_terbit' => '2024-12-15',
-                'file' => 'rkpd-2025.pdf',
-            ],
+            ['judul' => 'Peraturan Daerah No. 1 Tahun 2023', 'tahun' => '2023'],
+            ['judul' => 'Peraturan Bupati No. 2 Tahun 2023', 'tahun' => '2023'],
+            ['judul' => 'Keputusan Bupati No. 3 Tahun 2023', 'tahun' => '2023'],
+            ['judul' => 'Surat Edaran No. 4 Tahun 2023', 'tahun' => '2023'],
+            ['judul' => 'Laporan Tahunan 2023', 'tahun' => '2023'],
+            ['judul' => 'Peraturan Daerah No. 5 Tahun 2023', 'tahun' => '2023'],
+            ['judul' => 'Peraturan Bupati No. 6 Tahun 2023', 'tahun' => '2023'],
+            ['judul' => 'Keputusan Bupati No. 7 Tahun 2023', 'tahun' => '2023'],
+            ['judul' => 'Surat Edaran No. 8 Tahun 2023', 'tahun' => '2023'],
+            ['judul' => 'Laporan Triwulan I 2023', 'tahun' => '2023'],
         ];
 
-        // Create documents for each team
-        foreach ($teams as $team) {
-            foreach ($dokumenData as $data) {
-                // Check if document with this slug already exists for this team
-                if (!Dokumen::where('team_id', $team->id)
-                    ->where('slug', $data['slug'])
-                    ->exists()) {
-                    
-                    // Add team-specific data
-                    $dokumen = array_merge($data, [
-                        'team_id' => $team->id,
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ]);
+        // Create documents
+        foreach ($dokumenData as $data) {
+            // Generate a unique slug
+            $slug = Str::slug($data['judul']);
+            
+            // Check if document with this slug already exists
+            if (!Dokumen::where('slug', $slug)->exists()) {
+                
+                // Create document with model's fillable fields
+                $dokumen = [
+                    'nama_dokumen' => $data['judul'],
+                    'slug' => $slug,
+                    'deskripsi' => 'Deskripsi untuk ' . $data['judul'],
+                    'cover' => 'cover-' . Str::slug($data['judul']) . '.jpg',
+                    'file' => 'dokumen/' . Str::random(10) . '.pdf',
+                    'tahun_terbit' => $data['tahun'] . '-12-31',
+                    'views' => rand(0, 1000),
+                    'downloads' => rand(0, 500),
+                    'published_at' => now(),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
 
-                    // Create the document
-                    Dokumen::create($dokumen);
-                }
+                Dokumen::create($dokumen);
             }
         }
     }

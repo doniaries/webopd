@@ -35,15 +35,15 @@ class AgendaKegiatan extends Model
 
     public function getNamaPenyelenggaraAttribute()
     {
-        return $this->penyelenggara ?? ($this->team ? $this->team->name : 'Tidak Diketahui');
+        return $this->penyelenggara ?? 'Tidak Diketahui';
     }
 
     protected static function booted()
     {
         static::saving(function ($model) {
-            // Jika penyelenggara kosong, gunakan nama tim
-            if (empty($model->penyelenggara) && $model->team) {
-                $model->penyelenggara = $model->team->name;
+            // Ensure penyelenggara is not empty
+            if (empty($model->penyelenggara)) {
+                $model->penyelenggara = 'Penyelenggara Tidak Diketahui';
             }
         });
     }

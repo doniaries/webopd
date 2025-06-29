@@ -29,9 +29,6 @@ class ProdukHukumResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('team_id')
-                    ->required()
-                    ->numeric(),
                 Forms\Components\TextInput::make('judul')
                     ->required()
                     ->maxLength(255),
@@ -48,9 +45,7 @@ class ProdukHukumResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('team_id')
-                    ->numeric()
-                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('judul')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('slug')

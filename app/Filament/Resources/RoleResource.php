@@ -21,7 +21,7 @@ use Illuminate\Support\Str;
 
 class RoleResource extends Resource implements HasShieldPermissions
 {
-    protected static ?string $tenantOwnershipRelationshipName = 'teams';
+
 
     use HasShieldFormComponents;
 
@@ -69,14 +69,7 @@ class RoleResource extends Resource implements HasShieldPermissions
                                     ->nullable()
                                     ->maxLength(255),
 
-                                Forms\Components\Select::make(config('permission.column_names.team_foreign_key'))
-                                    ->label(__('filament-shield::filament-shield.field.team'))
-                                    ->placeholder(__('filament-shield::filament-shield.field.team.placeholder'))
-                                    /** @phpstan-ignore-next-line */
-                                    ->default([Filament::getTenant()?->id])
-                                    ->options(fn(): Arrayable => Utils::getTenantModel() ? Utils::getTenantModel()::pluck('name', 'id') : collect())
-                                    ->hidden(fn(): bool => ! (static::shield()->isCentralApp() && Utils::isTenancyEnabled()))
-                                    ->dehydrated(fn(): bool => ! (static::shield()->isCentralApp() && Utils::isTenancyEnabled())),
+
                                 ShieldSelectAllToggle::make('select_all')
                                     ->onIcon('heroicon-s-shield-check')
                                     ->offIcon('heroicon-s-shield-exclamation')
@@ -154,8 +147,8 @@ class RoleResource extends Resource implements HasShieldPermissions
     public static function getRelations(): array
     {
         return [
-            UsersRelationManager::class,
             PermissionsRelationManager::class,
+            UsersRelationManager::class,
         ];
     }
 

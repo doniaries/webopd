@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Team;
 use App\Models\Tag;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
@@ -20,10 +19,7 @@ class TagSeeder extends Seeder
         Tag::truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
-        // Get all teams
-        $teams = Team::all();
-
-        // Common tags that will be created for each team
+        // Common tags
         $tags = [
             'Teknologi',
             'Kesehatan',
@@ -38,23 +34,17 @@ class TagSeeder extends Seeder
             'Teknologi Informasi',
             'Pemerintahan',
             'Peraturan',
-
         ];
 
-        foreach ($teams as $team) {
-            foreach ($tags as $tagName) {
-                Tag::firstOrCreate(
-                    [
-                        'name' => $tagName,
-                        'team_id' => $team->id
-                    ],
-                    [
-                        'slug' => Str::slug($tagName),
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ]
-                );
-            }
+        foreach ($tags as $tagName) {
+            Tag::firstOrCreate(
+                ['name' => $tagName],
+                [
+                    'slug' => Str::slug($tagName),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]
+            );
         }
     }
 }

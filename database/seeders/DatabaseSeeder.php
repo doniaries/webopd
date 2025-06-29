@@ -13,11 +13,11 @@ class DatabaseSeeder extends Seeder
     {
         // Run seeders in order
         $this->call([
+            ShieldSeeder::class,  // Must come before UserSeeder
             UserSeeder::class,
             UnitKerjaSeeder::class,
             VisiMisiSeeder::class,
             SambutanPimpinanSeeder::class,
-            ShieldSeeder::class,
             PengaturanSeeder::class,
             TagSeeder::class,
             PostSeeder::class,
@@ -28,7 +28,6 @@ class DatabaseSeeder extends Seeder
             InfografisSeeder::class,
             AgendaKegiatanSeeder::class,
             DokumenSeeder::class,
-            SambutanPimpinanSeeder::class,
             ExternalLinkSeeder::class,
         ]);
     }

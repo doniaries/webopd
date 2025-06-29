@@ -28,9 +28,6 @@ class SliderResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('team_id')
-                    ->default(fn() => Auth::user()->current_team_id)
-                    ->hidden(fn() => !in_array(Auth::user()->email, ['admin@example.com'])), // Ganti dengan email admin yang sesuai
                 Forms\Components\TextInput::make('judul')
                     ->required()
                     ->maxLength(255)

@@ -17,7 +17,6 @@ use App\Filament\Resources\UserResource\Pages;
 use Filament\Tables\Enums\ActionsPosition;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use STS\FilamentImpersonate\Tables\Actions\Impersonate;
-use App\Filament\Resources\UserResource\RelationManagers\TeamsRelationManager;
 use App\Filament\Resources\UserResource\RelationManagers\RolesRelationManager;
 
 
@@ -25,8 +24,6 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    // Tambahkan property ini untuk menentukan relationship tenant
-    protected static ?string $tenantOwnershipRelationshipName = 'teams';
 
     protected static ?string $navigationIcon = 'heroicon-o-users';
     protected static ?string $navigationLabel = 'Users';
@@ -41,13 +38,7 @@ class UserResource extends Resource
 
     public static function isScopedToTenant(): bool
     {
-        // Untuk super_admin, jangan batasi berdasarkan tenant
-        if (auth()->user()?->hasRole('super_admin')) {
-            return false;
-        }
-
-        // Untuk pengguna lain, batasi berdasarkan tenant
-        return true;
+        return false; // Disable tenant scoping
     }
 
     public static function shouldRegister(): bool
@@ -94,7 +85,7 @@ class UserResource extends Resource
                             ->default(true),
                         Forms\Components\Select::make('roles')
                             ->relationship('roles', 'name', function ($query) {
-                                if (auth()->user()->hasRole('super_admin')) {
+                                if (auth()->user()?->hasRole('super_admin')) {
                                     return $query;
                                 }
                                 return $query->whereNot('name', 'super_admin');
@@ -102,24 +93,7 @@ class UserResource extends Resource
                             ->multiple()
                             ->preload()
                             ->searchable(),
-                    ])->columns(2),
-                Forms\Components\Section::make(__('Tenant'))
-                    ->description('Selecting Multi Tenancy will allow you to assign the user to a tenant.')
-                    ->schema([
-                        Forms\Components\Select::make('teams')
-                            ->label(__('Tenant'))
-                            ->relationship('teams', 'name', function ($query) {
-                                // Jika bukan super_admin, hanya tampilkan team yang dimiliki user
-                                if (!auth()->user()->hasRole('super_admin')) {
-                                    $teamIds = auth()->user()->teams->pluck('id')->toArray();
-                                    return $query->whereIn('id', $teamIds);
-                                }
-                                return $query;
-                            })
-                            ->multiple()
-                            ->preload()
-                            ->searchable(),
-                    ])
+                    ])->columns(2)
             ]);
     }
 
@@ -135,11 +109,7 @@ class UserResource extends Resource
                     ->colors(['warning'])
                     ->copyable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('teams.name')
-                    ->label('Team')
-                    ->badge()
-                    ->color('primary')
-                    ->searchable(),
+                // Teams column removed
                 Tables\Columns\TextColumn::make('roles.name')
                     ->label('Role')
                     ->badge()
@@ -213,7 +183,6 @@ class UserResource extends Resource
     public static function getRelations(): array
     {
         return [
-            TeamsRelationManager::class,
             RolesRelationManager::class,
         ];
     }

@@ -27,11 +27,7 @@ class BannerResource extends Resource
     protected static ?string $pluralModelLabel = 'Banner';
     protected static ?int $navigationSort = 2;
 
-    // Define the tenant ownership relationship name
-    protected static ?string $tenantOwnershipRelationshipName = 'team';
 
-    // Define the tenant relationship name
-    protected static ?string $tenantRelationshipName = 'banners';
 
     public static function getNavigationGroup(): ?string
     {

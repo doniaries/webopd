@@ -3,69 +3,56 @@
 namespace Database\Seeders;
 
 use App\Models\Slider;
-use App\Models\Team;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
 
 class SliderSeeder extends Seeder
 {
     public function run()
     {
-        // Get the first team or create one if none exists
-        $team = Team::first();
-        
-        if (!$team) {
-            $this->command->warn('No teams found. Creating a default team...');
-            $team = Team::create([
-                'name' => 'Default Team',
-                'personal_team' => true,
-                'user_id' => 1, // Assuming user with ID 1 exists
-            ]);
-        }
-        
-        $sliderData = [
+        // Create sliders if they don't exist
+        $sliders = [
             [
-                'judul' => 'Selamat Datang di Portal Resmi',
-                'deskripsi' => 'Portal resmi untuk informasi dan layanan publik terkini.',
-                'gambar' => 'https://placehold.co/1200x600/007bff/ffffff/png?text=Selamat+Datang',
-                'url' => '/berita',
+                'judul' => 'Selamat Datang di Website Resmi',
+                'deskripsi' => 'Website resmi Pemerintah Daerah Kabupaten Sijunjung',
                 'urutan' => 1,
-                'is_active' => true,
+                'status' => 'aktif',
+                'gambar' => 'slider1.jpg',
+                'tautan' => '#',
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
-                'judul' => 'Informasi Terbaru',
-                'deskripsi' => 'Dapatkan informasi terbaru dan pengumuman penting dari kami.',
-                'gambar' => 'https://placehold.co/1200x600/28a745/ffffff/png?text=Informasi+Terbaru',
-                'url' => '/pengumuman',
+                'judul' => 'Layanan Publik Terpadu',
+                'deskripsi' => 'Satu pintu pelayanan publik yang cepat dan transparan',
                 'urutan' => 2,
-                'is_active' => true,
+                'status' => 'aktif',
+                'gambar' => 'slider2.jpg',
+                'tautan' => '#',
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
-                'judul' => 'Agenda Kegiatan',
-                'deskripsi' => 'Ikuti berbagai kegiatan dan acara yang akan datang.',
-                'gambar' => 'https://placehold.co/1200x600/dc3545/ffffff/png?text=Agenda+Kegiatan',
-                'url' => '/agenda-kegiatan',
+                'judul' => 'Informasi Terkini',
+                'deskripsi' => 'Dapatkan informasi terbaru seputar Pemerintah Kabupaten Sijunjung',
                 'urutan' => 3,
-                'is_active' => true,
+                'status' => 'aktif',
+                'gambar' => 'slider3.jpg',
+                'tautan' => '#',
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
         ];
-        
-        // Create sliders for the team if they don't exist
-        foreach ($sliderData as $data) {
-            // Check if slider with this urutan already exists for the team
-            $exists = Slider::where('team_id', $team->id)
-                ->where('urutan', $data['urutan'])
-                ->exists();
-                
+
+        foreach ($sliders as $slider) {
+            // Check if slider with this order already exists
+            $exists = Slider::where('urutan', $slider['urutan'])->exists();
+
             if (!$exists) {
-                Slider::create(array_merge($data, [
-                    'team_id' => $team->id,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]));
+                Slider::create($slider);
             }
         }
-        
+
         $this->command->info('Sliders seeded successfully!');
     }
 }

@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Post;
 use App\Models\Tag;
-use App\Models\Team;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -42,12 +41,6 @@ class PostSeeder extends Seeder
             if (!Storage::disk('public')->exists('posts')) {
                 Storage::disk('public')->makeDirectory('posts');
             }
-            // Get or create a team
-            $team = Team::first();
-            if (!$team) {
-                $team = Team::create(['name' => 'Tim Default']);
-            }
-
             // Get or create admin user
             $user = User::firstOrCreate(
                 ['email' => 'admin@example.com'],
@@ -58,13 +51,8 @@ class PostSeeder extends Seeder
                 ]
             );
 
-            // Ensure user is attached to the team
-            if (!$user->teams->contains($team->id)) {
-                $user->teams()->attach($team);
-            }
-
-            // Get all active tags for this team
-            $tags = Tag::where('team_id', $team->id)->get();
+            // Get all tags
+            $tags = Tag::all();
 
             if ($tags->isEmpty()) {
                 $this->command->warn('No tags found. Please run TagSeeder first!');
@@ -172,7 +160,7 @@ class PostSeeder extends Seeder
                             'published_at' => $postDate,
                             'status' => 'published',
                             'user_id' => $user->id,
-                            'team_id' => $team->id,
+            
                             'views' => $this->faker->numberBetween(10, 1000),
                             'foto_utama' => $placeholder, // Simpan placeholder SVG
                             'gallery_images' => [], // Kosongkan gallery
@@ -194,11 +182,7 @@ class PostSeeder extends Seeder
                         // Attach random tags to post
                         if ($tags->isNotEmpty()) {
                             $randomTags = $tags->random(rand(1, min(3, $tags->count())));
-                            $post->tags()->sync(
-                                $randomTags->mapWithKeys(fn($tag) => [
-                                    $tag->id => ['team_id' => $team->id]
-                                ])
-                            );
+                            $post->tags()->sync($randomTags->pluck('id'));
                         }
                     } catch (\Exception $e) {
                         $this->command->error('Error creating post: ' . $e->getMessage());

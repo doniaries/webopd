@@ -6,7 +6,7 @@ use App\Filament\Resources\PostResource\Pages;
 use App\Filament\Resources\PostResource\RelationManagers;
 use App\Models\Post;
 use App\Models\Tag;
-use App\Models\Team;
+
 use App\Models\User;
 use Spatie\Permission\Traits\HasRoles;
 use Filament\Forms;
@@ -19,7 +19,6 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Str;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
-use Illuminate\Support\Facades\Auth;
 use Filament\Facades\Filament;
 
 class PostResource extends Resource
@@ -121,10 +120,6 @@ class PostResource extends Resource
 
                         Forms\Components\Group::make()
                             ->schema([
-                                Forms\Components\Hidden::make('team_id')
-                                    ->default(fn() => auth()->check() ? auth()->user()->teams->first()?->id : null)
-                                    ->dehydrated(),
-
                                 Forms\Components\Section::make('Status Publikasi')
                                     ->description('Pengaturan status publikasi artikel')
                                     ->schema([
@@ -146,12 +141,7 @@ class PostResource extends Resource
                                     ->description('Informasi dasar artikel')
                                     ->schema([
                                         Forms\Components\Select::make('tags')
-                                            ->relationship(
-                                                'tags',
-                                                'name',
-                                                fn(Builder $query) =>
-                                                $query->where('tags.team_id', auth()->user()->teams->first()?->id)
-                                            )
+                                            ->relationship('tags', 'name')
                                             ->label('Tag')
                                             ->preload()
                                             ->multiple()
@@ -161,21 +151,14 @@ class PostResource extends Resource
                                                     $record->tags()->detach();
                                                     return;
                                                 }
-
-                                                $teamId = auth()->user()->teams->first()?->id;
-                                                $pivotData = array_fill(0, count($state), ['team_id' => $teamId]);
-                                                $syncData = array_combine($state, $pivotData);
-
-                                                $record->tags()->sync($syncData);
+                                                
+                                                $record->tags()->sync($state);
                                             }),
                                         // User selection - only visible and changeable by super admin
                                         Forms\Components\Select::make('user_id')
-                                            ->relationship('user', 'name')
-                                            ->default(fn () => auth()->id())
-                                            ->disabled(fn () => !in_array('super_admin', auth()->user()?->roles->pluck('name')->toArray() ?? []))
-                                            ->visible(fn () => in_array('super_admin', auth()->user()?->roles->pluck('name')->toArray() ?? []))
+                                            ->relationship('author', 'name')
+                                            ->default(fn () => \Filament\Facades\Filament::auth()->id())
                                             ->dehydrated(),
-
 
                                         Forms\Components\Hidden::make('views')
                                             ->required()
@@ -190,8 +173,7 @@ class PostResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('team.name'),
-                // ->hidden(),
+
                 Tables\Columns\ImageColumn::make('foto_utama_url')
                     ->label('Foto Utama')
                     ->circular(false)
@@ -323,9 +305,22 @@ class PostResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()
-            ->when(!auth()->user()->hasRole('super_admin'), function ($query) {
-                $query->where('team_id', auth()->user()->teams->first()?->id);
-            });
+        $query = parent::getEloquentQuery();
+        
+        if (Filament::auth()->check()) {
+            $user = Filament::auth()->user();
+            
+            // If user is not super admin, only show their own posts
+            if ($user) {
+                $isSuperAdmin = method_exists($user, 'hasRole') ? $user->hasRole('super_admin') : false;
+                if (!$isSuperAdmin) {
+                    $query->where('user_id', $user->id);
+                }
+            }
+        }
+
+        return $query->withoutGlobalScopes([
+            SoftDeletingScope::class,
+        ]);
     }
 }
