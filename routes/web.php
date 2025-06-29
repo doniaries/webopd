@@ -11,11 +11,13 @@ use App\Livewire\Kontak;
 use App\Livewire\Post;
 use App\Livewire\ProdukHukum;
 use App\Livewire\SambutanPimpinan;
-use App\Livewire\Unitkerja as UnitKerja;
 use App\Livewire\VisiMisi;
+use App\Livewire\UnitKerja;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+
+
 
 
 
@@ -43,27 +45,7 @@ Route::get('/profil/visi-misi', VisiMisi::class)->name('profil.visi-misi');
 Route::get('/visi-misi', VisiMisi::class)->name('visi-misi'); // Alias untuk kompatibilitas dengan template
 Route::get('/profil/unit-kerja', UnitKerja::class)->name('profil.unit-kerja');
 Route::get('/struktur-organisasi', UnitKerja::class)->name('struktur-organisasi'); // Alias untuk kompatibilitas dengan template
-
-
-// Route untuk mengunduh file
-Route::get('/download/{file}', function ($file) {
-    // Hapus awalan 'public/' jika ada
-    $filePath = str_starts_with($file, 'public/') ? $file : 'public/' . $file;
-
-    if (Storage::exists($filePath)) {
-        // Dapatkan nama file asli
-        $originalName = basename($filePath);
-
-        // Unduh file dengan nama asli
-        return Storage::download($filePath, $originalName, [
-            'Content-Type' => Storage::mimeType($filePath),
-            'Content-Length' => Storage::size($filePath),
-            'Content-Disposition' => 'attachment; filename="' . $originalName . '"',
-        ]);
-    }
-
-    return back()->with('error', 'File tidak ditemukan');
-})->name('file.download')->middleware('web');
+Route::get('/profil/unit-kerja/{unitKerja:slug}', [\App\Http\Controllers\UnitKerjaController::class, 'show'])->name('unit-kerja.detail');
 
 // Produk Hukum
 Route::get('/produk-hukum', ProdukHukum::class)->name('produk-hukum.index');
@@ -108,3 +90,23 @@ Route::post('/logout', function () {
     request()->session()->regenerateToken();
     return redirect('/');
 })->name('logout');
+
+// Route untuk mengunduh file
+Route::get('/download/{file}', function ($file) {
+    // Hapus awalan 'public/' jika ada
+    $filePath = str_starts_with($file, 'public/') ? $file : 'public/' . $file;
+
+    if (Storage::exists($filePath)) {
+        // Dapatkan nama file asli
+        $originalName = basename($filePath);
+
+        // Unduh file dengan nama asli
+        return Storage::download($filePath, $originalName, [
+            'Content-Type' => Storage::mimeType($filePath),
+            'Content-Length' => Storage::size($filePath),
+            'Content-Disposition' => 'attachment; filename="' . $originalName . '"',
+        ]);
+    }
+
+    return back()->with('error', 'File tidak ditemukan');
+})->name('file.download')->middleware('web');

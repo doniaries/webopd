@@ -11,6 +11,7 @@ class UnitKerja extends Model
         'team_id',
         'nama_unit',
         'slug',
+        'deskripsi',
     ];
 
     protected $dates = ['published_at'];
