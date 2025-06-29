@@ -55,6 +55,8 @@ class ShieldSeeder extends Seeder
             'satuan',
             'ukuran',
             'tentang',
+            'external_link',
+
         ];
 
         // Define all permissions for each resource
@@ -78,11 +80,13 @@ class ShieldSeeder extends Seeder
         foreach ($resources as $resource) {
             foreach ($permissionTypes as $type) {
                 // Skip invalid permission combinations
-                if (in_array($type, ['restore_', 'restore_any_', 'force_delete_', 'force_delete_any_', 'replicate_']) && 
-                    in_array($resource, ['role', 'permission'])) {
+                if (
+                    in_array($type, ['restore_', 'restore_any_', 'force_delete_', 'force_delete_any_', 'replicate_']) &&
+                    in_array($resource, ['role', 'permission'])
+                ) {
                     continue;
                 }
-                
+
                 $permissions[] = $type . $resource;
             }
         }
@@ -114,25 +118,32 @@ class ShieldSeeder extends Seeder
             'infografis',
             'dokumen',
             'sambutan_pimpinan',
+            'unit_kerja',
+            'visi_misi',
+            'external_link',
+            'kategori_informasi',
+            'kategori_produk_hukum',
+            'kategori_agenda',
+            'kategori_dokumen',
             'post',
             'tag',
             'comment',
         ];
 
         foreach ($allowedAdminResources as $resource) {
-            $adminOpdPermissions = array_merge($adminOpdPermissions, array_filter($permissions, function($permission) use ($resource) {
-                return (str_starts_with($permission, 'view_') || 
-                       str_starts_with($permission, 'create_') || 
-                       str_starts_with($permission, 'update_') ||
-                       str_starts_with($permission, 'delete_') ||
-                       str_starts_with($permission, 'restore_') ||
-                       str_starts_with($permission, 'force_delete_') ||
-                       str_starts_with($permission, 'replicate_') ||
-                       str_starts_with($permission, 'reorder_')) && 
-                       str_contains($permission, $resource);
+            $adminOpdPermissions = array_merge($adminOpdPermissions, array_filter($permissions, function ($permission) use ($resource) {
+                return (str_starts_with($permission, 'view_') ||
+                    str_starts_with($permission, 'create_') ||
+                    str_starts_with($permission, 'update_') ||
+                    str_starts_with($permission, 'delete_') ||
+                    str_starts_with($permission, 'restore_') ||
+                    str_starts_with($permission, 'force_delete_') ||
+                    str_starts_with($permission, 'replicate_') ||
+                    str_starts_with($permission, 'reorder_')) &&
+                    str_contains($permission, $resource);
             }));
         }
-        
+
         // Assign all permissions to super admin (must be done last)
         $superAdminRole->syncPermissions(Permission::all());
 
@@ -141,14 +152,20 @@ class ShieldSeeder extends Seeder
         $allowedEditorResources = [
             'post',
             'comment',
+            'agenda_kegiatan',
+            'informasi',
+            'dokumen',
         ];
 
         foreach ($allowedEditorResources as $resource) {
-            $editorPermissions = array_merge($editorPermissions, array_filter($permissions, function($permission) use ($resource) {
-                return (str_starts_with($permission, 'view_') || 
-                        str_starts_with($permission, 'create_') || 
-                        str_starts_with($permission, 'update_')) && 
-                       str_contains($permission, $resource);
+            $editorPermissions = array_merge($editorPermissions, array_filter($permissions, function ($permission) use ($resource) {
+                return (str_starts_with($permission, 'view_') ||
+                    str_starts_with($permission, 'create_') ||
+                    str_starts_with($permission, 'update_')) &&
+                    str_contains($permission, $resource) &&
+                    !str_contains($permission, 'delete_') &&
+                    !str_contains($permission, 'force_') &&
+                    !str_contains($permission, 'restore_');
             }));
         }
 

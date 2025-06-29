@@ -137,4 +137,11 @@ class Team extends Model
     {
         return $this->hasMany(\App\Models\ProdukHukum::class);
     }
+
+    /** @return HasMany<\App\Models\ExternalLink, self> */
+    public function externalLinks(): HasMany
+    {
+        return $this->hasMany(\App\Models\ExternalLink::class);
+    }
+
 }
