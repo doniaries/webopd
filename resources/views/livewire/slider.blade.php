@@ -1,584 +1,146 @@
-<section id="hero" class="hero p-0">
+<div class="relative w-full" x-data="{
+    initSwiper() {
+        new Swiper(this.$refs.swiperContainer, {
+            loop: true,
+            autoplay: {
+                delay: 5000,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            effect: 'fade',
+            fadeEffect: {
+                crossFade: true
+            },
+            speed: 800,
+        });
+    }
+}" x-init="initSwiper()">
     @if ($sliders && count($sliders) > 0)
-        <div class="container-fluid p-0 m-0 w-100">
-            <div class="row g-0 w-100 m-0">
-                <!-- Main Slider (full width) -->
-                <div class="col-12 p-0">
-                    <div class="swiper main-slider w-100">
-                        <div class="swiper-wrapper">
-                            @foreach (array_slice($sliders, 0, 5) as $slider)
-                                @php
-                                    $slider = is_object($slider) ? (array) $slider : $slider;
-                                    $imageUrl = $slider['gambar_url'] ?? asset('assets/img/hero-img.png');
-                                    $title = $slider['judul'] ?? 'No Title';
-                                    $url = $slider['url'] ?? '#';
-                                @endphp
-                                <div class="swiper-slide" style="height: 80vh; min-height: 500px; max-height: 800px;">
-                                    <div class="position-relative h-100 w-100">
-                                        <img src="{{ $imageUrl }}" alt="{{ $title }}" class="w-100 h-100"
-                                            style="object-fit: cover; object-position: center; width: 100%; height: 100%;">
-                                        <!-- Latar belakang gradient -->
-                                        <div class="position-absolute bottom-0 start-0 w-100 p-4"
-                                            style="background: linear-gradient(to top, rgba(46, 87, 211, 0.8), transparent); z-index: 10; height: 180px; padding-bottom: 60px !important;">
-                                        </div>
-
-                                        <!-- Judul dan tag dengan efek fade -->
-                                        <div class="position-absolute start-0 w-100 px-5 pb-4 slide-text"
-                                            style="z-index: 11; bottom: 60px;">
-                                            <h3 class="text-white fw-bold mb-0 ps-5"
-                                                style="opacity: 0; animation: slideInFromTop 0.8s ease-out 0.5s forwards;">
-                                                <a href="{{ $url }}"
-                                                    class="text-white text-decoration-none fs-4"
-                                                    style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">{{ Str::limit($title, 70) }}</a>
-                                            </h3>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
+        <div class="swiper" x-ref="swiperContainer">
+            <div class="swiper-wrapper">
+                @foreach ($sliders as $slider)
+                    <div class="swiper-slide relative">
+                        <!-- Background Image -->
+                        <div class="absolute inset-0 bg-cover bg-center"
+                            style="background-image: url('{{ $slider->gambar_url ?? asset('images/placeholder.jpg') }}');">
+                            <div class="absolute inset-0 bg-black bg-opacity-40"></div>
                         </div>
-                        <!-- Navigation Buttons -->
-                        <div class="swiper-button-next"><i class="bi bi-chevron-right"></i></div>
-                        <div class="swiper-button-prev"><i class="bi bi-chevron-left"></i></div>
+
+                        <!-- Content -->
+                        <div class="swiper-slide h-[80vh] min-h-[500px] max-h-[800px]">
+                            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                                <div class="max-w-2xl bg-black bg-opacity-40 backdrop-blur-sm p-8 rounded-lg shadow-xl">
+                                    <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white mb-4 leading-tight"
+                                        data-aos="fade-up" data-aos-duration="600" data-aos-easing="ease-out-cubic">
+                                        {{ $slider->judul }}
+                                    </h2>
+
+                                    <!-- Tags -->
+                                    @if(isset($slider->tags) && count($slider->tags) > 0)
+                                        <div class="flex flex-wrap gap-2 mb-3" data-aos="fade-up" data-aos-delay="50">
+                                            @foreach($slider->tags as $tag)
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100">
+                                                    {{ $tag }}
+                                                </span>
+                                            @endforeach
+                                        </div>
+                                    @endif
+
+                                    @if (!empty($slider->deskripsi))
+                                        <p class="text-gray-200 text-lg mb-6" data-aos="fade-up" data-aos-delay="100"
+                                            data-aos-duration="500">
+                                            {{ $slider->deskripsi }}
+                                        </p>
+                                    @endif
+
+                                    @if (!empty($slider->url))
+                                        <div class="mt-6" data-aos="fade-up" data-aos-delay="200">
+                                            <a href="{{ $slider->url }}"
+                                                class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                                Selengkapnya
+                                                <svg class="w-5 h-5 ml-2 -mr-1" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                                </svg>
+                                            </a>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                @endforeach
             </div>
+
+            <!-- Navigation Buttons -->
+            <div class="swiper-button-next text-white"></div>
+            <div class="swiper-button-prev text-white"></div>
+            <div class="swiper-pagination"></div>
         </div>
     @else
-        <div class="d-flex justify-content-center align-items-center" style="height: 50vh; background-color: #f8f9fa;">
-            <div class="text-center">
-                <i class="bi bi-image text-4xl mb-4" style="font-size: 3rem; color: #6c757d;"></i>
-                <p class="text-lg text-muted">Tidak ada slider tersedia</p>
-            </div>
+        <div class="bg-gray-100 h-96 flex items-center justify-center">
+            <p class="text-gray-500">Tidak ada slider yang tersedia</p>
         </div>
     @endif
+</div>
 
-    @push('styles')
-        <style>
-            .slider-container {
-                width: 100%;
-                height: 85vh;
-            }
+@push('styles')
+    <style>
+        .swiper-button-next,
+        .swiper-button-prev {
+            width: 3rem;
+            height: 3rem;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 9999px;
+            transition: all 0.3s;
+        }
 
+        .swiper-button-next:hover,
+        .swiper-button-prev:hover {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .swiper-button-next:after,
+        .swiper-button-prev:after {
+            font-size: 1.25rem;
+            color: white;
+        }
+
+        .swiper-pagination-bullet {
+            width: 0.75rem;
+            height: 0.75rem;
+            background-color: rgba(255, 255, 255, 0.5);
+            opacity: 1;
+            margin: 0 0.25rem;
+        }
+
+        .swiper-pagination-bullet-active {
+            background-color: white;
+            transform: scale(1.25);
+        }
+
+        .swiper-slide {
+            height: 60vh;
+            max-height: 600px;
+        }
+
+        @media (max-width: 640px) {
             .swiper-slide {
-                background-size: cover;
-                background-position: center;
-                position: relative;
-                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-                backface-visibility: hidden;
-                -webkit-backface-visibility: hidden;
-                -webkit-transform-style: preserve-3d;
-                transform-style: preserve-3d;
+                height: 50vh;
             }
-
-            .slide-overlay {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: linear-gradient(to bottom, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5));
-            }
-
-            .slider-content {
-                position: relative;
-                z-index: 2;
-                color: #ffffff;
-                padding: 0 15px;
-                text-align: left;
-                margin-left: 4rem;
-                max-width: 800px;
-            }
-
-            .post-tag {
-                font-size: 0.75rem;
-                font-weight: 500;
-                padding: 0.25rem 0.5rem;
-                border-radius: 4px;
-                margin-right: 5px;
-                margin-bottom: 5px;
-                display: inline-block;
-                text-shadow: none;
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-                transition: all 0.3s ease;
-                color: white;
-            }
-
-            .post-tag:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-                background-color: #0d6efd !important;
-                color: white;
-                opacity: 0.9;
-            }
-
-            .post-tags {
-                margin-top: -5px;
-                margin-bottom: 10px;
-            }
-
-            .swiper-button-next,
-            .swiper-button-prev {
-                color: white;
-                width: 50px;
-                height: 50px;
-                background: rgba(0, 0, 0, 0.5);
-                border-radius: 50%;
-                transition: all 0.3s ease;
-                z-index: 10;
-                opacity: 0.8;
-            }
-
-            .swiper-button-next:hover,
-            .swiper-button-prev:hover {
-                background: rgba(0, 0, 0, 0.6);
-            }
-
-            .swiper-button-next:after,
-            .swiper-button-prev:after {
-                font-size: 1.5rem;
-            }
-
-            .slider.swiper {
-                width: 100%;
-                height: 100%;
-                margin: 0 auto;
-                position: relative;
-                overflow: visible;
-                border-radius: 0;
-            }
-
-            .slider .swiper-slide {
-                padding: 0;
-                width: 100%;
-                border-radius: 0;
-            }
-
-            .swiper-button-next,
-            .swiper-button-prev {
-                margin: 0 20px;
-            }
-
-            .swiper-container,
-            .swiper {
-                overflow: visible !important;
-                position: relative !important;
-            }
-
-            .container-fluid,
-            .row,
-            .col-12 {
-                overflow: visible !important;
-            }
-
-            .slider-content {
-                color: #ffffff !important;
-                text-align: left !important;
-            }
-
-            .slider-content h1,
-            .slider-content h2 {
-                color: #ffffff !important;
-                text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 2px 2px 4px rgba(0, 0, 0, 0.8);
-                font-weight: 700;
-                letter-spacing: 1px;
-                text-align: left !important;
-            }
-
-            .slider-content p {
-                color: #ffffff !important;
-                text-shadow: 0 0 8px rgba(255, 255, 255, 0.4), 1px 1px 3px rgba(0, 0, 0, 0.8);
-                font-size: 1.2rem;
-                letter-spacing: 0.5px;
-                line-height: 1.6;
-                text-align: left !important;
-            }
-
-            .animate__animated.animate__fadeInRight {
-                animation-duration: 1s;
-                animation-fill-mode: both;
-            }
-
-            @keyframes fadeInRight {
-                from {
-                    opacity: 0;
-                    transform: translate3d(100%, 0, 0);
-                }
-
-                to {
-                    opacity: 1;
-                    transform: translate3d(0, 0, 0);
-                }
-            }
-
-            .animate__fadeInRight {
-                animation-name: fadeInRight;
-            }
-
-            @media (max-width: 768px) {
-                .slider-content {
-                    margin-left: 2rem;
-                    margin-right: 2rem;
-                }
-
-                .slider-content h2 {
-                    font-size: 2rem !important;
-                }
-
-                .slider-content p {
-                    font-size: 1rem !important;
-                }
-
-                .post-tag {
-                    display: inline-block;
-                    padding: 4px 12px;
-                    font-size: 13px;
-                }
-
-                .post-tag .ms-3 {
-                    margin-left: 0 !important;
-                    margin-top: 0.5rem;
-                }
-            }
-
-            @keyframes slideInFromTop {
-                from {
-                    opacity: 0;
-                    transform: translateY(-50px);
-                }
-
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
-
-            #hero.hero {
-                width: 100%;
-                overflow: hidden;
-                -webkit-font-smoothing: antialiased;
-                padding-bottom: 5px;
-                margin-bottom: -10px;
-                -moz-osx-font-smoothing: grayscale;
-            }
-
-            .main-slider {
-                height: 80vh;
-                min-height: 500px;
-                max-height: 800px;
-                width: 100%;
-                overflow: visible;
-                position: relative;
-                margin-bottom: 60px;
-            }
-
-            /* Styling untuk tombol navigasi dengan ikon */
-            .swiper-button-next,
-            .swiper-button-prev {
-                background-color: rgba(0, 0, 0, 0.5);
-                width: 44px;
-                height: 44px;
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                position: absolute;
-                top: 50%;
-                transform: translateY(-50%);
-                z-index: 9;
-                backdrop-filter: blur(4px);
-                border: 1px solid rgba(255, 255, 255, 0.1);
-                color: white;
-                transition: all 0.3s ease;
-                opacity: 0.8;
-            }
-
-            .swiper-button-next:hover,
-            .swiper-button-prev:hover {
-                background: rgba(0, 0, 0, 0.8);
-                transform: translateY(-50%) scale(1.1);
-                opacity: 1;
-            }
-
-            .swiper-button-next::after,
-            .swiper-button-prev::after {
-                display: none;
-            }
-
-            .swiper-button-next i,
-            .swiper-button-prev i {
-                font-size: 1.5rem;
-                color: white;
-            }
-
-            .swiper-button-prev {
-                left: 20px;
-            }
-
-            .swiper-button-next {
-                right: 20px;
-            }
-
-            .swiper-slide {
-                border-radius: 8px;
-                position: relative;
-                background-size: cover;
-                background-position: center;
-                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-                transform: translate3d(0, 0, 0);
-                -webkit-transform: translate3d(0, 0, 0);
-                backface-visibility: hidden;
-                -webkit-backface-visibility: hidden;
-                -webkit-transform-style: preserve-3d;
-                transform-style: preserve-3d;
-            }
-
-            .spin {
-                animation: spin 1s linear infinite;
-            }
-
-            @keyframes spin {
-                from {
-                    transform: rotate(0deg);
-                }
-
-                to {
-                    transform: rotate(360deg);
-                }
-            }
-
-            .opacity-50 {
-                opacity: 0.5;
-                transition: opacity 0.3s ease;
-            }
-
-            .text-truncate-2 {
-                display: -webkit-box;
-                -webkit-line-clamp: 2;
-                -webkit-box-orient: vertical;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-
-            .news-list {
-                height: 100%;
-                overflow-y: auto;
-            }
-
-            .hover-bg {
-                transition: background-color 0.2s ease;
-            }
-
-            .hover-bg:hover {
-                background-color: #f8f9fa;
-            }
-
-            /* Custom scrollbar */
-            .card-body::-webkit-scrollbar {
-                width: 4px;
-            }
-
-            .card-body::-webkit-scrollbar-track {
-                background: #f1f1f1;
-                border-radius: 10px;
-            }
-
-            .card-body::-webkit-scrollbar-thumb {
-                background: #888;
-                border-radius: 10px;
-            }
-
-            .card-body::-webkit-scrollbar-thumb:hover {
-                background: #555;
-            }
-
-            /* Animation for slider text */
-            @keyframes slideInFromTop {
-                from {
-                    opacity: 0;
-                    transform: translateY(-50px);
-                }
-
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
-
-            /* Efek fade untuk slide */
-            @keyframes fadeIn {
-                from {
-                    opacity: 0;
-                }
-
-                to {
-                    opacity: 1;
-                }
-            }
-
-            .swiper-slide-active .slide-text {
-                animation: fadeIn 1s ease forwards;
-            }
-
-            /* Styling untuk tag post di slider */
-            .post-tag {
-                font-size: 0.75rem;
-                font-weight: 500;
-                padding: 0.25rem 0.5rem;
-                border-radius: 4px;
-                margin-right: 5px;
-                margin-bottom: 5px;
-                display: inline-block;
-                text-shadow: none;
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-                transition: all 0.3s ease;
-                color: white;
-            }
-
-            .post-tag:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-                background-color: #0d6efd !important;
-                color: white;
-                opacity: 0.9;
-            }
-
-            .post-tags {
-                margin-top: -5px;
-                margin-bottom: 10px;
-                display: flex;
-                flex-wrap: wrap;
-                gap: 8px;
-                justify-content: flex-start;
-            }
-
-            @media (max-width: 768px) {
-                .post-tags {
-                    display: flex;
-                    flex-wrap: wrap;
-                    gap: 5px;
-                }
-            }
-
-            .post-tag {
-                display: inline-block;
-                padding: 5px 15px;
-                border-radius: 999px;
-                background: #2563eb;
-                color: #fff;
-                font-size: 14px;
-                font-weight: 500;
-                white-space: nowrap;
-                min-width: 0;
-                max-width: fit-content;
-                box-sizing: border-box;
-                margin-bottom: 0;
-                margin-right: 0;
-                transition: background 0.2s;
-            }
-
-            .post-tag:hover {
-                background: #1d4ed8 !important;
-                color: #fff;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-                transform: translateY(-2px);
-                opacity: 0.95;
-            }
-
-            #hero.hero {
-                width: 100%;
-                overflow: hidden;
-                -webkit-font-smoothing: antialiased;
-                padding-bottom: 5px;
-                margin-bottom: -10px;
-                -moz-osx-font-smoothing: grayscale;
-            }
-
-            @media (max-width: 991.98px) {
-                .main-slider {
-                    margin-bottom: 1.5rem;
-                    height: 300px !important;
-                }
-
-                .swiper-slide {
-                    height: 300px !important;
-                }
-            }
-
-            @media (max-width: 768px) {
-                .slider-content {
-                    margin-left: 2rem;
-                    margin-right: 2rem;
-                }
-
-                .slider-content h2 {
-                    font-size: 2rem !important;
-                }
-
-                .slider-content p {
-                    font-size: 1rem !important;
-                }
-
-                .post-tag {
-                    padding: 4px 12px;
-                    font-size: 13px;
-                    max-width: fit-content;
-                    width: auto;
-                }
-
-                .main-slider {
-                    margin-bottom: 20px;
-                }
-
-                .post-tag .ms-3 {
-                    margin-left: 0 !important;
-                    margin-top: 0 !important;
-                }
-            }
-        </style>
-    @endpush
-
-    @push('scripts')
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                // Set Carbon locale to Indonesian
-                window.Carbon && window.Carbon.setLocale('id');
-
-                // Initialize Swiper for main slider
-                if (document.querySelector('.main-slider')) {
-                    const mainSwiper = new Swiper('.main-slider', {
-                        loop: true,
-                        effect: 'fade',
-                        fadeEffect: {
-                            crossFade: true
-                        },
-                        autoplay: {
-                            delay: 5000,
-                            disableOnInteraction: false,
-                        },
-                        speed: 800,
-                        navigation: {
-                            nextEl: '.swiper-button-next',
-                            prevEl: '.swiper-button-prev',
-                        },
-                        on: {
-                            slideChange: function() {
-                                const activeSlide = this.slides[this.activeIndex];
-                                const slideText = activeSlide.querySelector('.slide-text');
-                                if (slideText) {
-                                    slideText.style.opacity = '0';
-                                    slideText.style.transform = 'translateY(20px)';
-                                    setTimeout(() => {
-                                        slideText.style.opacity = '1';
-                                        slideText.style.transform = 'translateY(0)';
-                                        slideText.style.transition =
-                                            'opacity 0.5s ease, transform 0.5s ease';
-                                    }, 50);
-                                }
-                            }
-                        }
-                    });
-                }
-            });
-        </script>
-    @endpush
-</section><!-- End Hero -->
+        }
+    </style>
+@endpush
+
+@push('scripts')
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+@endpush

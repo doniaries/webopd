@@ -67,8 +67,18 @@ class Slider extends Component
 
                 if ($rawPosts->isNotEmpty()) {
                     $mappedPosts = $rawPosts->map(function (Post $post) {
-                        // Use post's main image or fallback to placeholder
-                        $imageUrl = $post->foto_utama_url ?: asset('placeholder.jpg');
+                        // Get the full URL for the featured image
+                        $imageUrl = $post->foto_utama_url;
+                        
+                        // If no image is set, use a placeholder
+                        if (empty($imageUrl) || $imageUrl === asset('placeholder.jpg')) {
+                            $imageUrl = asset('images/placeholder.jpg');
+                        }
+                        
+                        // Ensure the URL is absolute
+                        if (!empty($imageUrl) && strpos($imageUrl, 'http') !== 0) {
+                            $imageUrl = asset($imageUrl);
+                        }
 
                         $mapped = [
                             'id' => $post->id,
