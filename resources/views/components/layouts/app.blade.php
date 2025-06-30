@@ -3,14 +3,10 @@
 
 <head>
     @php
-        $siteName = 'WebOPD';
-        if (class_exists('App\\Models\\Pengaturan')) {
-            $pengaturan = DB::table('pengaturans')->first();
-            if ($pengaturan && !empty($pengaturan->nama_website)) {
-                $siteName = $pengaturan->nama_website;
-            }
-        }
+        use App\Models\Pengaturan;
+        $siteName = Pengaturan::first()->name ?? 'Web OPD';
     @endphp
+
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>{{ $siteName }}</title>
@@ -35,10 +31,7 @@
     <link href="{{ asset('assets/vendor/aos/aos.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
-    <!-- icon external link -->
-    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-        integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92goGqGqzxxIebL/XbblzMrFBdZrJWrjXlHt8WrwWP9Jf/9lJeA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" /> --}}
+
     <!-- Main CSS File -->
     <link href="{{ asset('assets/css/main.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/dark-mode.css') }}" rel="stylesheet">
@@ -68,7 +61,7 @@
     @include('partials.header')
 
     <main class="main" style="padding-top: 10px;">
-        @if(request()->is('/'))
+        @if (request()->is('/'))
             {{ $slot }}
         @else
             <x-layouts.container>
