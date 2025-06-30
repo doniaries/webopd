@@ -23,9 +23,9 @@
                                         </div>
 
                                         <!-- Judul dan tag dengan efek fade -->
-                                        <div class="position-absolute start-0 w-100 p-4 slide-text"
+                                        <div class="position-absolute start-0 w-100 px-5 pb-4 slide-text"
                                             style="z-index: 11; bottom: 60px;">
-                                            <h3 class="text-white fw-bold mb-0"
+                                            <h3 class="text-white fw-bold mb-0 ps-5"
                                                 style="opacity: 0; animation: slideInFromTop 0.8s ease-out 0.5s forwards;">
                                                 <a href="{{ $url }}"
                                                     class="text-white text-decoration-none fs-4"
@@ -450,7 +450,7 @@
                 gap: 8px;
                 justify-content: flex-start;
             }
-            
+
             @media (max-width: 768px) {
                 .post-tags {
                     display: flex;
