@@ -120,20 +120,10 @@
                                                         style="object-fit: cover;" alt="{{ $post->title }}">
                                                 @endif
 
-                                                @if($post->tags->isNotEmpty())
-                                                    @foreach($post->tags->take(1) as $tag)
-                                                        <a href="{{ route('post.tag', ['tag' => $tag->slug]) }}" 
-                                                           class="text-white small rounded-pill d-inline-block"
-                                                           style="background-color: #2E57D3; padding: 0.25rem 0.75rem; margin: 0.5rem; font-size: 0.75rem; text-decoration: none; line-height: 1.2; position: absolute; bottom: 0; left: 0;">
-                                                            {{ $tag->name }}
-                                                        </a>
-                                                    @endforeach
-                                                @else
-                                                    <span class="text-white small rounded-pill d-inline-block"
-                                                          style="background-color: #2E57D3; padding: 0.25rem 0.75rem; margin: 0.5rem; font-size: 0.75rem; text-decoration: none; line-height: 1.2; position: absolute; bottom: 0; left: 0;">
-                                                        Berita
-                                                    </span>
-                                                @endif
+                                                <div
+                                                    class="position-absolute bottom-0 start-0 p-2 bg-primary text-white small">
+                                                    {{ $post->tags->first()->name ?? 'Berita' }}
+                                                </div>
                                             </div>
                                             <!-- Konten Teks -->
                                             <div class="card-body d-flex flex-column">
@@ -304,33 +294,5 @@
                 @livewire('external-links', ['limit' => 8])
             </div>
         </section>
-
-        <style>
-            /* Perbaiki tampilan tombol tag melebar di mobile */
-            .tag-btn,
-            .external-link-btn,
-            .tag,
-            .kategori-tag {
-                display: inline-block !important;
-                width: auto !important;
-                min-width: 0 !important;
-                max-width: 100% !important;
-                white-space: nowrap !important;
-                text-align: center !important;
-                padding-left: 1rem;
-                padding-right: 1rem;
-            }
-
-            @media (max-width: 600px) {
-
-                .tag-btn,
-                .external-link-btn,
-                .tag,
-                .kategori-tag {
-                    font-size: 0.95rem;
-                    padding-left: 0.75rem;
-                    padding-right: 0.75rem;
-                }
-            }
-        </style>
     </div>
+</div>
