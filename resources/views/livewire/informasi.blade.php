@@ -1,4 +1,4 @@
-<div class="space-y-4">
+<div class="-mt-6 space-y-4">
     @if ($informasi && $informasi->count() > 0)
         @foreach ($informasi as $item)
             <div class="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">

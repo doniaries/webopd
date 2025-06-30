@@ -23,56 +23,54 @@
     }
 }" x-init="initSwiper()">
     @if ($sliders && count($sliders) > 0)
-        <div class="swiper" x-ref="swiperContainer">
+        <div class="swiper main-slider w-full" x-ref="swiperContainer">
             <div class="swiper-wrapper">
-                @foreach ($sliders as $slider)
-                    <div class="swiper-slide relative">
-                        <!-- Background Image -->
-                        <div class="absolute inset-0 bg-cover bg-center"
-                            style="background-image: url('{{ $slider->gambar_url ?? asset('images/placeholder.jpg') }}');">
-                            <div class="absolute inset-0 bg-black bg-opacity-40"></div>
-                        </div>
+                @foreach (array_slice($sliders, 0, 5) as $slider)
+                    @php
+                        $slider = is_object($slider) ? (array) $slider : $slider;
+                        $imageUrl = $slider['gambar_url'] ?? asset('assets/img/hero-img.png');
+                        $title = $slider['judul'] ?? 'No Title';
+                        $url = $slider['url'] ?? '#';
+                    @endphp
+                    <div class="swiper-slide relative" style="height: 80vh; min-height: 500px; max-height: 800px;">
+                        <div class="relative w-full h-full">
+                            <!-- Background Image -->
+                            <img src="{{ $imageUrl }}" alt=""
+                                class="w-full h-full object-cover object-center">
 
-                        <!-- Content -->
-                        <div class="swiper-slide h-[80vh] min-h-[500px] max-h-[800px]">
-                            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-                                <div class="max-w-2xl bg-black bg-opacity-40 backdrop-blur-sm p-8 rounded-lg shadow-xl">
-                                    <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white mb-4 leading-tight"
-                                        data-aos="fade-up" data-aos-duration="600" data-aos-easing="ease-out-cubic">
-                                        {{ $slider->judul }}
-                                    </h2>
+                            <!-- Dark Overlay -->
+                            <div class="absolute inset-0 bg-black/40 z-10"></div>
 
+                            <!-- Blue Gradient Overlay -->
+                            <div class="absolute bottom-0 left-0 z-10 h-full w-2/3 md:w-1/2"
+                                style="background: linear-gradient(90deg, rgba(0, 69, 142, 0.8) 0%, rgba(0, 69, 142, 0.4) 70%, transparent 100%);">
+                            </div>
+
+                            <!-- Content Container -->
+                            <div
+                                class="absolute bottom-0 left-0 w-full z-20 px-8 sm:px-12 md:px-16 lg:px-20 xl:px-24 pb-16">
+                                <div class="max-w-2xl">
                                     <!-- Tags -->
-                                    @if(isset($slider->tags) && count($slider->tags) > 0)
-                                        <div class="flex flex-wrap gap-2 mb-3" data-aos="fade-up" data-aos-delay="50">
-                                            @foreach($slider->tags as $tag)
-                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100">
+                                    @if (isset($slider['tags']) && count($slider['tags']) > 0)
+                                        <div class="flex flex-wrap gap-2 mb-3" data-aos="fade-up"
+                                            data-aos-duration="100" data-aos-delay="0">
+                                            @foreach ($slider['tags'] as $tag)
+                                                <span
+                                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-white text-blue-800 shadow-sm">
                                                     {{ $tag }}
                                                 </span>
                                             @endforeach
                                         </div>
                                     @endif
 
-                                    @if (!empty($slider->deskripsi))
-                                        <p class="text-gray-200 text-lg mb-6" data-aos="fade-up" data-aos-delay="100"
-                                            data-aos-duration="500">
-                                            {{ $slider->deskripsi }}
-                                        </p>
-                                    @endif
-
-                                    @if (!empty($slider->url))
-                                        <div class="mt-6" data-aos="fade-up" data-aos-delay="200">
-                                            <a href="{{ $slider->url }}"
-                                                class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                                Selengkapnya
-                                                <svg class="w-5 h-5 ml-2 -mr-1" fill="none" stroke="currentColor"
-                                                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                                                </svg>
-                                            </a>
-                                        </div>
-                                    @endif
+                                    <h3 class="text-white mb-2 fw-bold text-left"
+                                        style="opacity: 0; animation: slideInFromTop 0.8s ease-out 0.5s forwards; max-width: 420px; margin: 1.2rem 0 0.7rem 3.5rem; padding-top: 0.2rem;">
+                                        <a href="{{ $url }}"
+                                            class="text-white text-decoration-none fs-4 text-left"
+                                            style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8); white-space: normal; line-height: 1.2;">
+                                            {{ $title }}
+                                        </a>
+                                    </h3>
                                 </div>
                             </div>
                         </div>
@@ -94,6 +92,16 @@
 
 @push('styles')
     <style>
+        @keyframes slideInFromTop {
+            0% {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
         .swiper-button-next,
         .swiper-button-prev {
             width: 3rem;
