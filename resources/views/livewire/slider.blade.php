@@ -53,7 +53,7 @@
                                     <!-- Tags -->
                                     @if (isset($slider['tags']) && count($slider['tags']) > 0)
                                         <div class="flex flex-wrap gap-2 mb-3" data-aos="fade-up"
-                                            data-aos-duration="100" data-aos-delay="0">
+                                            data-aos-duration="100" data-aos-delay="0" style="margin-left: 3.5rem;">
                                             @foreach ($slider['tags'] as $tag)
                                                 <span
                                                     class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-white text-blue-800 shadow-sm">
