@@ -19,26 +19,18 @@
                                             style="object-fit: cover; object-position: center; width: 100%; height: 100%;">
                                         <!-- Latar belakang gradient -->
                                         <div class="position-absolute bottom-0 start-0 w-100 p-4"
-                                            style="background: linear-gradient(to top, rgba(46, 87, 211, 0.8), transparent); z-index: 10; height: 150px;">
+                                            style="background: linear-gradient(to top, rgba(46, 87, 211, 0.8), transparent); z-index: 10; height: 180px; padding-bottom: 60px !important;">
                                         </div>
 
                                         <!-- Judul dan tag dengan efek fade -->
-                                        <div class="position-absolute bottom-0 start-0 w-100 p-4 slide-text"
-                                            style="z-index: 11;">
-                                            <h3 class="text-white mb-2 fw-bold"
+                                        <div class="position-absolute start-0 w-100 p-4 slide-text"
+                                            style="z-index: 11; bottom: 60px;">
+                                            <h3 class="text-white fw-bold mb-0"
                                                 style="opacity: 0; animation: slideInFromTop 0.8s ease-out 0.5s forwards;">
                                                 <a href="{{ $url }}"
                                                     class="text-white text-decoration-none fs-4"
                                                     style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">{{ Str::limit($title, 70) }}</a>
                                             </h3>
-                                            @if (isset($slider['is_post']) && $slider['is_post'] && isset($slider['tags']) && count($slider['tags']) > 0)
-                                                <div class="post-tags d-flex flex-wrap gap-2 mb-3">
-                                                    @foreach ($slider['tags'] as $tag)
-                                                        <a href="{{ route('post.tag', ['tag' => Str::slug($tag)]) }}"
-                                                            class="post-tag bg-primary text-decoration-none text-white">{{ $tag }}</a>
-                                                    @endforeach
-                                                </div>
-                                            @endif
                                         </div>
                                     </div>
                                 </div>
