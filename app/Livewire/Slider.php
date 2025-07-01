@@ -51,6 +51,10 @@ class Slider extends Component
             ->get();
     }
 
+    public function getFotoUtamaUrlAttribute()
+    {
+        return $this->gambar ? asset('storage/' . $this->gambar) : null;
+    }
 
     public function render()
     {

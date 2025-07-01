@@ -47,16 +47,16 @@
                 },
                 slidesPerView: 1,
                 spaceBetween: 24,
-                // Responsive breakpoints jika perlu
+                // Semua breakpoint tetap 1 slide per view
                 breakpoints: {
                     640: {
                         slidesPerView: 1
                     },
                     768: {
-                        slidesPerView: 2
+                        slidesPerView: 1
                     },
                     1024: {
-                        slidesPerView: 3
+                        slidesPerView: 1
                     },
                 },
             });
@@ -89,15 +89,16 @@
             justify-content: center;
             align-items: center;
             position: relative;
+            padding: 0;
         }
 
         .slide-img {
-            max-width: 220px;
-            max-height: 180px;
-            object-fit: contain;
-            margin: 0 auto;
+            width: 100%;
+            max-height: 220px;
+            object-fit: cover;
+            margin: 0;
             display: block;
-            border-radius: 8px;
+            border-radius: 10px;
             box-shadow: 0 2px 16px #23272f33;
             background: #4b5563;
         }
