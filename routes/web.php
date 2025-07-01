@@ -11,11 +11,13 @@ use App\Livewire\Kontak;
 use App\Livewire\Post;
 use App\Livewire\ProdukHukum;
 use App\Livewire\SambutanPimpinan;
-use App\Livewire\VisiMisi;
+use App\Livewire\Slider;
 use App\Livewire\UnitKerja;
+use App\Livewire\VisiMisi;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+
 
 
 
@@ -78,6 +80,8 @@ Route::get('/agenda', AgendaKegiatan::class)->name('agenda.index');
 Route::get('/berita', Post::class)->name('berita.index');
 Route::get('/berita/kategori/{slug}', Post::class)->name('berita.kategori');
 Route::get('/berita/{slug}', Post::class)->name('berita.show');
+
+Route::get('/tag/{tag}', Slider::class)->name('slider.tag');
 
 // Authentication Routes
 Route::get('/login', function () {

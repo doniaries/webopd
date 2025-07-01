@@ -50,7 +50,7 @@
                             <div
                                 class="absolute bottom-0 left-0 w-full z-20 px-8 sm:px-12 md:px-16 lg:px-20 xl:px-24 pb-16">
 
-                                <div class="max-w-5xl pr-8 lg:pr-20">
+                                <div class="max-w-5xl">
                                     <!-- Tags -->
                                     @if (isset($slider['tags']) && count($slider['tags']) > 0)
                                         <div class="flex flex-wrap gap-2 mb-3" data-aos="fade-up"
