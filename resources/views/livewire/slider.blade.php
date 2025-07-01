@@ -49,7 +49,7 @@
                             <!-- Content Container -->
                             <div
                                 class="absolute bottom-0 left-0 w-full z-20 px-8 sm:px-12 md:px-16 lg:px-20 xl:px-24 pb-16">
-                                <div class="max-w-2xl">
+                                <div class="max-w-5xl pr-8 lg:pr-20">
                                     <!-- Tags -->
                                     @if (isset($slider['tags']) && count($slider['tags']) > 0)
                                         <div class="flex flex-wrap gap-2 mb-3" data-aos="fade-up"
@@ -63,14 +63,23 @@
                                         </div>
                                     @endif
 
-                                    <h2 class="text-white mb-4 fw-bold text-left"
-                                        style="opacity: 0; animation: slideInFromTop 0.8s ease-out 0.5s forwards; max-width: 800px; margin: 1.5rem 0 1rem 3.5rem; padding-top: 0.2rem;">
-                                        <a href="{{ $url }}"
-                                            class="text-white text-decoration-none fs-2 fw-bold text-left"
-                                            style="text-shadow: 2px 2px 6px rgba(0,0,0,0.9); white-space: normal; line-height: 1.3; display: block; font-size: 2rem;">
+                                    <h2 class="text-white fw-bold text-start"
+                                        style="opacity: 0; animation: slideInFromTop 0.8s ease-out 0.5s forwards; max-width: 800px; margin: 2rem 0 1rem 3rem; padding-top: 0.2rem;">
+                                        <a href="{{ $url }}" class="text-white text-decoration-none"
+                                            style="
+            display: block;
+            font-size: 2.5rem;
+            line-height: 1.4;
+            white-space: normal;
+            text-shadow: 2px 2px 6px rgba(0,0,0,0.9);
+            max-width: 100%;
+            word-break: break-word;
+        ">
                                             {{ $title }}
                                         </a>
                                     </h2>
+
+
                                 </div>
                             </div>
                         </div>
@@ -97,11 +106,13 @@
                 opacity: 0;
                 transform: translateY(-30px);
             }
+
             100% {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
+
         .swiper-button-next,
         .swiper-button-prev {
             width: 3rem;
