@@ -63,14 +63,14 @@
                                         </div>
                                     @endif
 
-                                    <h3 class="text-white mb-2 fw-bold text-left"
-                                        style="opacity: 0; animation: slideInFromTop 0.8s ease-out 0.5s forwards; max-width: 420px; margin: 1.2rem 0 0.7rem 3.5rem; padding-top: 0.2rem;">
+                                    <h2 class="text-white mb-4 fw-bold text-left"
+                                        style="opacity: 0; animation: slideInFromTop 0.8s ease-out 0.5s forwards; max-width: 800px; margin: 1.5rem 0 1rem 3.5rem; padding-top: 0.2rem;">
                                         <a href="{{ $url }}"
-                                            class="text-white text-decoration-none fs-4 text-left"
-                                            style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8); white-space: normal; line-height: 1.2;">
+                                            class="text-white text-decoration-none fs-2 fw-bold text-left"
+                                            style="text-shadow: 2px 2px 6px rgba(0,0,0,0.9); white-space: normal; line-height: 1.3; display: block; font-size: 2rem;">
                                             {{ $title }}
                                         </a>
-                                    </h3>
+                                    </h2>
                                 </div>
                             </div>
                         </div>
