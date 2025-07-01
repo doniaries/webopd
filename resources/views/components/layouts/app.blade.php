@@ -35,17 +35,16 @@
     <!-- Main CSS File -->
     <link href="{{ asset('assets/css/main.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/dark-mode.css') }}" rel="stylesheet">
-    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
     @vite('resources/css/app.css')
-    <style>
+    {{-- <style>
         @media (max-width: 576px) {
             .main {
                 padding-top: 15px !important;
                 margin-top: 5px !important;
             }
         }
-    </style>
+    </style> --}}
     @stack('styles')
 
     <!-- =======================================================
@@ -60,7 +59,6 @@
 <body class="index-page">
 
     @include('partials.header')
-
     <main class="main" style="padding-top: 10px;">
         @if (request()->is('/'))
             {{ $slot }}
@@ -92,6 +90,7 @@
 
     <!-- Main JS File -->
     <script src="{{ asset('assets/js/main.js') }}"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
     @stack('scripts')
 

@@ -45,12 +45,18 @@ class Post extends Model
 
     protected $appends = ['foto_utama_url', 'gallery_images_urls', 'excerpt'];
 
-    /**
-     * Get the team that owns the post.
-   
 
-     * Get the excerpt attribute.
+    /**
+     * The slider that this post belongs to.
+     * @return BelongsTo<Slider, Post>
      */
+    public function slider(): BelongsTo
+    {
+        return $this->belongsTo(Slider::class, 'slider_id');
+    }
+
+
+
     public function getExcerptAttribute()
     {
         return Str::limit(strip_tags($this->content), 200);

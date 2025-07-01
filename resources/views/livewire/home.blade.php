@@ -6,15 +6,9 @@
         <meta name="description" content="{{ $pageDescription }}">
     @endpush
 
-    <div class="space-y-8">
-        <!-- Hero Slider Section -->
-        @livewire('slider', [
-            'sliders' => !empty($sliders) && count($sliders) > 0 ? $sliders : $banners ?? [],
-            'pengaturan' => $pengaturan ?? null,
-            'usePostsAsSliders' => !empty($sliders) && count($sliders) > 0,
-        ])
-        <!-- End Hero Slider -->
 
+    <div class="space-y-8">
+        <livewire:slider />
         <!-- Berita & Informasi Section -->
         <section id="berita-informasi" class="features" style="margin: 1.5rem 0 0 0; padding: 0;">
             <div class="container-fluid px-4">

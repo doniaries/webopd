@@ -47,5 +47,10 @@ class Slider extends Model
 
         // Kembalikan gambar default jika tidak ada
         return asset('assets/img/hero-img.png');
+        }
+
+    public function post()
+    {
+        return $this->belongsTo(Post::class);
     }
 }

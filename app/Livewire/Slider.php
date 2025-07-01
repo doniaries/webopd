@@ -35,111 +35,21 @@ class Slider extends Component
         // Log the loaded sliders for debugging
         \Illuminate\Support\Facades\Log::info('Loaded sliders:', [
             'count' => count($this->sliders),
-            'type' => $this->sliders instanceof Collection ? 'Collection' : gettype($this->sliders),
+            'type' => $this->sliders instanceof \Illuminate\Support\Collection ? 'Collection' : gettype($this->sliders),
             'first_item' => !empty($this->sliders) ? get_class(collect($this->sliders)->first()) : 'empty'
         ]);
     }
 
     /**
-     * Load sliders from posts or fallback to regular sliders
-     *
-     * @return void
+     * Load sliders from database beserta post dan tags
      */
     public function loadSliders(): void
     {
-        try {
-            // Always try to get posts first if usePostsAsSliders is true
-            if ($this->usePostsAsSliders) {
-                // Debug query to see what's in the database
-                \Illuminate\Support\Facades\Log::info('Checking posts table for featured posts...');
-
-                // Get latest published posts with proper eager loading, ordered by published date (newest first)
-                $rawPosts = Post::query()
-                    ->where('status', 'published')
-                    ->whereNotNull('published_at')
-                    ->where('published_at', '<=', now())
-                    ->with(['tags', 'user'])
-                    ->latest('published_at') // Orders by published_at in descending order (newest first)
-                    ->take(5)
-                    ->get();
-
-                \Illuminate\Support\Facades\Log::info('Found ' . $rawPosts->count() . ' featured posts');
-
-                if ($rawPosts->isNotEmpty()) {
-                    $mappedPosts = $rawPosts->map(function (Post $post) {
-                        // Get the full URL for the featured image
-                        $imageUrl = $post->foto_utama_url;
-                        
-                        // If no image is set, use a placeholder
-                        if (empty($imageUrl) || $imageUrl === asset('placeholder.jpg')) {
-                            $imageUrl = asset('images/placeholder.jpg');
-                        }
-                        
-                        // Ensure the URL is absolute
-                        if (!empty($imageUrl) && strpos($imageUrl, 'http') !== 0) {
-                            $imageUrl = asset($imageUrl);
-                        }
-
-                        $mapped = [
-                            'id' => $post->id,
-                            'judul' => $post->title,
-                            'deskripsi' => $post->excerpt ?? substr(strip_tags($post->content), 0, 150) . '...',
-                            'gambar_url' => $imageUrl,
-                            'url' => route('berita.show', $post->slug),
-                            'is_post' => true,
-                            'post' => $post,
-                            'published_at' => $post->published_at,
-                            'author_name' => $post->user->name ?? 'Admin',
-                            'tags' => $post->tags->pluck('name')->toArray()
-                        ];
-
-                        \Illuminate\Support\Facades\Log::info('Mapped post', [
-                            'id' => $post->id,
-                            'title' => $post->title,
-                            'image_url' => $imageUrl,
-                            'has_image' => !empty($post->foto_utama_url)
-                        ]);
-
-                        return (object) $mapped;
-                    });
-
-                    // Convert to array to ensure proper serialization
-                    $this->sliders = $mappedPosts->values()->all();
-                    \Illuminate\Support\Facades\Log::info('Set sliders property', [
-                        'count' => count($this->sliders),
-                        'type' => gettype($this->sliders),
-                        'first_item' => !empty($this->sliders) ? gettype(reset($this->sliders)) : 'empty'
-                    ]);
-                    return;
-                }
-            }
-
-            // Fallback to regular sliders if no featured posts found or usePostsAsSliders is false
-            $this->sliders = SliderModel::where('is_active', true)
-                ->orderBy('urutan')
-                ->get();
-
-            // If no sliders at all, create a default one
-            if ($this->sliders->isEmpty()) {
-                $this->sliders = collect([
-                    (object) [
-                        'judul' => 'Selamat Datang di Portal Resmi',
-                        'deskripsi' => 'Portal resmi untuk informasi dan layanan publik.',
-                        'gambar_url' => asset('assets/img/hero-img.png'),
-                        'url' => route('berita.index'),
-                        'is_post' => false,
-                        'published_at' => now()
-                    ]
-                ]);
-            }
-        } catch (\Exception $e) {
-            // Log the error but don't break the page
-            \Illuminate\Support\Facades\Log::error('Error in Slider@loadSliders: ' . $e->getMessage());
-            $this->sliders = [];
-        }
+        $this->sliders = \App\Models\Post::with('tags')
+            ->orderByDesc('created_at')
+            ->take(5) // Jumlah post yang ingin ditampilkan di slider
+            ->get();
     }
-
-
 
 
     public function render()

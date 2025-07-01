@@ -1,121 +1,145 @@
-<div class="relative w-full" x-data="{
-    initSwiper() {
-        new Swiper(this.$refs.swiperContainer, {
-            loop: true,
-            autoplay: {
-                delay: 5000,
-                disableOnInteraction: false,
-            },
-            pagination: {
-                el: '.swiper-pagination',
-                clickable: true,
-            },
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-            },
-            effect: 'fade',
-            fadeEffect: {
-                crossFade: true
-            },
-            speed: 800,
-        });
-    }
-}" x-init="initSwiper()">
-    @if ($sliders && count($sliders) > 0)
-        <div class="swiper main-slider group" x-ref="swiperContainer">
-            <div class="swiper-wrapper">
+<div>
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
-                @foreach (array_slice($sliders, 0, 5) as $slider)
-                    @php
-                        $slider = is_object($slider) ? (array) $slider : $slider;
-                        $imageUrl = $slider['gambar_url'] ?? 'https://source.unsplash.com/random/1600x900?abstract';
-                        $title = $slider['judul'] ?? 'Judul Default Slider';
-                        $url = $slider['url'] ?? '#';
-                        $tags = $slider['tags'] ?? [];
-                    @endphp
-
-                    <div class="swiper-slide relative" style="height: 80vh; min-height: 500px; max-height: 800px;">
-                        <img src="{{ $imageUrl }}" alt="{{ $title }}"
-                            class="absolute inset-0 w-full h-full object-cover object-center z-10">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent z-20"></div>
-                        <div class="relative h-full flex flex-col justify-end md:justify-center p-6 sm:p-8 md:p-12 lg:p-16 text-white z-30">
-                            <div class="max-w-4xl" x-data="{ inView: false }" x-intersect:enter="inView = true" x-intersect:leave="inView = false">
-                                @if (count($tags) > 0)
-                                    <div class="flex flex-wrap gap-2 mb-4" x-show="inView"
-                                        x-transition:enter="transition ease-out duration-500"
-                                        x-transition:enter-start="opacity-0 translate-y-4"
-                                        x-transition:enter-end="opacity-100 translate-y-0">
-                                        @foreach ($tags as $tag)
-                                            <a href="{{ route('post.tag', ['tag' => \Illuminate\Support\Str::slug($tag)]) }}"
-                                                class="inline-block px-3 py-1 text-xs font-medium text-white bg-white/20 rounded-full backdrop-blur-sm hover:bg-white/30 transition-colors">
-                                                {{ $tag }}
-                                            </a>
-                                        @endforeach
-                                    </div>
-                                @endif
-                                <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-shadow"
-                                    x-show="inView" x-transition:enter="transition ease-out duration-500 delay-100"
-                                    x-transition:enter-start="opacity-0 translate-y-4"
-                                    x-transition:enter-end="opacity-100 translate-y-0">
-                                    <a href="{{ $url }}"
-                                        class="text-white no-underline hover:text-gray-200 transition">
-                                        {{ $title }}
-                                    </a>
-                                </h2>
-                            </div>
+    <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
+            @foreach ($sliders as $slider)
+                <div class="swiper-slide">
+                    <div class="slide-content flex flex-col justify-center items-center h-full w-full relative">
+                        @if ($slider->foto_utama_url)
+                            <img src="{{ $slider->foto_utama_url }}" alt="{{ $slider->title }}" class="slide-img" />
+                        @else
+                            <!-- SVG Placeholder -->
+                        @endif
+                        <h3 class="slide-title ...">{{ $slider->title }}</h3>
+                        <!-- Tag -->
+                        <div class="flex flex-wrap gap-2 mt-2">
+                            @foreach ($slider->tags as $tag)
+                                <span
+                                    class="px-3 py-1 bg-blue-200 text-blue-900 rounded-full text-xs font-semibold">#{{ $tag->name }}</span>
+                            @endforeach
                         </div>
                     </div>
-                @endforeach
-
-            </div>
-
-            <div
-                class="swiper-button-next text-white w-12 h-12 bg-black/20 rounded-full transition-all duration-300 hover:bg-black/40 opacity-0 group-hover:opacity-100 -mr-4 md:mr-2">
-            </div>
-            <div
-                class="swiper-button-prev text-white w-12 h-12 bg-black/20 rounded-full transition-all duration-300 hover:bg-black/40 opacity-0 group-hover:opacity-100 -ml-4 md:ml-2">
-            </div>
-
-            <div class="swiper-pagination"></div>
+                </div>
+            @endforeach
         </div>
-    @else
-        <div class="bg-gray-200 h-96 flex items-center justify-center">
-            <p class="text-gray-600">Slider tidak tersedia.</p>
-        </div>
-    @endif
-</div>
+        <!-- Navigasi panah -->
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+        <!-- Dot pagination -->
+        <div class="swiper-pagination"></div>
+    </div>
 
-{{-- Push styles and scripts are the same as before --}}
-@push('styles')
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            new Swiper('.mySwiper', {
+                loop: true,
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                slidesPerView: 1,
+                spaceBetween: 24,
+                // Responsive breakpoints jika perlu
+                breakpoints: {
+                    640: {
+                        slidesPerView: 1
+                    },
+                    768: {
+                        slidesPerView: 2
+                    },
+                    1024: {
+                        slidesPerView: 3
+                    },
+                },
+            });
+        });
+    </script>
+
+    <!-- Styling tambahan agar swiper tampil bagus -->
     <style>
-        .text-shadow {
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+        .swiper {
+            width: 100%;
+            padding: 32px 0;
+            background: #3a4354;
+            border-radius: 10px;
+            min-height: 350px;
         }
 
-        .swiper-button-next:after,
-        .swiper-button-prev:after {
-            font-size: 1.25rem;
-            font-weight: 600;
+        .swiper-slide {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 350px;
+            background: transparent;
+        }
+
+        .slide-content {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .slide-img {
+            max-width: 220px;
+            max-height: 180px;
+            object-fit: contain;
+            margin: 0 auto;
+            display: block;
+            border-radius: 8px;
+            box-shadow: 0 2px 16px #23272f33;
+            background: #4b5563;
+        }
+
+        .slide-title {
+            position: absolute;
+            left: 50%;
+            top: 55%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-size: 2rem;
+            font-weight: bold;
+            width: 100%;
+            text-align: center;
+            text-shadow: 0 2px 8px #222;
+            pointer-events: none;
+        }
+
+        .swiper-button-next,
+        .swiper-button-prev {
+            color: #4ea1ff;
+            background: #fff0;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            box-shadow: none;
+            border: none;
+            transition: background 0.2s;
+        }
+
+        .swiper-button-next:hover,
+        .swiper-button-prev:hover {
+            background: #4ea1ff22;
         }
 
         .swiper-pagination-bullet {
-            width: 8px;
-            height: 8px;
-            background-color: rgba(255, 255, 255, 0.5);
-            opacity: 1;
-            transition: all 0.2s ease-out;
+            background: #fff;
+            opacity: 0.7;
         }
 
         .swiper-pagination-bullet-active {
-            width: 24px;
-            border-radius: 99px;
-            background-color: white;
+            background: #4ea1ff;
+            opacity: 1;
         }
     </style>
-@endpush
-
-@push('scripts')
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-    
-@endpush

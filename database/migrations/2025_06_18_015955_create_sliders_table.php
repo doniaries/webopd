@@ -13,14 +13,7 @@ return new class extends Migration
     {
         Schema::create('sliders', function (Blueprint $table) {
             $table->id();
-            $table->string('judul');
-            $table->text('deskripsi')->nullable();
-            $table->string('gambar');
-            $table->string('url')->nullable();
-            $table->string('button_text')->nullable()->comment('Teks tombol yang akan ditampilkan');
-            $table->string('button_url')->nullable()->comment('URL tujuan saat tombol diklik');
-            $table->integer('urutan')->unique()->default(0);
-            $table->boolean('is_active')->default(true);
+            $table->foreignId('post_id')->constrained('posts')->onDelete('cascade');
             $table->timestamps();
         });
     }
