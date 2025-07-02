@@ -1,5 +1,5 @@
 <div>
-    <!-- Swiper CSS -->
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
     <div class="swiper mySwiper">
@@ -66,39 +66,53 @@
     <!-- Styling tambahan agar swiper tampil bagus -->
     <style>
         .swiper {
-            width: 100%;
-            padding: 32px 0;
-            background: #3a4354;
-            border-radius: 10px;
+            width: 100vw;
+            height: 400px;
             min-height: 350px;
+            max-height: 450px;
+            background: #3a4354;
+            border-radius: 0px;
+            padding: 0;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
         }
 
         .swiper-slide {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 350px;
+            width: 100vw;
+            height: 400px;
+            min-height: 350px;
+            max-height: 450px;
             background: transparent;
+            padding: 0;
+            margin: 0;
         }
 
         .slide-content {
             height: 100%;
-            width: 100%;
+            width: 100vw;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             position: relative;
             padding: 0;
+            margin: 0;
+            overflow: hidden;
         }
 
         .slide-img {
-            width: 100%;
-            max-height: 220px;
+            width: 100vw;
+            height: 100%;
+            min-height: 350px;
+            max-height: 450px;
             object-fit: cover;
             margin: 0;
             display: block;
-            border-radius: 10px;
+            border-radius: 0px;
             box-shadow: 0 2px 16px #23272f33;
             background: #4b5563;
         }
