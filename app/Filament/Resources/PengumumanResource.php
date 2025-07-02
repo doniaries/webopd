@@ -24,14 +24,40 @@ class PengumumanResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('judul')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('slug')
-                    ->maxLength(255),
-                Forms\Components\Textarea::make('isi')
+                    ->required()
+                    ->maxLength(255)
+                    ->live(onBlur: true)
+                    ->afterStateUpdated(function (string $operation, $state, Forms\Set $set) {
+                        // Only generate slug on create or when judul is updated
+                        if ($operation === 'create' || $operation === 'edit') {
+                            $set('slug', \Illuminate\Support\Str::slug($state));
+                        }
+                    }),
+
+                Forms\Components\Hidden::make('slug')
+                    ->required()
+                    ->maxLength(255)
+                    ->unique(ignoreRecord: true)
+                    ->dehydrated(),
+
+                Forms\Components\FileUpload::make('file')
+                    ->directory('pengumuman/files')
+                    ->downloadable()
+                    ->openable()
+                    ->previewable()
+                    ->acceptedFileTypes(['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'])
+                    ->maxSize(1024)
                     ->columnSpanFull(),
-                Forms\Components\TextInput::make('file')
-                    ->maxLength(255),
-                Forms\Components\DateTimePicker::make('published_at'),
+
+                Forms\Components\DateTimePicker::make('published_at')
+                    ->label('Tanggal Publikasi')
+                    ->default(now())
+                    ->required(),
+
+                Forms\Components\RichEditor::make('isi')
+                    ->required()
+                    ->columnSpanFull()
+                    ->fileAttachmentsDirectory('pengumuman/attachments'),
             ]);
     }
 
@@ -42,7 +68,7 @@ class PengumumanResource extends Resource
                 Tables\Columns\TextColumn::make('judul')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('slug')
-                    ->searchable(),
+                    ->hidden(),
                 Tables\Columns\TextColumn::make('file')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('published_at')

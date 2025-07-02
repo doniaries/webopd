@@ -2,17 +2,16 @@
 
 namespace App\Models;
 
+use App\Traits\HasSlug;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Carbon;
 
 class Informasi extends Model
 {
-    use HasFactory;
-    use SoftDeletes;
+    use HasFactory, SoftDeletes, HasSlug;
 
     protected $table = 'informasis';
 
@@ -26,8 +25,7 @@ class Informasi extends Model
         'downloads',
         'published_at',
     ];
-
-
+    
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',

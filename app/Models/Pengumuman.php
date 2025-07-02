@@ -5,13 +5,14 @@ namespace App\Models;
 use App\Traits\HasSlug;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Pengumuman extends Model
 {
-    use HasSlug;
-    
+    use SoftDeletes, HasSlug;
+
     protected $table = 'pengumumen';
-    
+
     protected $fillable = [
         'judul',
         'slug',
@@ -23,14 +24,14 @@ class Pengumuman extends Model
     protected $casts = [
         'published_at' => 'datetime',
     ];
-    
+
     /**
      * The field that should be used for generating the slug.
      *
      * @var string
      */
     protected $slugSource = 'judul';
-    
+
     /**
      * The field where the slug is stored.
      *
@@ -43,14 +44,14 @@ class Pengumuman extends Model
         if (!$this->published_at) {
             return null;
         }
-        
+
         $date = Carbon::parse($this->published_at)->timezone('Asia/Jakarta');
         $day = $date->isoFormat('dddd');
         $dayNumber = $date->day;
         $month = $date->isoFormat('MMMM');
         $year = $date->year;
         $time = $date->format('H:i');
-        
+
         // Format: Senin, 3 Juli 2023 13:45 WIB
         return ucfirst($day) . ", $dayNumber $month $year $time WIB";
     }
@@ -60,13 +61,13 @@ class Pengumuman extends Model
         if (!$this->published_at) {
             return null;
         }
-        
+
         $date = Carbon::parse($this->published_at)->timezone('Asia/Jakarta');
         $day = $date->isoFormat('dddd');
         $dayNumber = $date->day;
         $month = $date->isoFormat('MMMM');
         $year = $date->year;
-        
+
         // Format: Senin, 3 Juli 2023
         return ucfirst($day) . ", $dayNumber $month $year";
     }
@@ -76,14 +77,14 @@ class Pengumuman extends Model
         if (!$this->file) {
             return null;
         }
-        
+
         return asset('storage/' . $this->file);
     }
 
     public function scopePublished($query)
     {
         return $query->where('published_at', '<=', now())
-                    ->orderBy('published_at', 'desc');
+            ->orderBy('published_at', 'desc');
     }
 
     public function scopeLatestPublished($query, $limit = 5)

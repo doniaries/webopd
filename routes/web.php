@@ -56,6 +56,10 @@ Route::get('/produk-hukum', ProdukHukum::class)->name('produk-hukum.index');
 // Alias untuk kompatibilitas dengan template
 Route::get('/produk-hukum', ProdukHukum::class)->name('produk-hukum');
 
+// Layanan
+Route::get('/layanan', \App\Livewire\Layanan::class)->name('layanan.index');
+Route::get('/layanan/{layanan:slug}', \App\Livewire\LayananDetail::class)->name('layanan.show');
+
 
 // Infografis
 Route::get('/infografis', Infografis::class)->name('infografis.index');
