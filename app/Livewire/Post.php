@@ -20,7 +20,7 @@ class Post extends Component
     public $tag = '';
     #[Url]
     public $sort = 'latest';
-    public $perPage = 10;
+    public $perPage = 6;
     public $tags;
     public $tagName;
 
@@ -79,6 +79,21 @@ class Post extends Component
         return view('livewire.posts.index', [
             'tags' => $this->tags,
             'posts' => $this->getPosts()
+        ]);
+    }
+
+    // Handle route untuk /post/tag/{tag:slug}
+    public function tag(\App\Models\Tag $tag)
+    {
+        $posts = $tag->posts()
+            ->published()
+            ->latest('published_at')
+            ->paginate($this->perPage);
+
+        return view('livewire.posts.tag', [
+            'tag' => $tag,
+            'posts' => $posts,
+            'tags' => \App\Models\Tag::all(),
         ]);
     }
 

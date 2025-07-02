@@ -60,12 +60,10 @@
 
     @include('partials.header')
     <main class="main" style="padding-top: 10px;">
-        @if (request()->is('/'))
-            {{ $slot }}
+        @hasSection('content')
+            @yield('content')
         @else
-            <x-layouts.container>
-                {{ $slot }}
-            </x-layouts.container>
+            {{ $slot ?? '' }}
         @endif
     </main>
 

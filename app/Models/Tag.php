@@ -33,12 +33,7 @@ class Tag extends Model
             ->withTimestamps();
     }
 
-    /**
-     * Scope a query to only include tags with published posts.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
+
     public function scopeHasPosts($query)
     {
         return $query->whereHas('posts', function ($q) {
@@ -46,13 +41,7 @@ class Tag extends Model
         });
     }
 
-    /**
-     * Scope a query to order tags by name.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  string  $direction
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
+
     public function scopeOrderByName($query, $direction = 'asc')
     {
         return $query->orderBy('name', $direction);

@@ -12,14 +12,24 @@
                         @else
                             <!-- SVG Placeholder -->
                         @endif
-                        <h3 class="slide-title ...">{{ $slider->title }}</h3>
-                        <!-- Tag -->
-                        <div class="flex flex-wrap gap-2 mt-2">
-                            @foreach ($slider->tags as $tag)
-                                <span
-                                    class="px-3 py-1 bg-blue-200 text-blue-900 rounded-full text-xs font-semibold">#{{ $tag->name }}</span>
-                            @endforeach
+
+                        <div
+                            class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full px-4 z-10 flex flex-col items-center">
+                            @if (isset($slider->tags) && count($slider->tags) > 0)
+                                <div class="mb-2 flex flex-wrap justify-center gap-2">
+                                    @foreach ($slider->tags as $tag)
+                                        <a href="{{ route('post.tag', ['tag' => \Illuminate\Support\Str::slug($tag->name)]) }}"
+                                            class="inline-block bg-blue-600/80 text-white text-xs font-semibold px-3 py-1 rounded-full shadow hover:bg-blue-700 transition">
+                                            {{ $tag->name }}
+                                        </a>
+                                    @endforeach
+                                </div>
+                            @endif
+                            <a href="{{ route('berita.show', $slider->slug) }}">
+                                <h3 class="slide-title ... hover:underline cursor-pointer">{{ $slider->title }}</h3>
+                            </a>
                         </div>
+
                     </div>
                 </div>
             @endforeach
@@ -67,7 +77,7 @@
     <style>
         .swiper {
             width: 100vw;
-            height: 400px;
+            height: 450px;
             min-height: 350px;
             max-height: 450px;
             background: #3a4354;
@@ -83,7 +93,7 @@
             justify-content: center;
             align-items: center;
             width: 100vw;
-            height: 400px;
+            height: 450px;
             min-height: 350px;
             max-height: 450px;
             background: transparent;
@@ -118,17 +128,21 @@
         }
 
         .slide-title {
-            position: absolute;
-            left: 50%;
-            top: 55%;
-            transform: translate(-50%, -50%);
+            position: relative;
+            left: auto;
+            top: auto;
+            transform: none;
             color: #fff;
             font-size: 2rem;
             font-weight: bold;
             width: 100%;
             text-align: center;
             text-shadow: 0 2px 8px #222;
-            pointer-events: none;
+            pointer-events: auto;
+            background: rgba(0, 0, 0, 0.45);
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+            margin-bottom: 0;
         }
 
         .swiper-button-next,
@@ -158,3 +172,4 @@
             opacity: 1;
         }
     </style>
+</div>

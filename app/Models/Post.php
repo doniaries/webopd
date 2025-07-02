@@ -180,6 +180,10 @@ class Post extends Model
     }
 
 
+    /**
+     * Relasi many-to-many ke Tag.
+     * Mendapatkan semua tag yang terkait dengan post ini.
+     */
     public function tags()
     {
         return $this->belongsToMany(Tag::class, 'post_tag')
