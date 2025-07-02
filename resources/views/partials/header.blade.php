@@ -102,7 +102,7 @@
             width: 100%;
             padding: 0;
         }
-        
+
         /* Flowbite style untuk tombol hamburger */
         .hamburger-button {
             display: inline-flex;
@@ -118,11 +118,11 @@
             border: none;
             cursor: pointer;
         }
-        
+
         .hamburger-button:hover {
             background-color: #F3F4F6;
         }
-        
+
         .hamburger-button:focus {
             outline: none;
             box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
@@ -138,16 +138,17 @@
             display: flex;
             align-items: center;
         }
-        
+
         @media (max-width: 576px) {
             .header {
-                height: 60px !important; /* Tinggi tetap untuk nav */
+                height: 60px !important;
+                /* Tinggi tetap untuk nav */
                 min-height: 60px !important;
                 position: sticky !important;
                 top: 0 !important;
                 z-index: 1000 !important;
             }
-            
+
             .header-wrapper {
                 padding: 0 12px;
                 height: 100%;
@@ -160,11 +161,12 @@
             background-color: white;
             border-bottom: 1px solid #e0e0e0;
             padding: 2px 0;
-            min-height: 50px; /* Pastikan header memiliki tinggi minimum */
+            min-height: 50px;
+            /* Pastikan header memiliki tinggi minimum */
             display: flex;
             align-items: center;
         }
-        
+
         .header-content {
             display: flex;
             width: 100%;
@@ -183,31 +185,71 @@
             align-items: center;
             text-decoration: none;
             padding: 2px 0;
-            min-width: 40px; /* Pastikan logo memiliki lebar minimum */
-            margin-right: auto; /* Pastikan logo selalu di kiri */
+            min-width: 40px;
+            /* Pastikan logo memiliki lebar minimum */
+            margin-right: auto;
+            /* Pastikan logo selalu di kiri */
         }
-        
+
         /* Logo Styles */
+        .logo {
+            display: flex !important;
+            align-items: center;
+            text-decoration: none;
+            color: inherit;
+        }
+
         .logo-wrapper {
             display: flex;
             align-items: center;
             height: 35px;
             margin-right: 10px;
         }
-        
+
         .logo-image {
             height: 100%;
             width: auto;
             max-width: 150px;
             object-fit: contain;
         }
-        
+
+        /* Nama Aplikasi */
+        .sitename {
+            font-size: 1.1rem !important;
+            line-height: 1.2 !important;
+            font-weight: 700 !important;
+            color: #333 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            white-space: nowrap !important;
+            overflow: visible !important;
+            text-overflow: unset !important;
+            display: block !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            position: relative !important;
+            z-index: 100 !important;
+        }
+
+        .text-uppercase {
+            font-size: 0.7rem !important;
+            letter-spacing: 0.5px !important;
+            color: #6c757d !important;
+            font-weight: 600 !important;
+            display: block !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            line-height: 1.2 !important;
+        }
+
         /* Fallback for logo */
         .logo-image[src*='kabupaten-sijunjung.png'] {
             height: 35px;
             width: auto;
         }
-        
+
         /* Mobile Styles */
         @media (max-width: 767px) {
             .logo {
@@ -218,9 +260,9 @@
                 padding: 0 !important;
                 overflow: visible !important;
             }
-            
-            .logo img, 
-            .logo-image, 
+
+            .logo img,
+            .logo-image,
             .logo-container img,
             .d-flex.align-items-center img {
                 min-width: 35px !important;
@@ -233,7 +275,7 @@
                 position: relative !important;
             }
         }
-        
+
         /* CSS untuk logo container */
         .logo-container {
             flex-shrink: 0;
@@ -248,16 +290,17 @@
             justify-content: center;
             overflow: visible;
         }
-        
+
         /* Tambahan untuk memastikan logo terlihat pada mobile */
         @media (max-width: 576px) {
             .logo a {
                 display: flex !important;
                 align-items: center !important;
             }
-            
+
             /* Pastikan container logo memiliki dimensi tetap */
-            .logo a > div:first-child, .logo-container {
+            .logo a>div:first-child,
+            .logo-container {
                 min-width: 35px !important;
                 width: 35px !important;
                 height: 35px !important;
@@ -268,9 +311,10 @@
                 position: relative !important;
                 z-index: 10 !important;
             }
-            
+
             /* Pastikan gambar logo terlihat */
-            .logo a > div:first-child img, .logo-image {
+            .logo a>div:first-child img,
+            .logo-image {
                 display: block !important;
                 visibility: visible !important;
                 opacity: 1 !important;
@@ -281,7 +325,7 @@
                 z-index: 10 !important;
                 max-width: none !important;
             }
-            
+
             /* CSS khusus untuk logo-container dan logo-image */
             .logo-container {
                 min-width: 35px !important;
@@ -294,7 +338,7 @@
                 position: relative !important;
                 z-index: 10 !important;
             }
-            
+
             .logo-image {
                 display: block !important;
                 visibility: visible !important;
@@ -373,7 +417,7 @@
             transition: opacity 0.3s ease;
             <div class="position-absolute bottom-0 start-0 w-100 p-4 mb-5" style="background: linear-gradient(to top, rgba(0, 0, 255, 0.8), transparent); z-index: 11; transform: translateY(20px);">
         }
-        
+
         .mobile-menu-container.visible {
             opacity: 1;
         }
@@ -381,8 +425,10 @@
         .mobile-menu {
             position: fixed;
             top: 0;
-            right: -280px; /* Lebih kecil untuk tampilan mobile */
-            width: 280px; /* Lebih kecil untuk tampilan mobile */
+            right: -280px;
+            /* Lebih kecil untuk tampilan mobile */
+            width: 280px;
+            /* Lebih kecil untuk tampilan mobile */
             height: 100%;
             background-color: white;
             overflow-y: auto;
@@ -468,7 +514,7 @@
             padding: 8px 0;
             transition: color 0.3s, background-color 0.2s ease;
         }
-        
+
         .mobile-menu-content ul li a:active {
             background-color: #f5f5f5;
         }
@@ -518,7 +564,8 @@
 
         .mobile-dropdown-menu.open {
             display: block;
-            max-height: 1000px; /* Nilai yang cukup besar untuk menampung semua item */
+            max-height: 1000px;
+            /* Nilai yang cukup besar untuk menampung semua item */
         }
 
         /* Memastikan class hidden dan open bekerja dengan benar */
@@ -571,11 +618,11 @@
             border: none;
             cursor: pointer;
         }
-        
+
         .hamburger-button:hover {
             background-color: #F3F4F6;
         }
-        
+
         .hamburger-button:focus {
             outline: none;
             box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
@@ -624,14 +671,14 @@
                 width: 100% !important;
                 max-width: 100% !important;
             }
-            
+
             .header-wrapper {
                 padding: 0 10px !important;
                 width: 100% !important;
                 max-width: 100% !important;
                 margin: 0 !important;
             }
-            
+
             .header-content {
                 padding: 0 5px !important;
                 margin: 0 !important;
@@ -642,7 +689,7 @@
                 min-width: 35px !important;
                 flex-shrink: 0 !important;
             }
-            
+
             .logo img {
                 max-height: 35px !important;
                 min-height: 35px !important;
@@ -656,11 +703,15 @@
 
             .sitename {
                 font-size: 0.85rem !important;
-                max-width: 180px;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
+                max-width: 180px !important;
+                white-space: nowrap !important;
+                overflow: visible !important;
+                text-overflow: unset !important;
                 font-weight: 700 !important;
+                color: #333 !important;
+                display: block !important;
+                opacity: 1 !important;
+                visibility: visible !important;
             }
 
             #current-time {
@@ -671,24 +722,68 @@
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .header-content {
-                padding: 10px 0;
+                padding: 0 10px !important;
+                min-height: 50px;
+                justify-content: space-between;
             }
 
-            .logo img {
-                max-height: 35px !important;
+            .logo {
+                flex: 0 0 auto !important;
+                max-width: 180px !important;
+                display: flex !important;
+                align-items: center !important;
+                margin-right: 0 !important;
+            }
+
+            .logo-wrapper {
+                width: 35px !important;
+                min-width: 35px !important;
+                height: 35px !important;
+                margin-right: 8px !important;
+                flex-shrink: 0 !important;
+            }
+
+            .logo-image {
+                width: 100% !important;
+                height: 100% !important;
+                object-fit: contain !important;
             }
 
             .sitename {
                 font-size: 0.9rem !important;
+                max-width: 120px !important;
+                white-space: nowrap !important;
+                overflow: visible !important;
+                text-overflow: unset !important;
+                color: #333 !important;
+                display: block !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+                position: relative !important;
+                z-index: 100 !important;
+                line-height: 1.2 !important;
+                margin: 0 !important;
+                padding: 0 !important;
             }
 
-            .logo .d-flex:last-child img {
-                max-height: 28px !important;
-            }
-            
-            #current-time {
-                display: none !important;
-            }
+            padding: 10px 0;
+        }
+
+        .logo img {
+            max-height: 35px !important;
+        }
+
+        .sitename {
+            font-size: 0.9rem !important;
+        }
+
+        .logo .d-flex:last-child img {
+            max-height: 28px !important;
+        }
+
+        #current-time {
+            display: none !important;
+        }
         }
 
         @media (max-width: 576px) {
@@ -703,7 +798,7 @@
                 max-width: none !important;
                 flex-shrink: 0 !important;
             }
-            
+
             .logo img {
                 max-height: 35px !important;
                 min-height: 35px !important;
@@ -719,7 +814,8 @@
 
             .sitename {
                 font-size: 0.85rem !important;
-                max-width: 180px; /* Perluas lebar teks karena tidak ada jam */
+                max-width: 180px;
+                /* Perluas lebar teks karena tidak ada jam */
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
@@ -729,7 +825,7 @@
             .logo .d-flex:last-child {
                 display: none !important;
             }
-            
+
             /* Mengurangi padding pada header untuk memberi ruang lebih pada logo */
             .header-container {
                 padding: 0;
@@ -737,24 +833,25 @@
                 display: flex;
                 align-items: center;
             }
-            
+
             /* Sembunyikan elemen yang tidak penting pada mobile */
             .d-flex.align-items-center.ms-3 {
-                display: none !important; /* Sembunyikan gambar bangga dan berakhlak pada mobile */
+                display: none !important;
+                /* Sembunyikan gambar bangga dan berakhlak pada mobile */
             }
-            
+
             /* Pastikan header content memiliki ruang yang cukup */
             .header-content {
                 padding: 0 5px;
                 justify-content: space-between;
                 align-items: center;
             }
-            
+
             /* Kurangi margin pada waktu */
             #current-time {
                 margin-right: 5px !important;
             }
-            
+
             .hamburger-button {
                 margin-left: auto !important;
             }
@@ -773,13 +870,13 @@
             font-weight: 500;
             transition: background-color 0.3s;
         }
-        
+
         @media (max-width: 576px) {
             .login-button {
                 padding: 6px 10px;
                 font-size: 0.9rem;
             }
-            
+
             .login-button i {
                 margin-right: 4px;
             }
@@ -823,39 +920,41 @@
 
                         @endphp
                         <div class="logo-wrapper">
-                            <img src="{{ $logoUrl }}" alt="Logo" class="logo-image" onerror="this.onerror=null; this.src='{{ asset('kabupaten-sijunjung.png') }}';">
-                            </div>
-                            <div class="ms-2 d-flex flex-column">
-                                <span class="text-uppercase d-none d-sm-block"
-                                    style="font-size: 0.7rem; letter-spacing: 0.5px; color: #6c757d; font-weight: 600;">WEBSITE</span>
-                                <h1 class="sitename m-0" style="font-size: 1.1rem; line-height: 1.2; font-weight: 700;">{{ $siteName }}
-                                </h1>
-                            </div>
+                            <img src="{{ $logoUrl }}" alt="Logo" class="logo-image"
+                                onerror="this.onerror=null; this.src='{{ asset('kabupaten-sijunjung.png') }}';">
                         </div>
-                    </a>
-                    <div class="d-flex align-items-center ms-3 d-none d-md-flex"
-                        style="border-left: 1px solid #dee2e6; padding-left: 15px;">
-                        <img src="{{ asset('images/bangga.png') }}" alt="Bangga" class="img-fluid me-1"
-                            style="max-height: 24px;">
-                        <img src="{{ asset('images/berakhlak.png') }}" alt="Berakhlak" class="img-fluid"
-                            style="max-height: 24px;">
-                    </div>
+                        <div class="ms-2 d-flex flex-column" style="position: relative; z-index: 1000;">
+                            <span class="text-uppercase d-none d-sm-block">WEBSITE</span>
+                            <div class="sitename" style="color: #000 !important;">{{ $siteName }}</div>
+                        </div>
                 </div>
-
-                
-
-                <!-- Elemen di kanan: hanya tombol hamburger -->
-                <div class="d-flex align-items-center">
-                    <!-- Hamburger Menu Button dengan style Flowbite -->
-                    <button id="mobile-menu-toggle" type="button" class="hamburger-button inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200">
-                        <span class="sr-only">Open main menu</span>
-                        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
-                        </svg>
-                    </button>
+                </a>
+                <div class="d-flex align-items-center ms-3 d-none d-md-flex"
+                    style="border-left: 1px solid #dee2e6; padding-left: 15px;">
+                    <img src="{{ asset('images/bangga.png') }}" alt="Bangga" class="img-fluid me-1"
+                        style="max-height: 24px;">
+                    <img src="{{ asset('images/berakhlak.png') }}" alt="Berakhlak" class="img-fluid"
+                        style="max-height: 24px;">
                 </div>
             </div>
+
+
+
+            <!-- Elemen di kanan: hanya tombol hamburger -->
+            <div class="d-flex align-items-center">
+                <!-- Hamburger Menu Button dengan style Flowbite -->
+                <button id="mobile-menu-toggle" type="button"
+                    class="hamburger-button inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200">
+                    <span class="sr-only">Open main menu</span>
+                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 17 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M1 1h15M1 7h15M1 13h15" />
+                    </svg>
+                </button>
+            </div>
         </div>
+    </div>
     </div>
 
     <!-- Mobile Menu -->
@@ -1099,16 +1198,19 @@
                     setTimeout(function() {
                         mobileMenuContainer.classList.add('visible');
                         mobileMenuOverlay.classList.add('open');
-                        document.body.style.overflow = 'hidden'; // Prevent scrolling when menu is open
-                        
+                        document.body.style.overflow =
+                        'hidden'; // Prevent scrolling when menu is open
+
                         setTimeout(function() {
                             mobileMenu.classList.add('open');
                             // Tidak perlu lagi mengubah kelas hamburger icon karena menggunakan SVG
 
                             // Pastikan semua dropdown tertutup saat menu dibuka
                             mobileDropdowns.forEach(dropdown => {
-                                const menu = dropdown.querySelector('.mobile-dropdown-menu');
-                                const icon = dropdown.querySelector('.mobile-dropdown-icon');
+                                const menu = dropdown.querySelector(
+                                    '.mobile-dropdown-menu');
+                                const icon = dropdown.querySelector(
+                                    '.mobile-dropdown-icon');
 
                                 menu.classList.add('hidden');
                                 menu.classList.remove('open');
@@ -1134,7 +1236,7 @@
                 });
             }
 
-           
+
             // Toggle mobile dropdowns
             mobileDropdowns.forEach(dropdown => {
                 const button = dropdown.querySelector('button');

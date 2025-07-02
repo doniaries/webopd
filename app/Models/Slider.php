@@ -7,30 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class Slider extends Model
 {
     protected $fillable = [
-        // 'team_id',
-        'judul',
-        'deskripsi',
-        'gambar',
-        'url',
-        'urutan',
-        'is_active',
+        'post_id',
     ];
 
     protected $casts = [
-        'is_active' => 'boolean',
         'urutan' => 'integer',
     ];
 
-    // public function team()
-    // {
-    //     return $this->belongsTo(Team::class);
-    // }
 
-    // Scope untuk slider aktif
-    public function scopeActive($query)
-    {
-        return $query->where('is_active', true)->orderBy('urutan');
-    }
 
     // Accessor untuk URL gambar
     public function getGambarUrlAttribute()
@@ -47,7 +31,7 @@ class Slider extends Model
 
         // Kembalikan gambar default jika tidak ada
         return asset('assets/img/hero-img.png');
-        }
+    }
 
     public function post()
     {
