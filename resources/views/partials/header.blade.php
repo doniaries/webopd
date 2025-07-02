@@ -188,37 +188,24 @@
         }
         
         /* Logo Styles */
-        .logo {
-            display: flex !important;
+        .logo-wrapper {
+            display: flex;
             align-items: center;
-            min-width: 35px;
             height: 35px;
-            position: relative;
-            z-index: 100;
+            margin-right: 10px;
         }
         
-        .logo a {
-            display: flex !important;
-            align-items: center;
+        .logo-image {
             height: 100%;
+            width: auto;
+            max-width: 150px;
+            object-fit: contain;
         }
         
-        .logo img, 
-        .logo-image, 
-        .logo-container img,
-        .d-flex.align-items-center img {
-            max-height: 35px !important;
-            min-height: 30px !important;
-            min-width: 30px !important;
-            width: auto !important;
-            height: auto !important;
-            max-width: none !important;
-            display: block !important;
-            object-fit: contain !important;
-            visibility: visible !important;
-            opacity: 1 !important;
-            position: relative !important;
-            z-index: 1 !important;
+        /* Fallback for logo */
+        .logo-image[src*='kabupaten-sijunjung.png'] {
+            height: 35px;
+            width: auto;
         }
         
         /* Mobile Styles */
@@ -835,9 +822,8 @@
                             }
 
                         @endphp
-                        <div class="d-flex align-items-center">
-                            <div class="logo-container" style="flex-shrink: 0 !important; display: block !important; min-width: 35px !important; width: 35px !important; height: 35px !important; position: relative !important; z-index: 10 !important; overflow: visible !important;">
-                <img src="{{ $logoUrl }}" alt="Logo" class="img-fluid logo-image" style="max-height: 35px !important; min-height: 35px !important; min-width: 35px !important; width: 35px !important; height: 35px !important; display: block !important; object-fit: contain !important; visibility: visible !important; opacity: 1 !important; position: relative !important; z-index: 10 !important;">
+                        <div class="logo-wrapper">
+                            <img src="{{ $logoUrl }}" alt="Logo" class="logo-image" onerror="this.onerror=null; this.src='{{ asset('kabupaten-sijunjung.png') }}';">
                             </div>
                             <div class="ms-2 d-flex flex-column">
                                 <span class="text-uppercase d-none d-sm-block"
