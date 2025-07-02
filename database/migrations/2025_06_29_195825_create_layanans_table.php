@@ -16,21 +16,14 @@ return new class extends Migration
             $table->string('nama_layanan');
             $table->string('slug')->unique();
             $table->text('deskripsi')->nullable();
-            $table->longText('konten')->nullable();
-            $table->longText('persyaratan')->nullable();
+            $table->text('persyaratan')->nullable();
             $table->text('biaya')->nullable();
             $table->text('waktu_penyelesaian')->nullable();
-            $table->string('gambar')->nullable();
-            $table->json('file')->nullable();
-            $table->boolean('is_active')->default(true);
-            $table->string('meta_title')->nullable();
-            $table->text('meta_description')->nullable();
-            $table->text('meta_keywords')->nullable();
+            $table->string('file')->nullable();
             $table->softDeletes();
             $table->timestamps();
-            
+
             // Add index for better performance
-            $table->index('is_active');
             $table->index('slug');
         });
     }

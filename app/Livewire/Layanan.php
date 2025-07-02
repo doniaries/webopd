@@ -23,9 +23,9 @@ class Layanan extends Component
         $layanans = LayananModel::query()
             ->when($this->search, function($query) {
                 $query->where('nama_layanan', 'like', '%' . $this->search . '%')
-                      ->orWhere('deskripsi', 'like', '%' . $this->search . '%');
+                      ->orWhere('deskripsi', 'like', '%' . $this->search . '%')
+                      ->orWhere('persyaratan', 'like', '%' . $this->search . '%');
             })
-            ->where('is_active', true)
             ->orderBy('created_at', 'desc')
             ->paginate($this->perPage);
 

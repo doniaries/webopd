@@ -18,21 +18,14 @@ class Layanan extends Model
         'nama_layanan',
         'slug',
         'deskripsi',
-        'konten',
         'persyaratan',
         'biaya',
         'waktu_penyelesaian',
-        'gambar',
         'file',
-        'is_active',
-        'meta_title',
-        'meta_description',
-        'meta_keywords',
     ];
 
     protected $casts = [
-        'file' => 'array',
-        'is_active' => 'boolean',
+        'file' => 'string',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',
@@ -52,25 +45,16 @@ class Layanan extends Model
      */
     protected $slugField = 'slug';
 
-    /**
-     * Scope a query to only include active layanan.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeActive($query)
-    {
-        return $query->where('is_active', true);
-    }
+
 
     /**
-     * Get the URL to the layanan's image.
+     * Get the URL to the layanan's file.
      *
-     * @return string
+     * @return string|null
      */
-    public function getImageUrlAttribute()
+    public function getFileUrlAttribute()
     {
-        return $this->gambar ? \Storage::url($this->gambar) : null;
+        return $this->file ? \Storage::url($this->file) : null;
     }
 
     /**
