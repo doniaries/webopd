@@ -5,7 +5,7 @@
     <div class="swiper mySwiper">
         <div class="swiper-wrapper">
             @foreach ($sliders as $slider)
-                <div class="swiper-slide">
+                <div class="swiper-slide min-h-[260px] md:min-h-[400px]">
                     <div class="slide-content flex flex-col justify-center items-center h-full w-full relative">
                         @if ($slider->foto_utama_url)
                             <img src="{{ $slider->foto_utama_url }}" alt="{{ $slider->title }}" class="slide-img" />
@@ -14,9 +14,9 @@
                         @endif
 
                         <div
-                            class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full px-4 z-10 flex flex-col items-center">
+                            class="absolute left-1/2 top-[60%] md:top-[70%] transform -translate-x-1/2 -translate-y-1/3 w-full px-4 z-10 flex flex-col items-center pt-8 md:pt-0">
                             @if (isset($slider->tags) && count($slider->tags) > 0)
-                                <div class="mb-2 flex justify-center gap-2 overflow-x-auto">
+                                <div class="mb-2 flex justify-center gap-2 overflow-x-auto max-w-full bg-black/40 rounded py-1 px-2">
                                     @foreach ($slider->tags as $tag)
                                         <a href="{{ route('post.tag', ['tag' => \Illuminate\Support\Str::slug($tag->name)]) }}"
                                             class="inline-flex bg-blue-600/80 text-white text-sm font-semibold px-3 py-1 rounded-full shadow hover:bg-blue-700 transition whitespace-nowrap">
@@ -26,7 +26,7 @@
                                 </div>
                             @endif
                             <a href="{{ route('berita.show', $slider->slug) }}">
-                                <h3 class="slide-title ... hover:underline cursor-pointer">{{ $slider->title }}</h3>
+                                <h3 class="slide-title text-white text-center md:text-left ... hover:underline cursor-pointer shadow-lg">{{ $slider->title }}</h3>
                             </a>
                         </div>
 

@@ -1,44 +1,46 @@
 <header id="header" class="header sticky-top">
     <style>
-        /* Transisi untuk efek smooth */
+        /* Base Styles */
         .header-container,
         .menu-container {
-            transition: all 0.3s ease-in-out;
+            transition: none;
         }
 
-        /* Header selalu putih solid */
+        /* Header Container */
         .header-container {
-            padding: 10px 0;
-            background-color: #ffffff !important;
+            width: 100%;
+            background-color: #ffffff;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 0;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            z-index: 999 !important; /* Pastikan header selalu di atas konten lain */
-            position: relative;
+            overflow: visible !important;
         }
 
+        /* Menu Container */
         .menu-container {
             padding: 8px 0;
-            background-color: #ffffff !important;
+            background-color: #ffffff;
             border-top: 1px solid #f0f0f0;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         }
 
-        /* Hapus efek transisi yang tidak diinginkan */
-        .header-container,
-        .menu-container {
-            transition: none !important;
-        }
-
-        /* Pastikan navmenu juga putih */
+        /* Navmenu */
         #navmenu {
             background-color: #ffffff;
         }
 
-        /* Pastikan dropdown menu juga putih */
         #navmenu ul ul {
             background-color: #ffffff;
         }
 
-        /* Style untuk menu item saat di atas */
         .at-top #navmenu>ul>li>a {
             padding: 10px 15px;
             font-size: 1rem;
@@ -163,21 +165,16 @@
             align-items: center;
         }
         
-        @media (max-width: 576px) {
-            .header-container {
-                padding: 0;
-                height: 60px;
-                display: flex;
-                align-items: center;
-            }
-        }
-
         .header-content {
             display: flex;
             width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 10px;
             justify-content: space-between;
             align-items: center;
-            padding: 0;
+            box-sizing: border-box;
+            position: relative;
         }
 
         /* Logo */
@@ -190,17 +187,64 @@
             margin-right: auto; /* Pastikan logo selalu di kiri */
         }
         
-        /* Pastikan logo terlihat pada semua perangkat */
-        .logo img, .logo-image {
-            display: block;
-            width: auto;
-            height: auto;
-            max-width: none;
-            min-width: 40px;
-            min-height: 40px;
-            object-fit: contain;
-            visibility: visible;
-            opacity: 1;
+        /* Logo Styles */
+        .logo {
+            display: flex !important;
+            align-items: center;
+            min-width: 35px;
+            height: 35px;
+            position: relative;
+            z-index: 100;
+        }
+        
+        .logo a {
+            display: flex !important;
+            align-items: center;
+            height: 100%;
+        }
+        
+        .logo img, 
+        .logo-image, 
+        .logo-container img,
+        .d-flex.align-items-center img {
+            max-height: 35px !important;
+            min-height: 30px !important;
+            min-width: 30px !important;
+            width: auto !important;
+            height: auto !important;
+            max-width: none !important;
+            display: block !important;
+            object-fit: contain !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            position: relative !important;
+            z-index: 1 !important;
+        }
+        
+        /* Mobile Styles */
+        @media (max-width: 767px) {
+            .logo {
+                min-width: 35px !important;
+                width: 35px !important;
+                height: 35px !important;
+                margin: 0 5px 0 0 !important;
+                padding: 0 !important;
+                overflow: visible !important;
+            }
+            
+            .logo img, 
+            .logo-image, 
+            .logo-container img,
+            .d-flex.align-items-center img {
+                min-width: 35px !important;
+                width: 35px !important;
+                height: 35px !important;
+                max-width: 100% !important;
+                display: block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                position: relative !important;
+            }
         }
         
         /* CSS untuk logo container */
@@ -550,18 +594,90 @@
             box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
         }
 
-        /* Sembunyikan hamburger menu pada tampilan desktop */
-        .hamburger-menu {
+        /* Hamburger Menu */
+        #mobile-menu-toggle {
             display: none;
+            background: transparent;
+            border: none;
+            padding: 8px;
+            cursor: pointer;
+            z-index: 1001;
         }
 
-        @media (max-width: 768px) {
+        #mobile-menu-toggle svg {
+            width: 24px;
+            height: 24px;
+            color: #333;
+        }
+
+        /* Mobile Menu Styles */
+        @media (max-width: 991.98px) {
             .navmenu {
-                display: none;
+                display: none !important;
             }
 
-            .hamburger-button {
-                display: inline-flex;
+            #mobile-menu-toggle {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .header-wrapper {
+                padding: 0 15px;
+                height: 100%;
+            }
+        }
+
+        /* Mobile Specific Styles */
+        @media (max-width: 576px) {
+            .header-container {
+                height: 60px;
+                padding: 0 !important;
+                margin: 0 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+            
+            .header-wrapper {
+                padding: 0 10px !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                margin: 0 !important;
+            }
+            
+            .header-content {
+                padding: 0 5px !important;
+                margin: 0 !important;
+            }
+
+            .logo {
+                display: flex !important;
+                min-width: 35px !important;
+                flex-shrink: 0 !important;
+            }
+            
+            .logo img {
+                max-height: 35px !important;
+                min-height: 35px !important;
+                min-width: 35px !important;
+                width: auto !important;
+                margin-right: 5px;
+                display: block !important;
+                flex-shrink: 0 !important;
+                object-fit: contain !important;
+            }
+
+            .sitename {
+                font-size: 0.85rem !important;
+                max-width: 180px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                font-weight: 700 !important;
+            }
+
+            #current-time {
+                display: none !important;
             }
         }
 
