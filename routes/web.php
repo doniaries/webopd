@@ -1,5 +1,6 @@
 <?php
 
+use \App\Livewire\Layanan;
 use App\Http\Controllers\InformasiController;
 use App\Livewire\AgendaKegiatan;
 use App\Livewire\Dokumen;
@@ -17,6 +18,7 @@ use App\Livewire\VisiMisi;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+
 
 
 
@@ -82,6 +84,8 @@ Route::get('/berita/kategori/{slug}', Post::class)->name('berita.kategori');
 Route::get('/berita/{slug}', Post::class)->name('berita.show');
 
 Route::get('/tag/{tag}', Slider::class)->name('slider.tag');
+
+
 
 // Authentication Routes
 Route::get('/login', function () {

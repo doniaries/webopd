@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasSlug;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -9,7 +10,7 @@ use App\Models\Post;
 
 class Tag extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, HasSlug;
 
     protected $fillable = [
         'name',
@@ -21,6 +22,20 @@ class Tag extends Model
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',
     ];
+    
+    /**
+     * The field that should be used for generating the slug.
+     *
+     * @var string
+     */
+    protected $slugSource = 'name';
+    
+    /**
+     * The field where the slug is stored.
+     *
+     * @var string
+     */
+    protected $slugField = 'slug';
 
     /**
      * The posts that belong to the tag.

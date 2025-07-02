@@ -19,12 +19,4 @@ class ExternalLink extends Model
         'status' => 'string',
         'urutan' => 'integer'
     ];
-
-    /**
-     * Get the user that owns the external link.
-     */
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
 }

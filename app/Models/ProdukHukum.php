@@ -2,15 +2,17 @@
 
 namespace App\Models;
 
+use App\Traits\HasSlug;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\Team;
 
 class ProdukHukum extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, HasSlug;
 
     protected $table = 'produk_hukums';
+    protected $slugSource = 'judul';
+    protected $slugField = 'slug';
 
     protected $fillable = [
         'judul',
@@ -19,9 +21,9 @@ class ProdukHukum extends Model
         'file',
     ];
 
-
-    public function getRouteKeyName()
-    {
-        return 'slug';
-    }
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'deleted_at' => 'datetime',
+    ];
 }

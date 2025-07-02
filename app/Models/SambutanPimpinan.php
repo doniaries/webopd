@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\HasSlug;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Str;
 
 class SambutanPimpinan extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, HasSlug;
 
     protected $table = 'sambutan_pimpinans';
 
@@ -27,9 +27,18 @@ class SambutanPimpinan extends Model
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',
     ];
-
-    public function getSlugAttribute()
-    {
-        return Str::slug($this->judul);
-    }
+    
+    /**
+     * The field that should be used for generating the slug.
+     *
+     * @var string
+     */
+    protected $slugSource = 'judul';
+    
+    /**
+     * The field where the slug is stored.
+     *
+     * @var string
+     */
+    protected $slugField = 'slug';
 }

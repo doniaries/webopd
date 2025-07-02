@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\HasSlug;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Pengaturan extends Model
 {
+    use HasSlug;
+    
     protected $table = 'pengaturans';
 
     protected $fillable = [
@@ -29,27 +32,24 @@ class Pengaturan extends Model
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'deleted_at' => 'datetime',
         'latitude' => 'decimal:8',
         'longitude' => 'decimal:8',
     ];
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($model) {
-            if (empty($model->slug)) {
-                $model->slug = \Illuminate\Support\Str::slug($model->name);
-            }
-        });
-
-        static::updating(function ($model) {
-            if ($model->isDirty('name') && empty($model->slug)) {
-                $model->slug = \Illuminate\Support\Str::slug($model->name);
-            }
-        });
-    }
-
+    
+    /**
+     * The field that should be used for generating the slug.
+     *
+     * @var string
+     */
+    protected $slugSource = 'name';
+    
+    /**
+     * The field where the slug is stored.
+     *
+     * @var string
+     */
+    protected $slugField = 'slug';
 
     public static function getFirst()
     {

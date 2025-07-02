@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\HasSlug;
 use Illuminate\Database\Eloquent\Model;
 
 class UnitKerja extends Model
 {
+    use HasSlug;
+    
     protected $table = 'unit_kerjas';
     protected $fillable = [
         'nama_unit',
@@ -18,9 +21,18 @@ class UnitKerja extends Model
     protected $casts = [
         'published_at' => 'datetime',
     ];
-
-    public function getRouteKeyName()
-    {
-        return 'slug';
-    }
+    
+    /**
+     * The field that should be used for generating the slug.
+     *
+     * @var string
+     */
+    protected $slugSource = 'nama_unit';
+    
+    /**
+     * The field where the slug is stored.
+     *
+     * @var string
+     */
+    protected $slugField = 'slug';
 }
