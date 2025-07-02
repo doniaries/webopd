@@ -16,10 +16,10 @@
                         <div
                             class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full px-4 z-10 flex flex-col items-center">
                             @if (isset($slider->tags) && count($slider->tags) > 0)
-                                <div class="mb-2 flex flex-wrap justify-center gap-2">
+                                <div class="mb-2 flex justify-center gap-2 overflow-x-auto">
                                     @foreach ($slider->tags as $tag)
                                         <a href="{{ route('post.tag', ['tag' => \Illuminate\Support\Str::slug($tag->name)]) }}"
-                                            class="inline-block bg-blue-600/80 text-white text-xs font-semibold px-3 py-1 rounded-full shadow hover:bg-blue-700 transition">
+                                            class="inline-flex bg-blue-600/80 text-white text-sm font-semibold px-3 py-1 rounded-full shadow hover:bg-blue-700 transition whitespace-nowrap">
                                             {{ $tag->name }}
                                         </a>
                                     @endforeach
