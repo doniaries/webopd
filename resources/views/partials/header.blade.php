@@ -1,89 +1,6 @@
 <header id="header" class="header sticky-top">
     <style>
-        /* Base Styles */
-        .header-container,
-        .menu-container {
-            transition: none;
-        }
-
-        /* Header Container */
-        .header-container {
-            width: 100%;
-            background-color: #ffffff;
-            border-bottom: 1px solid #e0e0e0;
-            padding: 0;
-            min-height: 50px;
-            display: flex;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            overflow: visible !important;
-        }
-
-        /* Menu Container */
-        .menu-container {
-            padding: 8px 0;
-            background-color: #ffffff;
-            border-top: 1px solid #f0f0f0;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-        }
-
-        /* Navmenu */
-        #navmenu {
-            background-color: #ffffff;
-        }
-
-        #navmenu ul ul {
-            background-color: #ffffff;
-        }
-
-        .at-top #navmenu>ul>li>a {
-            padding: 10px 15px;
-            font-size: 1rem;
-        }
-
-        .at-top #navmenu>ul>li>a svg {
-            width: 1.25rem;
-            height: 1.25rem;
-            margin-right: 6px;
-        }
-
-        /* Style default untuk menu item (saat di-scroll) */
-        #navmenu>ul>li>a {
-            padding: 8px 12px;
-            font-size: 0.95rem;
-            transition: all 0.3s ease-in-out;
-        }
-
-        #navmenu>ul>li>a svg {
-            width: 1.1rem;
-            height: 1.1rem;
-            margin-right: 5px;
-            transition: all 0.3s ease-in-out;
-        }
-
-        /* Menyesuaikan tinggi menu container */
-        .menu-container {
-            display: flex;
-            align-items: center;
-            height: auto;
-            padding: 0;
-        }
-
-        .menu-wrapper {
-            width: 100%;
-        }
-
-        #navmenu ul {
-            margin: 0;
-            padding: 0;
-        }
-
-        /* Reset border radius untuk header dan semua elemen di dalamnya */
+        /* Reset and Base Styles */
         header#header,
         header#header *,
         header#header *:before,
@@ -91,9 +8,10 @@
             border-radius: 0 !important;
             -webkit-border-radius: 0 !important;
             -moz-border-radius: 0 !important;
+            box-sizing: border-box;
         }
 
-        /* Container utama untuk header dan menu */
+        /* Layout Containers */
         .sticky-top {
             position: sticky;
             top: 0;
@@ -103,66 +21,36 @@
             padding: 0;
         }
 
-        /* Flowbite style untuk tombol hamburger */
-        .hamburger-button {
-            display: inline-flex;
+        .header-container {
+            width: 100%;
+            background-color: #ffffff;
+            border-bottom: 1px solid #e0e0e0;
+            min-height: 50px;
+            display: flex;
             align-items: center;
-            padding: 0.5rem;
-            width: 2.5rem;
-            height: 2.5rem;
-            justify-content: center;
-            font-size: 0.875rem;
-            color: #6B7280;
-            background-color: transparent;
-            border-radius: 0.375rem;
-            border: none;
-            cursor: pointer;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: none !important;
         }
 
-        .hamburger-button:hover {
-            background-color: #F3F4F6;
+        .menu-container {
+            padding: 0;
+            background-color: #ffffff;
+            border-top: 1px solid #e0e0e0;
+            border-bottom: 1px solid #e0e0e0;
+            box-shadow: none !important;
+            display: flex;
+            align-items: center;
+            height: auto;
         }
 
-        .hamburger-button:focus {
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
-        }
-
-        /* Container untuk konten header dan menu */
         .header-wrapper,
         .menu-wrapper {
             max-width: 1320px;
             margin: 0 auto;
             padding: 0 20px;
             width: 100%;
-            display: flex;
-            align-items: center;
-        }
-
-        @media (max-width: 576px) {
-            .header {
-                height: 60px !important;
-                /* Tinggi tetap untuk nav */
-                min-height: 60px !important;
-                position: sticky !important;
-                top: 0 !important;
-                z-index: 1000 !important;
-            }
-
-            .header-wrapper {
-                padding: 0 12px;
-                height: 100%;
-            }
-        }
-
-        /* Header utama */
-        .header-container {
-            width: 100%;
-            background-color: white;
-            border-bottom: 1px solid #e0e0e0;
-            padding: 2px 0;
-            min-height: 50px;
-            /* Pastikan header memiliki tinggi minimum */
             display: flex;
             align-items: center;
         }
@@ -175,20 +63,7 @@
             padding: 0 10px;
             justify-content: space-between;
             align-items: center;
-            box-sizing: border-box;
             position: relative;
-        }
-
-        /* Logo */
-        .logo {
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-            padding: 2px 0;
-            min-width: 40px;
-            /* Pastikan logo memiliki lebar minimum */
-            margin-right: auto;
-            /* Pastikan logo selalu di kiri */
         }
 
         /* Logo Styles */
@@ -197,6 +72,9 @@
             align-items: center;
             text-decoration: none;
             color: inherit;
+            padding: 2px 0;
+            min-width: 40px;
+            margin-right: auto;
         }
 
         .logo-wrapper {
@@ -1199,7 +1077,7 @@
                         mobileMenuContainer.classList.add('visible');
                         mobileMenuOverlay.classList.add('open');
                         document.body.style.overflow =
-                        'hidden'; // Prevent scrolling when menu is open
+                            'hidden'; // Prevent scrolling when menu is open
 
                         setTimeout(function() {
                             mobileMenu.classList.add('open');

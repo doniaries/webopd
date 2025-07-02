@@ -42,11 +42,11 @@
                                         <div class="card h-100 border-1 overflow-hidden mx-auto"
                                             style="transition: transform 0.2s ease, box-shadow 0.2s ease; width: 100%;">
                                             <div class="position-absolute top-0 end-0 p-2">
-                                                <span
+                                                {{-- <span
                                                     class="badge bg-white text-dark border border-light-subtle shadow-sm">
                                                     <i class="bi bi-eye me-1" style="display: inline-block;"></i>
                                                     {{ $post->views ?? 0 }}
-                                                </span>
+                                                </span> --}}
                                             </div>
                                             <!-- Gambar Utama -->
                                             <div class="position-relative" style="padding-top: 56.25%;">

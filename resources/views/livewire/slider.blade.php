@@ -16,7 +16,8 @@
                         <div
                             class="absolute left-1/2 top-[60%] md:top-[70%] transform -translate-x-1/2 -translate-y-1/3 w-full px-4 z-10 flex flex-col items-center pt-8 md:pt-0">
                             @if (isset($slider->tags) && count($slider->tags) > 0)
-                                <div class="mb-2 flex justify-center gap-2 overflow-x-auto max-w-full bg-black/40 rounded py-1 px-2">
+                                <div
+                                    class="mb-2 flex justify-center gap-2 overflow-x-auto max-w-full bg-black/40 rounded py-1 px-2">
                                     @foreach ($slider->tags as $tag)
                                         <a href="{{ route('post.tag', ['tag' => \Illuminate\Support\Str::slug($tag->name)]) }}"
                                             class="inline-flex bg-blue-600/80 text-white text-sm font-semibold px-3 py-1 rounded-full shadow hover:bg-blue-700 transition whitespace-nowrap">
@@ -26,7 +27,9 @@
                                 </div>
                             @endif
                             <a href="{{ route('berita.show', $slider->slug) }}">
-                                <h3 class="slide-title text-white text-center md:text-left ... hover:underline cursor-pointer shadow-lg">{{ $slider->title }}</h3>
+                                <h3
+                                    class="slide-title text-white text-center md:text-left ... hover:underline cursor-pointer shadow-lg">
+                                    {{ $slider->title }}</h3>
                             </a>
                         </div>
 
@@ -47,6 +50,10 @@
         document.addEventListener('DOMContentLoaded', function() {
             new Swiper('.mySwiper', {
                 loop: true,
+                autoplay: {
+                    delay: 5000, // 5 seconds delay
+                    disableOnInteraction: false,
+                },
                 navigation: {
                     nextEl: '.swiper-button-next',
                     prevEl: '.swiper-button-prev',
@@ -139,7 +146,7 @@
             text-align: center;
             text-shadow: 0 2px 8px #222;
             pointer-events: auto;
-            background: rgba(0, 0, 0, 0.45);
+            /* background: rgba(0, 0, 0, 0.15); */
             border-radius: 0.5rem;
             padding: 0.5rem 1rem;
             margin-bottom: 0;
