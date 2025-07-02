@@ -984,6 +984,9 @@
                     <li class="dropdown"><a href="#"><span>Informasi</span> <i
                                 class="bi bi-chevron-down toggle-dropdown"></i></a>
                         <ul>
+                            <li><a href="{{ route('layanan.index') }}"
+                                    class="{{ request()->routeIs('layanan.index') || request()->routeIs('layanan.show') ? 'active' : '' }}">Layanan</a>
+                            </li>
                             <li><a href="{{ route('infografis') }}"
                                     class="{{ request()->routeIs('infografis') ? 'active' : '' }}">Infografis</a></li>
                             <li><a href="{{ route('dokumen') }}"
@@ -997,7 +1000,7 @@
                             <li><a href="{{ route('informasi.index') }}"
                                     class="{{ request()->routeIs('informasi.index') || request()->routeIs('informasi.show') ? 'active' : '' }}">Informasi</a>
                             </li>
-                        </ul>
+                        </ul>`
                     </li>
                     <li><a href="{{ route('kontak') }}"
                             class="{{ request()->routeIs('kontak') ? 'active' : '' }}">Kontak</a></li>

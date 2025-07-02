@@ -13,7 +13,15 @@ return new class extends Migration
     {
         Schema::create('pengumumen', function (Blueprint $table) {
             $table->id();
+            $table->string('judul')->nullable();
+            $table->string('slug')->nullable();
+            $table->text('isi')->nullable();
+            $table->string('file')->nullable();
+            $table->timestamp('published_at')->nullable();
             $table->timestamps();
+            $table->softDeletes();
+
+            $table->index(['judul', 'slug', 'published_at']);
         });
     }
 
