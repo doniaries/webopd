@@ -51,6 +51,14 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        .banner-swiper:hover .swiper-button-next,
+        .banner-swiper:hover .swiper-button-prev {
+            opacity: 1;
+            pointer-events: auto;
         }
         .banner-swiper .swiper-button-next { right: 10px; }
         .banner-swiper .swiper-button-prev { left: 10px; }
