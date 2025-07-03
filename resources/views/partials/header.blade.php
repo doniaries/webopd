@@ -402,6 +402,33 @@
             color: #0d6efd;
         }
 
+        /* Active menu item styles */
+        .navmenu > ul > li > a.active {
+            background-color: #3490dc;
+            color: white !important;
+            border-radius: 4px;
+            padding: 8px 16px !important;
+            transition: all 0.3s ease;
+        }
+        
+        .navmenu > ul > li > a:hover {
+            background-color: #3490dc;
+            color: white !important;
+            border-radius: 4px;
+        }
+        
+        .navmenu > ul > li > a {
+            padding: 8px 16px;
+            transition: all 0.3s ease;
+            display: inline-block;
+            font-size: 1rem; /* Match submenu font size */
+        }
+        
+        /* Ensure dropdown menu items have consistent font size */
+        .navmenu ul ul li a {
+            font-size: 1rem;
+        }
+
         .mobile-menu-content ul li a svg,
         .mobile-menu-content ul li a i {
             margin-right: 10px;
@@ -414,20 +441,6 @@
         }
 
         .mobile-dropdown button {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-            background: none;
-            border: none;
-            color: #333;
-            font-weight: 500;
-            padding: 8px 0;
-            text-align: left;
-            cursor: pointer;
-        }
-
-        .mobile-dropdown button:focus {
             outline: none;
         }
 
@@ -955,8 +968,8 @@
     <div class="menu-container">
         <div class="menu-wrapper">
             <nav id="navmenu" class="navmenu">
-                <ul class="flex justify-center items-center">
-                    <li class="flex items-center">
+                <ul class="flex justify-center items-center" style="gap: 20px;">
+                    <li class="flex items-center" style="margin-right: 20px;">
                         <a href="{{ url('/') }}"
                             class="{{ request()->is('/') ? 'active' : '' }} flex items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
@@ -966,9 +979,9 @@
                             </svg>
                         </a>
                     </li>
-                    <li><a href="{{ route('berita.index') }}"
+                    <li style="margin: 0 20px;"><a href="{{ route('berita.index') }}"
                             class="{{ request()->routeIs('berita.index') ? 'active' : '' }}">Berita</a></li>
-                    <li class="dropdown"><a href="#"><span>Profil</span> <i
+                    <li class="dropdown" style="margin: 0 20px;"><a href="#"><span>Profil</span> <i
                                 class="bi bi-chevron-down toggle-dropdown"></i></a>
                         <ul>
                             <li><a href="{{ route('visi-misi') }}"
@@ -981,7 +994,7 @@
                                     Organisasi</a></li>
                         </ul>
                     </li>
-                    <li class="dropdown"><a href="#"><span>Informasi</span> <i
+                    <li class="dropdown" style="margin: 0 20px;"><a href="#"><span>Informasi</span> <i
                                 class="bi bi-chevron-down toggle-dropdown"></i></a>
                         <ul>
                             <li><a href="{{ route('layanan.index') }}"
@@ -1000,9 +1013,9 @@
                             <li><a href="{{ route('informasi.index') }}"
                                     class="{{ request()->routeIs('informasi.index') || request()->routeIs('informasi.show') ? 'active' : '' }}">Informasi</a>
                             </li>
-                        </ul>`
+                        </ul>
                     </li>
-                    <li><a href="{{ route('kontak') }}"
+                    <li style="margin-left: 20px;"><a href="{{ route('kontak') }}"
                             class="{{ request()->routeIs('kontak') ? 'active' : '' }}">Kontak</a></li>
                 </ul>
             </nav>
