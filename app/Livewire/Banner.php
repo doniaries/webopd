@@ -22,7 +22,7 @@ class Banner extends Component
             $this->banners = BannerModel::where('is_active', true)
                 ->latest()
                 ->take(5)
-                ->get();
+                ->get(['id', 'gambar', 'is_active']);
             
             // Log for debugging
             Log::info('Banners loaded in Banner component', [

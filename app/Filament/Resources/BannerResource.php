@@ -38,12 +38,7 @@ class BannerResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('judul')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('keterangan')
-                    ->required()
-                    ->maxLength(255),
+
                 Forms\Components\FileUpload::make('gambar')
                     ->label('Foto Iklan')
                     ->directory('banners')
@@ -53,7 +48,6 @@ class BannerResource extends Resource
                     ->imageResizeTargetWidth(800)
                     ->imageResizeTargetHeight(1000)
                     ->maxSize(2048),
-
 
                 Forms\Components\Toggle::make('is_active')
                     ->required()
@@ -66,10 +60,6 @@ class BannerResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\ImageColumn::make('gambar')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('judul')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('keterangan')
                     ->searchable(),
                 Tables\Columns\ToggleColumn::make('is_active')
                     ->label('Aktif')
