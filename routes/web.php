@@ -15,6 +15,7 @@ use App\Livewire\SambutanPimpinan;
 use App\Livewire\Slider;
 use App\Livewire\UnitKerja;
 use App\Livewire\VisiMisi;
+use App\Livewire\Pengumuman;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
@@ -35,6 +36,10 @@ Route::get('/post', [Post::class, 'index'])->name('post.index');
 Route::get('/post/kategori/{slug}', Post::class)->name('post.kategori');
 Route::get('/post/tag/{tag:slug}', [Post::class, 'tag'])->name('post.tag');
 Route::get('/post/{slug}', Post::class)->name('post.show');
+
+// Pengumuman Routes
+Route::get('/pengumuman', Pengumuman::class)->name('pengumuman.index');
+Route::get('/pengumuman/{pengumuman:slug}', \App\Livewire\PengumumanDetail::class)->name('pengumuman.show');
 
 // Informasi Routes
 Route::get('/informasi', Informasi::class)->name('informasi.index');

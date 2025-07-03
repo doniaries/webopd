@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
             ProdukHukumSeeder::class,
             InfografisSeeder::class,
             AgendaKegiatanSeeder::class,
+            PengumumanSeeder::class,
             DokumenSeeder::class,
             ExternalLinkSeeder::class,
         ]);

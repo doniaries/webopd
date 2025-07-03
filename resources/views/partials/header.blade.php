@@ -1004,6 +1004,8 @@
                     </li>
                     <li style="margin: 0 20px;"><a href="{{ route('berita.index') }}"
                             class="{{ request()->routeIs('berita.index') ? 'active' : '' }}">Berita</a></li>
+                    <li style="margin: 0 20px;"><a href="{{ route('pengumuman.index') }}"
+                            class="{{ request()->routeIs('pengumuman.*') ? 'active' : '' }}">Pengumuman</a></li>
                     <li class="dropdown" style="margin: 0 20px;"><a href="#"><span>Profil</span> <i
                                 class="bi bi-chevron-down toggle-dropdown"></i></a>
                         <ul>
