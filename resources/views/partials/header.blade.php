@@ -1,6 +1,8 @@
 <header id="header" class="header sticky-top">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         /* Reset and Base Styles */
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
         header#header,
         header#header *,
         header#header *:before,
@@ -686,7 +688,13 @@
         }
 
         .sitename {
-            font-size: 0.9rem !important;
+            font-family: 'Roboto', sans-serif !important;
+            font-size: 1.1rem !important;
+            font-weight: 700 !important;
+            color: #2c3e50 !important;
+            letter-spacing: 0.3px;
+            line-height: 1.2;
+            text-shadow: 0 1px 1px rgba(0,0,0,0.1);
         }
 
         .logo .d-flex:last-child img {
@@ -821,8 +829,8 @@
                                 }
 
                                 // Get site name
-                                if (!empty($pengaturan->nama_website)) {
-                                    $siteName = $pengaturan->nama_website;
+                                if (!empty($pengaturan->name)) {
+                                    $siteName = $pengaturan->name;
                                 }
                             }
 
@@ -1047,31 +1055,20 @@
     </div>
 
     <script>
-        // Handle scroll untuk mengubah ukuran header
-        function updateHeader() {
-            const header = document.getElementById('header');
-            if (window.scrollY > 50) {
-                header.classList.remove('at-top');
-            } else {
-                header.classList.add('at-top');
-            }
-        }
-
-        // Add at-top class by default
-        document.getElementById('header').classList.add('at-top');
-
-        // Update on scroll
-        window.addEventListener('scroll', updateHeader);
-
-        // Check initial scroll position
-        updateHeader();
-
-        // Fungsi update waktu dihapus karena elemen waktu sudah tidak digunakan
-
-        // Hapus class at-top yang mungkin menimbulkan efek tidak diinginkan
-        document.getElementById('header').classList.remove('at-top');
-
         document.addEventListener('DOMContentLoaded', function() {
+            // Handle scroll untuk mengubah ukuran header
+            function updateHeader() {
+                const header = document.getElementById('header');
+                if (window.scrollY > 50) {
+                    header.classList.remove('at-top');
+                } else {
+                    header.classList.add('at-top');
+                }
+            }
+
+            // Initialize header state
+            updateHeader();
+            window.addEventListener('scroll', updateHeader);
             // Mobile menu toggle
             const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
             const mobileMenuContainer = document.getElementById('mobile-menu-container');
