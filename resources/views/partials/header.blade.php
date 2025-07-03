@@ -24,7 +24,7 @@
         .header-container {
             width: 100%;
             background-color: #ffffff;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid #d8d7d7;
             min-height: 50px;
             display: flex;
             align-items: center;
@@ -37,8 +37,6 @@
         .menu-container {
             padding: 0;
             background-color: #ffffff;
-            border-top: 1px solid #e0e0e0;
-            border-bottom: 1px solid #e0e0e0;
             box-shadow: none !important;
             display: flex;
             align-items: center;
@@ -235,7 +233,7 @@
         /* Menu container */
         .menu-container {
             background-color: white;
-            border-bottom: 1px solid #e0e0e0;
+            /* border-bottom: 1px solid #e0e0e0; */
             padding: 0;
         }
 
@@ -433,7 +431,7 @@
             padding: 5px 0;
             min-width: 200px;
         }
-        
+
         .navmenu ul ul li a {
             font-size: 1rem;
             text-decoration: none !important;
@@ -442,7 +440,7 @@
             color: #333;
             transition: all 0.3s ease;
         }
-        
+
         .navmenu ul ul li a:hover {
             background-color: #3490dc;
             color: white !important;
@@ -1004,8 +1002,7 @@
                     </li>
                     <li style="margin: 0 20px;"><a href="{{ route('berita.index') }}"
                             class="{{ request()->routeIs('berita.index') ? 'active' : '' }}">Berita</a></li>
-                    <li style="margin: 0 20px;"><a href="{{ route('pengumuman.index') }}"
-                            class="{{ request()->routeIs('pengumuman.*') ? 'active' : '' }}">Pengumuman</a></li>
+
                     <li class="dropdown" style="margin: 0 20px;"><a href="#"><span>Profil</span> <i
                                 class="bi bi-chevron-down toggle-dropdown"></i></a>
                         <ul>
@@ -1035,11 +1032,13 @@
                             <li><a href="{{ route('agenda.index') }}"
                                     class="{{ request()->routeIs('agenda.index') || request()->routeIs('agenda.show') ? 'active' : '' }}">Agenda
                                     Kegiatan</a></li>
-                            <li><a href="{{ route('informasi.index') }}"
+                            {{-- <li><a href="{{ route('informasi.index') }}"
                                     class="{{ request()->routeIs('informasi.index') || request()->routeIs('informasi.show') ? 'active' : '' }}">Informasi</a>
-                            </li>
+                            </li> --}}
                         </ul>
                     </li>
+                    <li style="margin: 0 20px;"><a href="{{ route('pengumuman.index') }}"
+                            class="{{ request()->routeIs('pengumuman.*') ? 'active' : '' }}">Pengumuman</a></li>
                     <li style="margin-left: 20px;"><a href="{{ route('kontak') }}"
                             class="{{ request()->routeIs('kontak') ? 'active' : '' }}">Kontak</a></li>
                 </ul>
