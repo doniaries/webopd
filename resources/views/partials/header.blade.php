@@ -403,33 +403,56 @@
         }
 
         /* Active menu item styles */
-        .navmenu > ul > li > a.active {
+        .navmenu>ul>li>a.active {
             background-color: #3490dc;
             color: white !important;
             border-radius: 4px;
             padding: 8px 16px !important;
             transition: all 0.3s ease;
         }
-        
-        .navmenu > ul > li > a:hover {
+
+        .navmenu>ul>li>a:hover {
             background-color: #3490dc;
             color: white !important;
             border-radius: 4px;
         }
-        
-        .navmenu > ul > li > a {
+
+        .navmenu>ul>li>a {
             padding: 8px 16px;
             transition: all 0.3s ease;
             display: inline-block;
-            font-size: 1rem; /* Match submenu font size */
+            font-size: 1rem;
+            /* Match submenu font size */
+        }
+
+        /* Dropdown menu items styling */
+        .navmenu ul ul {
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 5px 0;
+            min-width: 200px;
         }
         
+        .navmenu ul ul li a {
+            font-size: 1rem;
+            text-decoration: none !important;
+            display: block;
+            padding: 8px 16px;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+        
+        .navmenu ul ul li a:hover {
+            background-color: #3490dc;
+            color: white !important;
+        }
+
         /* Ensure dropdown menu items have consistent font size */
         .navmenu ul ul li a {
             font-size: 1rem;
         }
 
-        .mobile-menu-content ul li a svg,
         .mobile-menu-content ul li a i {
             margin-right: 10px;
             width: 20px;
