@@ -12,29 +12,26 @@ class BannerSeeder extends Seeder
     {
         // Clear existing data
         Banner::truncate();
-        
+
         // Create banners with default placeholder image
         $banners = [
             [
-                'judul' => 'Selamat Datang di Website Resmi',
-                'keterangan' => 'Situs resmi Pemerintah Kabupaten Sijunjung',
-                'gambar' => 'image/placeholder.jpg',
+                'id' => 1,
+                'gambar' => 'assets/images/placeholder2.jpg',
                 'is_active' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'judul' => 'Layanan Publik Terpadu',
-                'keterangan' => 'Layanan terpadu untuk masyarakat',
-                'gambar' => 'image/placeholder.jpg',
+                'id' => 2,
+                'gambar' => 'assets/images/placeholder2.jpg',
                 'is_active' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'judul' => 'Informasi Terkini',
-                'keterangan' => 'Update informasi terbaru dari kami',
-                'gambar' => 'image/placeholder.jpg',
+                'id' => 3,
+                'gambar' => 'assets/images/placeholder2.jpg',
                 'is_active' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -44,7 +41,6 @@ class BannerSeeder extends Seeder
         // Insert banners
         foreach ($banners as $banner) {
             Banner::firstOrCreate(
-                ['judul' => $banner['judul']],
                 $banner
             );
         }
