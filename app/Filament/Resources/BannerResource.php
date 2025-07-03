@@ -22,9 +22,9 @@ class BannerResource extends Resource
     protected static ?string $model = Banner::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-    protected static ?string $navigationLabel = 'Iklan';
-    protected static ?string $modelLabel = 'Iklan';
-    protected static ?string $pluralModelLabel = 'Iklan';
+    protected static ?string $navigationLabel = 'Banner';
+    protected static ?string $modelLabel = 'Banner';
+    protected static ?string $pluralModelLabel = 'Banner';
     protected static ?int $navigationSort = 2;
 
 
@@ -40,7 +40,7 @@ class BannerResource extends Resource
             ->schema([
 
                 Forms\Components\FileUpload::make('gambar')
-                    ->label('Foto Iklan')
+                    ->label('Foto Banner')
                     ->directory('banners')
                     ->image()
                     ->imageEditor()

@@ -1,106 +1,155 @@
-<div>
-    <div class="swiper-container">
-        <!-- Swiper Wrapper -->
+<div class="w-full max-w-[320px] mx-auto rounded-lg shadow-md overflow-hidden relative bg-gray-100 group"
+    style="aspect-ratio: 4/5; width: 100%; height: 100%;">
+    @if (env('APP_DEBUG'))
+        <div class="absolute top-0 left-0 bg-black/70 text-white text-xs p-2 z-50">
+            Banners: {{ count($banners) }}
+        </div>
+    @endif
+
+    <div class="swiper banner-slider w-full h-full">
         <div class="swiper-wrapper">
-            @forelse($banners as $banner)
-                <div class="swiper-slide">
-                    <div class="relative aspect-[16/9] overflow-hidden rounded-lg">
-                        <img src="{{ $banner->image_url }}" alt="Banner {{ $loop->index + 1 }}"
-                            class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-                            loading="lazy">
-                        <div
-                            class="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-30 transition-opacity duration-300">
-                        </div>
+            @forelse ($banners as $banner)
+                <div class="swiper-slide flex justify-center items-center">
+                    <div
+                        class="w-full max-w-[320px] aspect-[4/5] bg-gray-200 rounded-lg overflow-hidden flex items-center justify-center">
+                        <a href="{{ $banner->url ?? '#' }}" class="block w-full h-full">
+                            <img src="{{ $banner->gambar_url }}" alt="{{ $banner->judul ?? 'Banner' }}"
+                                class="w-full h-full object-cover transition-all duration-300 ease-in-out hover:scale-105"
+                                onerror="this.onerror=null; this.src='{{ asset('assets/images/placeholder2.jpg') }}'"
+                                loading="lazy">
+                        </a>
                     </div>
                 </div>
             @empty
                 <div class="swiper-slide">
-                    <div class="text-center py-4 text-gray-500">
-                        Tidak ada banner tersedia
+                    <div class="w-full h-full flex flex-col items-center justify-center bg-gray-100 text-gray-400 p-4 text-center"
+                        style="aspect-ratio: 4/5;">
+                        <i class="bi bi-image text-4xl mb-4"></i>
+                        <p class="text-lg">Tidak ada banner tersedia</p>
                     </div>
                 </div>
             @endforelse
         </div>
-
-        <!-- Navigation Buttons -->
-        <div class="swiper-button-next"></div>
-        <div class="swiper-button-prev"></div>
+        @if (count($banners ?? []) > 1)
+            <div
+                class="swiper-button-next bg-black/50 hover:bg-black/70 w-10 h-10 md:w-12 md:h-12 rounded-full transition-all duration-300">
+            </div>
+            <div
+                class="swiper-button-prev bg-black/50 hover:bg-black/70 w-10 h-10 md:w-12 md:h-12 rounded-full transition-all duration-300">
+            </div>
+            <div class="swiper-pagination !bottom-2 transition-opacity duration-300">
+            </div>
+        @endif
     </div>
+</div>
 
-    @push('styles')
-        <style>
-            .swiper-container {
-                width: 100%;
-                height: 100%;
-            }
+@push('styles')
+    <style>
+        .banner-slider {
+            min-height: 320px;
+            max-width: 320px;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+        }
 
-            .swiper-slide {
-                text-align: center;
-                font-size: 18px;
-                background: #fff;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
+        .banner-slider .swiper-wrapper {
+            max-width: 320px;
+        }
+
+        .swiper-slide {
+            width: 100% !important;
+            max-width: 320px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .swiper-button-next,
+        .swiper-button-prev {
+            transform: translateY(-50%) scale(0.8);
+            transition: all 0.3s ease;
+        }
+
+        .swiper-button-next:after,
+        .swiper-button-prev:after {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .swiper-button-next:hover,
+        .swiper-button-prev:hover {
+            transform: translateY(-50%) scale(0.9);
+        }
+
+        .swiper-pagination-bullet {
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 1;
+            width: 8px;
+            height: 8px;
+            margin: 0 4px !important;
+            transition: all 0.3s ease;
+        }
+
+        .swiper-pagination-bullet-active {
+            background: #fff;
+            width: 30px;
+            border-radius: 5px;
+        }
+
+        @media (max-width: 768px) {
 
             .swiper-button-next,
             .swiper-button-prev {
-                color: #fff;
-                background-color: rgba(0, 0, 0, 0.5);
-                border-radius: 50%;
-                width: 40px;
-                height: 40px;
-                transition: all 0.3s ease;
+                width: 32px !important;
+                height: 32px !important;
             }
+        }
+    </style>
+@endpush
 
-            .swiper-button-next:hover,
-            .swiper-button-prev:hover {
-                background-color: rgba(0, 0, 0, 0.7);
-            }
-
-            .swiper-slide img {
-                filter: brightness(1);
-                transition: filter 0.3s ease;
-            }
-
-            .swiper-slide:hover img {
-                filter: brightness(0.9);
-            }
-        </style>
-    @endpush
-
-    @push('scripts')
-        <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const swiper = new Swiper('.swiper-container', {
-                    // Optional parameters
-                    direction: 'horizontal',
-                    loop: true,
-                    speed: 600,
-
-                    // Navigation arrows
-                    navigation: {
-                        nextEl: '.swiper-button-next',
-                        prevEl: '.swiper-button-prev',
-                    },
-
-                    // Responsive breakpoints
-                    breakpoints: {
-                        320: {
-                            slidesPerView: 1,
-                            spaceBetween: 10
-                        },
-                        768: {
-                            slidesPerView: 1,
-                            spaceBetween: 20
-                        },
-                        1024: {
-                            slidesPerView: 1,
-                            spaceBetween: 30
-                        }
+@push('scripts')
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const bannerSwiper = new Swiper('.banner-slider', {
+                loop: {{ count($banners ?? []) > 1 ? 'true' : 'false' }},
+                
+                autoplay: {
+                    delay: 3000,
+                    disableOnInteraction: false,
+                    pauseOnMouseEnter: true,
+                },
+                speed: 800,
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+                grabCursor: true,
+                preloadImages: true,
+                updateOnWindowResize: true,
+                watchSlidesProgress: true,
+                preventClicks: true,
+                preventClicksPropagation: true,
+            });
+            const bannerContainer = document.querySelector('.banner-slider');
+            if (bannerContainer) {
+                bannerContainer.addEventListener('mouseenter', () => {
+                    if (bannerSwiper.autoplay && bannerSwiper.autoplay.running) {
+                        bannerSwiper.autoplay.stop();
                     }
                 });
-            });
-        </script>
-    @endpush
+                bannerContainer.addEventListener('mouseleave', () => {
+                    if (bannerSwiper.autoplay && !bannerSwiper.autoplay.running) {
+                        bannerSwiper.autoplay.start();
+                    }
+                });
+            }
+        });
+    </script>
+@endpush

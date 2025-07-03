@@ -51,15 +51,17 @@ class Banner extends Model
             return $this->gambar;
         }
 
-        // Jika gambar adalah path relatif dan sudah mengandung 'storage/banners/'
+        // Jika gambar sudah mengandung 'storage/banners/'
         if (Str::startsWith($this->gambar, 'storage/banners/')) {
             return asset($this->gambar);
         }
-        // Jika gambar adalah path relatif tanpa 'storage/'
+
+        // Jika gambar sudah mengandung 'banners/'
         if (Str::startsWith($this->gambar, 'banners/')) {
             return asset('storage/' . $this->gambar);
         }
-        // Jika gambar adalah nama file saja
+
+        // Jika gambar hanya nama file saja
         return asset('storage/banners/' . $this->gambar);
     }
 }
