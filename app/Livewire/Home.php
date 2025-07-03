@@ -180,7 +180,6 @@ class Home extends Component
             return $banners->map(function ($banner) {
                 return (object)[
                     'id' => $banner->id,
-                    'judul' => $banner->judul ?? 'Banner ' . $banner->id,
                     'gambar_url' => $banner->gambar_url,
                     'url' => $banner->url ?: '#',
                     'is_banner' => true
