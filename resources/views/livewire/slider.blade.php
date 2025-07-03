@@ -50,6 +50,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             new Swiper('.mySwiper', {
                 loop: true,
+                slidesPerView: 1,
                 autoplay: {
                     delay: 5000, // 5 seconds delay
                     disableOnInteraction: false,
@@ -61,21 +62,7 @@
                 pagination: {
                     el: '.swiper-pagination',
                     clickable: true,
-                },
-                slidesPerView: 1,
-                spaceBetween: 24,
-                // Semua breakpoint tetap 1 slide per view
-                breakpoints: {
-                    640: {
-                        slidesPerView: 1
-                    },
-                    768: {
-                        slidesPerView: 1
-                    },
-                    1024: {
-                        slidesPerView: 1
-                    },
-                },
+                }
             });
         });
     </script>
@@ -99,13 +86,14 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 100vw;
+            width: 100vw !important;
             height: 450px;
             min-height: 350px;
             max-height: 450px;
             background: transparent;
             padding: 0;
             margin: 0;
+            overflow: hidden;
         }
 
         .slide-content {
