@@ -7,20 +7,28 @@
         </div>
 
         <!-- Document List -->
-        @if($dokumens && $dokumens->count() > 0)
+        @if ($dokumens && $dokumens->count() > 0)
             <div class="bg-white rounded-lg shadow overflow-hidden border border-gray-200">
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Dokumen</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jenis</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
-                                <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Nama Dokumen</th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Jenis</th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Tanggal</th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            @foreach($dokumens as $dokumen)
+                            @foreach ($dokumens as $dokumen)
                                 <tr class="hover:bg-gray-50">
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center">
@@ -31,12 +39,13 @@
                                                 } elseif (str_contains(strtolower($dokumen->nama_dokumen), 'panduan')) {
                                                     $icon = 'fa-book text-green-500';
                                                 }
-                                                
+
                                                 $fileExtension = pathinfo($dokumen->file, PATHINFO_EXTENSION);
                                             @endphp
                                             <i class="fas {{ $icon }} text-xl mr-3"></i>
                                             <div>
-                                                <div class="text-sm font-medium text-gray-900">{{ $dokumen->nama_dokumen }}</div>
+                                                <div class="text-sm font-medium text-gray-900">
+                                                    {{ $dokumen->nama_dokumen }}</div>
                                                 <div class="text-xs text-gray-500">
                                                     {{ $dokumen->published_at ? $dokumen->published_at->translatedFormat('d M Y') : 'Tanpa Tanggal' }}
                                                 </div>
@@ -44,25 +53,23 @@
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                        <span
+                                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
                                             {{ strtoupper($fileExtension) }}
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                         {{ $dokumen->published_at ? $dokumen->published_at->translatedFormat('d M Y') : '-' }}
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <a href="{{ route('dokumen.detail', $dokumen->slug) }}" 
-                                           class="text-blue-600 hover:text-blue-900 mr-4"
-                                           target="_blank"
-                                           rel="noopener noreferrer">
-                                            <i class="far fa-eye mr-1"></i> Lihat
+                                    <td class="px-6 py-4 whitespace-nowrap text-right space-x-2">
+                                        <a href="{{ route('dokumen.detail', $dokumen->slug) }}"
+                                            class="inline-flex items-center px-3 py-1.5 border border-blue-500 text-sm font-medium rounded-md text-blue-700 bg-white hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
+                                            <i class="far fa-eye mr-1.5"></i> Lihat
                                         </a>
-                                        <a href="{{ route('dokumen.download', $dokumen->slug) }}" 
-                                           class="text-green-600 hover:text-green-900"
-                                           target="_blank"
-                                           download>
-                                            <i class="fas fa-download mr-1"></i> Unduh
+                                        <a href="{{ route('dokumen.download', $dokumen->slug) }}"
+                                            class="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200"
+                                            download>
+                                            <i class="fas fa-download mr-1.5"></i> Unduh
                                         </a>
                                     </td>
                                 </tr>
@@ -70,7 +77,7 @@
                         </tbody>
                     </table>
                 </div>
-                
+
                 <!-- Pagination -->
                 <div class="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
                     {{ $dokumens->links() }}
