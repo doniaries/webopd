@@ -192,7 +192,7 @@
 
         <!-- Dokumen Section -->
         <div class="py-12 bg-white">
-            <div class="container mx-auto px-4">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-10">
                     <h2 class="text-3xl font-bold text-gray-900 mb-3">Dokumen Terbaru</h2>
 
@@ -309,7 +309,8 @@
                                                 <i class="fas fa-download mr-1"></i>{{ $doc['downloads'] }}
                                             </div>
                                         </td>
-                                        <td class="px-4 py-3 whitespace-nowrap w-1/6 text-sm font-medium text-center space-x-2">
+                                        <td
+                                            class="px-4 py-3 whitespace-nowrap w-1/6 text-sm font-medium text-center space-x-2">
                                             <a href="{{ route('dokumen.detail', $doc['slug']) }}"
                                                 class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
                                                 <i class="far fa-eye mr-1"></i>Lihat

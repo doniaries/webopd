@@ -33,7 +33,7 @@ Route::get('/', Home::class)->name('home');
 
 // Post Routes (Legacy)
 Route::get('/post', [Post::class, 'index'])->name('post.index');
-Route::get('/post/kategori/{slug}', Post::class)->name('post.kategori');
+// Route::get('/post/kategori/{slug}', Post::class)->name('post.kategori');
 Route::get('/post/tag/{tag:slug}', [Post::class, 'tag'])->name('post.tag');
 Route::get('/post/{slug}', Post::class)->name('post.show');
 

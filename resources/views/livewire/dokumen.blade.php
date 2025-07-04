@@ -53,11 +53,15 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                         <a href="{{ route('dokumen.detail', $dokumen->slug) }}" 
-                                           class="text-blue-600 hover:text-blue-900 mr-4">
+                                           class="text-blue-600 hover:text-blue-900 mr-4"
+                                           target="_blank"
+                                           rel="noopener noreferrer">
                                             <i class="far fa-eye mr-1"></i> Lihat
                                         </a>
                                         <a href="{{ route('dokumen.download', $dokumen->slug) }}" 
-                                           class="text-green-600 hover:text-green-900">
+                                           class="text-green-600 hover:text-green-900"
+                                           target="_blank"
+                                           download>
                                             <i class="fas fa-download mr-1"></i> Unduh
                                         </a>
                                     </td>

@@ -63,12 +63,36 @@
 
                         @if ($dokumen->deskripsi)
                             <div class="prose max-w-none mt-6">
-                                <h3 class="text-lg font-semibold text-gray-900 mb-2">Deskripsi Dokumen</h3>
                                 <p class="text-gray-700">{{ $dokumen->deskripsi }}</p>
                             </div>
                         @endif
 
-                        <!-- File information removed as files are not available -->
+                        <!-- Document Actions -->
+                        <div class="mt-8 pt-6 border-t border-gray-200">
+                            <div class="flex flex-wrap gap-4">
+                                {{-- <!-- Download Button -->
+                                <a href="{{ route('dokumen.download', $dokumen->slug) }}" 
+                                   class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                   download>
+                                    <i class="fas fa-download mr-2"></i> Unduh Dokumen
+                                </a> --}}
+
+                                <!-- View Button (only for previewable files) -->
+                                @php
+                                    $fileExtension = strtolower(pathinfo($dokumen->file, PATHINFO_EXTENSION));
+                                    $canPreview = in_array($fileExtension, ['pdf', 'jpg', 'jpeg', 'png', 'gif']);
+                                    $filePath = asset('storage/' . $dokumen->file);
+                                @endphp
+
+                                @if ($canPreview)
+                                    <a href="{{ $filePath }}"
+                                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                        target="_blank" rel="noopener noreferrer">
+                                        <i class="far fa-eye mr-2"></i> unduh dokumen
+                                    </a>
+                                @endif
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
