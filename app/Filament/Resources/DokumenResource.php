@@ -6,10 +6,13 @@ use App\Filament\Resources\DokumenResource\Pages;
 use App\Models\Dokumen;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Support\Colors\Color;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Filament\Actions\StaticAction;
 
 class DokumenResource extends Resource
 {
@@ -71,9 +74,11 @@ class DokumenResource extends Resource
                             ->downloadable()
                             ->visibility('public')
                             ->openable()
+                            ->previewable()
                             ->panelLayout('grid')
                             ->preserveFilenames()
-                            // ->required()
+                            ->uploadingMessage('Sedang mengunggah...')
+                            ->uploadProgressIndicatorPosition('left')
                             ->columnSpanFull()
                             ->helperText('Unggah file dokumen dalam format PDF (maks. 10MB)'),
 
@@ -105,6 +110,42 @@ class DokumenResource extends Resource
                     ->sortable()
                     ->toggleable(),
 
+                Tables\Columns\TextColumn::make('file')
+                    ->label('File')
+                    ->searchable()
+                    ->tooltip('Klik untuk melihat')
+                    ->alignCenter()
+                    ->icon('heroicon-m-document')
+                    ->color(Color::Green)
+                    ->formatStateUsing(fn($state) => !empty($state) ? 'Lihat' : '-')
+                    ->action(
+                        Tables\Actions\Action::make('previewFile')
+                            ->modalHeading('Preview Dokumen')
+                            ->modalWidth('4xl')
+                            ->modalSubmitAction(false)
+                            ->stickyModalHeader() //header tidak hilang ketika scroll
+                            // ->modalWidth(MaxWidth::FiveExtraLarge)
+                            ->stickyModalFooter()
+                            ->modalCancelAction(fn(StaticAction $action) => $action->label('Tutup'))
+                            ->modalCancelActionLabel('Tutup')
+                            ->modalContent(function ($record) {
+                                if (empty($record->file)) {
+                                    return 'No files available';
+                                }
+
+                                $files = collect($record->file)->map(function ($file) {
+                                    return [
+                                        'url' => Storage::url($file),
+                                        'filename' => basename($file)
+                                    ];
+                                });
+
+                                return view('filament.components.file-viewer', [
+                                    'files' => $files
+                                ]);
+                            })
+                    ),
+
                 Tables\Columns\TextColumn::make('downloads')
                     ->label('Diunduh')
                     ->numeric()
@@ -127,6 +168,7 @@ class DokumenResource extends Resource
                     ->label('Tahun Terbit'),
             ])
             ->actions([
+
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
@@ -136,7 +178,7 @@ class DokumenResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
-            ->defaultSort('published_at', 'desc');
+            ->defaultSort('created_at', 'desc');
     }
 
     public static function getRelations(): array

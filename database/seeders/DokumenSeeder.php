@@ -17,26 +17,16 @@ class DokumenSeeder extends Seeder
             ['judul' => 'Sijunjung Dalam Angka 2023', 'tahun' => '2023'],
             ['judul' => 'Laporan Realisasi Anggaran Dinas PUPR 2023', 'tahun' => '2023'],
             ['judul' => 'Profil Kesehatan Kabupaten Sijunjung 2023', 'tahun' => '2023'],
-            ['judul' => 'Statistik Daerah Kabupaten Sijunjung 2023', 'tahun' => '2023'],
-            ['judul' => 'Rencana Strategis Dinas PMD 2023-2026', 'tahun' => '2023'],
-            ['judul' => 'Laporan Akuntabilitas Kinerja Instansi Pemerintah 2023', 'tahun' => '2023'],
-            ['judul' => 'Rencana Kerja Pemerintah Daerah 2024', 'tahun' => '2024'],
-            ['judul' => 'Laporan Keterangan Pertanggungjawaban Bupati 2023', 'tahun' => '2023'],
-            ['judul' => 'RKA Dinas Sosial Tahun 2024', 'tahun' => '2024'],
-            ['judul' => 'Indeks Pembangunan Manusia Kabupaten Sijunjung 2023', 'tahun' => '2023'],
-            ['judul' => 'Laporan Realisasi Fisik dan Keuangan Triwulan I 2024', 'tahun' => '2024'],
-            ['judul' => 'Profil Pendidikan Kabupaten Sijunjung 2023', 'tahun' => '2023'],
-            ['judul' => 'Rencana Kerja Dinas Perdagangan dan Perindustrian 2024', 'tahun' => '2024'],
         ];
 
         // Create documents
         foreach ($dokumenData as $data) {
             // Generate a unique slug
             $slug = Str::slug($data['judul']);
-            
+
             // Check if document with this slug already exists
             if (!Dokumen::where('slug', $slug)->exists()) {
-                
+
                 // Create document with model's fillable fields
                 $dokumen = [
                     'nama_dokumen' => $data['judul'],
