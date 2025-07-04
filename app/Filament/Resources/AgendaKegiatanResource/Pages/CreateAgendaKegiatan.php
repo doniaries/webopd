@@ -9,4 +9,9 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateAgendaKegiatan extends CreateRecord
 {
     protected static string $resource = AgendaKegiatanResource::class;
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }
