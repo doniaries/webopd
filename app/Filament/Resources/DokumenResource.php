@@ -3,51 +3,89 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\DokumenResource\Pages;
-use App\Filament\Resources\DokumenResource\RelationManagers;
 use App\Models\Dokumen;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Str;
 
 class DokumenResource extends Resource
 {
     protected static ?string $model = Dokumen::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
+    protected static ?string $navigationIcon = 'heroicon-o-document-text';
     protected static ?string $modelLabel = 'Dokumen';
-
-    protected static ?string $navigationGroup = 'Instansi';
-
-    protected static ?int $navigationSort = 2;
+    protected static ?string $navigationLabel = 'Dokumen';
+    protected static ?string $navigationGroup = 'Konten';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('nama_dokumen')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('slug')
-                    ->maxLength(255),
-                Forms\Components\Textarea::make('deskripsi')
-                    ->columnSpanFull(),
-                Forms\Components\TextInput::make('cover')
-                    ->maxLength(255),
-                Forms\Components\DatePicker::make('tahun_terbit'),
-                Forms\Components\TextInput::make('file')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('views')
-                    ->numeric()
-                    ->default(0)
-                    ->disabled(),
-                Forms\Components\TextInput::make('downloads')
-                    ->numeric()
-                    ->default(0)
-                    ->disabled(),
+                Forms\Components\Section::make('Informasi Dokumen')
+                    ->schema([
+                        Forms\Components\TextInput::make('nama_dokumen')
+                            ->required()
+                            ->maxLength(255)
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(function (string $operation, $state, Forms\Set $set) {
+                                if ($operation === 'edit') {
+                                    return;
+                                }
+                                $set('slug', Str::slug($state));
+                            })
+                            ->label('Nama Dokumen'),
+
+                        Forms\Components\TextInput::make('slug')
+                            ->required()
+                            ->maxLength(255)
+                            ->unique(ignoreRecord: true)
+                            ->disabledOn('edit')
+                            ->dehydrated()
+                            ->label('Slug (URL)'),
+
+                        Forms\Components\DatePicker::make('tahun_terbit')
+                            ->required()
+                            ->label('Tahun Terbit')
+                            ->default(now()),
+
+                        Forms\Components\DatePicker::make('published_at')
+                            ->label('Tanggal Publikasi')
+                            ->default(now()),
+
+                        Forms\Components\Textarea::make('deskripsi')
+                            ->label('Deskripsi')
+                            ->columnSpanFull()
+                            ->rows(3),
+                    ])
+                    ->columns(2),
+
+                Forms\Components\Section::make('File Dokumen')
+                    ->schema([
+                        Forms\Components\FileUpload::make('file')
+                            ->label('File PDF')
+                            ->directory('dokumen')
+                            ->acceptedFileTypes(['application/pdf'])
+                            ->downloadable()
+                            ->visibility('public')
+                            ->openable()
+                            ->panelLayout('grid')
+                            ->preserveFilenames()
+                            // ->required()
+                            ->columnSpanFull()
+                            ->helperText('Unggah file dokumen dalam format PDF (maks. 10MB)'),
+
+                        Forms\Components\FileUpload::make('cover')
+                            ->label('Cover Dokumen')
+                            ->directory('dokumen/covers')
+                            ->image()
+                            ->imageEditor()
+                            ->columnSpanFull()
+                            ->helperText('Unggah gambar cover dokumen (opsional)'),
+                    ])
+                    ->columns(1),
             ]);
     }
 
@@ -56,57 +94,54 @@ class DokumenResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('nama_dokumen')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('slug')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('cover')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('tahun_terbit')
-                    ->date()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('file')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable()
+                    ->wrap()
+                    ->description(fn(Dokumen $record) => $record->tahun_terbit?->format('Y')),
+
                 Tables\Columns\TextColumn::make('views')
+                    ->label('Dilihat')
                     ->numeric()
                     ->sortable()
-                    ->badge()
-                    ->color('success'),
+                    ->toggleable(),
+
                 Tables\Columns\TextColumn::make('downloads')
+                    ->label('Diunduh')
                     ->numeric()
                     ->sortable()
-                    ->badge()
-                    ->color('primary'),
-                Tables\Columns\TextColumn::make('deleted_at')
-                    ->dateTime()
+                    ->toggleable(),
+
+                Tables\Columns\TextColumn::make('published_at')
+                    ->label('Tgl. Publikasi')
+                    ->date('d M Y')
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(),
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('tahun_terbit')
+                    ->options(fn() => Dokumen::query()
+                        ->selectRaw('YEAR(tahun_terbit) as year')
+                        ->distinct()
+                        ->orderBy('year', 'desc')
+                        ->pluck('year', 'year'))
+                    ->label('Tahun Terbit'),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->defaultSort('published_at', 'desc');
     }
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array

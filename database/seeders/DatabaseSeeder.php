@@ -24,7 +24,6 @@ class DatabaseSeeder extends Seeder
             PostSeeder::class,
             BannerSeeder::class,
             // SliderSeeder::class,
-            InformasiSeeder::class,
             ProdukHukumSeeder::class,
             InfografisSeeder::class,
             AgendaKegiatanSeeder::class,

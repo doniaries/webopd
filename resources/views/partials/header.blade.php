@@ -971,9 +971,7 @@
                             <li><a href="{{ route('agenda.index') }}"
                                     class="{{ request()->routeIs('agenda.index') || request()->routeIs('agenda.show') ? 'active' : '' }}">Agenda
                                     Kegiatan</a></li>
-                            <li><a href="{{ route('informasi.index') }}"
-                                    class="{{ request()->routeIs('informasi.index') || request()->routeIs('informasi.show') ? 'active' : '' }}">Informasi</a>
-                            </li>
+
                         </ul>
                     </li>
                     <li>

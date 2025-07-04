@@ -10,8 +10,14 @@ class Dokumen extends Component
 {
     public function render()
     {
-        $dokumens = DokumenModel::orderBy('created_at', 'desc')->get();
-        return view('livewire.dokumen', compact('dokumens'));
+        $dokumens = DokumenModel::whereNotNull('published_at')
+            ->where('published_at', '<=', now())
+            ->orderBy('published_at', 'desc')
+            ->paginate(10);
+            
+        return view('livewire.dokumen', [
+            'dokumens' => $dokumens
+        ]);
     }
     
     #[On('incrementViews')]

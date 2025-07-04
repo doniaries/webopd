@@ -1,4 +1,4 @@
-<div>
+<div class="space-y-8">
     @use('Illuminate\Support\Facades\Storage')
 
     @push('title', $pageTitle)
@@ -9,7 +9,7 @@
 
     <div class="space-y-8">
         <livewire:slider />
-        <!-- Berita & Informasi Section -->
+        <!-- Berita Section -->
         <section id="berita-informasi" class="features" style="margin: 1.5rem 0 0 0; padding: 0;">
             <div class="container-fluid px-4">
                 <div class="row g-4">
@@ -173,21 +173,9 @@
                 </div>
             </div>
         </section>
-        <!-- Informasi & Agenda -->
+        <!-- Agenda Section -->
         <section class="w-full bg-white py-8 px-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-7xl mx-auto">
-                <!-- Kolom Informasi -->
-                <div class="bg-white shadow-md rounded-lg overflow-hidden border border-gray-200">
-                    <h3
-                        class="text-center text-blue-800 text-lg font-semibold py-3 border-b border-blue-200 bg-blue-50">
-                        <i class="fas fa-info-circle text-blue-600 mr-2" style="display: inline-block;"></i>
-                        Informasi Terbaru
-                    </h3>
-                    <div class="p-6">
-                        <livewire:informasi />
-                    </div>
-                </div>
-
+            <div class="max-w-7xl mx-auto">
                 <!-- Kolom Agenda -->
                 <div class="bg-white shadow-md rounded-lg overflow-hidden border border-gray-200">
                     <h3
@@ -202,85 +190,165 @@
             </div>
         </section>
 
-        <!-- Dokumen Terbaru Section -->
-        <section id="dokumen-terbaru" class="py-8 bg-gray-50">
+        <!-- Dokumen Section -->
+        <div class="py-12 bg-white">
             <div class="container mx-auto px-4">
-                <div class="text-center mb-8">
-                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Dokumen Terbaru</h2>
-                    <p class="text-gray-600">Akses dokumen-dokumen penting terbaru</p>
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-3">Dokumen Terbaru</h2>
+
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    @forelse($dokumens as $dokumen)
-                        <div
-                            class="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:shadow-lg hover:-translate-y-1">
-                            <div class="relative">
-                                @if ($dokumen->cover)
-                                    <img src="{{ asset('storage/' . $dokumen->cover) }}"
-                                        class="w-full h-48 object-cover" alt="{{ $dokumen->nama_dokumen }}">
-                                @else
-                                    <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
-                                        <i class="bi bi-file-earmark-text text-gray-400 text-5xl"
-                                            style="display: inline-block;"></i>
-                                    </div>
-                                @endif
-                            </div>
+                <div
+                    class="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl shadow-lg overflow-hidden border border-blue-200 w-full">
+                    <div class="w-full">
+                        <table class="w-full divide-y divide-blue-200 table-fixed">
+                            <thead class="bg-blue-600">
+                                <tr>
+                                    <th scope="col"
+                                        class="w-12 px-3 py-3 text-center text-xs font-medium text-white uppercase tracking-wider">
+                                        <i class="fas fa-hashtag"></i>
+                                    </th>
+                                    <th scope="col"
+                                        class="px-4 py-3 text-left text-xs font-medium text-white uppercase tracking-wider w-2/5">
+                                        <i class="far fa-file-alt mr-2"></i>Nama Dokumen
+                                    </th>
+                                    <th scope="col"
+                                        class="px-4 py-3 text-left text-xs font-medium text-white uppercase tracking-wider w-1/6">
+                                        <i class="fas fa-file-import mr-2"></i>Jenis
+                                    </th>
+                                    <th scope="col"
+                                        class="px-4 py-3 text-left text-xs font-medium text-white uppercase tracking-wider w-1/6">
+                                        <i class="far fa-calendar-alt mr-2"></i>Tanggal
+                                    </th>
+                                    <th scope="col"
+                                        class="px-4 py-3 text-center text-xs font-medium text-white uppercase tracking-wider w-1/6">
+                                        <i class="fas fa-cogs mr-1"></i>Aksi
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                @php
+                                    use App\Models\Dokumen;
 
-                            <div class="p-4">
-                                <h3 class="text-lg font-semibold text-gray-800 mb-2">{{ $dokumen->nama_dokumen }}</h3>
-                                <p class="text-gray-600 text-sm mb-3">{{ Str::limit($dokumen->deskripsi, 100) }}</p>
+                                    $documents = Dokumen::query()
+                                        ->whereNotNull('file')
+                                        ->where('file', '!=', '')
+                                        ->whereNotNull('published_at')
+                                        ->where('published_at', '<=', now())
+                                        ->orderBy('published_at', 'desc')
+                                        ->take(5)
+                                        ->get()
+                                        ->map(function ($doc) {
+                                            $fileExtension = pathinfo($doc->file, PATHINFO_EXTENSION);
+                                            return [
+                                                'name' => $doc->nama_dokumen,
+                                                'type' => strtoupper($fileExtension),
+                                                'date' => $doc->published_at
+                                                    ? $doc->published_at->translatedFormat('d M Y')
+                                                    : $doc->created_at->translatedFormat('d M Y'),
+                                                'views' => $doc->views ?? 0,
+                                                'downloads' => $doc->downloads ?? 0,
+                                                'file' => $doc->file,
+                                                'slug' => $doc->slug ?? '',
+                                            ];
+                                        })
+                                        ->toArray();
+                                @endphp
 
-                                <div class="flex items-center text-sm text-gray-500 mb-4">
-                                    <span><i class="bi bi-calendar me-1" style="display: inline-block;"></i>
-                                        {{ $dokumen->tahun_terbit }}</span>
-                                </div>
+                                @foreach ($documents as $index => $doc)
+                                    <tr
+                                        class="hover:bg-blue-50 transition-colors duration-200 {{ $index % 2 === 0 ? 'bg-white' : 'bg-blue-50' }}">
+                                        <td class="px-3 py-3 text-center text-sm text-gray-700 font-medium w-12">
+                                            <span
+                                                class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-blue-100 text-blue-800 text-xs">
+                                                {{ $index + 1 }}
+                                            </span>
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap w-2/5">
+                                            <div class="flex items-center">
+                                                @php
+                                                    $icon = 'fa-file-alt';
+                                                    if (str_contains(strtolower($doc['name']), 'laporan')) {
+                                                        $icon = 'fa-file-invoice';
+                                                    } elseif (str_contains(strtolower($doc['name']), 'panduan')) {
+                                                        $icon = 'fa-book';
+                                                    } elseif (str_contains(strtolower($doc['name']), 'struktur')) {
+                                                        $icon = 'fa-sitemap';
+                                                    } elseif (str_contains(strtolower($doc['name']), 'profil')) {
+                                                        $icon = 'fa-building';
+                                                    }
+                                                @endphp
+                                                <i class="fas {{ $icon }} text-blue-500 text-lg mr-3"></i>
+                                                <div class="text-sm font-medium text-gray-900">{{ $doc['name'] }}
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap w-1/6">
+                                            @php
+                                                $badgeClass = 'bg-blue-100 text-blue-800';
+                                                if ($doc['type'] === 'PDF') {
+                                                    $badgeClass = 'bg-red-100 text-red-800';
+                                                } elseif ($doc['type'] === 'DOCX') {
+                                                    $badgeClass = 'bg-blue-100 text-blue-800';
+                                                } elseif ($doc['type'] === 'XLSX') {
+                                                    $badgeClass = 'bg-green-100 text-green-800';
+                                                }
+                                            @endphp
+                                            <span
+                                                class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full {{ $badgeClass }}">
+                                                <i class="far fa-file-{{ strtolower($doc['type']) }} mr-1"></i>
+                                                {{ $doc['type'] }}
+                                            </span>
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                                            <i class="far fa-calendar-alt mr-2 text-blue-500"></i>
+                                            {{ $doc['date'] }}
+                                            <div class="text-xs text-gray-500 mt-1">
+                                                <i class="far fa-eye mr-1"></i>{{ $doc['views'] }}
+                                                <span class="mx-1">•</span>
+                                                <i class="fas fa-download mr-1"></i>{{ $doc['downloads'] }}
+                                            </div>
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap w-1/6 text-sm font-medium text-center space-x-2">
+                                            <a href="{{ route('dokumen.detail', $doc['slug']) }}"
+                                                class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
+                                                <i class="far fa-eye mr-1"></i>Lihat
+                                            </a>
+                                            <a href="{{ asset('storage/documents/' . $doc['file']) }}" download
+                                                class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200">
+                                                <i class="fas fa-download mr-1"></i>Unduh
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
 
-                                <div class="flex justify-between items-center mb-3">
-                                    <span
-                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                        <i class="bi bi-eye me-1" style="display: inline-block;"></i>
-                                        {{ number_format($dokumen->views) }} dilihat
-                                    </span>
-                                    <span
-                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                        <i class="bi bi-download me-1" style="display: inline-block;"></i>
-                                        {{ number_format($dokumen->downloads) }} unduhan
-                                    </span>
-                                </div>
-
-                                <div class="flex justify-between">
-                                    <a href="{{ asset('storage/' . $dokumen->file) }}" target="_blank"
-                                        onclick="Livewire.dispatch('incrementViews', { dokumenId: {{ $dokumen->id }} })"
-                                        class="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                        <i class="bi bi-eye me-1" style="display: inline-block;"></i> Lihat
-                                    </a>
-                                    <a href="{{ asset('storage/' . $dokumen->file) }}" download
-                                        onclick="Livewire.dispatch('incrementDownloads', { dokumenId: {{ $dokumen->id }} })"
-                                        class="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                                        <i class="bi bi-download me-1" style="display: inline-block;"></i> Unduh
-                                    </a>
-                                </div>
-                            </div>
+                    <div class="bg-blue-600 px-6 py-4 flex items-center justify-between border-t border-blue-500">
+                        <div class="text-sm text-white">
+                            <i class="fas fa-file-alt mr-2"></i>
+                            @php
+                                $totalDocuments = \App\Models\Dokumen::whereNotNull('file')
+                                    ->where('file', '!=', '')
+                                    ->whereNotNull('published_at')
+                                    ->where('published_at', '<=', now())
+                                    ->count();
+                            @endphp
+                            Total <span class="font-semibold">{{ $totalDocuments }} dokumen</span> tersedia untuk
+                            diunduh
                         </div>
-                    @empty
-                        <div class="col-span-3 text-center py-8">
-                            <div class="text-gray-500">
-                                <i class="bi bi-file-earmark-text text-5xl mb-3 block"
-                                    style="display: inline-block;"></i>
-                                <p>Belum ada dokumen yang tersedia</p>
-                            </div>
+                        <div class="flex-shrink-0">
+                            <a href="{{ route('dokumen') }}"
+                                class="relative inline-flex items-center px-4 py-2 border border-white text-sm font-medium rounded-md text-white bg-blue-700 hover:bg-blue-800 transition-colors duration-200">
+                                <i class="fas fa-list-ul mr-2"></i>Lihat Semua Dokumen
+                            </a>
                         </div>
-                    @endforelse
-                </div>
-
-                <div class="text-center mt-8">
-                    <a href="{{ route('dokumen') }}"
-                        class="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
-                        Lihat Semua Dokumen <i class="bi bi-arrow-right ms-2" style="display: inline-block;"></i>
-                    </a>
+                    </div>
                 </div>
             </div>
-        </section>
+        </div>
+
 
         <!-- Section External Links -->
         <section id="external-links" class="external-links-section section">
@@ -289,4 +357,6 @@
             </div>
         </section>
     </div>
+
+
 </div>

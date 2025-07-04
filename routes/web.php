@@ -41,11 +41,11 @@ Route::get('/post/{slug}', Post::class)->name('post.show');
 Route::get('/pengumuman', Pengumuman::class)->name('pengumuman.index');
 Route::get('/pengumuman/{pengumuman:slug}', \App\Livewire\PengumumanDetail::class)->name('pengumuman.show');
 
-// Informasi Routes
-Route::get('/informasi', Informasi::class)->name('informasi.index');
-Route::get('/informasi/kategori/{slug}', Informasi::class)->name('informasi.kategori');
-Route::get('/informasi/detail/{slug}', \App\Livewire\InformasiDetail::class)->name('informasi.detail');
-Route::get('/informasi/{slug}', \App\Livewire\InformasiDetail::class)->name('informasi.show');
+
+// Document Routes
+Route::get('/dokumen', \App\Livewire\Dokumen::class)->name('dokumen');
+Route::get('/dokumen/{slug}', \App\Livewire\DokumenDetail::class)->name('dokumen.detail');
+Route::get('/dokumen/{slug}/download', [\App\Livewire\DokumenDetail::class, 'download'])->name('dokumen.download');
 
 // Profil Instansi Routes
 Route::get('/profil/sambutan', SambutanPimpinan::class)->name('profil.sambutan');

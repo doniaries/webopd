@@ -12,16 +12,21 @@ class DokumenSeeder extends Seeder
     {
         // Sample document data
         $dokumenData = [
-            ['judul' => 'Peraturan Daerah No. 1 Tahun 2023', 'tahun' => '2023'],
-            ['judul' => 'Peraturan Bupati No. 2 Tahun 2023', 'tahun' => '2023'],
-            ['judul' => 'Keputusan Bupati No. 3 Tahun 2023', 'tahun' => '2023'],
-            ['judul' => 'Surat Edaran No. 4 Tahun 2023', 'tahun' => '2023'],
-            ['judul' => 'Laporan Tahunan 2023', 'tahun' => '2023'],
-            ['judul' => 'Peraturan Daerah No. 5 Tahun 2023', 'tahun' => '2023'],
-            ['judul' => 'Peraturan Bupati No. 6 Tahun 2023', 'tahun' => '2023'],
-            ['judul' => 'Keputusan Bupati No. 7 Tahun 2023', 'tahun' => '2023'],
-            ['judul' => 'Surat Edaran No. 8 Tahun 2023', 'tahun' => '2023'],
-            ['judul' => 'Laporan Triwulan I 2023', 'tahun' => '2023'],
+            ['judul' => 'RKA Dinas Kesehatan Tahun 2024', 'tahun' => '2024'],
+            ['judul' => 'RKA Dinas Pendidikan dan Kebudayaan 2024', 'tahun' => '2024'],
+            ['judul' => 'Sijunjung Dalam Angka 2023', 'tahun' => '2023'],
+            ['judul' => 'Laporan Realisasi Anggaran Dinas PUPR 2023', 'tahun' => '2023'],
+            ['judul' => 'Profil Kesehatan Kabupaten Sijunjung 2023', 'tahun' => '2023'],
+            ['judul' => 'Statistik Daerah Kabupaten Sijunjung 2023', 'tahun' => '2023'],
+            ['judul' => 'Rencana Strategis Dinas PMD 2023-2026', 'tahun' => '2023'],
+            ['judul' => 'Laporan Akuntabilitas Kinerja Instansi Pemerintah 2023', 'tahun' => '2023'],
+            ['judul' => 'Rencana Kerja Pemerintah Daerah 2024', 'tahun' => '2024'],
+            ['judul' => 'Laporan Keterangan Pertanggungjawaban Bupati 2023', 'tahun' => '2023'],
+            ['judul' => 'RKA Dinas Sosial Tahun 2024', 'tahun' => '2024'],
+            ['judul' => 'Indeks Pembangunan Manusia Kabupaten Sijunjung 2023', 'tahun' => '2023'],
+            ['judul' => 'Laporan Realisasi Fisik dan Keuangan Triwulan I 2024', 'tahun' => '2024'],
+            ['judul' => 'Profil Pendidikan Kabupaten Sijunjung 2023', 'tahun' => '2023'],
+            ['judul' => 'Rencana Kerja Dinas Perdagangan dan Perindustrian 2024', 'tahun' => '2024'],
         ];
 
         // Create documents

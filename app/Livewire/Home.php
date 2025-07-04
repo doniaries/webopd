@@ -26,7 +26,6 @@ class Home extends Component
     /** @var \Illuminate\Support\Collection<object{judul: string, gambar_url: string, url: string, is_banner: bool}> */
     public $banners;
     public $sliders = [];
-    public $informasi = [];
     /** @var \Illuminate\Support\Collection */
     public $agenda;
     public $popularPosts = [];
@@ -86,30 +85,6 @@ class Home extends Component
             // Get active sliders
             $this->sliders = Slider::active()->orderBy('urutan')->get() ?? [];
 
-            // Load informasi
-            try {
-                $informasiQuery = \App\Models\Informasi::query()
-                    ->withoutGlobalScopes() // Temporarily disable global scopes to ensure we get all relevant announcements
-                    ->published()
-                    ->orderBy('published_at', 'desc')
-                    ->take(5);
-
-                $informasiCollection = $informasiQuery->get();
-                $this->informasi = $informasiCollection->all();
-
-                // Debug: Log query yang dihasilkan
-                if (app()->environment('local')) {
-                    \Illuminate\Support\Facades\Log::info('Informasi query:', [
-                        'sql' => $informasiQuery->toSql(),
-                        'bindings' => $informasiQuery->getBindings(),
-                        'count' => $informasiCollection->count()
-                    ]);
-                }
-            } catch (\Exception $e) {
-                \Illuminate\Support\Facades\Log::error('Error loading informasi: ' . $e->getMessage());
-                $this->informasi = [];
-            }
-
             // Get agenda (events)
             $agenda = \App\Models\AgendaKegiatan::where('dari_tanggal', '>=', now()->toDateString())
                 ->where('sampai_tanggal', '>=', now()->toDateString())
@@ -161,7 +136,6 @@ class Home extends Component
             $this->featuredPosts = [];
             $this->banners = [];
             $this->sliders = [];
-            $this->informasi = [];
             $this->agenda = [];
         }
     }
@@ -226,7 +200,6 @@ class Home extends Component
             'tags' => $tags,
             'banners' => $this->banners,
             'sliders' => $this->sliders,
-            'informasi' => $this->informasi,
             'agenda' => $this->agenda,
             'pengaturan' => \App\Models\Pengaturan::first(),
             'popularPosts' => $this->popularPosts,
