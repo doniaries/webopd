@@ -68,7 +68,6 @@
                 <ul>
                     <li><a href="{{ route('infografis') }}">Infografis</a></li>
                     <li><a href="{{ route('dokumen') }}">Dokumen</a></li>
-                    <li><a href="{{ route('produk-hukum') }}">Produk Hukum</a></li>
                 </ul>
             </div>
 

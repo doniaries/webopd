@@ -3,6 +3,7 @@
     <style>
         /* Reset and Base Styles */
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
         header#header,
         header#header *,
         header#header *:before,
@@ -694,7 +695,7 @@
             color: #2c3e50 !important;
             letter-spacing: 0.3px;
             line-height: 1.2;
-            text-shadow: 0 1px 1px rgba(0,0,0,0.1);
+            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
         }
 
         .logo .d-flex:last-child img {
@@ -965,9 +966,6 @@
                                     class="{{ request()->routeIs('infografis') ? 'active' : '' }}">Infografis</a></li>
                             <li><a href="{{ route('dokumen') }}"
                                     class="{{ request()->routeIs('dokumen') ? 'active' : '' }}">Dokumen</a></li>
-                            <li><a href="{{ route('produk-hukum') }}"
-                                    class="{{ request()->routeIs('produk-hukum') ? 'active' : '' }}">Produk Hukum</a>
-                            </li>
                             <li><a href="{{ route('agenda.index') }}"
                                     class="{{ request()->routeIs('agenda.index') || request()->routeIs('agenda.show') ? 'active' : '' }}">Agenda
                                     Kegiatan</a></li>
@@ -1032,9 +1030,6 @@
                                     class="{{ request()->routeIs('infografis') ? 'active' : '' }}">Infografis</a></li>
                             <li><a href="{{ route('dokumen') }}"
                                     class="{{ request()->routeIs('dokumen') ? 'active' : '' }}">Dokumen</a></li>
-                            <li><a href="{{ route('produk-hukum') }}"
-                                    class="{{ request()->routeIs('produk-hukum') ? 'active' : '' }}">Produk Hukum</a>
-                            </li>
                             <li><a href="{{ route('agenda.index') }}"
                                     class="{{ request()->routeIs('agenda.index') || request()->routeIs('agenda.show') ? 'active' : '' }}">Agenda
                                     Kegiatan</a></li>

@@ -72,7 +72,7 @@
                                 @if ($link->logo)
                                     <img src="{{ asset('storage/' . $link->logo) }}" alt="{{ $link->nama_link }}"
                                         class="h-full w-full object-contain"
-                                        onerror="this.onerror=null; this.src='{{ asset('assets/img/placeholder-logo.png') }}';">
+                                        onerror="this.onerror=null; this.src='{{ asset('assets/img/placeholder2.jpg') }}';">
                                 @else
                                     <span class="text-sm font-bold text-blue-600">
                                         {{ strtoupper(substr($link->nama_link, 0, 2)) }}

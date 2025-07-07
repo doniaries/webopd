@@ -177,7 +177,8 @@
 
         <div class="h-16 bg-white"></div>
         <!-- Agenda Section -->
-        <div class="mt-12 bg-gray-200">
+        <livewire:agenda-kegiatan />
+        {{-- <div class="mt-12 bg-gray-200">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-10">
                     <h2 class="text-3xl font-bold text-gray-900 mb-3">Agenda Kegiatan Terkini</h2>
@@ -300,7 +301,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         <!-- Dokumen Section -->
         <div class="py-12 bg-white">

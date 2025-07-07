@@ -28,40 +28,82 @@ class AgendaKegiatanResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('nama_agenda')
-                    ->label('Nama Agenda')
-                    ->required()
-                    ->maxLength(255)
-                    ->live(onBlur: true)
-                    ->placeholder('Masukkan judul artikel di sini')
-                    ->afterStateUpdated(function ($state, Forms\Set $set) {
-                        $set('slug', \Illuminate\Support\Str::slug($state));
-                    }),
-                Forms\Components\Hidden::make('slug')
-                    ->required()
-                    ->unique(ignoreRecord: true),
-                Forms\Components\Textarea::make('uraian_agenda')
-                    ->columnSpanFull(),
-                Forms\Components\TextInput::make('tempat')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\DatePicker::make('dari_tanggal')
-                    ->required()
-                    ->native(false)
-                    ->displayFormat('d F Y'),
-                Forms\Components\TimePicker::make('waktu_mulai')
-                    ->label('Waktu Mulai')
-                    ->seconds(false)
-                    ->displayFormat('H:i'),
-                Forms\Components\DatePicker::make('sampai_tanggal')
-                    ->required()
-                    ->native(false)
-                    ->displayFormat('d F Y')
-                    ->afterOrEqual('dari_tanggal'),
-                Forms\Components\TimePicker::make('waktu_selesai')
-                    ->label('Waktu Selesai')
-                    ->seconds(false)
-                    ->displayFormat('H:i'),
+                // Section 1: Informasi Dasar
+                Forms\Components\Section::make('Informasi Dasar')
+                    ->schema([
+                        Forms\Components\TextInput::make('nama_agenda')
+                            ->label('Nama Agenda')
+                            ->required()
+                            ->maxLength(255)
+                            ->placeholder('Contoh: Rapat Koordinasi Bulanan')
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(function ($state, Forms\Set $set) {
+                                $set('slug', \Illuminate\Support\Str::slug($state));
+                            }),
+                        Forms\Components\Hidden::make('slug')
+                            ->required()
+                            ->unique(ignoreRecord: true),
+                        Forms\Components\Textarea::make('uraian_agenda')
+                            ->label('Uraian Kegiatan')
+                            ->required()
+                            ->placeholder('Deskripsi lengkap agenda kegiatan')
+                            ->columnSpanFull(),
+                    ])
+                    ->columns(1),
+
+                // Section 2: Detail Pelaksanaan
+                Forms\Components\Section::make('Detail Pelaksanaan')
+                    ->schema([
+                        Forms\Components\TextInput::make('penyelenggara')
+                            ->label('Penyelenggara')
+                            ->required()
+                            ->maxLength(255)
+                            ->placeholder('Contoh: Dinas Komunikasi dan Informatika'),
+                        Forms\Components\TextInput::make('tempat')
+                            ->label('Tempat')
+                            ->required()
+                            ->maxLength(255)
+                            ->placeholder('Contoh: Ruang Rapat Lt. 3'),
+                    ])
+                    ->columns(2),
+
+                // Section 3: Waktu Pelaksanaan
+                Forms\Components\Section::make('Waktu Pelaksanaan')
+                    ->schema([
+                        // Tanggal dan Waktu Mulai
+                        Forms\Components\Grid::make(2)
+                            ->schema([
+                                Forms\Components\DatePicker::make('dari_tanggal')
+                                    ->label('Tanggal Mulai')
+                                    ->required()
+                                    ->native(false)
+                                    ->displayFormat('d F Y')
+                                    ->default(now()),
+                                Forms\Components\TimePicker::make('waktu_mulai')
+                                    ->label('Waktu Mulai')
+                                    ->seconds(false)
+                                    ->displayFormat('H:i')
+                                    ->default(now()->format('H:00')),
+                            ]),
+                        
+                        // Tanggal dan Waktu Selesai
+                        Forms\Components\Grid::make(2)
+                            ->schema([
+                                Forms\Components\DatePicker::make('sampai_tanggal')
+                                    ->label('Tanggal Selesai')
+                                    ->required()
+                                    ->native(false)
+                                    ->displayFormat('d F Y')
+                                    ->afterOrEqual('dari_tanggal')
+                                    ->default(fn ($get) => $get('dari_tanggal') ?? now()),
+                                Forms\Components\TimePicker::make('waktu_selesai')
+                                    ->label('Waktu Selesai')
+                                    ->seconds(false)
+                                    ->displayFormat('H:i')
+                                    ->default(now()->addHour()->format('H:00')),
+                            ]),
+                    ])
+                    ->columns(1),
             ]);
     }
 

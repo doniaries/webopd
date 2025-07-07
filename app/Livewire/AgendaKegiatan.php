@@ -12,7 +12,7 @@ class AgendaKegiatan extends Component
     use WithPagination;
 
     public $search = '';
-    public $perPage = 6;
+    public $perPage = 5;
     public $currentMonth;
     public $currentYear;
     public $months = [
@@ -60,16 +60,15 @@ class AgendaKegiatan extends Component
     public function render()
     {
         $query = \App\Models\AgendaKegiatan::query()
-            ->where('dari_tanggal', '>=', now()->toDateString())
-            ->orderBy('dari_tanggal')
-            ->orderBy('waktu_mulai');
+            ->orderBy('dari_tanggal', 'asc')
+            ->orderBy('waktu_mulai', 'asc');
 
         if ($this->search) {
             $searchTerm = '%' . $this->search . '%';
             $query->where(function ($q) use ($searchTerm) {
                 $q->where('nama_agenda', 'like', $searchTerm)
-                  ->orWhere('uraian_agenda', 'like', $searchTerm)
-                  ->orWhere('tempat', 'like', $searchTerm);
+                    ->orWhere('uraian_agenda', 'like', $searchTerm)
+                    ->orWhere('tempat', 'like', $searchTerm);
             });
         }
 

@@ -57,9 +57,9 @@ Route::get('/struktur-organisasi', UnitKerja::class)->name('struktur-organisasi'
 Route::get('/profil/unit-kerja/{unitKerja:slug}', [\App\Http\Controllers\UnitKerjaController::class, 'show'])->name('unit-kerja.detail');
 
 // Produk Hukum
-Route::get('/produk-hukum', ProdukHukum::class)->name('produk-hukum.index');
+// Route::get('/produk-hukum', ProdukHukum::class)->name('produk-hukum.index');
 // Alias untuk kompatibilitas dengan template
-Route::get('/produk-hukum', ProdukHukum::class)->name('produk-hukum');
+// Route::get('/produk-hukum', ProdukHukum::class)->name('produk-hukum');
 
 // Layanan
 Route::get('/layanan', \App\Livewire\Layanan::class)->name('layanan.index');

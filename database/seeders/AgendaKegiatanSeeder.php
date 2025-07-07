@@ -26,8 +26,8 @@ class AgendaKegiatanSeeder extends Seeder
                 'uraian_agenda' => 'Rapat koordinasi bulanan antar dinas',
                 'tempat' => 'Aula Kantor Bappeda',
                 'penyelenggara' => 'Badan Perencanaan Pembangunan Daerah',
-                'dari_tanggal' => Carbon::now()->addDays(2)->startOfWeek(),
-                'sampai_tanggal' => Carbon::now()->addDays(2)->startOfWeek(),
+                'dari_tanggal' => Carbon::now()->subDays(2),
+                'sampai_tanggal' => Carbon::now()->subDays(2),
                 'waktu_mulai' => '09:00:00',
                 'waktu_selesai' => '12:00:00',
                 'created_at' => now(),
@@ -59,7 +59,7 @@ class AgendaKegiatanSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            
+
             // Month 2
             [
                 'nama_agenda' => 'Workshop Penyusunan RKPD',
@@ -100,7 +100,7 @@ class AgendaKegiatanSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            
+
             // Month 3
             [
                 'nama_agenda' => 'Rapat Paripurna DPRD',
@@ -150,7 +150,7 @@ class AgendaKegiatanSeeder extends Seeder
                 $agenda
             );
         }
-        
+
         $this->command->info('Berhasil menambahkan ' . count($agendaKegiatanData) . ' data agenda kegiatan.');
     }
 }

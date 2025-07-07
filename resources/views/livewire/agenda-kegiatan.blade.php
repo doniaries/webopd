@@ -40,11 +40,19 @@
                         <tbody class="bg-white divide-y divide-gray-200">
                             @foreach ($agendas as $index => $agenda)
                                 @php
-                                    $endDate = \Carbon\Carbon::parse($agenda->sampai_tanggal ?? $agenda->dari_tanggal)->endOfDay();
+                                    $endDate = \Carbon\Carbon::parse(
+                                        $agenda->sampai_tanggal ?? $agenda->dari_tanggal,
+                                    )->endOfDay();
                                     $today = \Carbon\Carbon::today();
                                     $isPastEvent = $today->gt($endDate);
+                                    $rowClass = $isPastEvent
+                                        ? 'bg-gray-50 text-gray-500'
+                                        : ($index % 2 === 0
+                                            ? 'bg-white hover:bg-green-50'
+                                            : 'bg-gray-50 hover:bg-green-50');
+                                    $rowClass .= ' transition-colors duration-200';
                                 @endphp
-                                <tr class="transition-colors duration-200 {{ $isPastEvent ? 'bg-gray-50 text-gray-500' : ($index % 2 === 0 ? 'bg-white hover:bg-green-50' : 'bg-gray-50 hover:bg-green-50') }}">
+                                <tr class="{{ $rowClass }}">
                                     <td class="px-2 py-3 text-center text-sm text-gray-700 font-medium">
                                         <span
                                             class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-green-100 text-green-800 text-xs">
@@ -53,18 +61,33 @@
                                     </td>
                                     <td class="px-3 py-3">
                                         <div class="flex items-center">
-                                            <i class="fas fa-calendar-day text-green-500 text-lg mr-2"></i>
+                                            <i
+                                                class="fas fa-calendar-day {{ $isPastEvent ? 'text-gray-400' : 'text-green-500' }} text-lg mr-2"></i>
                                             <div class="min-w-0">
-                                                <div class="text-sm font-medium text-gray-900 truncate">
-                                                    {{ $agenda->nama_agenda }}</div>
-                                                <div class="text-xs text-gray-500 truncate">{{ $agenda->penyelenggara }}
+                                                <div class="flex items-center">
+                                                    <span
+                                                        class="text-sm font-medium {{ $isPastEvent ? 'text-gray-700' : 'text-gray-900' }} truncate">
+                                                        {{ $agenda->nama_agenda }}
+                                                    </span>
+                                                    @if ($isPastEvent)
+                                                        <span
+                                                            class="ml-2 px-2 py-0.5 text-xs font-medium bg-gray-200 text-gray-700 rounded-full">
+                                                            Selesai
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                                <div
+                                                    class="text-xs {{ $isPastEvent ? 'text-gray-400' : 'text-gray-500' }} truncate">
+                                                    {{ $agenda->penyelenggara }}
                                                 </div>
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="px-3 py-3 text-sm text-gray-700">
+                                    <td
+                                        class="px-3 py-3 text-sm {{ $isPastEvent ? 'text-gray-500' : 'text-gray-700' }}">
                                         <div class="flex items-center">
-                                            <i class="fas fa-map-marker-alt text-green-500 mr-2 flex-shrink-0"></i>
+                                            <i
+                                                class="fas fa-map-marker-alt {{ $isPastEvent ? 'text-gray-400' : 'text-green-500' }} mr-2 flex-shrink-0"></i>
                                             <span class="truncate">{{ $agenda->tempat ?? '-' }}</span>
                                         </div>
                                     </td>
@@ -85,13 +108,14 @@
                                                 <div class="text-xs mt-1">
                                                     @if ($daysDifference < 0)
                                                         <span
-                                                            class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                                                            <i class="fas fa-check-circle text-gray-500 mr-1"></i> Sudah Selesai
+                                                            class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-600 text-white">
+                                                            <i class="fas fa-check-circle text-white mr-1"></i> Sudah
+                                                            Selesai
                                                         </span>
                                                     @elseif($daysDifference == 0)
                                                         <span
-                                                            class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                                            <i class="fas fa-calendar-day text-yellow-500 mr-1"></i>
+                                                            class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-600 text-white">
+                                                            <i class="fas fa-calendar-day text-white mr-1"></i>
                                                             Hari Ini
                                                         </span>
                                                     @else
@@ -105,16 +129,18 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="px-3 py-3 text-sm text-gray-700 whitespace-nowrap">
+                                    <td
+                                        class="px-3 py-3 text-sm {{ $isPastEvent ? 'text-gray-500' : 'text-gray-700' }}">
                                         <div class="flex items-center">
-                                            <i class="far fa-clock text-green-500 mr-2 flex-shrink-0"></i>
+                                            <i
+                                                class="far fa-clock {{ $isPastEvent ? 'text-gray-400' : 'text-green-500' }} mr-2 flex-shrink-0"></i>
                                             <span>{{ \Carbon\Carbon::parse($agenda->waktu_mulai)->format('H:i') }}-{{ \Carbon\Carbon::parse($agenda->waktu_selesai)->format('H:i') }}
                                                 WIB</span>
                                         </div>
                                     </td>
                                     <td class="px-2 py-3 text-sm font-medium text-center">
                                         <a href="{{ route('agenda.show', $agenda->id) }}"
-                                            class="inline-flex items-center justify-center w-full px-2 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200">
+                                            class="inline-flex items-center justify-center w-full px-2 py-1.5 border border-transparent text-xs font-medium rounded-md {{ $isPastEvent ? 'bg-gray-300 text-gray-700 hover:bg-gray-400' : 'text-white bg-green-600 hover:bg-green-700' }} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200">
                                             <i class="far fa-eye mr-1"></i> Detail
                                         </a>
                                     </td>
