@@ -6,7 +6,7 @@
         </div>
 
         <div
-            class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl shadow-lg overflow-hidden border border-green-200">
+            class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-sm shadow-lg overflow-hidden border border-green-200">
             @if (count($agendas) > 0)
                 <div class="w-full overflow-x-auto">
                     <table class="w-full table-auto divide-y divide-green-200">
@@ -39,8 +39,12 @@
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                             @foreach ($agendas as $index => $agenda)
-                                <tr
-                                    class="hover:bg-green-50 transition-colors duration-200 {{ $index % 2 === 0 ? 'bg-white' : 'bg-gray-50' }}">
+                                @php
+                                    $endDate = \Carbon\Carbon::parse($agenda->sampai_tanggal ?? $agenda->dari_tanggal)->endOfDay();
+                                    $today = \Carbon\Carbon::today();
+                                    $isPastEvent = $today->gt($endDate);
+                                @endphp
+                                <tr class="transition-colors duration-200 {{ $isPastEvent ? 'bg-gray-50 text-gray-500' : ($index % 2 === 0 ? 'bg-white hover:bg-green-50' : 'bg-gray-50 hover:bg-green-50') }}">
                                     <td class="px-2 py-3 text-center text-sm text-gray-700 font-medium">
                                         <span
                                             class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-green-100 text-green-800 text-xs">
@@ -64,16 +68,41 @@
                                             <span class="truncate">{{ $agenda->tempat ?? '-' }}</span>
                                         </div>
                                     </td>
-                                    <td class="px-3 py-3 text-sm text-gray-700 whitespace-nowrap">
+                                    <td class="px-3 py-3 text-sm text-gray-700">
                                         <div class="flex items-center">
                                             <i class="far fa-calendar text-green-500 mr-2 flex-shrink-0"></i>
-                                            <span>
-                                                {{ indonesia_date($agenda->dari_tanggal, true) }}
-                                                @if ($agenda->sampai_tanggal && $agenda->sampai_tanggal != $agenda->dari_tanggal)
-                                                    <span class="whitespace-nowrap">-
-                                                        {{ indonesia_date($agenda->sampai_tanggal, false) }}</span>
-                                                @endif
-                                            </span>
+                                            <div>
+                                                <div>
+                                                    {{ indonesia_date($agenda->dari_tanggal, true) }}
+                                                    @if ($agenda->sampai_tanggal && $agenda->sampai_tanggal != $agenda->dari_tanggal)
+                                                        <span class="whitespace-nowrap">-
+                                                            {{ indonesia_date($agenda->sampai_tanggal, false) }}</span>
+                                                    @endif
+                                                </div>
+                                                @php
+                                                    $daysDifference = floor($today->diffInHours($endDate, false) / 24);
+                                                @endphp
+                                                <div class="text-xs mt-1">
+                                                    @if ($daysDifference < 0)
+                                                        <span
+                                                            class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                                            <i class="fas fa-check-circle text-gray-500 mr-1"></i> Sudah Selesai
+                                                        </span>
+                                                    @elseif($daysDifference == 0)
+                                                        <span
+                                                            class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                                            <i class="fas fa-calendar-day text-yellow-500 mr-1"></i>
+                                                            Hari Ini
+                                                        </span>
+                                                    @else
+                                                        <span
+                                                            class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                            <i class="far fa-calendar-alt text-blue-500 mr-1"></i>
+                                                            {{ $daysDifference }} Hari Lagi
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </div>
                                         </div>
                                     </td>
                                     <td class="px-3 py-3 text-sm text-gray-700 whitespace-nowrap">
@@ -99,64 +128,82 @@
                 <div class="bg-white px-6 py-4 border-t border-gray-200">
                     <div class="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0">
                         <div class="text-sm text-gray-600">
-                            Menampilkan <span class="font-medium">{{ $agendas->firstItem() }}</span> sampai 
-                            <span class="font-medium">{{ $agendas->lastItem() }}</span> dari 
+                            Menampilkan <span class="font-medium">{{ $agendas->firstItem() }}</span> sampai
+                            <span class="font-medium">{{ $agendas->lastItem() }}</span> dari
                             <span class="font-medium">{{ $agendas->total() }}</span> hasil
                         </div>
-                        
+
                         <nav aria-label="Page navigation">
                             <ul class="inline-flex -space-x-px text-sm">
                                 <!-- Previous Button -->
                                 @if ($agendas->onFirstPage())
                                     <li>
-                                        <span class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-400 bg-white border border-gray-300 rounded-l-lg cursor-not-allowed">
+                                        <span
+                                            class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-400 bg-white border border-gray-300 rounded-l-lg cursor-not-allowed">
                                             Sebelumnya
                                         </span>
                                     </li>
                                 @else
                                     <li>
-                                        <button wire:click="previousPage" class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700">
+                                        <button wire:click="previousPage"
+                                            class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700">
                                             Sebelumnya
                                         </button>
                                     </li>
                                 @endif
-                                
+
                                 <!-- Page Numbers -->
                                 @php
                                     $current = $agendas->currentPage();
                                     $last = $agendas->lastPage();
                                     $start = max(1, $current - 2);
                                     $end = min($last, $current + 2);
-                                    
+
                                     if ($start > 1) {
                                         echo '<li><button wire:click="gotoPage(1)" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">1</button></li>';
-                                        if ($start > 2) echo '<li><span class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500">...</span></li>';
-                                    }
-                                    
-                                    for ($i = $start; $i <= $end; $i++) {
-                                        if ($i == $current) {
-                                            echo '<li><span class="flex items-center justify-center px-3 h-8 text-white border border-green-600 bg-green-600">' . $i . '</span></li>';
-                                        } else {
-                                            echo '<li><button wire:click="gotoPage(' . $i . ')" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">' . $i . '</button></li>';
+                                        if ($start > 2) {
+                                            echo '<li><span class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500">...</span></li>';
                                         }
                                     }
-                                    
+
+                                    for ($i = $start; $i <= $end; $i++) {
+                                        if ($i == $current) {
+                                            echo '<li><span class="flex items-center justify-center px-3 h-8 text-white border border-green-600 bg-green-600">' .
+                                                $i .
+                                                '</span></li>';
+                                        } else {
+                                            echo '<li><button wire:click="gotoPage(' .
+                                                $i .
+                                                ')" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">' .
+                                                $i .
+                                                '</button></li>';
+                                        }
+                                    }
+
                                     if ($end < $last) {
-                                        if ($end < $last - 1) echo '<li><span class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500">...</span></li>';
-                                        echo '<li><button wire:click="gotoPage(' . $last . ')" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">' . $last . '</button></li>';
+                                        if ($end < $last - 1) {
+                                            echo '<li><span class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500">...</span></li>';
+                                        }
+                                        echo '<li><button wire:click="gotoPage(' .
+                                            $last .
+                                            ')" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">' .
+                                            $last .
+                                            '</button></li>';
                                     }
                                 @endphp
-                                
+
                                 <!-- Next Button -->
                                 @if ($agendas->hasMorePages())
                                     <li>
-                                        <button wire:click="nextPage" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700">
+                                        <button wire:click="nextPage"
+                                            class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700">
                                             Selanjutnya
                                         </button>
                                     </li>
                                 @else
                                     <li>
-                                        <span class="flex items-center justify-center px-3 h-8 leading-tight text-gray-400 bg-white border border-gray-300 rounded-r-lg cursor-not-allowed">
+                                        <span
+                                            class="flex items-center justify-center px-3 h-8 leading-tight text-gray-400 bg-white border border-gray-300 rounded-r-lg cursor-not-allowed">
                                             Selanjutnya
                                         </span>
                                     </li>

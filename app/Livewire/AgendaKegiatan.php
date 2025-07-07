@@ -59,32 +59,21 @@ class AgendaKegiatan extends Component
 
     public function render()
     {
-        // Debug: Tampilkan parameter query
-        \Log::info('Query parameters:', [
-            'month' => $this->currentMonth,
-            'year' => $this->currentYear,
-            'search' => $this->search
-        ]);
-
-        $query = \App\Models\AgendaKegiatan::where('dari_tanggal', '>=', now()->toDateString())
-            ->orderBy('dari_tanggal', 'asc')
-            ->orderBy('waktu_mulai', 'asc');
+        $query = \App\Models\AgendaKegiatan::query()
+            ->where('dari_tanggal', '>=', now()->toDateString())
+            ->orderBy('dari_tanggal')
+            ->orderBy('waktu_mulai');
 
         if ($this->search) {
-            $query->where(function ($q) {
-                $q->where('nama_agenda', 'like', '%' . $this->search . '%')
-                    ->orWhere('uraian_agenda', 'like', '%' . $this->search . '%')
-                    ->orWhere('tempat', 'like', '%' . $this->search . '%');
+            $searchTerm = '%' . $this->search . '%';
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('nama_agenda', 'like', $searchTerm)
+                  ->orWhere('uraian_agenda', 'like', $searchTerm)
+                  ->orWhere('tempat', 'like', $searchTerm);
             });
         }
 
         $agendas = $query->paginate($this->perPage);
-
-        // Debug: Tampilkan data yang ditemukan
-        \Log::info('Agendas found:', [
-            'count' => $agendas->count(),
-            'items' => $agendas->toArray()
-        ]);
 
         return view('livewire.agenda-kegiatan', [
             'agendas' => $agendas,
