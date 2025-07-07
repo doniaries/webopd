@@ -88,9 +88,9 @@
 
     <!-- Main JS File -->
     <script src="{{ asset('assets/js/main.js') }}"></script>
+    <script src="{{ asset('assets/js/flowbite.min.js') }}"></script>
     @if (!request()->routeIs('login'))
     @endif
-    <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
     @stack('scripts')
 
 </body>
