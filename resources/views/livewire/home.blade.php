@@ -466,7 +466,7 @@
         <!-- Section External Links -->
         <section id="external-links" class="external-links-section section">
             <div class="mt-8">
-                @livewire('external-links', ['limit' => 8])
+                <livewire:external-links />
             </div>
         </section>
     </div>

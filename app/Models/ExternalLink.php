@@ -7,16 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class ExternalLink extends Model
 {
     protected $fillable = [
-        'nama',
+        'nama_link',
         'url',
-        'icon',
-        'deskripsi',
-        'status',
-        'urutan'
-    ];
+        'logo',
 
-    protected $casts = [
-        'status' => 'string',
-        'urutan' => 'integer'
     ];
 }

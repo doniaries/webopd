@@ -18,13 +18,17 @@ class ExternalLinks extends Component
 
     public function loadLinks()
     {
-        $this->links = ExternalLink::orderBy('nama')
+        $this->links = ExternalLink::orderBy('nama_link')
             ->limit($this->limit)
             ->get();
     }
 
     public function render()
     {
-        return view('livewire.external-links');
+        $links = ExternalLink::all();
+
+        return view('livewire.external-links', [
+            'links' => $links
+        ]);
     }
 }

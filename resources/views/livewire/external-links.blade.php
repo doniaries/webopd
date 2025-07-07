@@ -1,36 +1,85 @@
-<!-- resources/views/livewire/external-links.blade.php -->
-@if ($links->count() > 0)
-    <section class="py-5" style="background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);">
-        <div class="container">
-            <div class="section-title text-center mb-5">
-                <h2 class="text-white">Link Terkait</h2>
-            </div>
+{{-- <div x-data="{ test: 'Alpine is working!' }" x-text="test"></div> --}}
 
-            <div class="row justify-content-center">
-                @foreach ($links as $link)
-                    <div class="col-6 col-md-3 mb-4">
+@if ($links->count() > 0)
+    <div x-data="{
+        scrollContainer: null,
+        scrollInterval: null,
+        init() {
+            this.$nextTick(() => {
+                this.scrollContainer = this.$refs.scrollContainer;
+                if (this.scrollContainer) {
+                    this.startAutoScroll();
+                }
+            });
+        },
+        startAutoScroll() {
+            if (!this.scrollContainer) return;
+            
+            // Clear any existing interval to prevent duplicates
+            if (this.scrollInterval) {
+                clearInterval(this.scrollInterval);
+            }
+
+            this.scrollInterval = setInterval(() => {
+                try {
+                    if (!this.scrollContainer) {
+                        clearInterval(this.scrollInterval);
+                        return;
+                    }
+                    
+                    if (this.scrollContainer.scrollLeft + this.scrollContainer.offsetWidth >=
+                        this.scrollContainer.scrollWidth - 50) {
+                        this.scrollContainer.scrollTo({
+                            left: 0,
+                            behavior: 'smooth'
+                        });
+                    } else {
+                        this.scrollContainer.scrollBy({
+                            left: 1,
+                            behavior: 'smooth'
+                        });
+                    }
+                } catch (error) {
+                    console.error('Auto-scroll error:', error);
+                    clearInterval(this.scrollInterval);
+                }
+            }, 30);
+        },
+        stopAutoScroll() {
+            if (this.scrollInterval) {
+                clearInterval(this.scrollInterval);
+                this.scrollInterval = null;
+            }
+        }
+    }" x-init="init()" class="py-8 bg-gray-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="relative group">
+                <div x-ref="scrollContainer" @mouseenter="stopAutoScroll()" @mouseleave="startAutoScroll()"
+                    class="flex space-x-6 pb-6 overflow-x-auto scrollbar-hide snap-x snap-mandatory scroll-smooth">
+                    @foreach ($links as $link)
                         <a href="{{ $link->url }}" target="_blank" rel="noopener noreferrer"
-                            class="text-decoration-none">
-                            <div class="card h-100 border-0 shadow-sm hover-lift">
-                                <div class="card-body text-center p-3">
-                                    <div class="icon-wrapper mb-3">
-                                        @if($link->icon)
-                                            <i class="{{ $link->icon }} fa-2x text-primary"></i>
-                                        @else
-                                            <div class="default-logo">
-                                                <span class="text-2xl font-bold text-primary">{{ substr($link->name, 0, 2) }}</span>
-                                            </div>
-                                        @endif
+                            class="hover-lift group flex-shrink-0 w-40 h-40 bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 p-4 flex flex-col snap-center">
+                            <div class="icon-wrapper mb-3">
+                                @if ($link->logo)
+                                    <img src="{{ asset('storage/' . $link->logo) }}" alt="{{ $link->nama_link }}"
+                                        class="h-full w-full object-cover rounded-full">
+                                @else
+                                    <div class="h-full w-full flex items-center justify-center bg-blue-50 rounded-full">
+                                        <span class="text-xl font-bold text-blue-700">
+                                            {{ strtoupper(substr($link->nama_link, 0, 2)) }}
+                                        </span>
                                     </div>
-                                    <h6 class="card-title mb-0">{{ $link->name }}</h6>
-                                </div>
+                                @endif
                             </div>
+                            <h3 class="card-title">
+                                {{ $link->nama_link }}
+                            </h3>
                         </a>
-                    </div>
-                @endforeach
+                    @endforeach
+                </div>
             </div>
         </div>
-    </section>
+    </div>
 
     @push('styles')
         <style>
@@ -56,6 +105,7 @@
                 background: rgba(13, 110, 253, 0.1);
                 border-radius: 50%;
                 transition: all 0.3s ease;
+                overflow: hidden;
             }
 
             .hover-lift:hover .icon-wrapper {
@@ -63,27 +113,26 @@
                 transform: scale(1.05);
             }
 
-            .card {
-                height: 100%;
-                display: flex;
-                flex-direction: column;
-                border: none;
-                transition: all 0.3s ease;
-            }
-
-            .card-body {
-                flex: 1;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                padding: 1.5rem 1rem;
-                justify-content: space-between;
-            }
-
             .card-title {
-                font-size: 0.9rem;
+                font-size: 0.875rem;
                 font-weight: 600;
                 margin-top: auto;
+                color: #1a202c;
+                line-height: 1.4;
+                text-align: center;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+
+            .scrollbar-hide {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+
+            .scrollbar-hide::-webkit-scrollbar {
+                display: none;
             }
         </style>
     @endpush
