@@ -97,6 +97,7 @@ class PostResource extends Resource
                                             ->description('Gambar tambahan untuk konten artikel')
                                             ->schema([
                                                 Forms\Components\Repeater::make('postGallery')
+                                                    ->relationship()
                                                     ->schema([
                                                         Forms\Components\FileUpload::make('image_path')
                                                             ->label('Gambar')
@@ -106,8 +107,9 @@ class PostResource extends Resource
                                                             ->imageEditor()
                                                             ->imageResizeMode('cover')
                                                             ->optimize('webp')
-                                                            ->maxSize(2048),
-
+                                                            ->maxSize(2048)
+                                                            ->disk('public')
+                                                            ->preserveFilenames(),
                                                     ])
                                                     ->columns(2)
                                                     ->columnSpanFull()
@@ -115,7 +117,9 @@ class PostResource extends Resource
                                                     ->reorderable()
                                                     ->cloneable()
                                                     ->collapsible()
-                                                    ->itemLabel(fn(array $state): ?string => 'Gambar'),
+                                                    ->itemLabel(fn(array $state): ?string => 'Gambar')
+                                                    ->createItemButtonLabel('Tambah Gambar')
+                                                    ->defaultItems(0),
                                             ])->columnSpan(1),
                                     ])->columnSpan(['lg' => 3]),
                             ])->columnSpan(['lg' => 3]),
@@ -289,8 +293,23 @@ class PostResource extends Resource
     public static function getRelations(): array
     {
         return [
-            // RelationManagers\ImagesRelationManager::class,
+            //
         ];
+    }
+
+    public static function afterCreate(Post $record, array $data): void
+    {
+        if (isset($data['postGallery'])) {
+            $record->postGallery()->createMany($data['postGallery']);
+        }
+    }
+
+    public static function afterEdit(Post $record, array $data): void
+    {
+        if (isset($data['postGallery'])) {
+            $record->postGallery()->delete();
+            $record->postGallery()->createMany($data['postGallery']);
+        }
     }
 
     public static function getPages(): array

@@ -151,7 +151,7 @@ class Post extends Model
 
     public function postGallery()
     {
-        return $this->hasMany(PostGallery::class, 'post_id');
+        return $this->hasMany(PostGallery::class);
     }
 
     /**
