@@ -178,6 +178,7 @@
         <div class="h-16 bg-white"></div>
         <!-- Agenda Section -->
         <livewire:agenda-kegiatan />
+        <livewire:pengumuman />
         {{-- <div class="mt-12 bg-gray-200">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-10">
