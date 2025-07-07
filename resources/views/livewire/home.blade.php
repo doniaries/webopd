@@ -10,7 +10,8 @@
     <div class="space-y-8">
         <livewire:slider />
         <!-- Berita Section -->
-        <section id="berita-informasi" class="features" style="margin: 1.5rem 0 0 0; padding: 0;">
+        <section id="berita-informasi" class="features pb-8 border-b border-gray-200"
+            style="margin: 1.5rem 0 0 0; padding: 0;">
             <div class="container-fluid px-4">
                 <div class="row g-4">
                     <!-- Berita Terbaru Column -->
@@ -173,25 +174,136 @@
                 </div>
             </div>
         </section>
+
+
         <!-- Agenda Section -->
-        <section class="w-full bg-white py-8 px-4">
-            <div class="max-w-7xl mx-auto">
-                <!-- Kolom Agenda -->
-                <div class="bg-white shadow-md rounded-lg overflow-hidden border border-gray-200">
-                    <h3
-                        class="text-center text-green-800 text-lg font-semibold py-3 border-b border-green-200 bg-green-50">
-                        <i class="far fa-calendar-alt text-green-600 mr-2" style="display: inline-block;"></i>
-                        Agenda Kegiatan
-                    </h3>
-                    <div class="p-6">
-                        <livewire:agenda-kegiatan />
+        <div class="mt-12 py-16 bg-gray-100 border-t border-b border-gray-300">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-3">Agenda Kegiatan Terkini</h2>
+                    <p class="text-lg text-gray-600">Jadwal dan informasi kegiatan terbaru</p>
+                </div>
+
+                <div
+                    class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl shadow-lg overflow-hidden border border-green-200 w-full">
+                    <div class="w-full">
+                        <table class="w-full divide-y divide-green-200 table-fixed">
+                            <thead class="bg-green-600">
+                                <tr>
+                                    <th scope="col"
+                                        class="w-12 px-3 py-3 text-center text-xs font-medium text-white uppercase tracking-wider">
+                                        <i class="fas fa-hashtag"></i>
+                                    </th>
+                                    <th scope="col"
+                                        class="px-4 py-3 text-left text-xs font-medium text-white uppercase tracking-wider w-2/5">
+                                        <i class="far fa-calendar-alt mr-2"></i>Nama Kegiatan
+                                    </th>
+                                    <th scope="col"
+                                        class="px-4 py-3 text-left text-xs font-medium text-white uppercase tracking-wider w-1/6">
+                                        <i class="fas fa-map-marker-alt mr-2"></i>Lokasi
+                                    </th>
+                                    <th scope="col"
+                                        class="px-4 py-3 text-left text-xs font-medium text-white uppercase tracking-wider w-1/6">
+                                        <i class="far fa-clock mr-2"></i>Waktu
+                                    </th>
+                                    <th scope="col"
+                                        class="px-4 py-3 text-center text-xs font-medium text-white uppercase tracking-wider w-1/6">
+                                        <i class="fas fa-info-circle mr-1"></i>Detail
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                @php
+                                    $recentAgendas = \App\Models\AgendaKegiatan::query()
+                                        ->where('dari_tanggal', '>=', now())
+                                        ->orWhere('sampai_tanggal', '>=', now())
+                                        ->orderBy('dari_tanggal')
+                                        ->take(5)
+                                        ->get();
+                                @endphp
+
+                                @forelse($recentAgendas as $index => $agenda)
+                                    <tr
+                                        class="hover:bg-green-50 transition-colors duration-200 {{ $index % 2 === 0 ? 'bg-white' : 'bg-green-50' }}">
+                                        <td class="px-3 py-3 text-center text-sm text-gray-700 font-medium w-12">
+                                            <span
+                                                class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-green-100 text-green-800 text-xs">
+                                                {{ $index + 1 }}
+                                            </span>
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap w-2/5">
+                                            <div class="flex items-center">
+                                                <i class="fas fa-calendar-day text-green-500 text-lg mr-3"></i>
+                                                <div>
+                                                    <div class="text-sm font-medium text-gray-900">
+                                                        {{ $agenda->nama_agenda }}</div>
+                                                    @if ($agenda->kategori)
+                                                        <span
+                                                            class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800 mt-1">
+                                                            {{ $agenda->kategori }}
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap w-1/6 text-sm text-gray-700">
+                                            <div class="flex items-center">
+                                                <i class="fas fa-map-marker-alt text-green-500 mr-2"></i>
+                                                <span class="truncate">{{ $agenda->tempat ?? '-' }}</span>
+                                            </div>
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap w-1/6">
+                                            <div class="text-sm text-gray-700">
+                                                <div class="flex items-center">
+                                                    <i class="far fa-calendar-alt text-green-500 mr-2"></i>
+                                                    <span>{{ indonesia_date($agenda->dari_tanggal, true) }}</span>
+                                                </div>
+                                                @if ($agenda->sampai_tanggal && $agenda->sampai_tanggal != $agenda->dari_tanggal)
+                                                    <div class="text-xs text-gray-500 ml-6">
+                                                        s/d {{ indonesia_date($agenda->sampai_tanggal, false) }}
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap w-1/6 text-sm font-medium text-center">
+                                            <a href="{{ route('agenda.show', $agenda->id) }}"
+                                                class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200">
+                                                <i class="far fa-eye mr-1"></i> Detail
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="5" class="px-6 py-4 text-center text-gray-500">
+                                            <div class="flex flex-col items-center justify-center py-8">
+                                                <i class="far fa-calendar-times text-4xl text-gray-300 mb-2"></i>
+                                                <p class="text-gray-500">Tidak ada agenda yang akan datang</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="bg-green-600 px-6 py-4 flex items-center justify-between border-t border-green-500">
+                        <div class="text-sm text-white">
+                            <i class="far fa-calendar-alt mr-2"></i>
+                            Menampilkan {{ min(5, count($recentAgendas)) }} dari {{ count($recentAgendas) }} agenda
+                            terdekat
+                        </div>
+                        <a href="{{ route('agenda.index') }}"
+                            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-green-700 bg-white hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200">
+                            Lihat Semua Agenda
+                            <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
 
         <!-- Dokumen Section -->
-        <div class="py-12 bg-white">
+        <div class="py-12 bg-gray-100">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-10">
                     <h2 class="text-3xl font-bold text-gray-900 mb-3">Dokumen Terbaru</h2>
