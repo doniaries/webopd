@@ -24,10 +24,12 @@ class ExternalLinkResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('nama_link')
                     ->label('Nama Link')
+                    ->placeholder('contoh: Facebook')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('url')
                     ->label('URL')
+                    ->placeholder('contoh: https://www.google.com')
                     ->url()
                     ->required()
                     ->maxLength(255),

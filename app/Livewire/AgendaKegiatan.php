@@ -66,9 +66,9 @@ class AgendaKegiatan extends Component
             'search' => $this->search
         ]);
 
-        $query = \App\Models\AgendaKegiatan::whereMonth('dari_tanggal', $this->currentMonth)
-            ->whereYear('dari_tanggal', $this->currentYear)
-            ->orderBy('dari_tanggal', 'asc');
+        $query = \App\Models\AgendaKegiatan::where('dari_tanggal', '>=', now()->toDateString())
+            ->orderBy('dari_tanggal', 'asc')
+            ->orderBy('waktu_mulai', 'asc');
 
         if ($this->search) {
             $query->where(function ($q) {
