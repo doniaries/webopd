@@ -24,7 +24,6 @@ class Post extends Model
         'slug',
         'content',
         'foto_utama',
-        'gallery_images',
         'user_id',
         'status',
         'published_at',
@@ -32,10 +31,9 @@ class Post extends Model
         'is_featured',
     ];
 
-    protected $with = ['user', 'tags'];
+    protected $with = ['user', 'tags', 'PostGallery'];
 
     protected $casts = [
-        'gallery_images' => 'array',
         'published_at' => 'datetime',
         'is_featured' => 'boolean',
         'views' => 'integer',
@@ -58,7 +56,7 @@ class Post extends Model
      */
     protected $slugField = 'slug';
 
-    protected $appends = ['foto_utama_url', 'gallery_images_urls', 'excerpt'];
+    protected $appends = ['foto_utama_url', 'excerpt'];
 
 
     /**
@@ -151,39 +149,9 @@ class Post extends Model
         ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     }
 
-
-
-    public function getGalleryImagesUrlsAttribute()
+    public function postGallery()
     {
-        if (empty($this->gallery_images)) {
-            return [];
-        }
-
-        $photos = is_array($this->gallery_images) ? $this->gallery_images : json_decode($this->gallery_images, true);
-
-        if (!is_array($photos)) {
-            return [];
-        }
-
-        return collect($photos)->map(function ($photo) {
-            if (filter_var($photo, FILTER_VALIDATE_URL)) {
-                return $photo;
-            }
-
-            $imagePath = trim($photo, '/');
-            if (Storage::disk('public')->exists($imagePath)) {
-                return asset('storage/' . $imagePath);
-            }
-
-            if (strpos($imagePath, 'gallery-images/') === false) {
-                $imagePath = 'gallery-images/' . $imagePath;
-                if (Storage::disk('public')->exists($imagePath)) {
-                    return asset('storage/' . $imagePath);
-                }
-            }
-
-            return $photo; // Return as is if not found in storage
-        })->toArray();
+        return $this->hasMany(PostGallery::class, 'post_id');
     }
 
     /**

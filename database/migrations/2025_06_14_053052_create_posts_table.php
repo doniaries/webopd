@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('slug');
             $table->text('content');
             $table->string('foto_utama')->nullable()->comment('Foto utama/cover untuk postingan');
-            $table->json('gallery_images')->nullable()->comment('Daftar path gambar tambahan');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->enum('status', ['draft', 'published', 'archived'])->default('draft');
             $table->dateTime('published_at')->nullable();
@@ -26,7 +25,6 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            // Add composite unique constraint for team_id and slug
 
             // Add indexes for better performance
             $table->index('status');

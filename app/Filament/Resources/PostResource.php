@@ -96,24 +96,26 @@ class PostResource extends Resource
                                         Forms\Components\Section::make('Gambar Tambahan')
                                             ->description('Gambar tambahan untuk konten artikel')
                                             ->schema([
-                                                Forms\Components\FileUpload::make('foto_tambahan')
+                                                Forms\Components\Repeater::make('postGallery')
+                                                    ->schema([
+                                                        Forms\Components\FileUpload::make('image_path')
+                                                            ->label('Gambar')
+                                                            ->directory('post-gallery')
+                                                            ->image()
+                                                            ->required()
+                                                            ->imageEditor()
+                                                            ->imageResizeMode('cover')
+                                                            ->optimize('webp')
+                                                            ->maxSize(2048),
+
+                                                    ])
+                                                    ->columns(2)
+                                                    ->columnSpanFull()
                                                     ->label('Galeri Gambar')
-                                                    ->helperText('Gambar tambahan untuk konten artikel')
-                                                    ->multiple()
-                                                    ->directory('gallery-images')
-                                                    ->image()
-                                                    ->imageResizeMode('cover')
-                                                    ->optimize('webp')
-                                                    ->maxSize(1024)
-                                                    ->openable()
-                                                    ->previewable()
-                                                    ->afterStateUpdated(function ($state) {
-                                                        if (!is_array($state)) {
-                                                            return [$state];
-                                                        }
-                                                        return $state;
-                                                    })
-                                                    ->dehydrated(fn($state) => filled($state)),
+                                                    ->reorderable()
+                                                    ->cloneable()
+                                                    ->collapsible()
+                                                    ->itemLabel(fn(array $state): ?string => 'Gambar'),
                                             ])->columnSpan(1),
                                     ])->columnSpan(['lg' => 3]),
                             ])->columnSpan(['lg' => 3]),
@@ -168,6 +170,8 @@ class PostResource extends Resource
                     ])->columns(['lg' => 4])
             ]);
     }
+
+
 
     public static function table(Table $table): Table
     {

@@ -337,6 +337,32 @@
                     {!! $post->content !!}
                 </div>
 
+                <!-- Gallery Images -->
+                @if($post->postGallery && $post->postGallery->isNotEmpty())
+                    <div class="mt-12 mb-12">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-6">Galeri Foto</h2>
+                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                            @foreach($post->postGallery as $galleryImage)
+                                @php
+                                    $imageUrl = Storage::url($galleryImage->image_path);
+                                    $imageAlt = 'Galeri Gambar ' . $loop->iteration;
+                                @endphp
+                                <div class="relative group overflow-hidden rounded-lg">
+                                    <a href="{{ $imageUrl }}" data-fancybox="gallery" data-caption="{{ $imageAlt }}">
+                                        <img src="{{ $imageUrl }}" 
+                                             alt="{{ $imageAlt }}"
+                                             class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+                                             onerror="this.onerror=null; this.src='data:image/svg+xml;charset=UTF-8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100%\' height=\'100%\' viewBox=\'0 0 400 300\'><rect width=\'100%\' height=\'100%\' fill=\'%23f3f4f6\'/><text x=\'50%\' y=\'50%\' font-family=\'sans-serif\' font-size=\'14\' text-anchor=\'middle\' dominant-baseline=\'middle\' fill=\'%239ca3af\'>Gambar tidak tersedia</text></svg>';"
+                                        >
+                                    </a>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+
+                <div class="border-t border-gray-200 my-8"></div>
+
                 <!-- Related Posts -->
                 @if ($relatedPosts->count() > 0)
                     <div class="mt-12">

@@ -163,7 +163,6 @@ class PostSeeder extends Seeder
             
                             'views' => $this->faker->numberBetween(10, 1000),
                             'foto_utama' => $placeholder, // Simpan placeholder SVG
-                            'gallery_images' => [], // Kosongkan gallery
                             'is_featured' => $isFeatured,
                             'created_at' => $postDate,
                             'updated_at' => $postDate,
