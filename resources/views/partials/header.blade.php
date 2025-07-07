@@ -1042,6 +1042,7 @@
                             class="{{ request()->routeIs('pengumuman.*') ? 'active' : '' }}">Pengumuman</a></li>
                     <li style="margin-left: 20px;"><a href="{{ route('kontak') }}"
                             class="{{ request()->routeIs('kontak') ? 'active' : '' }}">Kontak</a></li>
+
                 </ul>
             </nav>
         </div>

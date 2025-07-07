@@ -15,6 +15,12 @@ class PengumumanDetail extends Component
     {
         $this->pengumuman = Pengumuman::where('slug', $pengumuman)->firstOrFail();
         $this->slug = $pengumuman;
+        
+        // Increment view count
+        $this->pengumuman->incrementViewCount();
+        
+        // Refresh the model to get updated view counts
+        $this->pengumuman->refresh();
     }
 
     #[Title('Detail Pengumuman')]

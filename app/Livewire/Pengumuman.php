@@ -12,15 +12,25 @@ class Pengumuman extends Component
     
     protected $paginationTheme = 'bootstrap';
     public $perPage = 10;
+    public $limit = null;
+    public $showPagination = true;
 
     public function render()
     {
-        $pengumuman = PengumumanModel::latest('published_at')
-            ->where('published_at', '<=', now())
-            ->paginate($this->perPage);
+        $query = PengumumanModel::latest('published_at')
+            ->where('published_at', '<=', now());
+            
+        if ($this->limit) {
+            // Always use paginate with a large number to effectively disable pagination
+            $pengumuman = $query->paginate($this->limit);
+            $this->showPagination = false;
+        } else {
+            $pengumuman = $query->paginate($this->perPage);
+        }
 
         return view('livewire.pengumuman', [
-            'pengumuman' => $pengumuman
+            'pengumuman' => $pengumuman,
+            'showPagination' => $this->showPagination
         ]);
     }
 }

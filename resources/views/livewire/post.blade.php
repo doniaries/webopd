@@ -269,9 +269,24 @@
             </div>
 
             <!-- Pagination -->
-            <div class="mt-8">
-                {{ $posts->links() }}
-            </div>
+            @if($showPagination && $posts->hasPages())
+                <div class="mt-8 px-4">
+                    <div class="flex flex-col sm:flex-row items-center justify-between">
+                        <div class="text-sm text-gray-700 mb-4 sm:mb-0">
+                            Menampilkan 
+                            <span class="font-medium">{{ $posts->firstItem() }}</span>
+                            sampai 
+                            <span class="font-medium">{{ $posts->lastItem() }}</span>
+                            dari 
+                            <span class="font-medium">{{ $posts->total() }}</span>
+                            hasil
+                        </div>
+                        <div class="flex items-center space-x-1">
+                            {{ $posts->links('pagination::tailwind') }}
+                        </div>
+                    </div>
+                </div>
+            @endif
         </div>
     @else
         <!-- Single Post View -->

@@ -198,7 +198,7 @@ class Post extends Component
         $posts = $this->getPosts();
 
         // Prepare view data for index view
-        return view('livewire.post', [
+        $viewData = [
             'posts' => $posts,
             'search' => $this->search,
             'tag' => $this->tag,
@@ -208,6 +208,13 @@ class Post extends Component
             'columns' => $this->columns,
             'showPagination' => $this->showPagination,
             'view' => 'index'
-        ]);
+        ];
+
+        // Add pagination links if pagination is enabled
+        if ($this->showPagination && method_exists($posts, 'links')) {
+            $viewData['posts']->withPath(\Illuminate\Support\Facades\Request::url());
+        }
+
+        return view('livewire.post', $viewData);
     }
 }

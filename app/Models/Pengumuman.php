@@ -19,7 +19,15 @@ class Pengumuman extends Model
         'isi',
         'file',
         'published_at',
+        'views',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+    }
+
+    protected $appends = ['view_count_formatted'];
 
     protected $casts = [
         'published_at' => 'datetime',
@@ -38,6 +46,32 @@ class Pengumuman extends Model
      * @var string
      */
     protected $slugField = 'slug';
+
+    /**
+     * Increment the view count
+     */
+    public function incrementViewCount()
+    {
+        $this->increment('views');
+    }
+
+    /**
+     * Get formatted view count
+     */
+    public function getViewCountFormattedAttribute()
+    {
+        $viewCount = $this->views ?? 0;
+
+        if ($viewCount >= 1000000) {
+            return number_format($viewCount / 1000000, 1) . 'jt';
+        }
+
+        if ($viewCount >= 1000) {
+            return number_format($viewCount / 1000, 1) . 'rb';
+        }
+
+        return $viewCount;
+    }
 
     public function getPublishedAtFormattedAttribute()
     {

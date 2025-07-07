@@ -22,11 +22,9 @@ class TagResource extends Resource
     protected static ?string $modelLabel = 'Tag';
     protected static ?string $pluralModelLabel = 'Tag';
     protected static ?int $navigationSort = 2;
+    protected static ?string $navigationGroup = 'Postingan';
 
-    public static function getNavigationGroup(): ?string
-    {
-        return 'Konten';
-    }
+
 
     public static function form(Form $form): Form
     {

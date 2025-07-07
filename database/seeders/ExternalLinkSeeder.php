@@ -16,32 +16,32 @@ class ExternalLinkSeeder extends Seeder
             [
                 'nama_link' => 'Dinas Koperasi dan UKM',
                 'url' => 'https://kukm.kemendag.go.id/',
-                'logo' => 'external-links/placeholder2.jpg',
+                'logo' => 'https://via.placeholder.com/100',
             ],
             [
                 'nama_link' => 'Kementerian Koperasi dan UKM',
                 'url' => 'https://kemenkopukm.go.id/',
-                'logo' => 'external-links/placeholder2.jpg',
+                'logo' => 'https://via.placeholder.com/100',
             ],
             [
                 'nama_link' => 'Layanan Perizinan Berusaha',
                 'url' => 'https://oss.go.id/',
-                'logo' => 'external-links/placeholder2.jpg',
+                'logo' => 'https://via.placeholder.com/100',
             ],
             [
                 'nama_link' => 'BPJS Ketenagakerjaan',
                 'url' => 'https://www.bpjsketenagakerjaan.go.id/',
-                'logo' => 'external-links/placeholder2.jpg',
+                'logo' => 'https://via.placeholder.com/100',
             ],
             [
                 'nama_link' => 'BPJS Kesehatan',
                 'url' => 'https://www.bpjs-kesehatan.go.id/',
-                'logo' => 'external-links/placeholder2.jpg',
+                'logo' => 'https://via.placeholder.com/100',
             ],
             [
                 'nama_link' => 'Dinas Tenaga Kerja',
                 'url' => 'https://disnaker.kemnaker.go.id/',
-                'logo' => 'external-links/placeholder2.jpg',
+                'logo' => 'https://via.placeholder.com/100',
             ],
         ];
 

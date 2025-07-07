@@ -16,7 +16,7 @@ class ExternalLinkResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-link';
     protected static ?string $modelLabel = 'Link Eksternal';
     protected static ?string $navigationLabel = 'Link Eksternal';
-    protected static ?string $navigationGroup = 'Pengaturan';
+    protected static ?string $navigationGroup = 'Konten';
 
     public static function form(Form $form): Form
     {

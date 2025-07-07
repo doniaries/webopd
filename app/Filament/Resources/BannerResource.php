@@ -26,13 +26,11 @@ class BannerResource extends Resource
     protected static ?string $modelLabel = 'Banner';
     protected static ?string $pluralModelLabel = 'Banner';
     protected static ?int $navigationSort = 2;
+    protected static ?string $navigationGroup = 'Konten';
 
 
 
-    public static function getNavigationGroup(): ?string
-    {
-        return 'Konten';
-    }
+
 
     public static function form(Form $form): Form
     {
@@ -41,6 +39,7 @@ class BannerResource extends Resource
 
                 Forms\Components\FileUpload::make('gambar')
                     ->label('Foto Banner')
+                    ->default('https://via.placeholder.com/100')
                     ->directory('banners')
                     ->image()
                     ->imageEditor()

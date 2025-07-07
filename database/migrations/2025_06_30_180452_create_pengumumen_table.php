@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('slug')->nullable();
             $table->text('isi')->nullable();
             $table->string('file')->nullable();
+            $table->integer('views')->default(0);
             $table->timestamp('published_at')->nullable();
             $table->timestamps();
             $table->softDeletes();

@@ -18,6 +18,11 @@ class PengumumanResource extends Resource
     protected static ?string $model = Pengumuman::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationLabel = 'Pengumuman';
+    protected static ?string $modelLabel = 'Pengumuman';
+    protected static ?string $pluralModelLabel = 'Pengumuman';
+    protected static ?string $navigationGroup = 'Konten';
+
 
     public static function form(Form $form): Form
     {
@@ -70,6 +75,8 @@ class PengumumanResource extends Resource
                 Tables\Columns\TextColumn::make('slug')
                     ->hidden(),
                 Tables\Columns\TextColumn::make('file')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('views')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('published_at')
                     ->dateTime()

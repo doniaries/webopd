@@ -85,6 +85,10 @@ class AdminPanelProvider extends PanelProvider
                     ->icon('heroicon-o-rectangle-stack')
                     ->collapsed(),
                 NavigationGroup::make()
+                    ->label('Postingan')
+                    ->icon('heroicon-o-newspaper')
+                    ->collapsed(),
+                NavigationGroup::make()
                     ->label('Instansi')
                     ->icon('heroicon-o-building-office-2')
                     ->collapsed(),

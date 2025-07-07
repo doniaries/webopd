@@ -1,4 +1,4 @@
-<div class="py-12 bg-gray-50">
+<div class="py-12 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-10">
             <h2 class="text-3xl font-bold text-gray-900 mb-3">Daftar Seluruh Agenda</h2>
@@ -6,7 +6,7 @@
         </div>
 
         <div
-            class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-sm shadow-lg overflow-hidden border border-green-200">
+            class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg shadow-md overflow-hidden border border-green-200">
             @if (count($agendas) > 0)
                 <div class="w-full overflow-x-auto">
                     <table class="w-full table-auto divide-y divide-green-200">
