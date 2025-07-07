@@ -83,7 +83,7 @@ class Home extends Component
             $this->loadBanners();
 
             // Get active sliders
-            $this->sliders = Slider::active()->orderBy('urutan')->get() ?? [];
+            $this->sliders = Slider::active()->get() ?? [];
 
             // Get agenda (events)
             $agenda = \App\Models\AgendaKegiatan::where('dari_tanggal', '>=', now()->toDateString())

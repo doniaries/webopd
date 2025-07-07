@@ -11,7 +11,7 @@ class Slider extends Model
     ];
 
     protected $casts = [
-        'urutan' => 'integer',
+        //
     ];
 
 
@@ -36,5 +36,19 @@ class Slider extends Model
     public function post()
     {
         return $this->belongsTo(Post::class);
+    }
+
+    /**
+     * Scope a query to only include active sliders.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeActive($query)
+    {
+        return $query->whereHas('post', function ($q) {
+            $q->where('status', 'published')
+                ->where('published_at', '<=', now());
+        });
     }
 }

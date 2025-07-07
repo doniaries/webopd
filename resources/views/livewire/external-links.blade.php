@@ -1,60 +1,103 @@
 {{-- <div x-data="{ test: 'Alpine is working!' }" x-text="test"></div> --}}
 
 @if ($links->count() > 0)
-    <div x-data="{
-        scrollContainer: null,
+    <script>
+        document.addEventListener('livewire:init', () => {
+            Livewire.hook('morph.updated', ({ el, component }) => {
+                // Dispatch event when Livewire updates the content
+                window.dispatchEvent(new CustomEvent('content-updated'));
+            });
+        });
+        
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('externalLinksScroll', () => ({
+                scrollContainer: null,
         scrollInterval: null,
+        isScrolling: true,
+        scrollStep: 1,
+        scrollSpeed: 30,
         init() {
-            this.$nextTick(() => {
-                this.scrollContainer = this.$refs.scrollContainer;
-                if (this.scrollContainer) {
-                    this.startAutoScroll();
-                }
+            console.log('Component initialized');
+            this.initScroll();
+            
+            // Listen for Livewire's content updated event
+            window.addEventListener('content-updated', () => {
+                console.log('Content updated, reinitializing scroll');
+                this.initScroll();
             });
         },
-        startAutoScroll() {
-            if (!this.scrollContainer) return;
+        initScroll() {
+            // Clear any existing interval
+            this.stopAutoScroll();
             
-            // Clear any existing interval to prevent duplicates
-            if (this.scrollInterval) {
-                clearInterval(this.scrollInterval);
+            // Try to find the scroll container
+            this.scrollContainer = this.$refs.scrollContainer;
+            
+            if (this.scrollContainer) {
+                console.log('Scroll container found:', this.scrollContainer);
+                this.startAutoScroll();
+            } else {
+                console.warn('Scroll container not found, retrying in 100ms');
+                // Retry after a short delay
+                setTimeout(() => this.initScroll(), 100);
             }
-
+        },
+        startAutoScroll() {
+            if (!this.scrollContainer) {
+                console.error('Cannot start scroll: container not found');
+                return;
+            }
+            
+            // Clear any existing interval
+            this.stopAutoScroll();
+            
+            console.log('Starting auto-scroll');
+            this.isScrolling = true;
+            
             this.scrollInterval = setInterval(() => {
+                if (!this.scrollContainer || !this.isScrolling) return;
+                
                 try {
-                    if (!this.scrollContainer) {
-                        clearInterval(this.scrollInterval);
-                        return;
-                    }
+                    const { scrollLeft, offsetWidth, scrollWidth } = this.scrollContainer;
                     
-                    if (this.scrollContainer.scrollLeft + this.scrollContainer.offsetWidth >=
-                        this.scrollContainer.scrollWidth - 50) {
-                        this.scrollContainer.scrollTo({
-                            left: 0,
-                            behavior: 'smooth'
-                        });
+                    // If we've scrolled to the end or beyond
+                    if (scrollLeft + offsetWidth >= scrollWidth - 10) {
+                        // Reset to start without animation for seamless loop
+                        this.scrollContainer.scrollLeft = 0;
                     } else {
+                        // Smooth scroll by small amount
                         this.scrollContainer.scrollBy({
-                            left: 1,
+                            left: this.scrollStep,
                             behavior: 'smooth'
                         });
                     }
                 } catch (error) {
                     console.error('Auto-scroll error:', error);
-                    clearInterval(this.scrollInterval);
+                    this.stopAutoScroll();
                 }
-            }, 30);
+            }, this.scrollSpeed);
         },
         stopAutoScroll() {
             if (this.scrollInterval) {
                 clearInterval(this.scrollInterval);
                 this.scrollInterval = null;
+                this.isScrolling = false;
+                console.log('Auto-scroll stopped');
             }
         }
-    }" x-init="init()" class="py-8 bg-gray-300">
+            }));
+        });
+    </script>
+    <div x-data="externalLinksScroll" 
+         x-init="init()" 
+         @scroll.window="if($el.contains($event.target)) stopAutoScroll()"
+         class="py-8 bg-gray-300"
+         wire:ignore>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="relative group">
-                <div x-ref="scrollContainer" @mouseenter="stopAutoScroll()" @mouseleave="startAutoScroll()"
+                <div x-ref="scrollContainer" 
+                    @mouseenter="stopAutoScroll()" 
+                    @mouseleave="startAutoScroll()"
                     class="flex space-x-6 pb-6 overflow-x-auto scrollbar-hide snap-x snap-mandatory scroll-smooth">
                     @foreach ($links as $link)
                         <a href="{{ $link->url }}" target="_blank" rel="noopener noreferrer"

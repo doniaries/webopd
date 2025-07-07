@@ -2,7 +2,11 @@ import "./bootstrap";
 
 // Import Flowbite for interactive components
 import "flowbite";
-import "./bootstrap";
 
-import Alpine from 'alpinejs'
-import intersect from '@alpinejs/intersect'
+import Alpine from 'alpinejs';
+import intersect from '@alpinejs/intersect';
+
+// Initialize Alpine.js
+window.Alpine = Alpine;
+Alpine.plugin(intersect);
+Alpine.start();
