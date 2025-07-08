@@ -7,13 +7,11 @@ use App\Models\AgendaKegiatan;
 
 class AgendaDetail extends Component
 {
-    public $id;
     public $agenda;
 
-    public function mount($id)
+    public function mount(AgendaKegiatan $agenda)
     {
-        $this->id = $id;
-        $this->agenda = AgendaKegiatan::findOrFail($id);
+        $this->agenda = $agenda;
     }
 
     public function render()

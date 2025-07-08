@@ -50,6 +50,16 @@ class AgendaKegiatan extends Model
      */
     protected $slugField = 'slug';
 
+    /**
+     * Get the route key name for Laravel's route model binding.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
     public function getNamaPenyelenggaraAttribute()
     {
         return $this->penyelenggara ?? 'Tidak Diketahui';
@@ -66,28 +76,4 @@ class AgendaKegiatan extends Model
             }
         });
     }
-
-
-
-    /**
-     * Get the route key for the model.
-     *
-     * @return string
-     */
-    public function getRouteKeyName()
-    {
-        return 'slug';
-    }
-    
-    /**
-     * Get the value of the model's route key.
-     *
-     * @return mixed
-     */
-    public function getRouteKey()
-    {
-        return $this->slug;
-    }
-
-
 }

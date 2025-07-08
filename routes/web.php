@@ -73,7 +73,9 @@ Route::get('/infografis', Infografis::class)->name('infografis');
 
 // Agenda Kegiatan
 Route::get('/agenda', AgendaKegiatan::class)->name('agenda.index');
-Route::get('/agenda/{id}', \App\Livewire\AgendaDetail::class)->name('agenda.show');
+Route::get('/agenda/{agenda:slug}', \App\Livewire\AgendaDetail::class)
+    ->name('agenda.show')
+    ->middleware('web');
 
 // Dokumen
 Route::get('/dokumen', Dokumen::class)->name('dokumen.index');
