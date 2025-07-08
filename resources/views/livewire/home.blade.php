@@ -175,15 +175,164 @@
             </div>
         </section>
 
-        <!-- Agenda Section -->
-        <div class="mb-4 bg-white py-8">
-            <livewire:agenda-kegiatan />
-        </div>
+        <!-- Agenda & Pengumuman Section -->
+        <section id="agenda-pengumuman" class="bg-blue-50 py-6">
+            <div class="container-fluid px-4">
+                <div class="row g-4">
+                    <!-- Agenda Section -->
+                    <div class="col-lg-8">
+                        <div class="bg-white rounded-lg shadow-sm p-4 h-100">
+                            <div class="d-flex align-items-center mb-4">
+                                <div class="border-start border-3 border-primary me-2" style="height: 24px;"></div>
+                                <h2 class="h5 fw-bold mb-0">Agenda Kegiatan</h2>
+                                <a href="{{ route('agenda.index') }}" class="ms-auto small text-decoration-none">
+                                    Lihat Semua <i class="bi bi-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover table-sm align-middle mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th class="text-nowrap" style="width: 120px;">Tanggal</th>
+                                            <th class="text-nowrap">Kegiatan</th>
+                                            <th class="text-nowrap text-center" style="width: 100px;">Waktu</th>
+                                            <th class="text-nowrap text-center" style="width: 100px;">Detail</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @php
+                                            $agendas = \App\Models\AgendaKegiatan::query()
+                                                ->where('dari_tanggal', '>=', now()->toDateString())
+                                                ->orderBy('dari_tanggal')
+                                                ->orderBy('waktu_mulai')
+                                                ->take(5)
+                                                ->get();
+                                        @endphp
+                                        @forelse($agendas as $agenda)
+                                            <tr>
+                                                <td class="text-nowrap">
+                                                    <div class="fw-medium">
+                                                        {{ \Carbon\Carbon::parse($agenda->dari_tanggal)->translatedFormat('d M Y') }}</div>
+                                                    <small class="text-muted">{{ \Carbon\Carbon::parse($agenda->dari_tanggal)->diffForHumans() }}</small>
+                                                </td>
+                                                <td>
+                                                    <div class="fw-medium text-truncate" style="max-width: 300px;">{{ $agenda->nama_agenda }}</div>
+                                                    <small class="text-muted">{{ $agenda->tempat }}</small>
+                                                </td>
+                                                <td class="text-center text-nowrap">
+                                                    {{ $agenda->waktu_mulai ? \Carbon\Carbon::parse($agenda->waktu_mulai)->format('H:i') : '-' }} - {{ $agenda->waktu_selesai ? \Carbon\Carbon::parse($agenda->waktu_selesai)->format('H:i') : '-' }}
+                                                </td>
+                                                <td class="text-center">
+                                                    <a href="{{ route('agenda.show', $agenda->slug) }}"
+                                                        class="btn btn-sm btn-outline-primary py-1 px-2">
+                                                        <i class="bi bi-eye"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="4" class="text-center py-3 text-muted">Tidak ada agenda
+                                                    mendatang</td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
 
-        <!-- Pengumuman Section -->
-        <div class="mt-4 bg-white py-8">
-            <livewire:pengumuman :limit="5" />
-        </div>
+                    <!-- Pengumuman Section -->
+                    <div class="col-lg-4">
+                        <div class="bg-white rounded-lg shadow-sm p-4 h-100 d-flex flex-column">
+                            <div class="d-flex align-items-center mb-4">
+                                <div class="border-start border-3 border-warning me-2" style="height: 28px;"></div>
+                                <h2 class="h5 fw-bold mb-0">Pengumuman Terkini</h2>
+                                <a href="{{ route('pengumuman.index') }}"
+                                    class="ms-auto small text-decoration-none text-primary">
+                                    Lihat Semua <i class="bi bi-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+
+                            <div class="pengumuman-list flex-grow-1">
+                                @php
+                                    $pengumuman = \App\Models\Pengumuman::query()
+                                        ->where('published_at', '<=', now())
+                                        ->latest('published_at')
+                                        ->take(5)
+                                        ->get();
+                                @endphp
+
+                                @forelse($pengumuman as $item)
+                                    <div
+                                        class="pengumuman-item mb-3 p-3 rounded-lg border border-gray-100 hover-shadow transition-all duration-200">
+                                        <div class="d-flex align-items-start">
+                                            <div class="pengumuman-icon bg-warning bg-opacity-10 text-warning rounded-circle d-flex align-items-center justify-content-center me-3"
+                                                style="width: 40px; height: 40px;">
+                                                <i class="bi bi-megaphone"></i>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <div class="d-flex justify-content-between align-items-start">
+                                                    <h6 class="mb-1 fw-semibold text-gray-900">{{ $item->judul }}
+                                                    </h6>
+                                                    <small class="text-muted ms-2 text-nowrap">
+                                                        <i class="bi bi-clock-history me-1"></i>
+                                                        {{ $item->published_at->diffForHumans() }}
+                                                    </small>
+                                                </div>
+                                                <p class="mb-2 text-muted small">
+                                                    {{ Str::limit(strip_tags($item->isi), 80) }}
+                                                </p>
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <span class="badge bg-light text-dark border">
+                                                        <i class="bi bi-calendar3 me-1"></i>
+                                                        {{ $item->published_at->translatedFormat('d M Y') }}
+                                                    </span>
+                                                    <a href="{{ route('pengumuman.show', $item->slug) }}"
+                                                        class="text-primary small text-decoration-none">
+                                                        Baca Selengkapnya <i class="bi bi-arrow-right ms-1"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @empty
+                                    <div class="text-center py-5">
+                                        <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                                            style="width: 80px; height: 80px;">
+                                            <i class="bi bi-bell-slash text-muted" style="font-size: 2rem;"></i>
+                                        </div>
+                                        <h6 class="text-muted mb-2">Belum Ada Pengumuman</h6>
+                                        <p class="small text-muted mb-0">Tidak ada pengumuman yang tersedia saat ini
+                                        </p>
+                                    </div>
+                                @endforelse
+                            </div>
+
+                            <style>
+                                .pengumuman-item {
+                                    transition: all 0.3s ease;
+                                    border-left: 3px solid transparent;
+                                }
+
+                                .pengumuman-item:hover {
+                                    border-left-color: #ffc107;
+                                    transform: translateX(4px);
+                                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+                                }
+
+                                .hover-shadow {
+                                    transition: box-shadow 0.3s ease;
+                                }
+
+                                .hover-shadow:hover {
+                                    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1) !important;
+                                }
+                            </style>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <!-- Dokumen Section -->
         <div class="py-12 bg-white">

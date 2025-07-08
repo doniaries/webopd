@@ -1,10 +1,10 @@
 <div class="py-12 bg-gray-50">
     @php use Illuminate\Support\Str; @endphp
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-10">
+        {{-- <div class="text-center mb-10">
             <h2 class="text-3xl font-bold text-gray-900 mb-3">Daftar Pengumuman</h2>
             <p class="text-lg text-gray-600">Informasi dan pengumuman terbaru</p>
-        </div>
+        </div> --}}
 
         <div
             class="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl shadow-md overflow-hidden border border-blue-200">
