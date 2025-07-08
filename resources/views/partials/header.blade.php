@@ -33,8 +33,13 @@
             align-items: center;
             position: sticky;
             top: 0;
+            left: 0;
+            right: 0;
             z-index: 1000;
             box-shadow: none !important;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
         }
 
         .menu-container {
@@ -44,16 +49,20 @@
             display: flex;
             align-items: center;
             height: auto;
+            width: 100%;
+            overflow: hidden;
         }
 
         .header-wrapper,
         .menu-wrapper {
-            max-width: 1320px;
-            margin: 0 auto;
-            padding: 0 20px;
             width: 100%;
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
             display: flex;
+            justify-content: flex-start;
             align-items: center;
+            box-sizing: border-box;
         }
 
         .header-content {
@@ -61,7 +70,7 @@
             width: 100%;
             max-width: 1400px;
             margin: 0 auto;
-            padding: 0 10px;
+            padding: 0 20px;
             justify-content: space-between;
             align-items: center;
             position: relative;
@@ -73,7 +82,7 @@
             align-items: center;
             text-decoration: none;
             color: inherit;
-            padding: 2px 0;
+            padding: 2px 0 2px 20px; /* Add left padding to logo */
             min-width: 40px;
             margin-right: auto;
         }
@@ -130,7 +139,7 @@
         }
 
         /* Mobile Styles */
-        @media (max-width: 767px) {
+        @media (max-width: 767.98px) {
             .logo {
                 min-width: 35px !important;
                 width: 35px !important;
@@ -559,6 +568,96 @@
             color: #333;
         }
 
+        /* Tablet Styles */
+        @media (min-width: 768px) and (max-width: 991.98px) {
+            .header-wrapper, .menu-wrapper {
+                padding: 0 15px !important;
+                max-width: 100% !important;
+                width: 100% !important;
+            }
+            
+            .header-content {
+                padding: 0 5px !important;
+                max-width: 100% !important;
+                width: 100% !important;
+            }
+            
+            .logo {
+                min-width: 35px !important;
+                width: auto !important;
+                height: 35px !important;
+                margin-right: 10px !important;
+            }
+            
+            .logo-image {
+                max-width: 35px !important;
+                height: auto !important;
+            }
+            
+            .sitename {
+                font-size: 0.95rem !important;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 150px !important;
+                display: block !important;
+            }
+            
+            .text-uppercase {
+                font-size: 0.65rem !important;
+                display: block !important;
+            }
+            
+            .navmenu > ul {
+                display: flex;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                padding-bottom: 5px;
+                margin: 0 -5px;
+                width: calc(100% + 10px);
+            }
+            
+            .navmenu > ul > li {
+                margin: 0 5px !important;
+                flex-shrink: 0;
+            }
+            
+            .navmenu > ul > li > a {
+                font-size: 0.75rem;
+                padding: 8px 8px;
+                white-space: nowrap;
+            }
+            
+            .menu-container {
+                padding: 5px 0;
+                overflow: hidden;
+            }
+            
+            .header-container {
+                min-height: 45px;
+                position: relative;
+            }
+            
+            /* Hide scrollbar for Chrome, Safari and Opera */
+            .navmenu > ul::-webkit-scrollbar {
+                display: none;
+            }
+            
+            /* Hide scrollbar for IE, Edge and Firefox */
+            .navmenu > ul {
+                -ms-overflow-style: none;  /* IE and Edge */
+                scrollbar-width: none;  /* Firefox */
+            }
+            
+            /* Ensure dropdowns are visible */
+            .dropdown-menu {
+                position: absolute !important;
+                z-index: 1000;
+                min-width: 200px;
+            }
+        }
+
         /* Mobile Menu Styles */
         @media (max-width: 991.98px) {
             .navmenu {
@@ -807,12 +906,12 @@
             background-color: #0b5ed7;
         }
     </style>
-    <div class="header-container">
-        <div class="header-wrapper">
-            <div class="header-content">
+    <div class="w-full bg-white border-b border-gray-300 sticky top-0 left-0 right-0 z-50">
+        <div class="w-full max-w-full m-0 p-0">
+            <div class="w-full max-w-[1400px] mx-auto px-4 sm:px-6 flex items-center justify-between h-[60px]">
                 <!-- Logo dan nama website di kiri -->
-                <div class="d-flex align-items-center">
-                    <a href="{{ url('/') }}" class="logo d-flex align-items-center">
+                <div class="flex items-center space-x-3">
+                    <a href="{{ url('/') }}" class="flex items-center no-underline group">
                         @php
                             $logoUrl = '';
                             $siteName = 'Web OPD'; // Default value
@@ -838,44 +937,39 @@
                             if (empty($logoUrl) || $logoUrl === asset('storage/')) {
                                 $logoUrl = asset('kabupaten-sijunjung.png');
                             }
-
                         @endphp
-                        <div class="logo-wrapper">
-                            <img src="{{ $logoUrl }}" alt="Logo" class="logo-image"
-                                onerror="this.onerror=null; this.src='{{ asset('kabupaten-sijunjung.png') }}';">
+                        
+                        <!-- Logo Container with subtle shadow and hover effect -->
+                        <div class="flex items-center justify-center h-12 w-12 md:h-14 md:w-14 bg-white rounded-lg shadow-sm border border-gray-100 p-1.5 transition-all duration-200 group-hover:shadow-md">
+                            <img src="{{ $logoUrl }}" alt="Logo" 
+                                 class="h-full w-full object-contain"
+                                 onerror="this.onerror=null; this.src='{{ asset('kabupaten-sijunjung.png') }}';">
                         </div>
-                        <div class="ms-2 d-flex flex-column" style="position: relative; z-index: 1000;">
-                            <span class="text-uppercase d-none d-sm-block">WEBSITE</span>
-                            <div class="sitename" style="color: #000 !important;">{{ $siteName }}</div>
+                        
+                        <!-- Site Name and Tagline -->
+                        <div class="flex flex-col ml-3">
+                            <span class="text-[11px] uppercase tracking-[1px] text-gray-500 font-semibold hidden sm:block mb-[-2px]">WEBSITE</span>
+                            <div class="text-[15px] md:text-[16px] font-bold text-gray-800 leading-tight group-hover:text-blue-600 transition-colors">{{ $siteName }}</div>
                         </div>
+                    </a>
                 </div>
-                </a>
-                <div class="d-flex align-items-center ms-3 d-none d-md-flex"
-                    style="border-left: 1px solid #dee2e6; padding-left: 15px;">
-                    <img src="{{ asset('images/bangga.png') }}" alt="Bangga" class="img-fluid me-1"
-                        style="max-height: 24px;">
-                    <img src="{{ asset('images/berakhlak.png') }}" alt="Berakhlak" class="img-fluid"
-                        style="max-height: 24px;">
+
+                <!-- Logo tambahan di kanan -->
+                <div class="hidden md:flex items-center ml-3 pl-3 border-l border-gray-200 h-8">
+                    <img src="{{ asset('images/bangga.png') }}" alt="Bangga" class="h-6 w-auto mr-2">
+                    <img src="{{ asset('images/berakhlak.png') }}" alt="Berakhlak" class="h-6 w-auto">
                 </div>
-            </div>
 
-
-
-            <!-- Elemen di kanan: hanya tombol hamburger -->
-            <div class="d-flex align-items-center">
-                <!-- Hamburger Menu Button dengan style Flowbite -->
+                <!-- Tombol menu mobile -->
                 <button id="mobile-menu-toggle" type="button"
-                    class="hamburger-button inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200">
+                    class="md:hidden p-2 text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200">
                     <span class="sr-only">Open main menu</span>
-                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                        viewBox="0 0 17 14">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M1 1h15M1 7h15M1 13h15" />
+                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
                     </svg>
                 </button>
             </div>
         </div>
-    </div>
     </div>
 
     <!-- Mobile Menu -->

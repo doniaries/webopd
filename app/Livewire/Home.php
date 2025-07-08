@@ -18,6 +18,7 @@ class Home extends Component
     use WithPagination;
 
     public $pageTitle = 'Beranda';
+    public $loading = true;
     public $pageDescription = 'Selamat datang di website resmi kami';
 
     public $tags = [];
@@ -35,7 +36,9 @@ class Home extends Component
     {
         $this->banners = collect();
         $this->agenda = collect();
+        $this->loading = true;
         $this->loadData();
+        $this->loading = false;
     }
 
     public function loadData()
