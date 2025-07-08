@@ -940,7 +940,7 @@
                         @endphp
                         
                         <!-- Logo Container with subtle shadow and hover effect -->
-                        <div class="flex items-center justify-center h-12 w-12 md:h-14 md:w-14 bg-white rounded-lg shadow-sm border border-gray-100 p-1.5 transition-all duration-200 group-hover:shadow-md">
+                        <div class="flex items-center justify-center h-12 w-12 md:h-14 md:w-14 bg-white rounded-lg shadow-sm p-1.5 transition-all duration-200 group-hover:shadow-md">
                             <img src="{{ $logoUrl }}" alt="Logo" 
                                  class="h-full w-full object-contain"
                                  onerror="this.onerror=null; this.src='{{ asset('kabupaten-sijunjung.png') }}';">
