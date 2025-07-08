@@ -1,4 +1,9 @@
-<div>
+<div 
+    x-data="{ loading: false }"
+    x-on:livewire:start="loading = true"
+    x-on:livewire:finish="loading = false"
+    class="relative"
+>
     @if ($view === 'index') <x-page-header :title="$pageTitle" />
         <div class="container mx-auto px-4 py-8">
 
@@ -198,14 +203,14 @@
                         @if($isPlaceholder)
                             <div class="w-full h-48 {{ $placeholderData['bg_color'] ?? 'bg-gray-100' }} flex items-center justify-center">
                                 <div class="text-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    <svg class="w-12 h-12 mx-auto mb-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                                     </svg>
                                     <span class="text-sm font-medium text-gray-500">{{ $placeholderData['text'] ?? 'Gambar tidak tersedia' }}</span>
                                 </div>
                             </div>
                         @else
-                            <a href="{{ route('posts.show', $post->slug) }}" class="block">
+                            <a href="{{ route('posts.show', $post->slug) }}" class="block" wire:navigate>
                                 <img src="{{ $post->foto_utama_url }}" alt="{{ $post->title }}" class="w-full h-48 object-cover">
                             </a>
                         @endif
@@ -223,12 +228,12 @@
                                     $tagClass = $colors[$post->tag->name] ?? $colors['default'];
                                 @endphp
                                 <a href="{{ route('posts.index', ['category' => $post->tag_id]) }}"
-                                    class="inline-block text-sm font-medium px-3 py-1 rounded-full mb-3 transition-colors {{ $tagClass }}">
+                                    class="inline-block text-sm font-medium px-3 py-1 rounded-full mb-3 transition-colors {{ $tagClass }}" wire:navigate>
                                     {{ $post->tag->name }}
                                 </a>
                             @endif
                             <h2 class="text-xl font-bold mb-2">
-                                <a href="{{ route('posts.show', $post->slug) }}" class="hover:text-blue-600">
+                                <a href="{{ route('posts.show', $post->slug) }}" class="hover:text-blue-600" wire:navigate>
                                     {{ $post->title }}
                                 </a>
                             </h2>
@@ -270,20 +275,63 @@
 
             <!-- Pagination -->
             @if($showPagination && $posts->hasPages())
-                <div class="mt-8 px-4">
-                    <div class="flex flex-col sm:flex-row items-center justify-between">
-                        <div class="text-sm text-gray-700 mb-4 sm:mb-0">
-                            Menampilkan 
-                            <span class="font-medium">{{ $posts->firstItem() }}</span>
-                            sampai 
-                            <span class="font-medium">{{ $posts->lastItem() }}</span>
-                            dari 
-                            <span class="font-medium">{{ $posts->total() }}</span>
-                            hasil
+                <div class="bg-white px-6 py-4 border-t border-gray-200 mt-8">
+                    <div class="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0">
+                        <div class="text-sm text-gray-600">
+                            Menampilkan <span class="font-medium">{{ $posts->firstItem() }}</span> sampai
+                            <span class="font-medium">{{ $posts->lastItem() }}</span> dari
+                            <span class="font-medium">{{ $posts->total() }}</span> hasil
                         </div>
-                        <div class="flex items-center space-x-1">
-                            {{ $posts->links('pagination::tailwind') }}
-                        </div>
+                        <nav aria-label="Page navigation">
+                            <ul class="inline-flex -space-x-px text-sm">
+                                <!-- Previous Button -->
+                                @if ($posts->onFirstPage())
+                                    <li>
+                                        <span class="flex items-center justify-center px-3 h-8 ml-0 leading-tight text-gray-400 bg-white border border-gray-300 rounded-l-lg cursor-not-allowed">
+                                            <i class="fas fa-chevron-left mr-1"></i> Sebelumnya
+                                        </span>
+                                    </li>
+                                @else
+                                    <li>
+                                        <button wire:click="previousPage" @if($posts->onFirstPage()) disabled @endif class="flex items-center justify-center px-3 h-8 ml-0 leading-tight text-gray-700 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed" wire:navigate>
+                                            <i class="fas fa-chevron-left mr-1"></i> Sebelumnya
+                                        </button>
+                                    </li>
+                                @endif
+
+                                <!-- Page Numbers -->
+                                @foreach ($posts->getUrlRange(1, $posts->lastPage()) as $page => $url)
+                                    @if ($page == $posts->currentPage())
+                                        <li>
+                                            <span aria-current="page" class="flex items-center justify-center px-3 h-8 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700">
+                                                {{ $page }}
+                                            </span>
+                                        </li>
+                                    @else
+                                        <li>
+                                            <button wire:click="gotoPage({{ $page }})" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-700 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 {{ $page == $posts->currentPage() ? 'bg-blue-50 text-blue-600' : '' }}" wire:navigate>
+                                                {{ $page }}
+                                            </button>
+                                        </li>
+                                    @endif
+                                @endforeach
+
+                                <!-- Next Button -->
+                                @if ($posts->hasMorePages())
+                                    <li>
+                                        <button wire:click="nextPage" @if(!$posts->hasMorePages()) disabled @endif class="flex items-center justify-center px-3 h-8 leading-tight text-gray-700 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed" wire:navigate>
+                                            Selanjutnya <i class="fas fa-chevron-right ml-1"></i>
+                                        </button>
+                                    </li>
+                                @else
+                                    <li>
+                                        <span class="flex items-center justify-center px-3 h-8 leading-tight text-gray-400 bg-white border border-gray-300 rounded-r-lg cursor-not-allowed">
+                                            Selanjutnya <i class="fas fa-chevron-right ml-1"></i>
+                                        </span>
+                                    </li>
+                                @endif
+                            </ul>
+                        </nav>
                     </div>
                 </div>
             @endif
@@ -367,8 +415,7 @@
                                         <img src="{{ $imageUrl }}" 
                                              alt="{{ $imageAlt }}"
                                              class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
-                                             onerror="this.onerror=null; this.src='data:image/svg+xml;charset=UTF-8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100%\' height=\'100%\' viewBox=\'0 0 400 300\'><rect width=\'100%\' height=\'100%\' fill=\'%23f3f4f6\'/><text x=\'50%\' y=\'50%\' font-family=\'sans-serif\' font-size=\'14\' text-anchor=\'middle\' dominant-baseline=\'middle\' fill=\'%239ca3af\'>Gambar tidak tersedia</text></svg>';"
-                                        >
+                                             onerror="this.onerror=null; this.src='data:image/svg+xml;charset=UTF-8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100%\' height=\'100%\' viewBox=\'0 0 400 300\'><rect width=\'100%\' height=\'100%\' fill=\'%23f3f4f6\'/><text x=\'50%\' y=\'50%\' font-family=\'sans-serif\' font-size=\'14\' text-anchor=\'middle\' dominant-baseline=\'middle\' fill=\'%239ca3af\'>Gambar tidak tersedia</text></svg>;'" wire:navigate>
                                     </a>
                                 </div>
                             @endforeach
@@ -401,7 +448,7 @@
                                                 </div>
                                             </div>
                                         @else
-                                            <a href="{{ route('posts.show', $related->slug) }}" class="block h-full">
+                                            <a href="{{ route('posts.show', $related->slug) }}" class="block h-full" wire:navigate>
                                                 <img src="{{ $related->foto_utama_url }}" 
                                                      alt="{{ $related->title }}" 
                                                      class="w-full h-full object-cover"
@@ -412,13 +459,12 @@
                                     <div class="p-4">
                                         @if ($related->category)
                                             <a href="{{ route('posts.index', ['category' => $related->category_id]) }}"
-                                                class="inline-block text-xs font-medium text-blue-600 mb-2 hover:underline">
+                                                class="inline-block text-xs font-medium text-blue-600 mb-2 hover:underline" wire:navigate>
                                                 {{ $related->category->name }}
                                             </a>
                                         @endif
                                         <h3 class="font-bold text-lg mb-2">
-                                            <a href="{{ route('posts.show', $related->slug) }}"
-                                                class="hover:text-blue-600">
+                                            <a href="{{ route('posts.show', $related->slug) }}" class="block" wire:navigate>
                                                 {{ $related->title }}
                                             </a>
                                         </h3>
