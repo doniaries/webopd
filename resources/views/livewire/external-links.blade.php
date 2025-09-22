@@ -69,13 +69,15 @@
 
                             <div
                                 class="w-20 h-20 mb-3 rounded-full bg-gray-50 flex items-center justify-center overflow-hidden p-2">
-                                @if ($link->logo)
+                                @if (Str::startsWith($link->logo, 'fa-'))
+                                    <i class="{{ $link->logo }} text-4xl text-blue-600"></i>
+                                @elseif ($link->logo)
                                     <img src="{{ asset('storage/' . $link->logo) }}" alt="{{ $link->nama_link }}"
                                         class="h-full w-full object-contain"
                                         onerror="this.onerror=null; this.src='{{ asset('assets/img/placeholder2.jpg') }}';">
                                 @else
-                                    <span class="text-sm font-bold text-blue-600">
-                                        {{ strtoupper(substr($link->nama_link, 0, 2)) }}
+                                    <span class="text-sm font-bold text-blue-600 text-center">
+                                        Logo Tidak Tersedia
                                     </span>
                                 @endif
                             </div>
@@ -101,52 +103,55 @@
 @endif
 
 @push('styles')
-    <style>
-        /* Custom tooltip theme */
-        .tippy-box[data-theme~='custom'] {
-            background-color: #6b7280;
-            color: white;
-            font-size: 0.75rem;
-            padding: 4px 8px;
-            border-radius: 4px;
-        }
-
-        .tippy-box[data-theme~='custom'] .tippy-arrow {
-            color: #6b7280;
-        }
-
-        /* Hide scrollbar but keep functionality */
-        .overflow-x-hidden {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-
-        .overflow-x-hidden::-webkit-scrollbar {
-            display: none;
-        }
-
-        /* Smooth scrolling */
-        .overflow-x-hidden {
-            scroll-behavior: smooth;
-        }
-
-        /* Animation for hover effect */
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
+        <!-- FontAwesome for icons -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <!-- Custom tooltip theme -->
+        <style>
+            /* Custom tooltip theme */
+            .tippy-box[data-theme~='custom'] {
+                background-color: #6b7280;
+                color: white;
+                font-size: 0.75rem;
+                padding: 4px 8px;
+                border-radius: 4px;
             }
 
-            50% {
-                transform: scale(1.05);
+            .tippy-box[data-theme~='custom'] .tippy-arrow {
+                color: #6b7280;
             }
 
-            100% {
-                transform: scale(1);
+            /* Hide scrollbar but keep functionality */
+            .overflow-x-hidden {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
             }
-        }
 
-        .group:hover .group-hover\:animate-pulse {
-            animation: pulse 2s infinite;
-        }
-    </style>
-@endpush
+            .overflow-x-hidden::-webkit-scrollbar {
+                display: none;
+            }
+
+            /* Smooth scrolling */
+            .overflow-x-hidden {
+                scroll-behavior: smooth;
+            }
+
+            /* Animation for hover effect */
+            @keyframes pulse {
+                0% {
+                    transform: scale(1);
+                }
+
+                50% {
+                    transform: scale(1.05);
+                }
+
+                100% {
+                    transform: scale(1);
+                }
+            }
+
+            .group:hover .group-hover\:animate-pulse {
+                animation: pulse 2s infinite;
+            }
+        </style>
+    @endpush
