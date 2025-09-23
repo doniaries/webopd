@@ -21,6 +21,10 @@
                                     <i class="far fa-calendar-alt mr-2"></i>Nama Kegiatan
                                 </th>
                                 <th scope="col"
+                                    class="min-w-[110px] px-3 py-3 text-center text-xs font-medium text-white uppercase tracking-wider">
+                                    <i class="bi bi-flag mr-2"></i>Status
+                                </th>
+                                <th scope="col"
                                     class="min-w-[150px] px-3 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                                     <i class="fas fa-map-marker-alt mr-2"></i>Lokasi
                                 </th>
@@ -69,12 +73,6 @@
                                                         class="text-sm font-medium {{ $isPastEvent ? 'text-gray-700' : 'text-gray-900' }} truncate">
                                                         {{ $agenda->nama_agenda }}
                                                     </span>
-                                                    @if ($isPastEvent)
-                                                        <span
-                                                            class="ml-2 px-2 py-0.5 text-xs font-medium bg-gray-200 text-gray-700 rounded-full">
-                                                            Selesai
-                                                        </span>
-                                                    @endif
                                                 </div>
                                                 <div
                                                     class="text-xs {{ $isPastEvent ? 'text-gray-400' : 'text-gray-500' }} truncate">
@@ -82,6 +80,17 @@
                                                 </div>
                                             </div>
                                         </div>
+                                    </td>
+                                    <td class="px-3 py-3 text-center">
+                                        @php
+                                            $status = $agenda->status ?? 'Mendatang';
+                                            $badgeClass = match ($status) {
+                                                'Berlangsung' => 'inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-600 text-white',
+                                                'Selesai' => 'inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-300 text-gray-800',
+                                                default => 'inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-300 text-gray-900',
+                                            };
+                                        @endphp
+                                        <span class="{{ $badgeClass }}">{{ $status }}</span>
                                     </td>
                                     <td
                                         class="px-3 py-3 text-sm {{ $isPastEvent ? 'text-gray-500' : 'text-gray-700' }}">
@@ -102,30 +111,6 @@
                                                             {{ indonesia_date($agenda->sampai_tanggal, false) }}</span>
                                                     @endif
                                                 </div>
-                                                @php
-                                                    $daysDifference = floor($today->diffInHours($endDate, false) / 24);
-                                                @endphp
-                                                <div class="text-xs mt-1">
-                                                    @if ($daysDifference < 0)
-                                                        <span
-                                                            class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-600 text-white">
-                                                            <i class="fas fa-check-circle text-white mr-1"></i> Sudah
-                                                            Selesai
-                                                        </span>
-                                                    @elseif($daysDifference == 0)
-                                                        <span
-                                                            class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-600 text-white">
-                                                            <i class="fas fa-calendar-day text-white mr-1"></i>
-                                                            Hari Ini
-                                                        </span>
-                                                    @else
-                                                        <span
-                                                            class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                                            <i class="far fa-calendar-alt text-blue-500 mr-1"></i>
-                                                            {{ $daysDifference }} Hari Lagi
-                                                        </span>
-                                                    @endif
-                                                </div>
                                             </div>
                                         </div>
                                     </td>
@@ -139,7 +124,7 @@
                                         </div>
                                     </td>
                                     <td class="px-2 py-3 text-sm font-medium text-center">
-                                        <a href="{{ route('agenda.show', $agenda->id) }}"
+                                        <a href="{{ route('agenda.show', $agenda->slug) }}"
                                             class="inline-flex items-center justify-center w-full px-2 py-1.5 border border-transparent text-xs font-medium rounded-md {{ $isPastEvent ? 'bg-gray-300 text-gray-700 hover:bg-gray-400' : 'text-white bg-green-600 hover:bg-green-700' }} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200">
                                             <i class="far fa-eye mr-1"></i> Detail
                                         </a>

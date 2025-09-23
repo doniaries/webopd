@@ -191,15 +191,15 @@
                                     Lihat Semua <i class="bi bi-arrow-right ms-1"></i>
                                 </a>
                             </div>
-                            <div class="table-responsive">
-                                <table class="table table-hover table-sm align-middle mb-0">
+                            <div class="table-responsive" style="overflow-x: hidden;">
+                                <table class="table table-hover table-sm align-middle mb-0 agenda-table">
                                     <thead class="table-light">
                                         <tr>
-                                            <th class="text-nowrap" style="width: 120px;">Tanggal</th>
+                                            <th class="text-nowrap">Tanggal</th>
                                             <th class="text-nowrap">Kegiatan</th>
-                                            <th class="text-nowrap text-center" style="width: 110px;">Status</th>
-                                            <th class="text-nowrap text-center" style="width: 100px;">Waktu</th>
-                                            <th class="text-nowrap text-center" style="width: 100px;">Detail</th>
+                                            <th class="text-nowrap text-center">Status</th>
+                                            <th class="text-nowrap text-center">Waktu</th>
+                                            <th class="text-nowrap text-center">Detail</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -222,8 +222,12 @@
                                                 </td>
                                                 <td>
                                                     <div class="fw-medium text-truncate" style="max-width: 300px;">
-                                                        {{ $agenda->nama_agenda }}</div>
-                                                    <small class="text-muted d-block">{{ $agenda->tempat }}</small>
+                                                        {{ $agenda->nama_agenda }}
+                                                    </div>
+                                                    <div class="text-truncate small mt-1" style="max-width: 320px;">
+                                                        <i class="bi bi-geo-alt text-primary me-1"></i>
+                                                        <span class="text-muted">{{ $agenda->tempat ?? '-' }}</span>
+                                                    </div>
                                                 </td>
                                                 <td class="text-center">
                                                     @php
@@ -257,6 +261,13 @@
                                     </tbody>
                                 </table>
                             </div>
+                            <style>
+                                .agenda-table { table-layout: auto; width: 100%; }
+                                .agenda-table th { white-space: nowrap; }
+                                .agenda-table td { vertical-align: middle; }
+                                /* Allow kegiatan column to wrap so it fits without scrolling */
+                                .agenda-table td:nth-child(2) { white-space: normal; }
+                            </style>
                         </div>
                     </div>
 

@@ -13,7 +13,18 @@
                             </a>
 
                             <div class="mb-4">
-                                <h1 class="h2 mb-3">{{ $agenda->nama_agenda }}</h1>
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <h1 class="h2 mb-0">{{ $agenda->nama_agenda }}</h1>
+                                    @php
+                                        $status = $agenda->status ?? 'Mendatang';
+                                        $badgeClass = match ($status) {
+                                            'Berlangsung' => 'badge bg-success',
+                                            'Selesai' => 'badge bg-secondary',
+                                            default => 'badge bg-warning text-dark',
+                                        };
+                                    @endphp
+                                    <span class="{{ $badgeClass }} align-self-center">{{ $status }}</span>
+                                </div>
                                 <div class="d-flex flex-column gap-2 mb-3">
                                     <div class="d-flex align-items-center text-muted">
                                         <i class="bi bi-calendar-event me-2"></i>
