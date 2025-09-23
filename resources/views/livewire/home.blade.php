@@ -197,6 +197,7 @@
                                         <tr>
                                             <th class="text-nowrap" style="width: 120px;">Tanggal</th>
                                             <th class="text-nowrap">Kegiatan</th>
+                                            <th class="text-nowrap text-center" style="width: 110px;">Status</th>
                                             <th class="text-nowrap text-center" style="width: 100px;">Waktu</th>
                                             <th class="text-nowrap text-center" style="width: 100px;">Detail</th>
                                         </tr>
@@ -222,7 +223,18 @@
                                                 <td>
                                                     <div class="fw-medium text-truncate" style="max-width: 300px;">
                                                         {{ $agenda->nama_agenda }}</div>
-                                                    <small class="text-muted">{{ $agenda->tempat }}</small>
+                                                    <small class="text-muted d-block">{{ $agenda->tempat }}</small>
+                                                </td>
+                                                <td class="text-center">
+                                                    @php
+                                                        $status = $agenda->status ?? 'Mendatang';
+                                                        $badgeClass = match ($status) {
+                                                            'Berlangsung' => 'badge bg-success',
+                                                            'Selesai' => 'badge bg-secondary',
+                                                            default => 'badge bg-warning text-dark',
+                                                        };
+                                                    @endphp
+                                                    <span class="{{ $badgeClass }}">{{ $status }}</span>
                                                 </td>
                                                 <td class="text-center text-nowrap">
                                                     {{ $agenda->waktu_mulai ? \Carbon\Carbon::parse($agenda->waktu_mulai)->format('H:i') : '-' }}

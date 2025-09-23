@@ -12,6 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Carbon\Carbon;
 
 class AgendaKegiatanResource extends Resource
 {
@@ -135,6 +136,15 @@ class AgendaKegiatanResource extends Resource
                     ->label('Selesai')
                     ->time('H:i'),
 
+                Tables\Columns\BadgeColumn::make('status')
+                    ->label('Status')
+                    ->colors([
+                        'warning' => static fn ($state) => $state === 'Mendatang',
+                        'success' => static fn ($state) => $state === 'Berlangsung',
+                        'gray' => static fn ($state) => $state === 'Selesai',
+                    ])
+                    ->formatStateUsing(fn ($state) => $state),
+
                 Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime()
                     ->sortable()
@@ -149,7 +159,44 @@ class AgendaKegiatanResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('status')
+                    ->label('Status')
+                    ->options([
+                        'Mendatang' => 'Mendatang',
+                        'Berlangsung' => 'Berlangsung',
+                        'Selesai' => 'Selesai',
+                    ])
+                    ->query(function (Builder $query, array $data) {
+                        $value = $data['value'] ?? null;
+                        if (!$value) return;
+
+                        $today = Carbon::today();
+                        $now = Carbon::now();
+
+                        if ($value === 'Mendatang') {
+                            // Belum mulai: sebelum dari_tanggal (awal hari)
+                            $query->whereDate('dari_tanggal', '>', $today);
+                        } elseif ($value === 'Selesai') {
+                            // Sudah lewat tanggal selesai, atau hari ini sama dengan sampai_tanggal namun waktu_selesai sudah lewat
+                            $query->where(function ($q) use ($today, $now) {
+                                $q->whereDate('sampai_tanggal', '<', $today)
+                                  ->orWhere(function ($q2) use ($today, $now) {
+                                      $q2->whereDate('sampai_tanggal', '=', $today)
+                                         ->whereNotNull('waktu_selesai')
+                                         ->whereTime('waktu_selesai', '<', $now->format('H:i:s'));
+                                  });
+                            });
+                        } elseif ($value === 'Berlangsung') {
+                            // Sedang berlangsung: (today between start and end) AND tidak selesai berdasarkan waktu di hari terakhir
+                            $query->whereDate('dari_tanggal', '<=', $today)
+                                  ->whereDate('sampai_tanggal', '>=', $today)
+                                  ->where(function ($q) use ($today, $now) {
+                                      $q->whereDate('sampai_tanggal', '>', $today)
+                                        ->orWhereNull('waktu_selesai')
+                                        ->orWhereTime('waktu_selesai', '>=', $now->format('H:i:s'));
+                                  });
+                        }
+                    }),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

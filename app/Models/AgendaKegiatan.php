@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Traits\HasSlug;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class AgendaKegiatan extends Model
 {
@@ -34,7 +35,7 @@ class AgendaKegiatan extends Model
         'deleted_at' => 'datetime',
     ];
 
-    protected $appends = ['nama_penyelenggara'];
+    protected $appends = ['nama_penyelenggara', 'status'];
 
     /**
      * The field that should be used for generating the slug.
@@ -63,6 +64,48 @@ class AgendaKegiatan extends Model
     public function getNamaPenyelenggaraAttribute()
     {
         return $this->penyelenggara ?? 'Tidak Diketahui';
+    }
+
+    /**
+     * Computed status of the agenda based on dates and times.
+     * - Mendatang: belum mulai
+     * - Berlangsung: sedang dalam rentang tanggal (dan waktu jika ada)
+     * - Selesai: sudah lewat tanggal selesai (atau lewat waktu selesai pada hari terakhir)
+     */
+    public function getStatusAttribute(): string
+    {
+        $today = Carbon::today();
+
+        // Normalize dates
+        $startDate = $this->dari_tanggal ? Carbon::parse($this->dari_tanggal) : null;
+        $endDate = $this->sampai_tanggal ? Carbon::parse($this->sampai_tanggal) : $startDate;
+
+        if (!$startDate) {
+            return 'Mendatang';
+        }
+
+        // If fully before start
+        if ($today->lt($startDate->copy()->startOfDay())) {
+            return 'Mendatang';
+        }
+
+        // If after end date, it's finished
+        if ($endDate && $today->gt($endDate->copy()->endOfDay())) {
+            return 'Selesai';
+        }
+
+        // Same day checks for finer granularity by time
+        if ($today->isSameDay($endDate)) {
+            // If waktu_selesai is defined and already passed, mark finished
+            if (!empty($this->waktu_selesai)) {
+                $endTime = Carbon::parse($this->waktu_selesai);
+                if (Carbon::now()->gt($endTime)) {
+                    return 'Selesai';
+                }
+            }
+        }
+
+        return 'Berlangsung';
     }
 
     protected static function booted()
