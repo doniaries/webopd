@@ -22,8 +22,18 @@
             @endforelse
         </div>
         @if (count($banners ?? []) > 1)
-            <div class="swiper-button-next banner-swiper-button-next"></div>
-            <div class="swiper-button-prev banner-swiper-button-prev"></div>
+            <div class="swiper-button-next banner-swiper-button-next flex items-center justify-center">
+                <!-- Chevron Right (outline) -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+                    <path d="M9 5l7 7-7 7" />
+                </svg>
+            </div>
+            <div class="swiper-button-prev banner-swiper-button-prev flex items-center justify-center">
+                <!-- Chevron Left (outline) -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+                    <path d="M15 19l-7-7 7-7" />
+                </svg>
+            </div>
             <div class="swiper-pagination banner-swiper-pagination"></div>
         @endif
     </div>
@@ -44,9 +54,9 @@
 
             .banner-swiper .swiper-button-next,
             .banner-swiper .swiper-button-prev {
-                color: #fff;
-                background: rgba(0, 0, 0, 0.6);
-                border-radius: 50%;
+                color: #ffffff;
+                background: rgba(17, 24, 39, 0.45); /* slate-900/45 */
+                border-radius: 9999px;
                 width: 40px;
                 height: 40px;
                 top: 50%;
@@ -55,15 +65,15 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                opacity: 0;
-                pointer-events: none;
-                transition: opacity 0.3s;
+                opacity: 0.2; /* semi transparan default */
+                pointer-events: auto; /* tetap bisa diklik */
+                transition: opacity 0.2s ease, background 0.2s ease;
             }
 
             .banner-swiper:hover .swiper-button-next,
             .banner-swiper:hover .swiper-button-prev {
                 opacity: 1;
-                pointer-events: auto;
+                background: rgba(17, 24, 39, 0.65);
             }
 
             .banner-swiper .swiper-button-next {
@@ -72,6 +82,12 @@
 
             .banner-swiper .swiper-button-prev {
                 left: 10px;
+            }
+
+            /* Sembunyikan pseudo-element default Swiper agar tidak dobel */
+            .banner-swiper .swiper-button-next:after,
+            .banner-swiper .swiper-button-prev:after {
+                content: '' !important;
             }
 
             .banner-swiper .swiper-pagination {
