@@ -82,9 +82,6 @@ class Home extends Component
                 ->take(8)
                 ->get() ?? [];
 
-            // Load active banners for the current team
-            $this->loadBanners();
-
             // Get active sliders
             $this->sliders = Slider::active()->get() ?? [];
 
@@ -109,14 +106,6 @@ class Home extends Component
                 ->get();
             $this->agenda = collect($agenda);
 
-            // Debug: Log agenda data
-            if (app()->environment('local')) {
-                \Illuminate\Support\Facades\Log::info('Agenda data:', [
-                    'count' => $this->agenda->count(),
-                    'first_item' => $this->agenda->first()
-                ]);
-            }
-
             // Get latest dokumens with views and downloads
             try {
                 $this->dokumens = \App\Models\Dokumen::orderBy('created_at', 'desc')
@@ -124,11 +113,7 @@ class Home extends Component
                     ->take(3)
                     ->get();
 
-                if (app()->environment('local')) {
-                    \Illuminate\Support\Facades\Log::info('Dokumen data:', [
-                        'count' => $this->dokumens->count()
-                    ]);
-                }
+                // Removed verbose dokumen info logging
             } catch (\Exception $e) {
                 \Illuminate\Support\Facades\Log::error('Error loading dokumens: ' . $e->getMessage());
                 $this->dokumens = collect();

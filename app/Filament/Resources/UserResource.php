@@ -206,11 +206,19 @@ class UserResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return static::getModel()::count();
+        $count = \Illuminate\Support\Facades\Cache::remember('filament.users.count', now()->addMinutes(5), function () {
+            return static::getModel()::count();
+        });
+
+        return (string) $count;
     }
 
     public static function getNavigationBadgeColor(): ?string
     {
-        return static::getModel()::count() < 5 ? 'warning' : 'danger';
+        $count = \Illuminate\Support\Facades\Cache::remember('filament.users.count', now()->addMinutes(5), function () {
+            return static::getModel()::count();
+        });
+
+        return $count < 5 ? 'warning' : 'danger';
     }
 }

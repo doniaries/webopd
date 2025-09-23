@@ -219,9 +219,16 @@ class RoleResource extends Resource implements HasShieldPermissions
 
     public static function getNavigationBadge(): ?string
     {
-        return Utils::isResourceNavigationBadgeEnabled()
-            ? strval(static::getEloquentQuery()->count())
-            : null;
+        if (!Utils::isResourceNavigationBadgeEnabled()) {
+            return null;
+        }
+
+        // Cache the count briefly to avoid duplicate queries across components
+        $count = \Illuminate\Support\Facades\Cache::remember('filament.roles.count', now()->addMinutes(5), function () {
+            return static::getEloquentQuery()->count();
+        });
+
+        return strval($count);
     }
 
     public static function isScopedToTenant(): bool

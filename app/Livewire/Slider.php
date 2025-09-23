@@ -23,21 +23,11 @@ class Slider extends Component
         $this->pengaturan = $pengaturan ?? Pengaturan::first();
         $this->usePostsAsSliders = true; // Always use posts as sliders
 
-        \Illuminate\Support\Facades\Log::info('Slider mount - usePostsAsSliders: ' . ($this->usePostsAsSliders ? 'true' : 'false'));
-
         // Clear any existing sliders
         $this->sliders = [];
 
         // Always load sliders from posts, ignore the passed in sliders
-        \Illuminate\Support\Facades\Log::info('Memanggil loadSliders()');
         $this->loadSliders();
-
-        // Log the loaded sliders for debugging
-        \Illuminate\Support\Facades\Log::info('Loaded sliders:', [
-            'count' => count($this->sliders),
-            'type' => $this->sliders instanceof \Illuminate\Support\Collection ? 'Collection' : gettype($this->sliders),
-            'first_item' => !empty($this->sliders) ? get_class(collect($this->sliders)->first()) : 'empty'
-        ]);
     }
 
     /**
@@ -45,10 +35,12 @@ class Slider extends Component
      */
     public function loadSliders(): void
     {
-        $this->sliders = \App\Models\Post::with('tags')
-            ->orderByDesc('created_at')
-            ->take(5) // Jumlah post yang ingin ditampilkan di slider
-            ->get();
+        $this->sliders = \Illuminate\Support\Facades\Cache::remember('home.sliders', now()->addMinutes(5), function () {
+            return \App\Models\Post::with('tags')
+                ->orderByDesc('created_at')
+                ->take(5) // Jumlah post yang ingin ditampilkan di slider
+                ->get();
+        });
     }
 
     public function getFotoUtamaUrlAttribute()
@@ -58,18 +50,12 @@ class Slider extends Component
 
     public function render()
     {
-        // Log jumlah slider sebelum render
-        Log::info('Slider render - Jumlah slider: ' . count($this->sliders));
-
         // Jika tidak ada slider, coba muat ulang
         if (empty($this->sliders) || count($this->sliders) === 0) {
-            Log::warning('Tidak ada slider untuk ditampilkan, mencoba memuat ulang');
             $this->loadSliders();
         }
 
-        if ($this->usePostsAsSliders) {
-            $this->loadSliders();
-        }
+        // Do not reload on each render to prevent duplicate queries
 
         return view('livewire.slider');
     }

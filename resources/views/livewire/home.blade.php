@@ -212,15 +212,20 @@
                                             <tr>
                                                 <td class="text-nowrap">
                                                     <div class="fw-medium">
-                                                        {{ \Carbon\Carbon::parse($agenda->dari_tanggal)->translatedFormat('d M Y') }}</div>
-                                                    <small class="text-muted">{{ \Carbon\Carbon::parse($agenda->dari_tanggal)->diffForHumans() }}</small>
+                                                        {{ \Carbon\Carbon::parse($agenda->dari_tanggal)->translatedFormat('d M Y') }}
+                                                    </div>
+                                                    <small
+                                                        class="text-muted">{{ \Carbon\Carbon::parse($agenda->dari_tanggal)->diffForHumans() }}</small>
                                                 </td>
                                                 <td>
-                                                    <div class="fw-medium text-truncate" style="max-width: 300px;">{{ $agenda->nama_agenda }}</div>
+                                                    <div class="fw-medium text-truncate" style="max-width: 300px;">
+                                                        {{ $agenda->nama_agenda }}</div>
                                                     <small class="text-muted">{{ $agenda->tempat }}</small>
                                                 </td>
                                                 <td class="text-center text-nowrap">
-                                                    {{ $agenda->waktu_mulai ? \Carbon\Carbon::parse($agenda->waktu_mulai)->format('H:i') : '-' }} - {{ $agenda->waktu_selesai ? \Carbon\Carbon::parse($agenda->waktu_selesai)->format('H:i') : '-' }}
+                                                    {{ $agenda->waktu_mulai ? \Carbon\Carbon::parse($agenda->waktu_mulai)->format('H:i') : '-' }}
+                                                    -
+                                                    {{ $agenda->waktu_selesai ? \Carbon\Carbon::parse($agenda->waktu_selesai)->format('H:i') : '-' }}
                                                 </td>
                                                 <td class="text-center">
                                                     <a href="{{ route('agenda.show', $agenda->slug) }}"
@@ -258,7 +263,7 @@
                                     $pengumuman = \App\Models\Pengumuman::query()
                                         ->where('published_at', '<=', now())
                                         ->latest('published_at')
-                                        ->take(5)
+                                        ->take(3)
                                         ->get();
                                 @endphp
 
@@ -335,7 +340,7 @@
         </section>
 
         <!-- Dokumen Section -->
-        <div class="py-12 bg-white">
+        {{-- <div class="py-12 bg-white">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-10">
                     <h2 class="text-3xl font-bold text-gray-900 mb-3">Dokumen Terbaru</h2>
@@ -492,7 +497,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         <!-- Section External Links -->
         <section id="external-links" class="external-links-section section">

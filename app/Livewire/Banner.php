@@ -23,11 +23,7 @@ class Banner extends Component
                 ->latest()
                 ->take(5)
                 ->get(['id', 'gambar', 'is_active']);
-            
-            // Log for debugging
-            Log::info('Banners loaded in Banner component', [
-                'count' => count($this->banners)
-            ]);
+            // Removed verbose logging
         } catch (\Exception $e) {
             // If there's an error (e.g., table doesn't exist), return empty collection
             $this->banners = collect();
