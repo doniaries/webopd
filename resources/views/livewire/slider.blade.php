@@ -38,8 +38,18 @@
             @endforeach
         </div>
         <!-- Navigasi panah -->
-        <div class="swiper-button-next"></div>
-        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next flex items-center justify-center">
+            <!-- Heroicons (outline): chevron-right -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6">
+                <path d="M9 5l7 7-7 7" />
+            </svg>
+        </div>
+        <div class="swiper-button-prev flex items-center justify-center">
+            <!-- Heroicons (outline): chevron-left -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6">
+                <path d="M15 19l-7-7 7-7" />
+            </svg>
+        </div>
         <!-- Dot pagination -->
         <div class="swiper-pagination"></div>
     </div>
@@ -142,19 +152,33 @@
 
         .swiper-button-next,
         .swiper-button-prev {
-            color: #4ea1ff;
-            background: #fff0;
-            border-radius: 50%;
-            width: 48px;
-            height: 48px;
-            box-shadow: none;
+            color: #ffffff;
+            background: rgba(17, 24, 39, 0.45); /* slate-900/45 */
+            border-radius: 9999px;
+            width: 44px;
+            height: 44px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.25);
             border: none;
-            transition: background 0.2s;
+            opacity: 0.2; /* lebih transparan saat non-hover */
+            transition: opacity 0.2s ease, background 0.2s ease, transform 0.2s ease;
+        }
+
+        /* Hide Swiper default double-arrow pseudo elements */
+        .swiper-button-next:after,
+        .swiper-button-prev:after {
+            content: '' !important;
+        }
+
+        /* Ensure SVG icon is centered and inherits color */
+        .swiper-button-next svg,
+        .swiper-button-prev svg {
+            display: block;
         }
 
         .swiper-button-next:hover,
         .swiper-button-prev:hover {
-            background: #4ea1ff22;
+            opacity: 1;
+            background: rgba(17, 24, 39, 0.65);
         }
 
         .swiper-pagination-bullet {
