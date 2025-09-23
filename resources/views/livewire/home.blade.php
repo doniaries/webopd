@@ -216,9 +216,11 @@
                                                 <td class="text-nowrap">
                                                     <div class="fw-medium">
                                                         {{ \Carbon\Carbon::parse($agenda->dari_tanggal)->translatedFormat('d M Y') }}
+                                                        @if ($agenda->sampai_tanggal && $agenda->sampai_tanggal != $agenda->dari_tanggal)
+                                                            - {{ \Carbon\Carbon::parse($agenda->sampai_tanggal)->translatedFormat('d M Y') }}
+                                                        @endif
                                                     </div>
-                                                    <small
-                                                        class="text-muted">{{ \Carbon\Carbon::parse($agenda->dari_tanggal)->diffForHumans() }}</small>
+                                                    <small class="text-muted">{{ \Carbon\Carbon::parse($agenda->dari_tanggal)->diffForHumans() }}</small>
                                                 </td>
                                                 <td>
                                                     <div class="fw-medium text-truncate" style="max-width: 300px;">
