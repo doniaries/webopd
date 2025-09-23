@@ -1,11 +1,7 @@
-<div class="py-8 px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-    <!-- Header -->
-    <div class="text-center mb-12">
-        <h1 class="text-3xl font-bold text-gray-900 sm:text-4xl">Layanan Kami</h1>
-        <p class="max-w-2xl mx-auto mt-4 text-lg text-gray-500">
-            Berbagai layanan unggulan yang kami sediakan untuk masyarakat
-        </p>
-    </div>
+<div>
+    <x-page-header title="Layanan Kami" subtitle="Berbagai layanan unggulan yang kami sediakan untuk masyarakat" />
+    
+    <div class="py-8 px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
 
     <!-- Search -->
     <div class="mb-8">
@@ -23,6 +19,7 @@
                     placeholder="Cari layanan...">
             </div>
         </div>
+    </div>
     </div>
 
     <!-- Layanan List -->

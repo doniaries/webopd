@@ -1,6 +1,48 @@
 <header id="header" class="header sticky-top">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --brand-blue-start: #3b82f6;
+            /* blue-500 */
+            --brand-blue-mid: #2563eb;
+            /* blue-600 */
+            --brand-blue-end: #1e40af;
+            /* blue-800 */
+        }
+
+        /* Brand gradient utilities for consistent blue headers */
+        .brand-gradient {
+            background: linear-gradient(180deg, var(--brand-blue-start) 0%, var(--brand-blue-mid) 55%, var(--brand-blue-end) 100%);
+            color: #fff !important;
+        }
+
+        .brand-bar {
+            border-radius: 6px;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.15);
+        }
+
+        .brand-bar h1,
+        .brand-bar h2,
+        .brand-bar h3,
+        .brand-bar h4,
+        .brand-bar h5,
+        .brand-bar h6 {
+            margin: 0 !important;
+            color: #fff !important;
+            font-weight: 700 !important;
+        }
+
+        .brand-bar .brand-dot {
+            width: 8px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.75);
+            border-radius: 9999px;
+        }
+
         /* Reset and Base Styles */
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
@@ -82,7 +124,8 @@
             align-items: center;
             text-decoration: none;
             color: inherit;
-            padding: 2px 0 2px 20px; /* Add left padding to logo */
+            padding: 2px 0 2px 20px;
+            /* Add left padding to logo */
             min-width: 40px;
             margin-right: auto;
         }
@@ -445,6 +488,7 @@
 
         /* Desktop dropdown behavior */
         @media (min-width: 992px) {
+
             /* Hide submenus by default and position them under parent */
             .navmenu ul ul {
                 display: none;
@@ -455,7 +499,7 @@
             }
 
             /* Show submenu on hover */
-            .navmenu li:hover > ul {
+            .navmenu li:hover>ul {
                 display: block;
             }
 
@@ -592,30 +636,32 @@
 
         /* Tablet Styles */
         @media (min-width: 768px) and (max-width: 991.98px) {
-            .header-wrapper, .menu-wrapper {
+
+            .header-wrapper,
+            .menu-wrapper {
                 padding: 0 15px !important;
                 max-width: 100% !important;
                 width: 100% !important;
             }
-            
+
             .header-content {
                 padding: 0 5px !important;
                 max-width: 100% !important;
                 width: 100% !important;
             }
-            
+
             .logo {
                 min-width: 35px !important;
                 width: auto !important;
                 height: 35px !important;
                 margin-right: 10px !important;
             }
-            
+
             .logo-image {
                 max-width: 35px !important;
                 height: auto !important;
             }
-            
+
             .sitename {
                 font-size: 0.95rem !important;
                 white-space: nowrap;
@@ -624,13 +670,13 @@
                 max-width: 150px !important;
                 display: block !important;
             }
-            
+
             .text-uppercase {
                 font-size: 0.65rem !important;
                 display: block !important;
             }
-            
-            .navmenu > ul {
+
+            .navmenu>ul {
                 display: flex;
                 flex-wrap: nowrap;
                 overflow-x: auto;
@@ -639,39 +685,41 @@
                 margin: 0 -5px;
                 width: calc(100% + 10px);
             }
-            
-            .navmenu > ul > li {
+
+            .navmenu>ul>li {
                 margin: 0 5px !important;
                 flex-shrink: 0;
             }
-            
-            .navmenu > ul > li > a {
+
+            .navmenu>ul>li>a {
                 font-size: 0.75rem;
                 padding: 8px 8px;
                 white-space: nowrap;
             }
-            
+
             .menu-container {
                 padding: 5px 0;
                 overflow: hidden;
             }
-            
+
             .header-container {
                 min-height: 45px;
                 position: relative;
             }
-            
+
             /* Hide scrollbar for Chrome, Safari and Opera */
-            .navmenu > ul::-webkit-scrollbar {
+            .navmenu>ul::-webkit-scrollbar {
                 display: none;
             }
-            
+
             /* Hide scrollbar for IE, Edge and Firefox */
-            .navmenu > ul {
-                -ms-overflow-style: none;  /* IE and Edge */
-                scrollbar-width: none;  /* Firefox */
+            .navmenu>ul {
+                -ms-overflow-style: none;
+                /* IE and Edge */
+                scrollbar-width: none;
+                /* Firefox */
             }
-            
+
             /* Ensure dropdowns are visible */
             .dropdown-menu {
                 position: absolute !important;
@@ -960,34 +1008,43 @@
                                 $logoUrl = asset('kabupaten-sijunjung.png');
                             }
                         @endphp
-                        
+
                         <!-- Logo Container with subtle shadow and hover effect -->
-                        <div class="flex items-center justify-center h-12 w-12 md:h-14 md:w-14 bg-white rounded-lg shadow-sm p-1.5 transition-all duration-200 group-hover:shadow-md">
-                            <img src="{{ $logoUrl }}" alt="Logo" 
-                                 class="h-full w-full object-contain"
-                                 onerror="this.onerror=null; this.src='{{ asset('kabupaten-sijunjung.png') }}';">
+                        <div
+                            class="flex items-center justify-center h-12 w-12 md:h-14 md:w-14 bg-white rounded-lg shadow-sm p-1.5 transition-all duration-200 group-hover:shadow-md">
+                            <img src="{{ $logoUrl }}" alt="Logo" class="h-full w-full object-contain"
+                                onerror="this.onerror=null; this.src='{{ asset('kabupaten-sijunjung.png') }}';">
                         </div>
-                        
+
                         <!-- Site Name and Tagline -->
-                        <div class="flex flex-col ml-3">
-                            <span class="text-[11px] uppercase tracking-[1px] text-gray-500 font-semibold hidden sm:block mb-[-2px]">WEBSITE</span>
-                            <div class="text-[15px] md:text-[16px] font-bold text-gray-800 leading-tight group-hover:text-blue-600 transition-colors">{{ $siteName }}</div>
+                        <div class="flex items-center ml-3">
+                            <div class="flex flex-col">
+                                <span
+                                    class="text-[11px] uppercase tracking-[1px] text-gray-500 font-semibold hidden sm:block mb-[-2px]">WEBSITE</span>
+                                <div
+                                    class="text-[15px] md:text-[16px] font-bold text-gray-800 leading-tight group-hover:text-blue-600 transition-colors">
+                                    {{ $siteName }}</div>
+                            </div>
+                            <!-- Additional Logos next to site name (md and up) -->
+                            <div class="hidden md:flex items-center ml-3 pl-3 border-l border-gray-200 h-8">
+                                <img src="{{ asset('images/bangga.png') }}" alt="Bangga" class="h-6 w-auto mr-2">
+                                <img src="{{ asset('images/berakhlak.png') }}" alt="Berakhlak" class="h-6 w-auto">
+                            </div>
                         </div>
+
                     </a>
                 </div>
 
-                <!-- Logo tambahan di kanan -->
-                <div class="hidden md:flex items-center ml-3 pl-3 border-l border-gray-200 h-8">
-                    <img src="{{ asset('images/bangga.png') }}" alt="Bangga" class="h-6 w-auto mr-2">
-                    <img src="{{ asset('images/berakhlak.png') }}" alt="Berakhlak" class="h-6 w-auto">
-                </div>
+                <!-- Logo tambahan di kanan (removed to avoid duplication, logos now next to site name) -->
 
                 <!-- Tombol menu mobile -->
                 <button id="mobile-menu-toggle" type="button"
                     class="md:hidden p-2 text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200">
                     <span class="sr-only">Open main menu</span>
-                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
+                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 17 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M1 1h15M1 7h15M1 13h15" />
                     </svg>
                 </button>
             </div>
@@ -1058,9 +1115,8 @@
                             <li><a href="{{ route('sambutan-pimpinan') }}"
                                     class="{{ request()->routeIs('sambutan-pimpinan') ? 'active' : '' }}">Sambutan
                                     Pimpinan</a></li>
-                            <li><a href="{{ route('struktur-organisasi') }}"
-                                    class="{{ request()->routeIs('struktur-organisasi') ? 'active' : '' }}">Struktur
-                                    Organisasi</a></li>
+                            <li><a href="{{ route('profil.unit-kerja') }}"
+                                    class="{{ request()->routeIs('profil.unit-kerja') ? 'active' : '' }}">Unit Kerja</a></li>
                         </ul>
                     </li>
                     <li class="mobile-dropdown">
@@ -1131,9 +1187,8 @@
                             <li><a href="{{ route('sambutan-pimpinan') }}"
                                     class="{{ request()->routeIs('sambutan-pimpinan') ? 'active' : '' }}">Sambutan
                                     Pimpinan</a></li>
-                            <li><a href="{{ route('struktur-organisasi') }}"
-                                    class="{{ request()->routeIs('struktur-organisasi') ? 'active' : '' }}">Struktur
-                                    Organisasi</a></li>
+                            <li><a href="{{ route('profil.unit-kerja') }}"
+                                    class="{{ request()->routeIs('profil.unit-kerja') ? 'active' : '' }}">Unit Kerja</a></li>
                         </ul>
                     </li>
                     <li class="dropdown" style="margin: 0 20px;"><a href="#"><span>Informasi</span> <i

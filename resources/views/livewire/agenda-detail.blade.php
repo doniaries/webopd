@@ -1,29 +1,32 @@
 <div>
-    <x-page-header title="Agenda Kegiatan" />
+    <x-page-header :title="$agenda->nama_agenda" />
+    
+    <div class="py-8">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <div class="p-6">
+                        <a href="{{ route('agenda.index') }}" class="inline-flex items-center text-blue-600 hover:text-blue-800 mb-6">
+                            <i class="fas fa-arrow-left mr-2"></i> Kembali ke Daftar Agenda
+                        </a>
 
-    <!-- Agenda Detail Section -->
-    <section id="agenda-detail" class="agenda-detail-section section">
-        <div class="container" data-aos="fade-up">
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <div class="card">
-                        <div class="card-body">
-                            <a href="{{ route('agenda.index') }}" class="btn btn-outline-secondary btn-sm mb-4">
-                                <i class="bi bi-arrow-left me-1"></i> Kembali ke Daftar Agenda
-                            </a>
-
-                            <div class="mb-4">
-                                <div class="d-flex align-items-center gap-2 mb-2">
-                                    <h1 class="h2 mb-0">{{ $agenda->nama_agenda }}</h1>
-                                    @php
-                                        $status = $agenda->status ?? 'Mendatang';
-                                        $badgeClass = match ($status) {
-                                            'Berlangsung' => 'badge bg-success',
-                                            'Selesai' => 'badge bg-secondary',
-                                            default => 'badge bg-warning text-dark',
-                                        };
-                                    @endphp
-                                    <span class="{{ $badgeClass }} align-self-center">{{ $status }}</span>
+                        <div class="mb-4">
+                            <div class="flex items-center justify-between mb-6">
+                                <div>
+                                    <h1 class="text-2xl font-bold text-gray-900">{{ $agenda->nama_agenda }}</h1>
+                                    <div class="mt-2">
+                                        @php
+                                            $status = $agenda->status ?? 'Mendatang';
+                                            $badgeClass = match ($status) {
+                                                'Berlangsung' => 'bg-green-100 text-green-800',
+                                                'Selesai' => 'bg-gray-100 text-gray-800',
+                                                default => 'bg-yellow-100 text-yellow-800',
+                                            };
+                                        @endphp
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium {{ $badgeClass }}">
+                                            {{ $status }}
+                                        </span>
+                                    </div>
                                 </div>
                                 <div class="d-flex flex-column gap-2 mb-3">
                                     <div class="d-flex align-items-center text-muted">
@@ -75,10 +78,11 @@
                                     </div>
                                 @endif
                             </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 </div>

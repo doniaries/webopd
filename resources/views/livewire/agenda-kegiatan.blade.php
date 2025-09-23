@@ -1,9 +1,8 @@
-<div class="py-12 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-10">
-            <h2 class="text-3xl font-bold text-gray-900 mb-3">Daftar Seluruh Agenda</h2>
-            <p class="text-lg text-gray-600">Jadwal dan informasi kegiatan terbaru</p>
-        </div>
+<div>
+    <x-page-header title="Daftar Seluruh Agenda" subtitle="Jadwal dan informasi kegiatan terbaru" />
+    
+    <div class="py-8 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <div
             class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg shadow-md overflow-hidden border border-green-200">
@@ -232,6 +231,8 @@
                     <p class="text-gray-500">Tidak ada agenda yang dijadwalkan untuk bulan ini.</p>
                 </div>
             @endif
+        </div>
+            </div>
         </div>
     </div>
 </div>

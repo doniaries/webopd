@@ -1,27 +1,24 @@
-<div class="py-12 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <!-- Breadcrumb -->
-        <nav class="flex mb-6" aria-label="Breadcrumb">
-            <ol class="inline-flex items-center space-x-1 md:space-x-3">
-                <li class="inline-flex items-center">
-                    <a href="{{ route('home') }}" class="text-blue-600 hover:text-blue-800">
-                        <i class="fas fa-home mr-2"></i>Beranda
-                    </a>
-                </li>
-                <li>
-                    <div class="flex items-center">
-                        <i class="fas fa-chevron-right text-gray-400 text-xs mx-2"></i>
-                        <a href="{{ route('dokumen') }}" class="text-blue-600 hover:text-blue-800 text-sm">Dokumen</a>
-                    </div>
-                </li>
-                <li aria-current="page">
-                    <div class="flex items-center">
-                        <i class="fas fa-chevron-right text-gray-400 text-xs mx-2"></i>
-                        <span class="text-gray-500 text-sm">Detail Dokumen</span>
-                    </div>
-                </li>
-            </ol>
-        </nav>
+<div>
+    <x-page-header :title="$dokumen->nama_dokumen" />
+    
+    <div class="py-8 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Breadcrumb -->
+            <nav class="flex mb-6" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                    <li class="inline-flex items-center">
+                        <a href="{{ route('home') }}" class="text-blue-600 hover:text-blue-800">
+                            <i class="fas fa-home mr-2"></i>Beranda
+                        </a>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fas fa-chevron-right text-gray-400 text-xs mx-2"></i>
+                            <a href="{{ route('dokumen') }}" class="text-blue-600 hover:text-blue-800 text-sm">Dokumen</a>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
 
         <!-- Document Detail -->
         <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
@@ -137,5 +134,7 @@
                 </div>
             </div>
         @endif
+            </div>
+        </div>
     </div>
 </div>

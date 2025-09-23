@@ -1,14 +1,10 @@
 <div>
-    <x-page-header title="Kontak Kami" />
+    <x-page-header title="Kontak Kami" :subtitle="$description" />
     
-    <div class="bg-gray-50 py-6">
-        <div class="xl:container mx-auto px-3 sm:px-4 xl:px-2">
-            <div class="flex flex-wrap">
-                <div class="flex-shrink max-w-full w-full overflow-hidden">
-                    <div class="p-7 rounded bg-white">
-                        <div class="mb-7">
-                            <p class="text-gray-600">{{ $description }}</p>
-                        </div>
+    <div class="py-8 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-lg shadow overflow-hidden">
+                <div class="p-6 md:p-8">
                         
                         @if($pengaturan)
                         <div class="flex flex-wrap -mx-4 mb-7">
@@ -109,6 +105,5 @@
             </div>
         </div>
     </div>
-
     <!-- Google Maps API is loaded via the iframe embed -->
 </div>
