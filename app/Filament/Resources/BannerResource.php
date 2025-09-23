@@ -42,17 +42,17 @@ class BannerResource extends Resource
                     ->default('https://via.placeholder.com/100')
                     ->directory('banners')
                     ->image()
-                    ->acceptedFileTypes(['image/jpeg','image/png','image/webp'])
+                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
                     ->imageEditor()
                     ->imageCropAspectRatio('4:5')
                     ->imageEditorAspectRatios([
                         '4:5' => 'Portrait 4:5',
                     ])
-                    ->rules(['image','mimes:jpeg,png,webp','dimensions:ratio=4/5'])
+                    ->rules(['image', 'mimes:jpeg,png,webp', 'dimensions:ratio=4/5'])
                     ->helperText('Unggah gambar portrait (rasio 4:5), misal 800x1000. Gunakan alat crop bila perlu.')
                     ->imageResizeTargetWidth(800)
                     ->imageResizeTargetHeight(1000)
-                    ->maxSize(2048),
+                    ->maxSize(3000),
 
                 Forms\Components\Toggle::make('is_active')
                     ->required()
