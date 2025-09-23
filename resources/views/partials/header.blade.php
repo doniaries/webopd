@@ -990,11 +990,11 @@
                                 $pengaturan = \App\Models\Pengaturan::first();
 
                                 // Get logo URL
-                                if ($pengaturan && $pengaturan->logo_instansi) {
-                                    if (str_starts_with($pengaturan->logo_instansi, 'http')) {
-                                        $logoUrl = $pengaturan->logo_instansi;
+                                if ($pengaturan && $pengaturan->logo) {
+                                    if (str_starts_with($pengaturan->logo, 'http')) {
+                                        $logoUrl = $pengaturan->logo;
                                     } else {
-                                        $logoUrl = asset('storage/' . $pengaturan->logo_instansi);
+                                        $logoUrl = asset('storage/' . $pengaturan->logo);
                                     }
                                 }
 
@@ -1005,7 +1005,7 @@
                             }
 
                             if (empty($logoUrl) || $logoUrl === asset('storage/')) {
-                                $logoUrl = asset('kabupaten-sijunjung.png');
+                                $logoUrl = asset('assets/img/logo.png');
                             }
                         @endphp
 
@@ -1013,42 +1013,41 @@
                         <div
                             class="flex items-center justify-center h-12 w-12 md:h-14 md:w-14 bg-white rounded-lg shadow-sm p-1.5 transition-all duration-200 group-hover:shadow-md">
                             <img src="{{ $logoUrl }}" alt="Logo" class="h-full w-full object-contain"
-                                onerror="this.onerror=null; this.src='{{ asset('kabupaten-sijunjung.png') }}';">
+                                onerror="this.onerror=null; this.src='{{ asset('assets/img/logo.png') }}';">
                         </div>
 
                         <!-- Site Name and Tagline -->
                         <div class="flex items-center ml-3">
                             <div class="flex flex-col">
-                                <span
-                                    class="text-[11px] uppercase tracking-[1px] text-gray-500 font-semibold hidden sm:block mb-[-2px]">WEBSITE</span>
-                                <div
+                                <span {{-- class="text-[11px] uppercase tracking-[1px] text-gray-500 font-semibold hidden sm:block mb-[-2px]">WEBSITE</span> --}} <div
                                     class="text-[15px] md:text-[16px] font-bold text-gray-800 leading-tight group-hover:text-blue-600 transition-colors">
-                                    {{ $siteName }}</div>
-                            </div>
-                            <!-- Additional Logos next to site name (md and up) -->
-                            <div class="hidden md:flex items-center ml-3 pl-3 border-l border-gray-200 h-8">
-                                <img src="{{ asset('images/bangga.png') }}" alt="Bangga" class="h-6 w-auto mr-2">
-                                <img src="{{ asset('images/berakhlak.png') }}" alt="Berakhlak" class="h-6 w-auto">
+                                    {{ $siteName }}
                             </div>
                         </div>
-
-                    </a>
+                        <!-- Additional Logos next to site name (md and up) -->
+                        <div class="hidden md:flex items-center ml-3 pl-3 border-l border-gray-200 h-8">
+                            <img src="{{ asset('images/bangga.png') }}" alt="Bangga" class="h-6 w-auto mr-2">
+                            <img src="{{ asset('images/berakhlak.png') }}" alt="Berakhlak" class="h-6 w-auto">
+                        </div>
                 </div>
 
-                <!-- Logo tambahan di kanan (removed to avoid duplication, logos now next to site name) -->
-
-                <!-- Tombol menu mobile -->
-                <button id="mobile-menu-toggle" type="button"
-                    class="md:hidden p-2 text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200">
-                    <span class="sr-only">Open main menu</span>
-                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                        viewBox="0 0 17 14">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M1 1h15M1 7h15M1 13h15" />
-                    </svg>
-                </button>
+                </a>
             </div>
+
+            <!-- Logo tambahan di kanan (removed to avoid duplication, logos now next to site name) -->
+
+            <!-- Tombol menu mobile -->
+            <button id="mobile-menu-toggle" type="button"
+                class="md:hidden p-2 text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200">
+                <span class="sr-only">Open main menu</span>
+                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    viewBox="0 0 17 14">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M1 1h15M1 7h15M1 13h15" />
+                </svg>
+            </button>
         </div>
+    </div>
     </div>
 
     <!-- Mobile Menu -->
