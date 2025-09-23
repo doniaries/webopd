@@ -303,7 +303,6 @@
             z-index: 1030;
             opacity: 0;
             transition: opacity 0.3s ease;
-            <div class="position-absolute bottom-0 start-0 w-100 p-4 mb-5" style="background: linear-gradient(to top, rgba(0, 0, 255, 0.8), transparent); z-index: 11; transform: translateY(20px);">
         }
 
         .mobile-menu-container.visible {
@@ -442,6 +441,29 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             padding: 5px 0;
             min-width: 200px;
+        }
+
+        /* Desktop dropdown behavior */
+        @media (min-width: 992px) {
+            /* Hide submenus by default and position them under parent */
+            .navmenu ul ul {
+                display: none;
+                position: absolute;
+                top: calc(100% + 8px);
+                left: 0;
+                z-index: 1000;
+            }
+
+            /* Show submenu on hover */
+            .navmenu li:hover > ul {
+                display: block;
+            }
+
+            /* Ensure dropdown isn't clipped by container */
+            .menu-container,
+            .menu-wrapper {
+                overflow: visible !important;
+            }
         }
 
         .navmenu ul ul li a {
