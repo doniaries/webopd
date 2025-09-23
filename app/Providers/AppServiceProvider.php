@@ -6,6 +6,8 @@ use Filament\Facades\Filament;
 use Illuminate\Support\ServiceProvider;
 use App\Models\Post;
 use App\Observers\PostObserver;
+use App\Http\View\Composers\PengaturanComposer;
+use Illuminate\Support\Facades\View;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -28,5 +30,8 @@ class AppServiceProvider extends ServiceProvider
         
         // Mendaftarkan observer
         Post::observe(PostObserver::class);
+        
+        // Share pengaturan with all views
+        View::composer('*', PengaturanComposer::class);
     }
 }

@@ -66,10 +66,10 @@ class PengaturanResource extends Resource
                             ->unique(ignoreRecord: true)
                             ->maxLength(255),
 
-                        Forms\Components\TextInput::make('alamat_instansi')
-                            ->label('Alamat Instansi')
-                            ->required()
-                            ->maxLength(255),
+                        // Forms\Components\TextInput::make('alamat_instansi')
+                        //     ->label('Alamat Instansi')
+                        //     ->required()
+                        //     ->maxLength(255),
 
                         // Add these inside the Informasi Website section, before the columns(2) call
                         Forms\Components\TextInput::make('latitude')
@@ -141,7 +141,7 @@ class PengaturanResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->label('Nama Website')
+                    ->label('Nama Instansi')
                     ->searchable()
                     ->sortable(),
 
