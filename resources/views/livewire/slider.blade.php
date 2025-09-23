@@ -190,5 +190,45 @@
             background: #4ea1ff;
             opacity: 1;
         }
+
+        /* Responsive heights: Mobile 320px, Tablet 420px, Desktop 560px */
+        @media (max-width: 767.98px) {
+            .swiper,
+            .swiper-slide {
+                height: 320px;
+                min-height: 320px;
+                max-height: 320px;
+            }
+            .slide-img {
+                min-height: 320px;
+                max-height: 320px;
+            }
+        }
+
+        @media (min-width: 768px) and (max-width: 1023.98px) {
+            .swiper,
+            .swiper-slide {
+                height: 420px;
+                min-height: 420px;
+                max-height: 420px;
+            }
+            .slide-img {
+                min-height: 420px;
+                max-height: 420px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .swiper,
+            .swiper-slide {
+                height: 560px;
+                min-height: 560px;
+                max-height: 560px;
+            }
+            .slide-img {
+                min-height: 560px;
+                max-height: 560px;
+            }
+        }
     </style>
 </div>
