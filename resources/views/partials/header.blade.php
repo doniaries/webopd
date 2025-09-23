@@ -1116,7 +1116,8 @@
                                     class="{{ request()->routeIs('sambutan-pimpinan') ? 'active' : '' }}">Sambutan
                                     Pimpinan</a></li>
                             <li><a href="{{ route('profil.unit-kerja') }}"
-                                    class="{{ request()->routeIs('profil.unit-kerja') ? 'active' : '' }}">Unit Kerja</a></li>
+                                    class="{{ request()->routeIs('profil.unit-kerja') ? 'active' : '' }}">Unit
+                                    Kerja</a></li>
                         </ul>
                     </li>
                     <li class="mobile-dropdown">
@@ -1188,7 +1189,8 @@
                                     class="{{ request()->routeIs('sambutan-pimpinan') ? 'active' : '' }}">Sambutan
                                     Pimpinan</a></li>
                             <li><a href="{{ route('profil.unit-kerja') }}"
-                                    class="{{ request()->routeIs('profil.unit-kerja') ? 'active' : '' }}">Unit Kerja</a></li>
+                                    class="{{ request()->routeIs('profil.unit-kerja') ? 'active' : '' }}">Unit
+                                    Kerja</a></li>
                         </ul>
                     </li>
                     <li class="dropdown" style="margin: 0 20px;"><a href="#"><span>Informasi</span> <i
@@ -1204,9 +1206,7 @@
                             <li><a href="{{ route('agenda.index') }}"
                                     class="{{ request()->routeIs('agenda.index') || request()->routeIs('agenda.show') ? 'active' : '' }}">Agenda
                                     Kegiatan</a></li>
-                            {{-- <li><a href="{{ route('informasi.index') }}"
-                                    class="{{ request()->routeIs('informasi.index') || request()->routeIs('informasi.show') ? 'active' : '' }}">Informasi</a>
-                            </li> --}}
+
                         </ul>
                     </li>
                     <li style="margin: 0 20px;"><a href="{{ route('pengumuman.index') }}"
