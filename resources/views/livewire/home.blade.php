@@ -168,9 +168,11 @@
                         <!-- Banner Section -->
                         <div class="mb-6">
                             @livewire('banner')
+                            <livewire:visitor-stats />
                         </div>
                         <!-- End Banner Section -->
                     </div>
+
                 </div>
             </div>
         </section>

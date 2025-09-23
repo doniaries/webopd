@@ -11,7 +11,8 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        // Track visits for web requests
+        $middleware->web(append: [\App\Http\Middleware\TrackVisit::class]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

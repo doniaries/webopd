@@ -1,20 +1,20 @@
 <div class="banner-root">
-    <div class="banner-swiper swiper" style="width:300px; height:350px; margin:auto; position:relative;">
+    <div class="banner-swiper swiper" style="width:300px; height:375px; margin:auto; position:relative;">
         <div class="swiper-wrapper">
             @forelse ($banners as $banner)
                 <div class="swiper-slide">
-                    <a href="{{ $banner->url ?? '#' }}" style="width:300px; height:350px; display:block;">
-                        <img src="{{ asset('storage/' . $banner->gambar) }}" alt="Banner"
-                            style="width:300px; height:350px; object-fit:cover; object-position:center; display:block; cursor: pointer;"
+                    <a href="{{ $banner->url ?? '#' }}" style="width:300px; height:375px; display:block;">
+                        <img src="{{ $banner->image_url ?? asset('assets/images/placeholder2.jpg') }}" alt="Banner"
+                            style="width:300px; height:375px; object-fit:contain; object-position:center; display:block; cursor: pointer; background:#fff;"
                             onerror="this.onerror=null; this.src='{{ asset('assets/images/placeholder2.jpg') }}'"
                             loading="lazy" class="banner-modal-trigger"
-                            data-img="{{ asset('storage/' . $banner->gambar) }}">
+                            data-img="{{ $banner->image_url ?? asset('assets/images/placeholder2.jpg') }}">
                     </a>
                 </div>
             @empty
                 <div class="swiper-slide">
                     <div class="w-full h-full flex flex-col items-center justify-center bg-gray-100 text-gray-400 p-4 text-center"
-                        style="width:300px; height:350px;">
+                        style="width:300px; height:375px;">
                         <i class="bi bi-image text-4xl mb-4"></i>
                         <p class="text-lg">Tidak ada banner tersedia</p>
                     </div>
@@ -41,16 +41,37 @@
     @push('styles')
         <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
         <style>
-            .banner-swiper {
+            .banner-root { background: transparent !important; }
+
+            .banner-swiper,
+            .banner-swiper.swiper {
                 width: 300px;
-                height: 350px;
+                height: 375px; /* 4:5 ratio portrait */
                 position: relative;
+                background: #fff !important; /* clean white background to avoid dark bars */
+                padding: 0 !important;
+                margin: 0 auto !important;
+                overflow: hidden !important;
             }
 
             .banner-swiper .swiper-slide {
                 width: 300px !important;
-                height: 350px !important;
+                height: 375px !important; /* 4:5 ratio */
+                background: #fff !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                overflow: hidden !important;
             }
+
+            /* Ensure wrapper matches fixed height */
+            .banner-swiper .swiper-wrapper { height: 375px !important; background: #fff !important; }
+
+            /* Force anchor and image to fully fill the frame */
+            .banner-swiper .swiper-slide > a { display: block; width: 300px; height: 375px; background: #fff !important; }
+            .banner-swiper .swiper-slide img { width: 300px; height: 375px; object-fit: contain; object-position: center; display: block; background: #fff !important; }
+
+            /* Make pagination background transparent as well */
+            .banner-swiper .swiper-pagination { background: transparent !important; }
 
             .banner-swiper .swiper-button-next,
             .banner-swiper .swiper-button-prev {

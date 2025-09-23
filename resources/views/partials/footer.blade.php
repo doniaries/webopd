@@ -71,7 +71,7 @@
                 </ul>
             </div>
 
-            <div class="col-lg-4 col-md-6 footer-newsletter">
+            {{-- <div class="col-lg-4 col-md-6 footer-newsletter">
                 <h4>Peta Lokasi</h4>
                 <div class="map-container" style="height: 200px; width: 100%;">
                     <!-- Ganti dengan iframe Google Maps lokasi instansi -->
@@ -80,7 +80,7 @@
                         width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
                         referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
-            </div>
+            </div> --}}
 
         </div>
     </div>
