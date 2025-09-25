@@ -110,9 +110,12 @@
                                                         </div>
                                                     </div>
                                                 @else
-                                                    <img src="{{ $post->foto_utama_url }}"
-                                                        class="position-absolute top-0 start-0 w-100 h-100 card-img-top"
-                                                        style="object-fit: cover;" alt="{{ $post->title }}">
+                                                    <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden">
+                                                        <img src="{{ $post->foto_utama_url }}"
+                                                            class="w-100 h-100 card-img-top hover-zoom"
+                                                            style="object-fit: cover; transition: transform 0.5s ease;"
+                                                            alt="{{ $post->title }}">
+                                                    </div>
                                                 @endif
 
                                                 <div
@@ -358,6 +361,19 @@
                                 .pengumuman-item {
                                     transition: all 0.3s ease;
                                     border-left: 3px solid transparent;
+                                }
+                                
+                                /* Image zoom effect on hover */
+                                .hover-zoom {
+                                    transition: transform 0.5s ease;
+                                }
+                                
+                                .card:hover .hover-zoom {
+                                    transform: scale(1.05);
+                                }
+                                
+                                .card {
+                                    overflow: hidden;
                                 }
 
                                 .pengumuman-item:hover {
