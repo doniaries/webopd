@@ -371,9 +371,10 @@
         <!-- Single Post View -->
         <x-page-header :title="$post->title" />
         <div class="container mx-auto px-4 py-8">
-            <article class="max-w-4xl mx-auto">
+            <article
+                class="max-w-4xl mx-auto bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-gray-100">
                 <!-- Foto Utama -->
-                <div class="mb-8 rounded-lg overflow-hidden">
+                <div class="mb-0 rounded-t-lg overflow-hidden">
                     @php
                         $fotoUtama = json_decode($post->foto_utama_url, true);
                         $isPlaceholder =
@@ -401,51 +402,59 @@
                 </div>
 
                 <!-- Post Header -->
-                <header class="mb-8 text-center">
-                    <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">{{ $post->title }}</h1>
+                <div class="px-8 pt-8">
+                    <header class="mb-8 text-center">
+                        <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">{{ $post->title }}</h1>
 
-                    <div class="flex flex-wrap justify-center items-center gap-2 text-sm text-gray-500 mb-4">
-                        <span class="flex items-center">
-                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                            {{ $post->published_at->translatedFormat('d F Y') }}
-                        </span>
-                        
-                        @if($post->tags->isNotEmpty())
-                            @foreach($post->tags as $tag)
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                    {{ $tag->name }}
-                                </span>
-                            @endforeach
-                            <span class="mx-1">•</span>
-                        @endif
-                        <span class="flex items-center">
-                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                            </svg>
-                            {{ $post->user->name ?? 'Admin' }}
-                        </span>
-                        @if ($post->category)
-                            <span class="mx-2">•</span>
-                            <a href="{{ route('posts.index', ['category' => $post->category_id]) }}"
-                                class="text-blue-600 hover:text-blue-800">
-                                {{ $post->category->name }}
-                            </a>
-                        @endif
-                    </div>
-                </header>
+                        <div class="flex flex-wrap justify-center items-center gap-2 text-sm text-gray-500 mb-4">
+                            <span class="flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                                {{ $post->published_at->translatedFormat('d F Y') }}
+                            </span>
+
+                            @if ($post->tags->isNotEmpty())
+                                @foreach ($post->tags as $tag)
+                                    <span
+                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                        {{ $tag->name }}
+                                    </span>
+                                @endforeach
+                                <span class="mx-1">•</span>
+                            @endif
+                            <span class="flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                                {{ $post->user->name ?? 'Admin' }}
+                            </span>
+                            @if ($post->category)
+                                <span class="mx-2">•</span>
+                                <a href="{{ route('posts.index', ['category' => $post->category_id]) }}"
+                                    class="text-blue-600 hover:text-blue-800">
+                                    {{ $post->category->name }}
+                                </a>
+                            @endif
+                        </div>
+                    </header>
+                </div>
 
                 <!-- Post Content -->
-                <div class="prose max-w-none mb-12">
-                    {!! $post->content !!}
+                <div class="px-8 pb-8">
+                    <div class="prose max-w-none mb-6">
+                        {!! $post->content !!}
+                    </div>
                 </div>
 
                 <!-- Gallery Images -->
                 @if ($post->postGallery && $post->postGallery->isNotEmpty())
-                    <div class="mt-12 mb-12">
+                    {{-- <div class="px-8 py-6 border-t border-gray-100">
+                        <h2 class="text-xl font-semibold text-gray-800 mb-6">Galeri Foto</h2> --}}
+                    <div class="px-8 py-6 border-t border-gray-100">
+                        <h2 class="text-xl font-semibold text-gray-800 mb-4">Galeri Foto</h2>
                         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" x-data="{
                             images: @js(
     collect($post->postGallery)->map(function ($img, $index) {
@@ -567,28 +576,27 @@
                     </div>
                 @endif
 
-                <div class="border-t border-gray-200 my-8"></div>
-
                 <!-- Related Posts -->
                 @if ($relatedPosts->count() > 0)
-                    <div class="mt-12">
+                    <div class="px-8 py-6 border-t border-gray-100">
                         <h2 class="text-2xl font-bold text-gray-900 mb-6">Baca Juga</h2>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                             @foreach ($relatedPosts as $related)
                                 <div
-                                    class="border rounded-lg overflow-hidden hover:shadow-md transition-shadow bg-white">
-                                    @php
-                                        $relatedFoto = $related->foto_utama_url;
-                                        $relatedPlaceholder = is_string($relatedFoto)
-                                            ? json_decode($relatedFoto, true)
-                                            : [];
-                                        $isRelatedPlaceholder =
-                                            is_array($relatedPlaceholder) &&
-                                            isset($relatedPlaceholder['type']) &&
-                                            $relatedPlaceholder['type'] === 'placeholder';
-                                    @endphp
+                                    class="group border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 bg-white hover:-translate-y-1">
+                                    <div class="h-48 bg-gray-100 overflow-hidden">
+                                        @php
+                                            $relatedFoto = $related->foto_utama_url;
+                                            $relatedPlaceholder = is_string($relatedFoto)
+                                                ? json_decode($relatedFoto, true)
+                                                : [];
+                                            $isRelatedPlaceholder =
+                                                is_array($relatedPlaceholder) &&
+                                                isset($relatedPlaceholder['type']) &&
+                                                $relatedPlaceholder['type'] === 'placeholder';
+                                        @endphp
 
-                                    <div class="w-full h-48 bg-gray-100 overflow-hidden">
+
                                         @if ($isRelatedPlaceholder)
                                             <div class="w-full h-full flex items-center justify-center"
                                                 style="background-color: {{ $relatedPlaceholder['bg_color'] ?? '#f3f4f6' }}; color: {{ $relatedPlaceholder['color'] ?? '#6b7280' }};">
