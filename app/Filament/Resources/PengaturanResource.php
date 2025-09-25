@@ -18,10 +18,10 @@ class PengaturanResource extends Resource
     protected static ?string $model = Pengaturan::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-cog-6-tooth';
-    protected static ?string $navigationLabel = 'Setting';
+    protected static ?string $navigationLabel = 'Identitas Instansi';
     protected static ?string $modelLabel = 'Pengaturan';
     protected static ?string $pluralModelLabel = 'Pengaturan';
-    protected static ?string $navigationGroup = 'Pengaturan';
+    protected static ?string $navigationGroup = 'Instansi';
     protected static ?int $navigationSort = 5;
 
     public static function form(Form $form): Form
@@ -53,7 +53,24 @@ class PengaturanResource extends Resource
 
                         Forms\Components\TextInput::make('kepala_instansi')
                             ->label('Nama Kepala Instansi')
-                            ->maxLength(255),
+                            ->maxLength(255)
+                            ->columnSpan(1),
+
+                        Forms\Components\FileUpload::make('foto_pimpinan')
+                            ->label('Foto Pimpinan')
+                            ->image()
+                            ->imageEditor()
+                            ->imageResizeMode('cover')
+                            ->imageCropAspectRatio('3:4')
+                            ->imageResizeTargetWidth('300')
+                            ->imageResizeTargetHeight('400')
+                            ->directory('pengaturan/foto-pimpinan')
+                            ->visibility('public')
+                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/jpg'])
+                            ->minSize(200) // 200KB
+                            ->maxSize(2048) // 2MB
+                            ->helperText('Format: JPG, JPEG, PNG | Ukuran: 200KB - 2MB | Rasio: 3:4')
+                            ->columnSpan(1),
 
                         Forms\Components\TextInput::make('no_telp_instansi')
                             ->label('Nomor Telepon')
@@ -145,42 +162,73 @@ class PengaturanResource extends Resource
                     ->searchable()
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('email_instansi')
-                    ->label('Email')
+                Tables\Columns\TextColumn::make('kepala_instansi')
+                    ->label('Nama Pimpinan')
                     ->searchable()
                     ->sortable(),
 
+                Tables\Columns\ImageColumn::make('foto_pimpinan')
+                    ->label('Foto Pimpinan')
+                    ->disk('public')
+                    ->height(50)
+                    ->circular(),
+
+                Tables\Columns\TextColumn::make('email_instansi')
+                    ->label('Email')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+
                 Tables\Columns\TextColumn::make('no_telp_instansi')
                     ->searchable()
-                    ->label('No. Telp'),
+                    ->label('No. Telp')
+                    ->toggleable(isToggledHiddenByDefault: true),
+
                 Tables\Columns\TextColumn::make('alamat_instansi')
                     ->searchable()
-                    ->label('Alamat'),
+                    ->label('Alamat')
+                    ->toggleable(isToggledHiddenByDefault: true),
+
                 Tables\Columns\TextColumn::make('latitude')
                     ->searchable()
-                    ->label('Latitude'),
+                    ->label('Latitude')
+                    ->toggleable(isToggledHiddenByDefault: true),
+
                 Tables\Columns\TextColumn::make('longitude')
                     ->searchable()
-                    ->label('Longitude'),
+                    ->label('Longitude')
+                    ->toggleable(isToggledHiddenByDefault: true),
 
-                Tables\Columns\TextColumn::make('logo_instansi')
-                    ->searchable()
-                    ->label('Logo'),
-                Tables\Columns\TextColumn::make('favicon_instansi')
-                    ->searchable()
-                    ->label('Favicon'),
+                Tables\Columns\ImageColumn::make('logo')
+                    ->label('Logo')
+                    ->disk('public')
+                    ->height(30)
+                    ->toggleable(isToggledHiddenByDefault: true),
+
+                Tables\Columns\ImageColumn::make('favicon')
+                    ->label('Favicon')
+                    ->disk('public')
+                    ->height(30)
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('facebook')
                     ->searchable()
-                    ->label('Facebook'),
+                    ->label('Facebook')
+                    ->toggleable(isToggledHiddenByDefault: true),
+
                 Tables\Columns\TextColumn::make('twitter')
                     ->searchable()
-                    ->label('Twitter'),
+                    ->label('Twitter')
+                    ->toggleable(isToggledHiddenByDefault: true),
+
                 Tables\Columns\TextColumn::make('instagram')
                     ->searchable()
-                    ->label('Instagram'),
+                    ->label('Instagram')
+                    ->toggleable(isToggledHiddenByDefault: true),
+
                 Tables\Columns\TextColumn::make('youtube')
                     ->searchable()
-                    ->label('Youtube'),
+                    ->label('Youtube')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
