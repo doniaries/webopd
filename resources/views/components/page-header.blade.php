@@ -30,15 +30,14 @@
     </div>
     
     <!-- Content -->
-    <div class="container mx-auto px-4 relative z-10 flex items-center justify-center">
-        <span class="brand-dot me-2"></span>
+    <div class="container mx-auto px-4 relative z-10 text-center">
         <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight leading-none text-white">{{ $title }}</h1>
     </div>
 </div>
 
 <style>
     .page-header { border-radius: 0; position: relative; }
-    .page-header h1 { text-shadow: 0 1px 2px rgba(0,0,0,0.1); color:#fff; position: relative; }
+    .page-header h1 { text-shadow: 0 1px 2px rgba(0,0,0,0.1); color:#fff; position: relative; margin: 0 auto; }
     
     /* Bubbles */
     .bubble {

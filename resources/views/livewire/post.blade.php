@@ -369,7 +369,6 @@
         </div>
     @else
         <!-- Single Post View -->
-        <x-page-header :title="$post->title" />
         <div class="container mx-auto px-4 py-8">
             <article
                 class="max-w-4xl mx-auto bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-gray-100">
@@ -563,13 +562,7 @@
                                         </button>
                                     </div>
 
-                                    {{-- <!-- Caption -->
-                                    <div class="mt-4 text-center text-white">
-                                        <p x-text="images[currentIndex].alt" class="text-sm md:text-base"></p>
-                                        <p class="text-xs text-gray-400 mt-1">
-                                            <span x-text="currentIndex + 1"></span> dari <span x-text="images.length"></span> Gambar
-                                        </p>
-                                    </div> --}}
+
                                 </div>
                             </div>
                         </div>
@@ -579,7 +572,7 @@
                 <!-- Related Posts -->
                 @if ($relatedPosts->count() > 0)
                     <div class="px-8 py-6 border-t border-gray-100">
-                        <h2 class="text-2xl font-bold text-gray-900 mb-6">Baca Juga</h2>
+                        <h2 class="text-xl font-bold text-gray-900 mb-6">Berita Terkait</h2>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                             @foreach ($relatedPosts as $related)
                                 <div
