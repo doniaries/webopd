@@ -17,7 +17,10 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Illuminate\Support\Str;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+use Intervention\Image\Facades\Image;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Facades\Filament;
@@ -37,24 +40,24 @@ class PostResource extends Resource
     protected static ?int $navigationSort = 1;
 
     protected static ?string $modelPolicy = PostPolicy::class;
-    
+
     public static function can(string $action, mixed $record = null): bool
     {
         if (!Auth::check()) {
             return false;
         }
-        
+
         $user = Auth::user();
-        
+
         // Gunakan policy jika ada
         $policy = app(PostPolicy::class);
         if (method_exists($policy, $action)) {
             return $policy->{$action}($user, $record);
         }
-        
+
         // Fallback ke permission default
         $permission = $action . '_post';
-        
+
         // Gunakan Gate untuk mengecek permission
         return Gate::forUser($user)->check($permission);
     }
@@ -112,13 +115,52 @@ class PostResource extends Resource
                                             ->schema([
                                                 Forms\Components\FileUpload::make('foto_utama')
                                                     ->label('Foto Utama')
-                                                    ->helperText('Foto ini akan ditampilkan sebagai thumbnail artikel')
+                                                    ->helperText('Format: JPG, JPEG, atau WebP (min. 250KB, max 2MB)')
+                                                    ->disk('public')
                                                     ->directory('foto-utama')
                                                     ->image()
                                                     ->imageEditor()
                                                     ->imageResizeMode('cover')
                                                     ->imageCropAspectRatio('16:9')
-                                                    ->maxSize(2048),
+                                                    ->imageResizeTargetWidth(1200)  // Lebar maksimum
+                                                    ->imageResizeTargetHeight(675)  // Tinggi maksimum (16:9)
+                                                    ->minSize(200)  // 200KB
+                                                    ->maxSize(2048)  // 2MB
+                                                    ->acceptedFileTypes(['image/jpeg', 'image/jpg', 'image/webp'])
+                                                    ->getUploadedFileNameForStorageUsing(
+                                                        function ($file) {
+                                                            $name = (string) str()->uuid();
+                                                            return 'foto-utama/' . $name . '.webp';
+                                                        }
+                                                    )
+                                                    ->afterStateUpdated(function ($state, $livewire, $set) {
+                                                        if ($state) {
+                                                            $path = storage_path('app/public/' . $state);
+
+                                                            // Pastikan file ada sebelum memproses
+                                                            if (file_exists($path)) {
+                                                                try {
+                                                                    $image = Image::make($path);
+
+                                                                    // Konversi ke WebP dengan kualitas 80%
+                                                                    $webpPath = pathinfo($path, PATHINFO_DIRNAME) . '/' . pathinfo($path, PATHINFO_FILENAME) . '.webp';
+                                                                    $image->encode('webp', 80)->save($webpPath);
+
+                                                                    // Hapus file asli jika bukan WebP
+                                                                    if (!str_ends_with(strtolower($path), '.webp')) {
+                                                                        unlink($path);
+                                                                    }
+
+                                                                    // Update path ke file WebP
+                                                                    $relativePath = str_replace(storage_path('app/public/'), '', $webpPath);
+                                                                    $set('foto_utama', $relativePath);
+                                                                } catch (\Exception $e) {
+                                                                    // Log error jika terjadi masalah saat konversi
+                                                                    \Log::error('Gagal mengkonversi gambar: ' . $e->getMessage());
+                                                                }
+                                                            }
+                                                        }
+                                                    })
 
                                             ])->columnSpan(1),
                                         Forms\Components\Section::make('Gambar Tambahan')
@@ -158,34 +200,20 @@ class PostResource extends Resource
                                     ->description('Pengaturan status publikasi artikel')
                                     ->schema([
                                         Forms\Components\Select::make('status')
-                                            ->options(function () {
-                                                $user = Auth::user();
-                                                $options = ['draft' => 'Draft'];
-                                                
-                                                // Hanya tampilkan opsi published jika user punya izin
-                                                if (Auth::check() && Gate::forUser(Auth::user())->check('publish_post')) {
-                                                    $options['published'] = 'Dipublikasikan';
-                                                }
-                                                
-                                                $options['archived'] = 'Diarsipkan';
-                                                
-                                                return $options;
-                                            })
+                                            ->options([
+                                                'draft' => 'Draft',
+                                                'published' => 'Dipublikasikan',
+                                                'archived' => 'Diarsipkan'
+                                            ])
                                             ->default('draft')
                                             ->required()
-                                            ->disabled(fn ($record) => 
-                                                $record && 
-                                                $record->status === 'published' && 
-                                                !(Auth::check() && Gate::forUser(Auth::user())->check('publish_post'))
-                                            )
-                                            ->dehydrated(fn ($state, $record) => 
-                                                $record && 
-                                                $record->exists && 
-                                                $record->status === 'published' && 
-                                                !(Auth::check() && Gate::forUser(Auth::user())->check('publish_post'))
-                                                    ? 'published' 
-                                                    : $state
-                                            ),
+                                            ->visible(fn () => Auth::check())
+                                            ->dehydrated()
+                                            ->afterStateUpdated(function ($state, $set) {
+                                                if ($state === 'published') {
+                                                    $set('published_at', now());
+                                                }
+                                            }),
                                         Forms\Components\DateTimePicker::make('published_at')
                                             ->label('Tanggal Publikasi')
                                             ->default(now())
@@ -230,17 +258,15 @@ class PostResource extends Resource
     {
         return $table
             ->columns([
-
                 Tables\Columns\ImageColumn::make('foto_utama_url')
                     ->label('Foto Utama')
-                    ->circular(false)
-                    ->square()
-                    ->width(100)
-                    ->height(60),
+                    ->circular(false),
+                // ->width(100)
+                // ->height(60),
                 Tables\Columns\TextColumn::make('title')
                     ->label('Judul')
                     ->searchable()
-                    ->limit(50)
+                    ->limit(20)
                     ->tooltip(function (Tables\Columns\TextColumn $column): ?string {
                         $state = $column->getState();
                         if (strlen($state) <= 50) {
@@ -373,16 +399,16 @@ class PostResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         $query = parent::getEloquentQuery();
-        
+
         if (!Auth::check()) {
             return $query->where('id', 0); // Return empty result if not authenticated
         }
-        
+
         $user = Auth::user();
-        
+
         // Cek apakah user memiliki izin untuk melihat semua post
         $canViewAnyPost = Gate::forUser($user)->check('view_any_post');
-        
+
         // Jika tidak bisa melihat semua post, hanya tampilkan post milik user tersebut
         if (!$canViewAnyPost) {
             $query->where('user_id', $user->id);
