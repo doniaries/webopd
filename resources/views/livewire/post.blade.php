@@ -1,9 +1,4 @@
-<div 
-    x-data="{ loading: false }"
-    x-on:livewire:start="loading = true"
-    x-on:livewire:finish="loading = false"
-    class="relative"
->
+<div x-data="{ loading: false }" x-on:livewire:start="loading = true" x-on:livewire:finish="loading = false" class="relative">
     @if ($view === 'index') <x-page-header :title="$pageTitle" />
         <div class="container mx-auto px-4 py-8">
 
@@ -71,60 +66,68 @@
                     <!-- Slider Content -->
                     <div class="relative h-96">
                         <template x-for="(slide, index) in slides" :key="index">
-                            <div x-show="currentSlide === index" 
-                                 x-transition:enter="transition ease-out duration-500"
-                                 x-transition:enter-start="opacity-0" 
-                                 x-transition:enter-end="opacity-100"
-                                 x-transition:leave="transition ease-in duration-500" 
-                                 x-transition:leave-start="opacity-100"
-                                 x-transition:leave-end="opacity-0" 
-                                 class="absolute inset-0">
+                            <div x-show="currentSlide === index" x-transition:enter="transition ease-out duration-500"
+                                x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                                x-transition:leave="transition ease-in duration-500"
+                                x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+                                class="absolute inset-0">
                                 <!-- Slide Image -->
-                                <template x-if="!slide.foto_utama_url || typeof slide.foto_utama_url !== 'string' || !slide.foto_utama_url.startsWith('http')">
-                                    <div x-data="{ 
-                                        placeholderData: (() => { 
-                                            try { 
-                                                return typeof slide.foto_utama_url === 'string' ? JSON.parse(slide.foto_utama_url) : slide.foto_utama_url; 
-                                            } catch(e) { 
-                                                return { type: 'placeholder', bg_color: 'bg-gray-200', text: 'Gambar tidak tersedia' }; 
-                                            } 
+                                <template
+                                    x-if="!slide.foto_utama_url || typeof slide.foto_utama_url !== 'string' || !slide.foto_utama_url.startsWith('http')">
+                                    <div x-data="{
+                                        placeholderData: (() => {
+                                            try {
+                                                return typeof slide.foto_utama_url === 'string' ? JSON.parse(slide.foto_utama_url) : slide.foto_utama_url;
+                                            } catch (e) {
+                                                return { type: 'placeholder', bg_color: 'bg-gray-200', text: 'Gambar tidak tersedia' };
+                                            }
                                         })()
-                                    }" class="w-full h-full flex items-center justify-center" :class="placeholderData.bg_color || 'bg-gray-200'">
+                                    }" class="w-full h-full flex items-center justify-center"
+                                        :class="placeholderData.bg_color || 'bg-gray-200'">
                                         <div class="text-center">
-                                            <svg class="w-12 h-12 mx-auto mb-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                            <svg class="w-12 h-12 mx-auto mb-2 text-gray-400" fill="none"
+                                                stroke="currentColor" viewBox="0 0 24 24"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
+                                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                                </path>
                                             </svg>
-                                            <span class="text-sm font-medium text-gray-500" x-text="placeholderData.text || 'Gambar tidak tersedia'"></span>
+                                            <span class="text-sm font-medium text-gray-500"
+                                                x-text="placeholderData.text || 'Gambar tidak tersedia'"></span>
                                         </div>
                                     </div>
                                 </template>
-                                <img x-show="slide.foto_utama_url && typeof slide.foto_utama_url === 'string' && slide.foto_utama_url.startsWith('http')" 
-                                     :src="slide.foto_utama_url" 
-                                     :alt="slide.title" 
-                                     class="w-full h-full object-cover">
-                                
+                                <img x-show="slide.foto_utama_url && typeof slide.foto_utama_url === 'string' && slide.foto_utama_url.startsWith('http')"
+                                    :src="slide.foto_utama_url" :alt="slide.title"
+                                    class="w-full h-full object-cover">
+
                                 <!-- Gradient Overlay -->
-                                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
-                                
+                                <div
+                                    class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent">
+                                </div>
+
                                 <!-- Slide Content -->
                                 <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
                                     <!-- Category Badge -->
                                     <div class="mb-3">
-                                        <span class="inline-block bg-blue-600 text-white text-xs font-semibold px-3 py-1 rounded-full">
+                                        <span
+                                            class="inline-block bg-blue-600 text-white text-xs font-semibold px-3 py-1 rounded-full">
                                             <span x-text="slide.tag?.name || 'Berita'"></span>
                                         </span>
                                     </div>
-                                    
+
                                     <!-- Title -->
                                     <h2 class="text-2xl md:text-3xl font-bold mb-3 leading-tight">
-                                        <a :href="'{{ url('/posts') }}/' + slide.slug" class="hover:underline" x-text="slide.title"></a>
+                                        <a :href="'{{ url('/posts') }}/' + slide.slug" class="hover:underline"
+                                            x-text="slide.title"></a>
                                     </h2>
-                                    
+
                                     <!-- Date and Views -->
                                     <div class="flex items-center text-sm text-gray-200">
                                         <span class="flex items-center mr-4">
                                             <i class="far fa-clock mr-1"></i>
-                                            <span x-text="new Date(slide.published_at).toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'})"></span>
+                                            <span
+                                                x-text="new Date(slide.published_at).toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'})"></span>
                                         </span>
                                         <span class="flex items-center">
                                             <i class="far fa-eye mr-1"></i>
@@ -134,15 +137,17 @@
                                 </div>
                             </div>
                         </template>
-                        
+
                         <!-- Navigation Arrows -->
-                        <button @click="prev()" class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/40 text-white p-2 rounded-full hover:bg-black/60 transition-colors">
+                        <button @click="prev()"
+                            class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/40 text-white p-2 rounded-full hover:bg-black/60 transition-colors">
                             <i class="fas fa-chevron-left"></i>
                         </button>
-                        <button @click="next()" class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/40 text-white p-2 rounded-full hover:bg-black/60 transition-colors">
+                        <button @click="next()"
+                            class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/40 text-white p-2 rounded-full hover:bg-black/60 transition-colors">
                             <i class="fas fa-chevron-right"></i>
                         </button>
-                        
+
                         <!-- Slider Indicators -->
                         <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
                             <template x-for="(slide, index) in slides" :key="'indicator-' + index">
@@ -153,7 +158,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Slider Footer -->
                 <div class="bg-gray-50 px-6 py-3 border-t border-gray-200">
                     <div class="flex items-center justify-between">
@@ -180,15 +185,23 @@
                         @php
                             $isPlaceholder = false;
                             $placeholderData = [];
-                            
+
                             if ($post->foto_utama_url) {
-                                if (is_string($post->foto_utama_url) && str_starts_with($post->foto_utama_url, '{"type"')) {
+                                if (
+                                    is_string($post->foto_utama_url) &&
+                                    str_starts_with($post->foto_utama_url, '{"type"')
+                                ) {
                                     try {
                                         $placeholderData = json_decode($post->foto_utama_url, true);
-                                        $isPlaceholder = isset($placeholderData['type']) && $placeholderData['type'] === 'placeholder';
+                                        $isPlaceholder =
+                                            isset($placeholderData['type']) &&
+                                            $placeholderData['type'] === 'placeholder';
                                     } catch (\Exception $e) {
                                         $isPlaceholder = true;
-                                        $placeholderData = ['bg_color' => 'bg-gray-200', 'text' => 'Gambar tidak tersedia'];
+                                        $placeholderData = [
+                                            'bg_color' => 'bg-gray-200',
+                                            'text' => 'Gambar tidak tersedia',
+                                        ];
                                     }
                                 } elseif (!filter_var($post->foto_utama_url, FILTER_VALIDATE_URL)) {
                                     $isPlaceholder = true;
@@ -200,18 +213,24 @@
                             }
                         @endphp
 
-                        @if($isPlaceholder)
-                            <div class="w-full h-48 {{ $placeholderData['bg_color'] ?? 'bg-gray-100' }} flex items-center justify-center">
+                        @if ($isPlaceholder)
+                            <div
+                                class="w-full h-48 {{ $placeholderData['bg_color'] ?? 'bg-gray-100' }} flex items-center justify-center">
                                 <div class="text-center">
-                                    <svg class="w-12 h-12 mx-auto mb-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    <svg class="w-12 h-12 mx-auto mb-2 text-gray-400" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
+                                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                        </path>
                                     </svg>
-                                    <span class="text-sm font-medium text-gray-500">{{ $placeholderData['text'] ?? 'Gambar tidak tersedia' }}</span>
+                                    <span
+                                        class="text-sm font-medium text-gray-500">{{ $placeholderData['text'] ?? 'Gambar tidak tersedia' }}</span>
                                 </div>
                             </div>
                         @else
                             <a href="{{ route('posts.show', $post->slug) }}" class="block" wire:navigate>
-                                <img src="{{ $post->foto_utama_url }}" alt="{{ $post->title }}" class="w-full h-48 object-cover">
+                                <img src="{{ $post->foto_utama_url }}" alt="{{ $post->title }}"
+                                    class="w-full h-48 object-cover">
                             </a>
                         @endif
                         <div class="p-4">
@@ -228,12 +247,14 @@
                                     $tagClass = $colors[$post->tag->name] ?? $colors['default'];
                                 @endphp
                                 <a href="{{ route('posts.index', ['category' => $post->tag_id]) }}"
-                                    class="inline-block text-sm font-medium px-3 py-1 rounded-full mb-3 transition-colors {{ $tagClass }}" wire:navigate>
+                                    class="inline-block text-sm font-medium px-3 py-1 rounded-full mb-3 transition-colors {{ $tagClass }}"
+                                    wire:navigate>
                                     {{ $post->tag->name }}
                                 </a>
                             @endif
                             <h2 class="text-xl font-bold mb-2">
-                                <a href="{{ route('posts.show', $post->slug) }}" class="hover:text-blue-600" wire:navigate>
+                                <a href="{{ route('posts.show', $post->slug) }}" class="hover:text-blue-600"
+                                    wire:navigate>
                                     {{ $post->title }}
                                 </a>
                             </h2>
@@ -274,7 +295,7 @@
             </div>
 
             <!-- Pagination -->
-            @if($showPagination && $posts->hasPages())
+            @if ($showPagination && $posts->hasPages())
                 <div class="bg-white px-6 py-4 border-t border-gray-200 mt-8">
                     <div class="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0">
                         <div class="text-sm text-gray-600">
@@ -287,13 +308,17 @@
                                 <!-- Previous Button -->
                                 @if ($posts->onFirstPage())
                                     <li>
-                                        <span class="flex items-center justify-center px-3 h-8 ml-0 leading-tight text-gray-400 bg-white border border-gray-300 rounded-l-lg cursor-not-allowed">
+                                        <span
+                                            class="flex items-center justify-center px-3 h-8 ml-0 leading-tight text-gray-400 bg-white border border-gray-300 rounded-l-lg cursor-not-allowed">
                                             <i class="fas fa-chevron-left mr-1"></i> Sebelumnya
                                         </span>
                                     </li>
                                 @else
                                     <li>
-                                        <button wire:click="previousPage" @if($posts->onFirstPage()) disabled @endif class="flex items-center justify-center px-3 h-8 ml-0 leading-tight text-gray-700 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed" wire:navigate>
+                                        <button wire:click="previousPage"
+                                            @if ($posts->onFirstPage()) disabled @endif
+                                            class="flex items-center justify-center px-3 h-8 ml-0 leading-tight text-gray-700 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                                            wire:navigate>
                                             <i class="fas fa-chevron-left mr-1"></i> Sebelumnya
                                         </button>
                                     </li>
@@ -303,13 +328,16 @@
                                 @foreach ($posts->getUrlRange(1, $posts->lastPage()) as $page => $url)
                                     @if ($page == $posts->currentPage())
                                         <li>
-                                            <span aria-current="page" class="flex items-center justify-center px-3 h-8 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700">
+                                            <span aria-current="page"
+                                                class="flex items-center justify-center px-3 h-8 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700">
                                                 {{ $page }}
                                             </span>
                                         </li>
                                     @else
                                         <li>
-                                            <button wire:click="gotoPage({{ $page }})" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-700 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 {{ $page == $posts->currentPage() ? 'bg-blue-50 text-blue-600' : '' }}" wire:navigate>
+                                            <button wire:click="gotoPage({{ $page }})"
+                                                class="flex items-center justify-center px-3 h-8 leading-tight text-gray-700 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 {{ $page == $posts->currentPage() ? 'bg-blue-50 text-blue-600' : '' }}"
+                                                wire:navigate>
                                                 {{ $page }}
                                             </button>
                                         </li>
@@ -319,13 +347,16 @@
                                 <!-- Next Button -->
                                 @if ($posts->hasMorePages())
                                     <li>
-                                        <button wire:click="nextPage" @if(!$posts->hasMorePages()) disabled @endif class="flex items-center justify-center px-3 h-8 leading-tight text-gray-700 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed" wire:navigate>
+                                        <button wire:click="nextPage" @if (!$posts->hasMorePages()) disabled @endif
+                                            class="flex items-center justify-center px-3 h-8 leading-tight text-gray-700 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                                            wire:navigate>
                                             Selanjutnya <i class="fas fa-chevron-right ml-1"></i>
                                         </button>
                                     </li>
                                 @else
                                     <li>
-                                        <span class="flex items-center justify-center px-3 h-8 leading-tight text-gray-400 bg-white border border-gray-300 rounded-r-lg cursor-not-allowed">
+                                        <span
+                                            class="flex items-center justify-center px-3 h-8 leading-tight text-gray-400 bg-white border border-gray-300 rounded-r-lg cursor-not-allowed">
                                             Selanjutnya <i class="fas fa-chevron-right ml-1"></i>
                                         </span>
                                     </li>
@@ -345,23 +376,27 @@
                 <div class="mb-8 rounded-lg overflow-hidden">
                     @php
                         $fotoUtama = json_decode($post->foto_utama_url, true);
-                        $isPlaceholder = is_array($fotoUtama) && isset($fotoUtama['type']) && $fotoUtama['type'] === 'placeholder';
+                        $isPlaceholder =
+                            is_array($fotoUtama) && isset($fotoUtama['type']) && $fotoUtama['type'] === 'placeholder';
                     @endphp
-                    
-                    @if($isPlaceholder && isset($fotoUtama['html']))
+
+                    @if ($isPlaceholder && isset($fotoUtama['html']))
                         {!! $fotoUtama['html'] !!}
                     @elseif($isPlaceholder)
-                        <div class="w-full h-64 flex flex-col items-center justify-center bg-gray-100 text-gray-600 p-4 text-center">
-                            <svg class="w-16 h-16 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        <div
+                            class="w-full h-64 flex flex-col items-center justify-center bg-gray-100 text-gray-600 p-4 text-center">
+                            <svg class="w-16 h-16 text-gray-400 mb-2" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
+                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                </path>
                             </svg>
                             <span class="text-sm font-medium">{{ $fotoUtama['text'] ?? 'Tidak ada gambar' }}</span>
                         </div>
                     @else
-                        <img src="{{ $post->foto_utama_url }}" 
-                             alt="{{ $post->title }}"
-                             class="w-full h-auto max-h-96 object-cover"
-                             onerror="this.onerror=null; this.parentElement.innerHTML = '<div class=\'w-full h-64 flex flex-col items-center justify-center bg-gray-100 text-gray-600 p-4 text-center\'><svg class=\'w-16 h-16 text-gray-400 mb-2\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\' xmlns=\'http://www.w3.org/2000/svg\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1\' d=\'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z\'></path></svg><span class=\'text-sm font-medium\'>Tidak ada gambar</span></div>'">
+                        <img src="{{ $post->foto_utama_url }}" alt="{{ $post->title }}"
+                            class="w-full h-auto max-h-96 object-cover"
+                            onerror="this.onerror=null; this.parentElement.innerHTML = '<div class=\'w-full h-64 flex flex-col items-center justify-center bg-gray-100 text-gray-600 p-4 text-center\'><svg class=\'w-16 h-16 text-gray-400 mb-2\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\' xmlns=\'http://www.w3.org/2000/svg\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1\' d=\'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z\'></path></svg><span class=\'text-sm font-medium\'>Tidak ada gambar</span></div>'">
                     @endif
                 </div>
 
@@ -401,24 +436,126 @@
                 </div>
 
                 <!-- Gallery Images -->
-                @if($post->postGallery && $post->postGallery->isNotEmpty())
+                @if ($post->postGallery && $post->postGallery->isNotEmpty())
                     <div class="mt-12 mb-12">
                         <h2 class="text-2xl font-bold text-gray-900 mb-6">Galeri Foto</h2>
-                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                            @foreach($post->postGallery as $galleryImage)
-                                @php
-                                    $imageUrl = Storage::url($galleryImage->image_path);
-                                    $imageAlt = 'Galeri Gambar ' . $loop->iteration;
-                                @endphp
-                                <div class="relative group overflow-hidden rounded-lg">
-                                    <a href="{{ $imageUrl }}" data-fancybox="gallery" data-caption="{{ $imageAlt }}">
-                                        <img src="{{ $imageUrl }}" 
-                                             alt="{{ $imageAlt }}"
-                                             class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
-                                             onerror="this.onerror=null; this.src='data:image/svg+xml;charset=UTF-8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100%\' height=\'100%\' viewBox=\'0 0 400 300\'><rect width=\'100%\' height=\'100%\' fill=\'%23f3f4f6\'/><text x=\'50%\' y=\'50%\' font-family=\'sans-serif\' font-size=\'14\' text-anchor=\'middle\' dominant-baseline=\'middle\' fill=\'%239ca3af\'>Gambar tidak tersedia</text></svg>;'" wire:navigate>
-                                    </a>
+                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" x-data="{
+                            images: @js(
+    collect($post->postGallery)->map(function ($img, $index) {
+        return [
+            'url' => Storage::url($img->image_path),
+            'alt' => 'Galeri Gambar ' . ($index + 1),
+        ];
+    }),
+),
+                            currentIndex: 0,
+                            isOpen: false,
+                            init() {
+                                // Handle keyboard navigation
+                                document.addEventListener('keydown', (e) => {
+                                    if (!this.isOpen) return;
+                        
+                                    if (e.key === 'Escape') {
+                                        this.closeModal();
+                                    } else if (e.key === 'ArrowLeft') {
+                                        this.prevImage();
+                                    } else if (e.key === 'ArrowRight') {
+                                        this.nextImage();
+                                    }
+                                });
+                            },
+                            openModal(index) {
+                                this.currentIndex = index;
+                                this.isOpen = true;
+                                document.body.style.overflow = 'hidden';
+                            },
+                            closeModal() {
+                                this.isOpen = false;
+                                document.body.style.overflow = 'auto';
+                            },
+                            nextImage() {
+                                this.currentIndex = (this.currentIndex + 1) % this.images.length;
+                            },
+                            prevImage() {
+                                this.currentIndex = (this.currentIndex - 1 + this.images.length) % this.images.length;
+                            }
+                        }">
+                            <!-- Thumbnails -->
+                            <template x-for="(image, index) in images" :key="index">
+                                <div class="relative group overflow-hidden rounded-lg cursor-pointer"
+                                    @click="openModal(index)">
+                                    <div class="relative overflow-hidden rounded-lg">
+                                        <img :src="image.url" :alt="image.alt"
+                                            class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+                                            loading="lazy"
+                                            onerror="this.onerror=null; this.src='data:image/svg+xml;charset=UTF-8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100%\' height=\'100%\' viewBox=\'0 0 400 300\'><rect width=\'100%\' height=\'100%\' fill=\'%23f3f4f6\'/><text x=\'50%\' y=\'50%\' font-family=\'sans-serif\' font-size=\'14\' text-anchor=\'middle\' dominant-baseline=\'middle\' fill=\'%239ca3af\'>Gambar tidak tersedia</text></svg>;'">
+                                        <div
+                                            class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-white"
+                                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                            </svg>
+                                        </div>
+                                    </div>
                                 </div>
-                            @endforeach
+                            </template>
+
+                            <!-- Modal -->
+                            <div x-show="isOpen" x-transition:enter="ease-out duration-300"
+                                x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                                x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100"
+                                x-transition:leave-end="opacity-0"
+                                class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-90"
+                                @click.self="closeModal()" x-cloak>
+                                <div class="relative w-full max-w-4xl max-h-full">
+                                    <!-- Close button -->
+                                    <button @click="closeModal()"
+                                        class="absolute -top-12 right-0 text-white hover:text-gray-300 focus:outline-none z-10"
+                                        aria-label="Tutup">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+
+                                    <!-- Image -->
+                                    <div class="relative h-full">
+                                        <img :src="images[currentIndex].url" :alt="images[currentIndex].alt"
+                                            class="max-h-[80vh] max-w-full mx-auto object-contain" loading="lazy">
+
+                                        <!-- Navigation Arrows -->
+                                        <button x-show="images.length > 1" @click.stop="prevImage()"
+                                            class="absolute left-0 top-1/2 -translate-y-1/2 -ml-12 md:-ml-16 bg-black bg-opacity-50 text-white p-3 rounded-full hover:bg-opacity-70 transition-all duration-200 focus:outline-none"
+                                            aria-label="Gambar Sebelumnya">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M15 19l-7-7 7-7" />
+                                            </svg>
+                                        </button>
+
+                                        <button x-show="images.length > 1" @click.stop="nextImage()"
+                                            class="absolute right-0 top-1/2 -translate-y-1/2 -mr-12 md:-mr-16 bg-black bg-opacity-50 text-white p-3 rounded-full hover:bg-opacity-70 transition-all duration-200 focus:outline-none"
+                                            aria-label="Gambar Selanjutnya">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M9 5l7 7-7 7" />
+                                            </svg>
+                                        </button>
+                                    </div>
+
+                                    {{-- <!-- Caption -->
+                                    <div class="mt-4 text-center text-white">
+                                        <p x-text="images[currentIndex].alt" class="text-sm md:text-base"></p>
+                                        <p class="text-xs text-gray-400 mt-1">
+                                            <span x-text="currentIndex + 1"></span> dari <span x-text="images.length"></span> Gambar
+                                        </p>
+                                    </div> --}}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 @endif
@@ -431,40 +568,54 @@
                         <h2 class="text-2xl font-bold text-gray-900 mb-6">Baca Juga</h2>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                             @foreach ($relatedPosts as $related)
-                                <div class="border rounded-lg overflow-hidden hover:shadow-md transition-shadow bg-white">
+                                <div
+                                    class="border rounded-lg overflow-hidden hover:shadow-md transition-shadow bg-white">
                                     @php
                                         $relatedFoto = $related->foto_utama_url;
-                                        $relatedPlaceholder = is_string($relatedFoto) ? json_decode($relatedFoto, true) : [];
-                                        $isRelatedPlaceholder = is_array($relatedPlaceholder) && isset($relatedPlaceholder['type']) && $relatedPlaceholder['type'] === 'placeholder';
+                                        $relatedPlaceholder = is_string($relatedFoto)
+                                            ? json_decode($relatedFoto, true)
+                                            : [];
+                                        $isRelatedPlaceholder =
+                                            is_array($relatedPlaceholder) &&
+                                            isset($relatedPlaceholder['type']) &&
+                                            $relatedPlaceholder['type'] === 'placeholder';
                                     @endphp
-                                    
+
                                     <div class="w-full h-48 bg-gray-100 overflow-hidden">
-                                        @if($isRelatedPlaceholder)
-                                            <div class="w-full h-full flex items-center justify-center" style="background-color: {{ $relatedPlaceholder['bg_color'] ?? '#f3f4f6' }}; color: {{ $relatedPlaceholder['color'] ?? '#6b7280' }};">
+                                        @if ($isRelatedPlaceholder)
+                                            <div class="w-full h-full flex items-center justify-center"
+                                                style="background-color: {{ $relatedPlaceholder['bg_color'] ?? '#f3f4f6' }}; color: {{ $relatedPlaceholder['color'] ?? '#6b7280' }};">
                                                 <div class="text-center p-4">
-                                                    <svg class="w-10 h-10 mx-auto mb-2 text-current" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                                    <svg class="w-10 h-10 mx-auto mb-2 text-current" fill="none"
+                                                        stroke="currentColor" viewBox="0 0 24 24"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="1"
+                                                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                                        </path>
                                                     </svg>
                                                 </div>
                                             </div>
                                         @else
-                                            <a href="{{ route('posts.show', $related->slug) }}" class="block h-full" wire:navigate>
-                                                <img src="{{ $related->foto_utama_url }}" 
-                                                     alt="{{ $related->title }}" 
-                                                     class="w-full h-full object-cover"
-                                                     onerror="this.onerror=null; this.parentNode.innerHTML='<div class=\'w-full h-full flex items-center justify-center bg-gray-100\'><svg class=\'w-10 h-10 text-gray-400\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\' xmlns=\'http://www.w3.org/2000/svg\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1\' d=\'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z\'></path></svg></div>'">
+                                            <a href="{{ route('posts.show', $related->slug) }}" class="block h-full"
+                                                wire:navigate>
+                                                <img src="{{ $related->foto_utama_url }}"
+                                                    alt="{{ $related->title }}" class="w-full h-full object-cover"
+                                                    onerror="this.onerror=null; this.parentNode.innerHTML='<div class=\'w-full h-full flex items-center justify-center bg-gray-100\'><svg class=\'w-10 h-10 text-gray-400\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\' xmlns=\'http://www.w3.org/2000/svg\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1\' d=\'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z\'></path></svg></div>'">
                                             </a>
                                         @endif
                                     </div>
                                     <div class="p-4">
                                         @if ($related->category)
                                             <a href="{{ route('posts.index', ['category' => $related->category_id]) }}"
-                                                class="inline-block text-xs font-medium text-blue-600 mb-2 hover:underline" wire:navigate>
+                                                class="inline-block text-xs font-medium text-blue-600 mb-2 hover:underline"
+                                                wire:navigate>
                                                 {{ $related->category->name }}
                                             </a>
                                         @endif
                                         <h3 class="font-bold text-lg mb-2">
-                                            <a href="{{ route('posts.show', $related->slug) }}" class="block" wire:navigate>
+                                            <a href="{{ route('posts.show', $related->slug) }}" class="block"
+                                                wire:navigate>
                                                 {{ $related->title }}
                                             </a>
                                         </h3>
