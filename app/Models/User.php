@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
-use Filament\Facades\Filament;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -42,10 +41,20 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasMany(ExternalLink::class);
     }
 
-
     public function canAccessPanel(Panel $panel): bool
     {
-        return true; // All users can access the panel by default
+        return $this->hasRole('super_admin') || $this->hasRole('admin') || $this->hasRole('editor');
+    }
+    
+    public function getAllPermissions()
+    {
+        $permissions = $this->permissions->pluck('name');
+        
+        foreach ($this->roles as $role) {
+            $permissions = $permissions->merge($role->permissions->pluck('name'));
+        }
+        
+        return $permissions->unique()->values();
     }
 
     public function isActive(): bool
@@ -56,7 +65,7 @@ class User extends Authenticatable implements FilamentUser
     protected static function booted()
     {
         static::creating(function ($user) {
-            $user->is_active = true; // Set default ke aktif
+            $user->is_active = true;
         });
     }
 }

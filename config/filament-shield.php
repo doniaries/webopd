@@ -10,7 +10,7 @@ return [
         'sub_navigation_position' => null,
         'is_globally_searchable' => false,
         'show_model_path' => true,
-        'is_scoped_to_tenant' => true,
+        'is_scoped_to_tenant' => false, // Changed to false to prevent tenant-related issues
         'cluster' => null,
     ],
 
@@ -24,7 +24,11 @@ return [
         'enabled' => true,
         'name' => 'super_admin',
         'define_via_gate' => false,
-        'intercept_gate' => 'before', // after
+        'intercept_gate' => 'before',
+    ],
+    
+    'filament_user' => [
+        'enabled' => true,
     ],
 
     'panel_user' => [
@@ -57,6 +61,7 @@ return [
         'widgets' => true,
         'resources' => true,
         'custom_permissions' => false,
+        'directory_scan_enabled' => ['app/Filament/Resources', 'app/Filament/Pages'],
     ],
 
     'generator' => [
@@ -89,5 +94,6 @@ return [
     'register_role_policy' => [
         'enabled' => true,
     ],
+    
 
 ];

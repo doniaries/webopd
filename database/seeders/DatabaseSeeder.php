@@ -13,8 +13,8 @@ class DatabaseSeeder extends Seeder
     {
         // Run seeders in order
         $this->call([
-            ShieldSeeder::class,  // Must come first to set up roles and permissions
-            UserSeeder::class,    // Then create users
+            ShieldSeeder::class,   // Set up roles and permissions using Filament Shield
+            UserSeeder::class,     // Then create users
             // Other seeders
             UnitKerjaSeeder::class,
             VisiMisiSeeder::class,

@@ -4,29 +4,29 @@
         <div class="text-center">
             <h3 class="text-xl font-semibold text-gray-800 mb-4">Tetap Terhubung</h3>
             <div class="flex justify-center space-x-6">
-                @if(!empty($pengaturan->facebook))
-                <a href="{{ $pengaturan->facebook }}" target="_blank"
-                    class="text-gray-600 hover:text-blue-600 transition-colors duration-300">
-                    <i class="bi bi-facebook text-2xl"></i>
-                </a>
+                @if (!empty($pengaturan->facebook))
+                    <a href="{{ $pengaturan->facebook }}" target="_blank"
+                        class="text-gray-600 hover:text-blue-600 transition-colors duration-300">
+                        <i class="bi bi-facebook text-2xl"></i>
+                    </a>
                 @endif
-                @if(!empty($pengaturan->twitter))
-                <a href="{{ $pengaturan->twitter }}" target="_blank"
-                    class="text-gray-600 hover:text-blue-400 transition-colors duration-300">
-                    <i class="bi bi-twitter-x text-2xl"></i>
-                </a>
+                @if (!empty($pengaturan->twitter))
+                    <a href="{{ $pengaturan->twitter }}" target="_blank"
+                        class="text-gray-600 hover:text-blue-400 transition-colors duration-300">
+                        <i class="bi bi-twitter-x text-2xl"></i>
+                    </a>
                 @endif
-                @if(!empty($pengaturan->instagram))
-                <a href="{{ $pengaturan->instagram }}" target="_blank"
-                    class="text-gray-600 hover:text-pink-500 transition-colors duration-300">
-                    <i class="bi bi-instagram text-2xl"></i>
-                </a>
+                @if (!empty($pengaturan->instagram))
+                    <a href="{{ $pengaturan->instagram }}" target="_blank"
+                        class="text-gray-600 hover:text-pink-500 transition-colors duration-300">
+                        <i class="bi bi-instagram text-2xl"></i>
+                    </a>
                 @endif
-                @if(!empty($pengaturan->youtube))
-                <a href="{{ $pengaturan->youtube }}" target="_blank"
-                    class="text-gray-600 hover:text-red-600 transition-colors duration-300">
-                    <i class="bi bi-youtube text-2xl"></i>
-                </a>
+                @if (!empty($pengaturan->youtube))
+                    <a href="{{ $pengaturan->youtube }}" target="_blank"
+                        class="text-gray-600 hover:text-red-600 transition-colors duration-300">
+                        <i class="bi bi-youtube text-2xl"></i>
+                    </a>
                 @endif
             </div>
         </div>
@@ -42,23 +42,23 @@
                     <span class="sitename">{{ $pengaturan->name ?? config('app.name') }}</span>
                 </a>
                 <div class="footer-contact pt-3">
-                    @if(!empty($pengaturan->alamat_instansi))
-                    <p>{{ $pengaturan->alamat_instansi }}</p>
-                @else
-                    <p>Jl. Contoh No. 123</p>
-                @endif
-                
-                @if(!empty($pengaturan->no_telp_instansi))
-                    <p class="mt-3"><strong>Telepon:</strong> <span>{{ $pengaturan->no_telp_instansi }}</span></p>
-                @else
-                    <p class="mt-3"><strong>Telepon:</strong> <span>+62 123 4567 890</span></p>
-                @endif
-                
-                @if(!empty($pengaturan->email_instansi))
-                    <p><strong>Email:</strong> <span>{{ $pengaturan->email_instansi }}</span></p>
-                @else
-                    <p><strong>Email:</strong> <span>info@webopd.com</span></p>
-                @endif
+                    @if (!empty($pengaturan->alamat_instansi))
+                        <p>{{ $pengaturan->alamat_instansi }}</p>
+                    @else
+                        <p>Jl. Contoh No. 123</p>
+                    @endif
+
+                    @if (!empty($pengaturan->no_telp_instansi))
+                        <p class="mt-3"><strong>Telepon:</strong> <span>{{ $pengaturan->no_telp_instansi }}</span></p>
+                    @else
+                        <p class="mt-3"><strong>Telepon:</strong> <span>+62 123 4567 890</span></p>
+                    @endif
+
+                    @if (!empty($pengaturan->email_instansi))
+                        <p><strong>Email:</strong> <span>{{ $pengaturan->email_instansi }}</span></p>
+                    @else
+                        <p><strong>Email:</strong> <span>info@webopd.com</span></p>
+                    @endif
                 </div>
                 {{-- <div class="social-links d-flex mt-4">
                     <a href="{{ $pengaturan->twitter_url ?? '#' }}" target="_blank"><i class="bi bi-twitter-x"></i></a>
@@ -103,7 +103,8 @@
     </div>
 
     <div class="container copyright text-center mt-4">
-        <p>© <span>Copyright</span> <strong class="px-1 sitename">{{ $pengaturan->name ?? config('app.name') }}</strong>
+        <p>© <span>Copyright</span> <strong
+                class="px-1 sitename">{{ $pengaturan->name ?? config('app.name') }}</strong>
             <span>{{ date('Y') }}. All Rights Reserved</span>
         </p>
         <div class="credits">
@@ -111,7 +112,7 @@
             <!-- You can delete the links only if you've purchased the pro version. -->
             <!-- Licensing information: https://bootstrapmade.com/license/ -->
             <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
-            Designed by <a href="https://doniaries.com/">Don Borland</a>
+            {{-- Designed by <a href="https://doniaries.com/">Don Borland</a> --}}
         </div>
     </div>
 

@@ -32,15 +32,46 @@ class UserSeeder extends Seeder
         ]);
         $superAdmin->syncRoles(['super_admin']);
 
-        // Create Admin User with super_admin role
+        // Create Admin User
         $admin = User::create([
-            'name' => 'Admin',
-            'email' => 'admin@gmail.com',
+            'name' => 'Administrator',
+            'email' => 'admin@example.com',
             'password' => Hash::make('password'),
             'is_active' => true,
             'email_verified_at' => now(),
         ]);
-        $admin->syncRoles(['super_admin']);
+        $admin->syncRoles(['administrator']);
+        $admin->syncRoles(['administrator']);
+
+        // Create Editor User
+        $editor = User::create([
+            'name' => 'Editor',
+            'email' => 'editor@example.com',
+            'password' => Hash::make('password'),
+            'is_active' => true,
+            'email_verified_at' => now(),
+        ]);
+        $editor->syncRoles(['editor']);
+
+        // Create Author User
+        $author = User::create([
+            'name' => 'Author',
+            'email' => 'author@example.com',
+            'password' => Hash::make('password'),
+            'is_active' => true,
+            'email_verified_at' => now(),
+        ]);
+        $author->syncRoles(['author']);
+
+        // Create Contributor User
+        $contributor = User::create([
+            'name' => 'Contributor',
+            'email' => 'contributor@example.com',
+            'password' => Hash::make('password'),
+            'is_active' => true,
+            'email_verified_at' => now(),
+        ]);
+        $contributor->syncRoles(['contributor']);
 
         $this->command->info('User seeding completed!');
     }

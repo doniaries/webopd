@@ -17,12 +17,12 @@ class PengaturanSeeder extends Seeder
 
         // Create default settings
         $settings = [
-            'name' => 'Sistem Informasi Pemerintahan',
-            'slug' => 'sistem-informasi-pemerintahan',
+            'name' => 'Dinas Komunikasi dan Informatika',
+            'slug' => 'dinas-komunikasi-dan-informatika',
             'logo' => null, // Akan diisi melalui admin
             'favicon' => null, // Akan diisi melalui admin
             'kepala_instansi' => 'Kepala Dinas',
-            'alamat_instansi' => 'Jl. Raya No. 1, Kota Anda',
+            'alamat_instansi' => 'Gedung Bersama',
             'no_telp_instansi' => '021-12345678',
             'email_instansi' => 'info@example.com',
             'facebook' => 'https://facebook.com',
@@ -30,7 +30,7 @@ class PengaturanSeeder extends Seeder
             'instagram' => 'https://instagram.com',
             'youtube' => 'https://youtube.com',
         ];
-        
+
         // Create the settings record
         \App\Models\Pengaturan::create($settings);
 
