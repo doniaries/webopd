@@ -17,8 +17,10 @@ class ShieldSeeder extends Seeder
         $permissions = [
             // Core permissions
             'view_post', 'view_any_post', 'create_post', 'update_post', 'delete_post',
-            'publish_post', 'unpublish_post', 'restore_post', 'restore_any_post',
-            'replicate_post', 'reorder_post', 'force_delete_post', 'force_delete_any_post',
+            'publish_post', 'unpublish_post', 'edit_published_posts', 'edit_others_posts',
+            'delete_published_posts', 'delete_others_posts', 'read_private_posts',
+            'restore_post', 'restore_any_post', 'replicate_post', 'reorder_post', 
+            'force_delete_post', 'force_delete_any_post',
             
             // Tag permissions
             'view_tag', 'view_any_tag', 'create_tag', 'update_tag', 'delete_tag',
@@ -81,51 +83,60 @@ class ShieldSeeder extends Seeder
             if (is_string($permission) && !empty($permission)) {
                 $createdPermissions[] = Permission::firstOrCreate(
                     ['name' => $permission],
-                    ['guard_name' => 'web']
                 )->name; // Store the permission name as a string
             }
         }
 
         // Create roles with their permissions
+        // Define role permissions
         $roles = [
             [
                 'name' => 'super_admin',
                 'guard_name' => 'web',
-                'permissions' => ['*'], // Wildcard for all permissions
-                'description' => 'Super Administrator with full access to all features, including future ones'
+                'permissions' => $permissions, // All permissions
+                'description' => 'Super Administrator dengan akses penuh ke semua fitur'
             ],
             [
                 'name' => 'administrator',
                 'guard_name' => 'web',
-                'permissions' => $permissions, // All current permissions
-                'description' => 'Administrator with full control over the entire site'
+                'permissions' => array_filter($permissions, function($permission) {
+                    // Admin bisa semua kecuali beberapa hal sensitif
+                    return !in_array($permission, [
+                        'delete_user', 'force_delete_user', 'force_delete_any_user',
+                        'delete_role', 'delete_any_role',
+                        'delete_setting', 'force_delete_setting', 'force_delete_any_setting'
+                    ]);
+                }),
+                'description' => 'Administrator dengan kendali penuh atas situs'
             ],
             [
                 'name' => 'editor',
                 'guard_name' => 'web',
                 'permissions' => array_filter($permissions, function($permission) {
-                    // Editors can manage all content but not users/roles/settings
-                    return !in_array($permission, [
-                        'view_user', 'view_any_user', 'create_user', 'update_user', 'delete_user',
-                        'view_role', 'view_any_role', 'create_role', 'update_role', 'delete_role',
-                        'view_setting', 'view_any_setting', 'create_setting', 'update_setting', 'delete_setting'
-                    ]);
+                    // Editor bisa mengelola konten termasuk mempublikasikan
+                    $allowed = [
+                        'view_post', 'view_any_post', 'create_post', 'update_post', 'delete_post',
+                        'publish_post', 'unpublish_post', 'edit_published_posts', 'edit_others_posts',
+                        'delete_published_posts', 'delete_others_posts', 'read_private_posts',
+                        'view_tag', 'view_any_tag', 'create_tag', 'update_tag', 'delete_tag',
+                        'view_sambutan::pimpinan', 'view_any_sambutan::pimpinan', 'update_sambutan::pimpinan'
+                    ];
+                    return in_array($permission, $allowed);
                 }),
-                'description' => 'Can manage all posts, pages, and content but not users or settings'
+                'description' => 'Dapat mengelola dan mempublikasikan konten'
             ],
             [
                 'name' => 'author',
                 'guard_name' => 'web',
                 'permissions' => array_filter($permissions, function($permission) {
-                    // Authors can only manage their own posts and view tags
-                    return in_array($permission, [
-                        'view_post', 'view_any_post', 'create_post', 'update_post',
-                        'publish_post', 'unpublish_post', 'view_tag', 'view_any_tag',
-                        'view_post_tag', 'view_any_post_tag',  // Tag permissions
-                        'view_post::tag', 'view_any_post::tag'  // Alternative tag permission format
-                    ]);
+                    // Author hanya bisa membuat dan mengedit draft
+                    $allowed = [
+                        'view_post', 'view_any_post', 'create_post', 'update_post', 'delete_post',
+                        'view_tag', 'view_any_tag', 'create_tag', 'update_tag'
+                    ];
+                    return in_array($permission, $allowed);
                 }),
-                'description' => 'Can create and manage their own posts'
+                'description' => 'Dapat membuat dan mengelola postingan mereka sendiri, tapi tidak bisa mempublikasikan'
             ],
             [
                 'name' => 'contributor',

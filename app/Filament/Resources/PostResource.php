@@ -9,6 +9,7 @@ use App\Models\Tag;
 
 use App\Models\User;
 use Spatie\Permission\Traits\HasRoles;
+use Spatie\Permission\Traits\HasPermissions;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -20,9 +21,13 @@ use Illuminate\Support\Str;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Facades\Filament;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
+use App\Policies\PostPolicy;
 
 class PostResource extends Resource
 {
+    use HasRoles, HasPermissions;
     protected static ?string $model = Post::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-newspaper';
@@ -30,6 +35,29 @@ class PostResource extends Resource
     protected static ?string $modelLabel = 'Postingan';
     protected static ?string $navigationGroup = 'Postingan';
     protected static ?int $navigationSort = 1;
+
+    protected static ?string $modelPolicy = PostPolicy::class;
+    
+    public static function can(string $action, mixed $record = null): bool
+    {
+        if (!Auth::check()) {
+            return false;
+        }
+        
+        $user = Auth::user();
+        
+        // Gunakan policy jika ada
+        $policy = app(PostPolicy::class);
+        if (method_exists($policy, $action)) {
+            return $policy->{$action}($user, $record);
+        }
+        
+        // Fallback ke permission default
+        $permission = $action . '_post';
+        
+        // Gunakan Gate untuk mengecek permission
+        return Gate::forUser($user)->check($permission);
+    }
 
     public static function form(Form $form): Form
     {
@@ -130,13 +158,34 @@ class PostResource extends Resource
                                     ->description('Pengaturan status publikasi artikel')
                                     ->schema([
                                         Forms\Components\Select::make('status')
-                                            ->options([
-                                                'draft' => 'Draft',
-                                                'published' => 'Dipublikasikan',
-                                                'archived' => 'Diarsipkan'
-                                            ])
+                                            ->options(function () {
+                                                $user = Auth::user();
+                                                $options = ['draft' => 'Draft'];
+                                                
+                                                // Hanya tampilkan opsi published jika user punya izin
+                                                if (Auth::check() && Gate::forUser(Auth::user())->check('publish_post')) {
+                                                    $options['published'] = 'Dipublikasikan';
+                                                }
+                                                
+                                                $options['archived'] = 'Diarsipkan';
+                                                
+                                                return $options;
+                                            })
                                             ->default('draft')
-                                            ->required(),
+                                            ->required()
+                                            ->disabled(fn ($record) => 
+                                                $record && 
+                                                $record->status === 'published' && 
+                                                !(Auth::check() && Gate::forUser(Auth::user())->check('publish_post'))
+                                            )
+                                            ->dehydrated(fn ($state, $record) => 
+                                                $record && 
+                                                $record->exists && 
+                                                $record->status === 'published' && 
+                                                !(Auth::check() && Gate::forUser(Auth::user())->check('publish_post'))
+                                                    ? 'published' 
+                                                    : $state
+                                            ),
                                         Forms\Components\DateTimePicker::make('published_at')
                                             ->label('Tanggal Publikasi')
                                             ->default(now())
@@ -324,17 +373,19 @@ class PostResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         $query = parent::getEloquentQuery();
-
-        if (Filament::auth()->check()) {
-            $user = Filament::auth()->user();
-
-            // If user is not super admin, only show their own posts
-            if ($user) {
-                $isSuperAdmin = method_exists($user, 'hasRole') ? $user->hasRole('super_admin') : false;
-                if (!$isSuperAdmin) {
-                    $query->where('user_id', $user->id);
-                }
-            }
+        
+        if (!Auth::check()) {
+            return $query->where('id', 0); // Return empty result if not authenticated
+        }
+        
+        $user = Auth::user();
+        
+        // Cek apakah user memiliki izin untuk melihat semua post
+        $canViewAnyPost = Gate::forUser($user)->check('view_any_post');
+        
+        // Jika tidak bisa melihat semua post, hanya tampilkan post milik user tersebut
+        if (!$canViewAnyPost) {
+            $query->where('user_id', $user->id);
         }
 
         return $query->withoutGlobalScopes([

@@ -11,12 +11,27 @@ class PostObserver
      */
     public function creating(Post $post): void
     {
-        // Mengubah status menjadi 'published' secara otomatis saat post dibuat
-        $post->status = 'published';
+        // Default status ke draft jika belum diatur
+        if (empty($post->status)) {
+            $post->status = 'draft';
+        }
         
-        // Jika published_at belum diatur, atur ke waktu saat ini
-        if (!$post->published_at) {
+        // Jika status published, pastikan ada published_at
+        if ($post->status === 'published' && !$post->published_at) {
             $post->published_at = now();
+        }
+    }
+    
+    public function updating(Post $post): void
+    {
+        // Jika status diubah menjadi published, set published_at jika belum ada
+        if ($post->isDirty('status') && $post->status === 'published' && !$post->published_at) {
+            $post->published_at = now();
+        }
+        
+        // Jika status diubah dari published, hapus published_at
+        if ($post->isDirty('status') && $post->getOriginal('status') === 'published' && $post->status !== 'published') {
+            $post->published_at = null;
         }
     }
 

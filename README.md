@@ -40,6 +40,68 @@ Laravel 12 Starter Kit adalah proyek Laravel yang dirancang untuk memudahkan And
     php artisan serve
     ```
 
+## 👥 Sistem Role dan Permission
+
+Aplikasi ini menggunakan [Spatie Laravel Permission](https://spatie.be/docs/laravel-permission) untuk manajemen role dan permission. Berikut adalah konfigurasi default yang tersedia:
+
+### 🏷️ Daftar Role
+
+1. **Super Admin**
+   - Memiliki akses penuh ke semua fitur
+   - Dapat mengelola semua data dan pengguna
+
+2. **Administrator**
+   - Hampir setara dengan Super Admin
+   - Tidak dapat mengubah konfigurasi sistem
+
+3. **Editor**
+   - Dapat mempublikasikan dan mengedit semua post
+   - Dapat mengelola kategori dan tag
+   - Tidak dapat mengelola pengguna
+
+4. **Author**
+   - Dapat membuat dan mengelola post mereka sendiri
+   - Tidak dapat mempublikasikan post
+   - Dapat mengelola tag
+   - **Permission**:
+     - `view_post`, `view_any_post`
+     - `create_post`, `update_post`, `delete_post`
+     - `view_tag`, `view_any_tag`, `create_tag`, `update_tag`
+
+5. **Contributor**
+   - Hanya dapat membuat draft
+   - Tidak dapat mempublikasikan atau menghapus post
+   - Hanya dapat melihat tag
+   - **Permission**:
+     - `view_post`, `view_any_post`
+     - `create_post`, `update_post`
+     - `view_tag`, `view_any_tag`
+
+### 🔒 Daftar Permission
+
+- Post Management:
+  - `view_post` - Melihat detail post
+  - `view_any_post` - Melihat daftar semua post
+  - `create_post` - Membuat post baru
+  - `update_post` - Mengupdate post
+  - `delete_post` - Menghapus post
+  - `publish_post` - Mempublikasikan post
+
+- Tag Management:
+  - `view_tag` - Melihat detail tag
+  - `view_any_tag` - Melihat daftar semua tag
+  - `create_tag` - Membuat tag baru
+  - `update_tag` - Mengupdate tag
+  - `delete_tag` - Menghapus tag
+
+### 🔄 Cara Menjalankan Seeder
+
+Untuk mengisi role dan permission default, jalankan:
+
+```bash
+php artisan db:seed --class=ShieldSeeder
+```
+
 ## 🎨 Dependensi Frontend (Plugins)
 
 Proyek ini menggunakan Vite untuk kompilasi aset frontend. Berikut adalah dependensi utama yang digunakan:
