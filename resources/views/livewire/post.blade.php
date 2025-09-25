@@ -401,10 +401,10 @@
                 </div>
 
                 <!-- Post Header -->
-                <header class="mb-8">
-                    <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{{ $post->title }}</h1>
+                <header class="mb-8 text-center">
+                    <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">{{ $post->title }}</h1>
 
-                    <div class="flex items-center text-sm text-gray-500 mb-4">
+                    <div class="flex flex-wrap justify-center items-center gap-2 text-sm text-gray-500 mb-4">
                         <span class="flex items-center">
                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -412,7 +412,15 @@
                             </svg>
                             {{ $post->published_at->translatedFormat('d F Y') }}
                         </span>
-                        <span class="mx-2">•</span>
+                        
+                        @if($post->tags->isNotEmpty())
+                            @foreach($post->tags as $tag)
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                    {{ $tag->name }}
+                                </span>
+                            @endforeach
+                            <span class="mx-1">•</span>
+                        @endif
                         <span class="flex items-center">
                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -438,7 +446,6 @@
                 <!-- Gallery Images -->
                 @if ($post->postGallery && $post->postGallery->isNotEmpty())
                     <div class="mt-12 mb-12">
-                        <h2 class="text-2xl font-bold text-gray-900 mb-6">Galeri Foto</h2>
                         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" x-data="{
                             images: @js(
     collect($post->postGallery)->map(function ($img, $index) {
