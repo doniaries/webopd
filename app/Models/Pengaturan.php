@@ -15,8 +15,8 @@ class Pengaturan extends Model
     protected $fillable = [
         'name',
         'slug',
+        'kabupaten',
         'logo',
-
         'kepala_instansi',
         'foto_pimpinan',
         'alamat_instansi',

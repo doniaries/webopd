@@ -16,4 +16,15 @@ class ListPengaturans extends ListRecords
             Actions\CreateAction::make(),
         ];
     }
+
+    public function mount(): void
+    {
+        $settings = \App\Models\Pengaturan::first();
+
+        if ($settings) {
+            $this->redirect(PengaturanResource::getUrl('view', ['record' => $settings]));
+        } else {
+            $this->redirect(PengaturanResource::getUrl('create'));
+        }
+    }
 }

@@ -10,6 +10,9 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Infolists\Infolist;
+use Filament\Infolists\Components;
+use Filament\Tables\Actions\ViewAction;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -39,6 +42,11 @@ class PengaturanResource extends Resource
                                 $set('slug', \Illuminate\Support\Str::slug($state));
                             })
                             ->unique(ignoreRecord: true),
+
+                        Forms\Components\TextInput::make('kabupaten')
+                            ->label('Kabupaten / Kota')
+                            ->placeholder('Contoh: Kota Padang Panjang')
+                            ->maxLength(255),
 
                         Forms\Components\Hidden::make('slug')
                             ->label('Slug')
@@ -154,6 +162,67 @@ class PengaturanResource extends Resource
             ]);
     }
 
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                Components\Section::make('Identitas Instansi')
+                    ->schema([
+                        Components\ImageEntry::make('logo')
+                            ->label('Logo Instansi')
+                            ->height(100)
+                            ->circular(),
+                        Components\TextEntry::make('name')
+                            ->label('Nama Instansi')
+                            ->weight('bold')
+                            ->size(Components\TextEntry\TextEntrySize::Large),
+                        Components\TextEntry::make('kabupaten')
+                            ->label('Kabupaten / Kota'),
+                        Components\TextEntry::make('active_theme')
+                            ->label('Tema Aktif')
+                            ->badge()
+                            ->color(fn(string $state): string => match ($state) {
+                                'default' => 'gray',
+                                'modern' => 'success',
+                                default => 'gray',
+                            }),
+                    ])->columns(2),
+
+                Components\Section::make('Informasi Kontak & Lokasi')
+                    ->schema([
+                        Components\TextEntry::make('alamat_instansi')
+                            ->label('Alamat')
+                            ->columnSpanFull(),
+                        Components\TextEntry::make('email_instansi')
+                            ->label('Email')
+                            ->icon('heroicon-m-envelope'),
+                        Components\TextEntry::make('no_telp_instansi')
+                            ->label('Telepon')
+                            ->icon('heroicon-m-phone'),
+                        Components\TextEntry::make('latitude'),
+                        Components\TextEntry::make('longitude'),
+                    ])->columns(2),
+
+                Components\Section::make('Pimpinan')
+                    ->schema([
+                        Components\ImageEntry::make('foto_pimpinan')
+                            ->label('Foto Pimpinan')
+                            ->height(150),
+                        Components\TextEntry::make('kepala_instansi')
+                            ->label('Nama Pimpinan')
+                            ->weight('bold'),
+                    ])->columns(2),
+
+                Components\Section::make('Media Sosial')
+                    ->schema([
+                        Components\TextEntry::make('facebook')->icon('heroicon-o-globe-alt')->url(fn($record) => $record->facebook)->openUrlInNewTab(),
+                        Components\TextEntry::make('twitter')->icon('heroicon-o-globe-alt')->url(fn($record) => $record->twitter)->openUrlInNewTab(),
+                        Components\TextEntry::make('instagram')->icon('heroicon-o-globe-alt')->url(fn($record) => $record->instagram)->openUrlInNewTab(),
+                        Components\TextEntry::make('youtube')->icon('heroicon-o-globe-alt')->url(fn($record) => $record->youtube)->openUrlInNewTab(),
+                    ])->columns(4),
+            ]);
+    }
+
     public static function table(Table $table): Table
     {
         return $table
@@ -248,6 +317,7 @@ class PengaturanResource extends Resource
                 // Add any filters here
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
@@ -270,6 +340,7 @@ class PengaturanResource extends Resource
         return [
             'index' => Pages\ListPengaturans::route('/'),
             'create' => Pages\CreatePengaturan::route('/create'),
+            'view' => Pages\ViewPengaturan::route('/{record}'),
             'edit' => Pages\EditPengaturan::route('/{record}/edit'),
         ];
     }

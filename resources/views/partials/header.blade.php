@@ -200,7 +200,7 @@
                 <img src="{{ $logoUrl }}" alt="Logo" class="logo-img" onerror="this.src='{{ asset('assets/img/logo.png') }}'">
                 <div class="site-identity">
                     <h1 class="site-name">{{ $siteName }}</h1>
-                    <span class="site-tagline">Pemerintah Kota Padang Panjang</span>
+                    <span class="site-tagline">Pemerintah {{ $pengaturan->kabupaten ?? 'Sijunjung' }}</span>
                 </div>
             </a>
 
