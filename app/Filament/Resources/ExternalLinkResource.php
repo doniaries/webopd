@@ -50,6 +50,7 @@ class ExternalLinkResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\ImageColumn::make('logo')
+                    ->defaultImageUrl(asset('images/no_image.png'))
                     ->label('Logo')
                     ->circular(),
                 Tables\Columns\TextColumn::make('nama_link')

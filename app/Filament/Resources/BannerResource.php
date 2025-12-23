@@ -65,6 +65,7 @@ class BannerResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\ImageColumn::make('gambar')
+                    ->defaultImageUrl(asset('images/no_image.png'))
                     ->searchable(),
                 Tables\Columns\ToggleColumn::make('is_active')
                     ->label('Aktif')

@@ -34,9 +34,10 @@ class UsersRelationManager extends RelationManager
             ->recordTitleAttribute('name')
             ->columns([
                 Tables\Columns\ImageColumn::make('profile_photo_path')
+                    ->defaultImageUrl(asset('images/no_image.png'))
                     ->label('')
                     ->circular()
-                    ->defaultImageUrl(fn ($record) => 'https://ui-avatars.com/api/?name=' . urlencode($record->name) . '&color=FFFFFF&background=111827'),
+                    ->defaultImageUrl(fn($record) => 'https://ui-avatars.com/api/?name=' . urlencode($record->name) . '&color=FFFFFF&background=111827'),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
@@ -55,13 +56,13 @@ class UsersRelationManager extends RelationManager
                 Tables\Actions\AttachAction::make()
                     ->preloadRecordSelect()
                     ->multiple()
-                    ->recordSelectOptionsQuery(fn (Builder $query) => $query->whereDoesntHave('roles', function ($query) {
+                    ->recordSelectOptionsQuery(fn(Builder $query) => $query->whereDoesntHave('roles', function ($query) {
                         $query->where('name', $this->getOwnerRecord()->name);
                     })),
             ])
             ->actions([
                 Tables\Actions\DetachAction::make()
-                    ->hidden(fn ($record) => $this->getOwnerRecord()->name === 'super_admin'),
+                    ->hidden(fn($record) => $this->getOwnerRecord()->name === 'super_admin'),
             ]);
     }
 }

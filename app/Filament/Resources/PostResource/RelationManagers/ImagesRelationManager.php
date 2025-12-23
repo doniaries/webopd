@@ -52,6 +52,7 @@ class ImagesRelationManager extends RelationManager
         return $table
             ->columns([
                 Tables\Columns\ImageColumn::make('image_path')
+                    ->defaultImageUrl(asset('images/no_image.png'))
                     ->label('Gambar')
                     ->circular(false)
                     ->square()

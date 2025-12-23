@@ -16,7 +16,8 @@
     @stack('meta')
 
     <!-- Favicons -->
-    <link href="{{ asset('favicon.png') }}" rel="icon">
+    <!-- Favicons -->
+    <link href="{{ $pengaturan->logo ? asset('storage/' . $pengaturan->logo) : asset('favicon.png') }}" rel="icon">
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com" rel="preconnect">

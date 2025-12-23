@@ -50,6 +50,7 @@ class PostGalleryResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\ImageColumn::make('image_path')
+                    ->defaultImageUrl(asset('images/no_image.png'))
                     ->label('Gambar')
                     ->disk('public'),
                 Tables\Columns\TextColumn::make('post.title')

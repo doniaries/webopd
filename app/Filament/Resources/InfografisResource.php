@@ -74,6 +74,7 @@ class InfografisResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\ImageColumn::make('gambar')
+                    ->defaultImageUrl(asset('images/no_image.png'))
                     ->label('Gambar')
                     ->circular(),
 

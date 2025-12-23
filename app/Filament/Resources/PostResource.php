@@ -207,7 +207,7 @@ class PostResource extends Resource
                                             ])
                                             ->default('draft')
                                             ->required()
-                                            ->visible(fn () => Auth::check())
+                                            ->visible(fn() => Auth::check())
                                             ->dehydrated()
                                             ->afterStateUpdated(function ($state, $set) {
                                                 if ($state === 'published') {
@@ -259,6 +259,7 @@ class PostResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\ImageColumn::make('foto_utama_url')
+                    ->defaultImageUrl(asset('images/no_image.png'))
                     ->label('Foto Utama')
                     ->circular(false),
                 // ->width(100)

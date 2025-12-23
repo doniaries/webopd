@@ -148,17 +148,7 @@ class PengaturanResource extends Resource
                             ->selectablePlaceholder(false)
                             ->native(false),
 
-                        Forms\Components\FileUpload::make('favicon')
-                            ->label('Favicon')
-                            ->image()
-                            ->directory('pengaturan/favicon')
-                            ->disk('public')
-                            ->visibility('public')
-                            ->preserveFilenames()
-                            ->imageResizeTargetWidth(64)
-                            ->imageResizeTargetHeight(64)
-                            ->imageResizeMode('contain')
-                            ->helperText('Ukuran disarankan: 64x64px, format: ICO/PNG')
+
                     ])
                     ->columns(2),
             ]);
@@ -179,6 +169,7 @@ class PengaturanResource extends Resource
                     ->sortable(),
 
                 Tables\Columns\ImageColumn::make('foto_pimpinan')
+                    ->defaultImageUrl(asset('images/no_image.png'))
                     ->label('Foto Pimpinan')
                     ->disk('public')
                     ->height(50)
@@ -212,16 +203,13 @@ class PengaturanResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 Tables\Columns\ImageColumn::make('logo')
+                    ->defaultImageUrl(asset('images/no_image.png'))
                     ->label('Logo')
                     ->disk('public')
                     ->height(30)
                     ->toggleable(isToggledHiddenByDefault: true),
 
-                Tables\Columns\ImageColumn::make('favicon')
-                    ->label('Favicon')
-                    ->disk('public')
-                    ->height(30)
-                    ->toggleable(isToggledHiddenByDefault: true),
+
                 Tables\Columns\TextColumn::make('facebook')
                     ->searchable()
                     ->label('Facebook')
@@ -241,6 +229,16 @@ class PengaturanResource extends Resource
                     ->searchable()
                     ->label('Youtube')
                     ->toggleable(isToggledHiddenByDefault: true),
+
+                Tables\Columns\SelectColumn::make('active_theme')
+                    ->label('Tema Website')
+                    ->options([
+                        'default' => 'Default (Original)',
+                        'modern' => 'Modern (Custom Default)',
+                    ])
+                    ->selectablePlaceholder(false)
+                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

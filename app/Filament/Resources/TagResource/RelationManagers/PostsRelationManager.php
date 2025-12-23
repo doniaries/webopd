@@ -50,6 +50,7 @@ class PostsRelationManager extends RelationManager
             ->recordTitleAttribute('title')
             ->columns([
                 Tables\Columns\ImageColumn::make('foto_utama_url')
+                    ->defaultImageUrl(asset('images/no_image.png'))
                     ->label('Foto')
                     ->circular(false)
                     ->square()

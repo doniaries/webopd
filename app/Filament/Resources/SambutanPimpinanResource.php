@@ -78,6 +78,7 @@ class SambutanPimpinanResource extends Resource
                     ->html()
                     ->wrap(),
                 Tables\Columns\ImageColumn::make('foto')
+                    ->defaultImageUrl(asset('images/no_image.png'))
                     ->label('Foto Pimpinan'),
 
 
