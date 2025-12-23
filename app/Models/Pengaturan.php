@@ -28,6 +28,7 @@ class Pengaturan extends Model
         'youtube',
         'latitude',
         'longitude',
+        'active_theme',
     ];
 
     protected $casts = [

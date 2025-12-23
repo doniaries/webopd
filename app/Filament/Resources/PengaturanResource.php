@@ -137,6 +137,17 @@ class PengaturanResource extends Resource
                             ->imageResizeMode('contain')
                             ->helperText('Ukuran disarankan: 300x300px, format: PNG/JPG'),
 
+                        Forms\Components\Select::make('active_theme')
+                            ->label('Tema Website')
+                            ->options([
+                                'default' => 'Default (Original)',
+                                'modern' => 'Modern (Custom Default)',
+                            ])
+                            ->default('default')
+                            ->required()
+                            ->selectablePlaceholder(false)
+                            ->native(false),
+
                         Forms\Components\FileUpload::make('favicon')
                             ->label('Favicon')
                             ->image()
@@ -172,6 +183,7 @@ class PengaturanResource extends Resource
                     ->disk('public')
                     ->height(50)
                     ->circular(),
+
 
                 Tables\Columns\TextColumn::make('email_instansi')
                     ->label('Email')

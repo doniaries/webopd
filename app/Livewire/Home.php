@@ -181,7 +181,33 @@ class Home extends Component
             ->orderBy('name')
             ->get();
 
-        return view('livewire.home', [
+        // Get active theme
+        $pengaturan = \App\Models\Pengaturan::first();
+        $activeTheme = $pengaturan->active_theme ?? 'default';
+
+        // Define view path
+        $viewPath = 'livewire.home'; // Default view
+        if ($activeTheme !== 'default' && view()->exists('themes.' . $activeTheme . '.home')) {
+            return view('themes.' . $activeTheme . '.home', [
+                'pageTitle' => 'Beranda - ' . config('app.name'),
+                'pageDescription' => 'Portal resmi ' . config('app.name') . ' untuk informasi terbaru, informasi, dan layanan publik.',
+                'featuredPosts' => $this->featuredPosts,
+                'tags' => $tags,
+                'banners' => $this->banners,
+                'sliders' => $this->sliders,
+                'agenda' => $this->agenda,
+                'pengaturan' => \App\Models\Pengaturan::first(),
+                'popularPosts' => $this->popularPosts,
+                'dokumens' => $this->dokumens,
+            ])->layout('themes.' . $activeTheme . '.layouts.app', [
+                'tags' => $tags,
+                'pengaturan' => \App\Models\Pengaturan::first(),
+                'pageTitle' => 'Beranda - ' . config('app.name'),
+                'pageDescription' => 'Portal resmi ' . config('app.name') . ' untuk informasi terbaru, informasi, dan layanan publik.',
+            ]);
+        }
+
+        return view($viewPath, [
             'pageTitle' => 'Beranda - ' . config('app.name'),
             'pageDescription' => 'Portal resmi ' . config('app.name') . ' untuk informasi terbaru, informasi, dan layanan publik.',
             'featuredPosts' => $this->featuredPosts,
