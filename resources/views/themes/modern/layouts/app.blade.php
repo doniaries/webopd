@@ -16,7 +16,6 @@
     @stack('meta')
 
     <!-- Favicons -->
-    <!-- Favicons -->
     <link href="{{ $pengaturan->logo ? asset('storage/' . $pengaturan->logo) : asset('favicon.png') }}" rel="icon">
 
     <!-- Fonts -->

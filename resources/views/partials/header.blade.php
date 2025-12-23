@@ -18,6 +18,7 @@
             border-bottom: 1px solid #eee;
             padding: 10px 0;
             background: #fff;
+            width: 100%;
         }
 
         .logo-section {
@@ -124,21 +125,30 @@
             padding: 5px 0;
         }
 
-        .dropdown:hover .dropdown-menu {
-            display: block;
+        /* Desktop Hover Support */
+        @media (min-width: 992px) {
+            .dropdown:hover .dropdown-menu {
+                display: block;
+            }
         }
 
         .dropdown-menu li a {
             display: block;
             padding: 8px 16px;
-            color: #333;
+            color: #444;
             text-decoration: none;
             font-size: 0.9rem;
+            transition: all 0.2s;
         }
 
         .dropdown-menu li a:hover {
-            background: #f9f9f9;
+            background: #f0fdf4;
             color: #10b981;
+        }
+
+        /* Show class for click interaction (Mobile) */
+        .dropdown-menu.show {
+            display: block;
         }
 
         /* Mobile Responsive */
@@ -169,6 +179,19 @@
                 display: none;
                 /* Disable hover on mobile */
             }
+
+            .dropdown-menu.show {
+                display: block;
+                position: relative;
+                width: 100%;
+                box-shadow: none;
+                border: none;
+                background-color: #fff;
+                /* Match menu bg */
+                padding-left: 20px;
+                border-left: 2px solid #10b981;
+                /* Accent line for nested feel */
+            }
         }
 
         @media (max-width: 576px) {
@@ -193,8 +216,8 @@
     $logoUrl = $pengaturan->logo ? asset('storage/' . $pengaturan->logo) : asset('assets/img/logo.png');
     @endphp
 
-    <div class="header-main">
-        <div class="container d-flex align-items-center justify-content-between">
+    <div class="header-main w-100">
+        <div class="container-fluid px-lg-5 px-3 d-flex align-items-center justify-content-between">
             <!-- Logo & Identity -->
             <a href="{{ url('/') }}" class="logo-section">
                 <img src="{{ $logoUrl }}" alt="Logo" class="logo-img" onerror="this.src='{{ asset('assets/img/logo.png') }}'">
@@ -218,8 +241,8 @@
     </div>
 
     <!-- Nav Container -->
-    <div class="nav-container border-bottom">
-        <div class="container">
+    <div class="nav-container border-bottom w-100">
+        <div class="container-fluid px-lg-5 px-3">
             <nav>
                 <ul class="main-nav">
                     <li><a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">
@@ -258,4 +281,67 @@
             </nav>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Universal Dropdown Toggle (Click-based)
+            const dropdownLinks = document.querySelectorAll('.dropdown > a');
+
+            function closeAllDropdowns() {
+                document.querySelectorAll('.dropdown-menu.show').forEach(menu => {
+                    menu.classList.remove('show');
+                    // Reset icon rotation and active state
+                    const toggleLink = menu.previousElementSibling;
+                    if (toggleLink) {
+                        toggleLink.classList.remove('active'); // Remove active highlight
+                        const icon = toggleLink.querySelector('.bi-chevron-down');
+                        if (icon) {
+                            icon.style.transform = 'rotate(0deg)';
+                        }
+                    }
+                });
+            }
+
+            dropdownLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    // Prevent default for # links always
+                    if (this.getAttribute('href') === '#') {
+                        e.preventDefault();
+                    }
+
+                    // Mobile Interaction (Click-based)
+                    if (window.matchMedia('(max-width: 991px)').matches) {
+                        // Prevent navigation on mobile for parent menu items
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        const menu = this.nextElementSibling;
+                        const isAlreadyOpen = menu && menu.classList.contains('show');
+
+                        closeAllDropdowns();
+
+                        // Toggle: If not open, open it. If open, closeAllDropdowns already closed it.
+                        if (menu && menu.classList.contains('dropdown-menu') && !isAlreadyOpen) {
+                            menu.classList.add('show');
+
+                            // Visual feedback for active state
+                            this.classList.add('active');
+
+                            const icon = this.querySelector('.bi-chevron-down');
+                            if (icon) {
+                                icon.style.transform = 'rotate(180deg)';
+                                icon.style.transition = 'transform 0.2s ease';
+                            }
+                        }
+                    }
+                });
+            });
+
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.dropdown')) {
+                    closeAllDropdowns();
+                }
+            });
+        });
+    </script>
 </header>
