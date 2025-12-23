@@ -3,8 +3,9 @@
 
 <head>
     @php
-        use App\Models\Pengaturan;
-        $siteName = Pengaturan::first()->name ?? 'Web OPD';
+    use App\Models\Pengaturan;
+    $pengaturan = Pengaturan::first();
+    $siteName = $pengaturan->name ?? 'Web OPD';
     @endphp
 
     <meta charset="utf-8">
@@ -16,7 +17,7 @@
     @stack('meta')
 
     <!-- Favicons -->
-    <link href="{{ asset('favicon.png') }}" rel="icon">
+    <link href="{{ $pengaturan->logo ? asset('storage/' . $pengaturan->logo) : asset('favicon.png') }}" rel="icon">
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com" rel="preconnect">
@@ -61,9 +62,9 @@
     @include('partials.header')
     <main class="main" style="padding-top: 10px;">
         @hasSection('content')
-            @yield('content')
+        @yield('content')
         @else
-            {{ $slot ?? '' }}
+        {{ $slot ?? '' }}
         @endif
     </main>
 

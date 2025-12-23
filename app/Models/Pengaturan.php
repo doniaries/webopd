@@ -9,14 +9,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Pengaturan extends Model
 {
     use HasSlug;
-    
+
     protected $table = 'pengaturans';
 
     protected $fillable = [
         'name',
         'slug',
         'logo',
-        'favicon',
+
         'kepala_instansi',
         'foto_pimpinan',
         'alamat_instansi',
@@ -38,14 +38,14 @@ class Pengaturan extends Model
         'latitude' => 'decimal:8',
         'longitude' => 'decimal:8',
     ];
-    
+
     /**
      * The field that should be used for generating the slug.
      *
      * @var string
      */
     protected $slugSource = 'name';
-    
+
     /**
      * The field where the slug is stored.
      *
