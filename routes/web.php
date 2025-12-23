@@ -43,7 +43,7 @@ Route::get('/pengumuman/{pengumuman:slug}', \App\Livewire\PengumumanDetail::clas
 
 
 // Document Routes
-Route::get('/dokumen', \App\Livewire\Dokumen::class)->name('dokumen');
+// Route::get('/dokumen', \App\Livewire\Dokumen::class)->name('dokumen');
 Route::get('/dokumen/{slug}', \App\Livewire\DokumenDetail::class)->name('dokumen.detail');
 Route::get('/dokumen/{slug}/download', [\App\Livewire\DokumenDetail::class, 'download'])->name('dokumen.download');
 
@@ -79,7 +79,6 @@ Route::get('/agenda/{agenda:slug}', \App\Livewire\AgendaDetail::class)
 
 // Dokumen
 Route::get('/dokumen', Dokumen::class)->name('dokumen.index');
-Route::get('/dokumen', Dokumen::class)->name('dokumen'); // Alias untuk kompatibilitas dengan template
 
 // Kontak
 Route::get('/kontak', Kontak::class)->name('kontak');

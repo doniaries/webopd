@@ -1,4 +1,4 @@
-<div class="space-y-8">
+<div>
     @use('Illuminate\Support\Facades\Storage')
 
     @push('title', $pageTitle)
@@ -536,7 +536,7 @@
                 diunduh
         </div>
         <div class="flex-shrink-0">
-            <a href="{{ route('dokumen') }}"
+            <a href="{{ route('dokumen.index') }}"
                 class="relative inline-flex items-center px-4 py-2 border border-white text-sm font-medium rounded-md text-white bg-blue-700 hover:bg-blue-800 transition-colors duration-200">
                 <i class="fas fa-list-ul mr-2"></i>Lihat Semua Dokumen
             </a>

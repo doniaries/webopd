@@ -5,28 +5,28 @@
             <h3 class="text-xl font-semibold text-gray-800 mb-4">Tetap Terhubung</h3>
             <div class="flex justify-center space-x-6">
                 @if (!empty($pengaturan->facebook))
-                    <a href="{{ $pengaturan->facebook }}" target="_blank"
-                        class="text-gray-600 hover:text-blue-600 transition-colors duration-300">
-                        <i class="bi bi-facebook text-2xl"></i>
-                    </a>
+                <a href="{{ $pengaturan->facebook }}" target="_blank"
+                    class="text-gray-600 hover:text-blue-600 transition-colors duration-300">
+                    <i class="bi bi-facebook text-2xl"></i>
+                </a>
                 @endif
                 @if (!empty($pengaturan->twitter))
-                    <a href="{{ $pengaturan->twitter }}" target="_blank"
-                        class="text-gray-600 hover:text-blue-400 transition-colors duration-300">
-                        <i class="bi bi-twitter-x text-2xl"></i>
-                    </a>
+                <a href="{{ $pengaturan->twitter }}" target="_blank"
+                    class="text-gray-600 hover:text-blue-400 transition-colors duration-300">
+                    <i class="bi bi-twitter-x text-2xl"></i>
+                </a>
                 @endif
                 @if (!empty($pengaturan->instagram))
-                    <a href="{{ $pengaturan->instagram }}" target="_blank"
-                        class="text-gray-600 hover:text-pink-500 transition-colors duration-300">
-                        <i class="bi bi-instagram text-2xl"></i>
-                    </a>
+                <a href="{{ $pengaturan->instagram }}" target="_blank"
+                    class="text-gray-600 hover:text-pink-500 transition-colors duration-300">
+                    <i class="bi bi-instagram text-2xl"></i>
+                </a>
                 @endif
                 @if (!empty($pengaturan->youtube))
-                    <a href="{{ $pengaturan->youtube }}" target="_blank"
-                        class="text-gray-600 hover:text-red-600 transition-colors duration-300">
-                        <i class="bi bi-youtube text-2xl"></i>
-                    </a>
+                <a href="{{ $pengaturan->youtube }}" target="_blank"
+                    class="text-gray-600 hover:text-red-600 transition-colors duration-300">
+                    <i class="bi bi-youtube text-2xl"></i>
+                </a>
                 @endif
             </div>
         </div>
@@ -43,52 +43,52 @@
                 </a>
                 <div class="footer-contact pt-3">
                     @if (!empty($pengaturan->alamat_instansi))
-                        <p>{{ $pengaturan->alamat_instansi }}</p>
+                    <p>{{ $pengaturan->alamat_instansi }}</p>
                     @else
-                        <p>Jl. Contoh No. 123</p>
+                    <p>Jl. Contoh No. 123</p>
                     @endif
 
                     @if (!empty($pengaturan->no_telp_instansi))
-                        <p class="mt-3"><strong>Telepon:</strong> <span>{{ $pengaturan->no_telp_instansi }}</span></p>
+                    <p class="mt-3"><strong>Telepon:</strong> <span>{{ $pengaturan->no_telp_instansi }}</span></p>
                     @else
-                        <p class="mt-3"><strong>Telepon:</strong> <span>+62 123 4567 890</span></p>
+                    <p class="mt-3"><strong>Telepon:</strong> <span>+62 123 4567 890</span></p>
                     @endif
 
                     @if (!empty($pengaturan->email_instansi))
-                        <p><strong>Email:</strong> <span>{{ $pengaturan->email_instansi }}</span></p>
+                    <p><strong>Email:</strong> <span>{{ $pengaturan->email_instansi }}</span></p>
                     @else
-                        <p><strong>Email:</strong> <span>info@webopd.com</span></p>
+                    <p><strong>Email:</strong> <span>info@webopd.com</span></p>
                     @endif
                 </div>
                 {{-- <div class="social-links d-flex mt-4">
                     <a href="{{ $pengaturan->twitter_url ?? '#' }}" target="_blank"><i class="bi bi-twitter-x"></i></a>
-                    <a href="{{ $pengaturan->facebook_url ?? '#' }}" target="_blank"><i class="bi bi-facebook"></i></a>
-                    <a href="{{ $pengaturan->instagram_url ?? '#' }}" target="_blank"><i
-                            class="bi bi-instagram"></i></a>
-                    <a href="{{ $pengaturan->youtube_url ?? '#' }}" target="_blank"><i class="bi bi-youtube"></i></a>
-                </div> --}}
-            </div>
+                <a href="{{ $pengaturan->facebook_url ?? '#' }}" target="_blank"><i class="bi bi-facebook"></i></a>
+                <a href="{{ $pengaturan->instagram_url ?? '#' }}" target="_blank"><i
+                        class="bi bi-instagram"></i></a>
+                <a href="{{ $pengaturan->youtube_url ?? '#' }}" target="_blank"><i class="bi bi-youtube"></i></a>
+            </div> --}}
+        </div>
 
-            <div class="col-lg-2 col-md-3 footer-links">
-                <h4>Tautan Cepat</h4>
-                <ul>
-                    <li><a href="{{ url('/') }}">Beranda</a></li>
-                    <li><a href="{{ route('visi-misi') }}">Visi & Misi</a></li>
-                    <li><a href="{{ route('sambutan-pimpinan') }}">Sambutan Pimpinan</a></li>
-                    <li><a href="{{ route('berita.index') }}">Berita</a></li>
-                    <li><a href="{{ route('kontak') }}">Kontak</a></li>
-                </ul>
-            </div>
+        <div class="col-lg-2 col-md-3 footer-links">
+            <h4>Tautan Cepat</h4>
+            <ul>
+                <li><a href="{{ url('/') }}">Beranda</a></li>
+                <li><a href="{{ route('visi-misi') }}">Visi & Misi</a></li>
+                <li><a href="{{ route('sambutan-pimpinan') }}">Sambutan Pimpinan</a></li>
+                <li><a href="{{ route('berita.index') }}">Berita</a></li>
+                <li><a href="{{ route('kontak') }}">Kontak</a></li>
+            </ul>
+        </div>
 
-            <div class="col-lg-2 col-md-3 footer-links">
-                <h4>Informasi</h4>
-                <ul>
-                    <li><a href="{{ route('infografis') }}">Infografis</a></li>
-                    <li><a href="{{ route('dokumen') }}">Dokumen</a></li>
-                </ul>
-            </div>
+        <div class="col-lg-2 col-md-3 footer-links">
+            <h4>Informasi</h4>
+            <ul>
+                <li><a href="{{ route('infografis') }}">Infografis</a></li>
+                <li><a href="{{ route('dokumen.index') }}">Dokumen</a></li>
+            </ul>
+        </div>
 
-            {{-- <div class="col-lg-4 col-md-6 footer-newsletter">
+        {{-- <div class="col-lg-4 col-md-6 footer-newsletter">
                 <h4>Peta Lokasi</h4>
                 <div class="map-container" style="height: 200px; width: 100%;">
                     <!-- Ganti dengan iframe Google Maps lokasi instansi -->
@@ -99,7 +99,7 @@
                 </div>
             </div> --}}
 
-        </div>
+    </div>
     </div>
 
     <div class="container copyright text-center mt-4">

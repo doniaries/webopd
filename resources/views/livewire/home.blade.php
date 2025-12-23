@@ -3,7 +3,7 @@
 
     @push('title', $pageTitle)
     @push('meta')
-        <meta name="description" content="{{ $pageDescription }}">
+    <meta name="description" content="{{ $pageDescription }}">
     @endpush
 
 
@@ -23,20 +23,20 @@
 
                         <div class="row g-9">
                             @php
-                                try {
-                                    $recentPosts = App\Models\Post::query()
-                                        ->where('status', 'published')
-                                        ->where('published_at', '<=', now())
-                                        ->with(['tags', 'user'])
-                                        ->latest('published_at')
-                                        ->take(6)
-                                        ->get();
+                            try {
+                            $recentPosts = App\Models\Post::query()
+                            ->where('status', 'published')
+                            ->where('published_at', '<=', now())
+                                ->with(['tags', 'user'])
+                                ->latest('published_at')
+                                ->take(6)
+                                ->get();
                                 } catch (\Exception $e) {
-                                    $recentPosts = collect();
+                                $recentPosts = collect();
                                 }
-                            @endphp
+                                @endphp
 
-                            @foreach ($recentPosts as $post)
+                                @foreach ($recentPosts as $post)
                                 <div class="col-12 col-md-6 col-lg-6 col-xl-4 mb-4">
                                     <a href="{{ route('berita.show', $post->slug) }}"
                                         class="text-decoration-none d-block h-100">
@@ -52,70 +52,70 @@
                                             <!-- Gambar Utama -->
                                             <div class="position-relative" style="padding-top: 56.25%;">
                                                 @php
-                                                    $isPlaceholder = false;
-                                                    $placeholderData = [];
+                                                $isPlaceholder = false;
+                                                $placeholderData = [];
 
-                                                    if ($post->foto_utama_url) {
-                                                        if (
-                                                            is_string($post->foto_utama_url) &&
-                                                            str_starts_with($post->foto_utama_url, '{"type"')
-                                                        ) {
-                                                            try {
-                                                                $placeholderData = json_decode(
-                                                                    $post->foto_utama_url,
-                                                                    true,
-                                                                );
-                                                                $isPlaceholder =
-                                                                    isset($placeholderData['type']) &&
-                                                                    $placeholderData['type'] === 'placeholder';
-                                                            } catch (\Exception $e) {
-                                                                $isPlaceholder = true;
-                                                                $placeholderData = [
-                                                                    'bg_color' => 'bg-gray-200',
-                                                                    'text' => 'Gambar tidak tersedia',
-                                                                ];
-                                                            }
-                                                        } elseif (
-                                                            !filter_var($post->foto_utama_url, FILTER_VALIDATE_URL)
-                                                        ) {
-                                                            $isPlaceholder = true;
-                                                            $placeholderData = [
-                                                                'bg_color' => 'bg-gray-200',
-                                                                'text' => 'Gambar tidak tersedia',
-                                                            ];
-                                                        }
-                                                    } else {
-                                                        $isPlaceholder = true;
-                                                        $placeholderData = [
-                                                            'bg_color' => 'bg-gray-200',
-                                                            'text' => 'Gambar tidak tersedia',
-                                                        ];
-                                                    }
+                                                if ($post->foto_utama_url) {
+                                                if (
+                                                is_string($post->foto_utama_url) &&
+                                                str_starts_with($post->foto_utama_url, '{"type"')
+                                                ) {
+                                                try {
+                                                $placeholderData = json_decode(
+                                                $post->foto_utama_url,
+                                                true,
+                                                );
+                                                $isPlaceholder =
+                                                isset($placeholderData['type']) &&
+                                                $placeholderData['type'] === 'placeholder';
+                                                } catch (\Exception $e) {
+                                                $isPlaceholder = true;
+                                                $placeholderData = [
+                                                'bg_color' => 'bg-gray-200',
+                                                'text' => 'Gambar tidak tersedia',
+                                                ];
+                                                }
+                                                } elseif (
+                                                !filter_var($post->foto_utama_url, FILTER_VALIDATE_URL)
+                                                ) {
+                                                $isPlaceholder = true;
+                                                $placeholderData = [
+                                                'bg_color' => 'bg-gray-200',
+                                                'text' => 'Gambar tidak tersedia',
+                                                ];
+                                                }
+                                                } else {
+                                                $isPlaceholder = true;
+                                                $placeholderData = [
+                                                'bg_color' => 'bg-gray-200',
+                                                'text' => 'Gambar tidak tersedia',
+                                                ];
+                                                }
                                                 @endphp
 
                                                 @if ($isPlaceholder)
-                                                    <div
-                                                        class="position-absolute top-0 start-0 w-100 h-100 flex items-center justify-center {{ $placeholderData['bg_color'] ?? 'bg-gray-100' }}">
-                                                        <div class="text-center">
-                                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                                class="h-12 w-12 mx-auto mb-2 text-gray-400"
-                                                                fill="none" viewBox="0 0 24 24"
-                                                                stroke="currentColor">
-                                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                                    stroke-width="1"
-                                                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                                            </svg>
-                                                            <span
-                                                                class="text-sm font-medium text-gray-500">{{ $placeholderData['text'] ?? 'Gambar tidak tersedia' }}</span>
-                                                        </div>
+                                                <div
+                                                    class="position-absolute top-0 start-0 w-100 h-100 flex items-center justify-center {{ $placeholderData['bg_color'] ?? 'bg-gray-100' }}">
+                                                    <div class="text-center">
+                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                            class="h-12 w-12 mx-auto mb-2 text-gray-400"
+                                                            fill="none" viewBox="0 0 24 24"
+                                                            stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="1"
+                                                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                        </svg>
+                                                        <span
+                                                            class="text-sm font-medium text-gray-500">{{ $placeholderData['text'] ?? 'Gambar tidak tersedia' }}</span>
                                                     </div>
+                                                </div>
                                                 @else
-                                                    <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden">
-                                                        <img src="{{ $post->foto_utama_url }}"
-                                                            class="w-100 h-100 card-img-top hover-zoom"
-                                                            style="object-fit: cover; transition: transform 0.5s ease;"
-                                                            alt="{{ $post->title }}">
-                                                    </div>
+                                                <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden">
+                                                    <img src="{{ $post->foto_utama_url }}"
+                                                        class="w-100 h-100 card-img-top hover-zoom"
+                                                        style="object-fit: cover; transition: transform 0.5s ease;"
+                                                        alt="{{ $post->title }}">
+                                                </div>
                                                 @endif
 
                                                 <div
@@ -153,7 +153,7 @@
                                         </div>
                                     </a>
                                 </div>
-                            @endforeach
+                                @endforeach
                         </div>
 
                         <div class="text-center mt-4">
@@ -207,63 +207,63 @@
                                     </thead>
                                     <tbody>
                                         @php
-                                            $agendas = \App\Models\AgendaKegiatan::query()
-                                                ->where('dari_tanggal', '>=', now()->toDateString())
-                                                ->orderBy('dari_tanggal')
-                                                ->orderBy('waktu_mulai')
-                                                ->take(7)
-                                                ->get();
+                                        $agendas = \App\Models\AgendaKegiatan::query()
+                                        ->where('dari_tanggal', '>=', now()->toDateString())
+                                        ->orderBy('dari_tanggal')
+                                        ->orderBy('waktu_mulai')
+                                        ->take(7)
+                                        ->get();
                                         @endphp
                                         @forelse($agendas as $agenda)
-                                            <tr>
-                                                <td class="text-nowrap">
-                                                    <div class="fw-medium">
-                                                        {{ \Carbon\Carbon::parse($agenda->dari_tanggal)->translatedFormat('d M Y') }}
-                                                        @if ($agenda->sampai_tanggal && $agenda->sampai_tanggal != $agenda->dari_tanggal)
-                                                            -
-                                                            {{ \Carbon\Carbon::parse($agenda->sampai_tanggal)->translatedFormat('d M Y') }}
-                                                        @endif
-                                                    </div>
-                                                    <small
-                                                        class="text-muted">{{ \Carbon\Carbon::parse($agenda->dari_tanggal)->diffForHumans() }}</small>
-                                                </td>
-                                                <td>
-                                                    <div class="fw-medium text-truncate" style="max-width: 300px;">
-                                                        {{ $agenda->nama_agenda }}
-                                                    </div>
-                                                    <div class="text-truncate small mt-1" style="max-width: 320px;">
-                                                        <i class="bi bi-geo-alt text-primary me-1"></i>
-                                                        <span class="text-muted">{{ $agenda->tempat ?? '-' }}</span>
-                                                    </div>
-                                                </td>
-                                                <td class="text-center">
-                                                    @php
-                                                        $status = $agenda->status ?? 'Mendatang';
-                                                        $badgeClass = match ($status) {
-                                                            'Berlangsung' => 'badge bg-success',
-                                                            'Selesai' => 'badge bg-secondary',
-                                                            default => 'badge bg-warning text-dark',
-                                                        };
-                                                    @endphp
-                                                    <span class="{{ $badgeClass }}">{{ $status }}</span>
-                                                </td>
-                                                <td class="text-center text-nowrap">
-                                                    {{ $agenda->waktu_mulai ? \Carbon\Carbon::parse($agenda->waktu_mulai)->format('H:i') : '-' }}
+                                        <tr>
+                                            <td class="text-nowrap">
+                                                <div class="fw-medium">
+                                                    {{ \Carbon\Carbon::parse($agenda->dari_tanggal)->translatedFormat('d M Y') }}
+                                                    @if ($agenda->sampai_tanggal && $agenda->sampai_tanggal != $agenda->dari_tanggal)
                                                     -
-                                                    {{ $agenda->waktu_selesai ? \Carbon\Carbon::parse($agenda->waktu_selesai)->format('H:i') : '-' }}
-                                                </td>
-                                                <td class="text-center">
-                                                    <a href="{{ route('agenda.show', $agenda->slug) }}"
-                                                        class="btn btn-sm btn-outline-primary py-1 px-2">
-                                                        <i class="bi bi-eye"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
+                                                    {{ \Carbon\Carbon::parse($agenda->sampai_tanggal)->translatedFormat('d M Y') }}
+                                                    @endif
+                                                </div>
+                                                <small
+                                                    class="text-muted">{{ \Carbon\Carbon::parse($agenda->dari_tanggal)->diffForHumans() }}</small>
+                                            </td>
+                                            <td>
+                                                <div class="fw-medium text-truncate" style="max-width: 300px;">
+                                                    {{ $agenda->nama_agenda }}
+                                                </div>
+                                                <div class="text-truncate small mt-1" style="max-width: 320px;">
+                                                    <i class="bi bi-geo-alt text-primary me-1"></i>
+                                                    <span class="text-muted">{{ $agenda->tempat ?? '-' }}</span>
+                                                </div>
+                                            </td>
+                                            <td class="text-center">
+                                                @php
+                                                $status = $agenda->status ?? 'Mendatang';
+                                                $badgeClass = match ($status) {
+                                                'Berlangsung' => 'badge bg-success',
+                                                'Selesai' => 'badge bg-secondary',
+                                                default => 'badge bg-warning text-dark',
+                                                };
+                                                @endphp
+                                                <span class="{{ $badgeClass }}">{{ $status }}</span>
+                                            </td>
+                                            <td class="text-center text-nowrap">
+                                                {{ $agenda->waktu_mulai ? \Carbon\Carbon::parse($agenda->waktu_mulai)->format('H:i') : '-' }}
+                                                -
+                                                {{ $agenda->waktu_selesai ? \Carbon\Carbon::parse($agenda->waktu_selesai)->format('H:i') : '-' }}
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="{{ route('agenda.show', $agenda->slug) }}"
+                                                    class="btn btn-sm btn-outline-primary py-1 px-2">
+                                                    <i class="bi bi-eye"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
                                         @empty
-                                            <tr>
-                                                <td colspan="4" class="text-center py-3 text-muted">Tidak ada agenda
-                                                    mendatang</td>
-                                            </tr>
+                                        <tr>
+                                            <td colspan="4" class="text-center py-3 text-muted">Tidak ada agenda
+                                                mendatang</td>
+                                        </tr>
                                         @endforelse
                                     </tbody>
                                 </table>
@@ -304,14 +304,14 @@
 
                             <div class="pengumuman-list flex-grow-1">
                                 @php
-                                    $pengumuman = \App\Models\Pengumuman::query()
-                                        ->where('published_at', '<=', now())
-                                        ->latest('published_at')
-                                        ->take(3)
-                                        ->get();
-                                @endphp
+                                $pengumuman = \App\Models\Pengumuman::query()
+                                ->where('published_at', '<=', now())
+                                    ->latest('published_at')
+                                    ->take(3)
+                                    ->get();
+                                    @endphp
 
-                                @forelse($pengumuman as $item)
+                                    @forelse($pengumuman as $item)
                                     <div
                                         class="pengumuman-item mb-3 p-3 rounded-lg border border-gray-100 hover-shadow transition-all duration-200">
                                         <div class="d-flex align-items-start">
@@ -344,7 +344,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                @empty
+                                    @empty
                                     <div class="text-center py-5">
                                         <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
                                             style="width: 80px; height: 80px;">
@@ -354,7 +354,7 @@
                                         <p class="small text-muted mb-0">Tidak ada pengumuman yang tersedia saat ini
                                         </p>
                                     </div>
-                                @endforelse
+                                    @endforelse
                             </div>
 
                             <style>
@@ -362,16 +362,16 @@
                                     transition: all 0.3s ease;
                                     border-left: 3px solid transparent;
                                 }
-                                
+
                                 /* Image zoom effect on hover */
                                 .hover-zoom {
                                     transition: transform 0.5s ease;
                                 }
-                                
+
                                 .card:hover .hover-zoom {
                                     transform: scale(1.05);
                                 }
-                                
+
                                 .card {
                                     overflow: hidden;
                                 }
@@ -464,103 +464,103 @@
                                 @foreach ($documents as $index => $doc)
                                     <tr
                                         class="hover:bg-blue-50 transition-colors duration-200 {{ $index % 2 === 0 ? 'bg-white' : 'bg-blue-50' }}">
-                                        <td class="px-3 py-3 text-center text-sm text-gray-700 font-medium w-12">
-                                            <span
-                                                class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-blue-100 text-blue-800 text-xs">
-                                                {{ $index + 1 }}
-                                            </span>
-                                        </td>
-                                        <td class="px-4 py-3 whitespace-nowrap w-2/5">
-                                            <div class="flex items-center">
-                                                @php
-                                                    $icon = 'fa-file-alt';
-                                                    if (str_contains(strtolower($doc['name']), 'laporan')) {
-                                                        $icon = 'fa-file-invoice';
-                                                    } elseif (str_contains(strtolower($doc['name']), 'panduan')) {
-                                                        $icon = 'fa-book';
-                                                    } elseif (str_contains(strtolower($doc['name']), 'struktur')) {
-                                                        $icon = 'fa-sitemap';
-                                                    } elseif (str_contains(strtolower($doc['name']), 'profil')) {
-                                                        $icon = 'fa-building';
-                                                    }
-                                                @endphp
-                                                <i class="fas {{ $icon }} text-blue-500 text-lg mr-3"></i>
-                                                <div class="text-sm font-medium text-gray-900">{{ $doc['name'] }}
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="px-4 py-3 whitespace-nowrap w-1/6">
-                                            @php
-                                                $badgeClass = 'bg-blue-100 text-blue-800';
-                                                if ($doc['type'] === 'PDF') {
-                                                    $badgeClass = 'bg-red-100 text-red-800';
-                                                } elseif ($doc['type'] === 'DOCX') {
-                                                    $badgeClass = 'bg-blue-100 text-blue-800';
-                                                } elseif ($doc['type'] === 'XLSX') {
-                                                    $badgeClass = 'bg-green-100 text-green-800';
-                                                }
-                                            @endphp
-                                            <span
-                                                class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full {{ $badgeClass }}">
-                                                <i class="far fa-file-{{ strtolower($doc['type']) }} mr-1"></i>
-                                                {{ $doc['type'] }}
-                                            </span>
-                                        </td>
-                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
-                                            <i class="far fa-calendar-alt mr-2 text-blue-500"></i>
-                                            {{ $doc['date'] }}
-                                            <div class="text-xs text-gray-500 mt-1">
-                                                <i class="far fa-eye mr-1"></i>{{ $doc['views'] }}
-                                                <span class="mx-1">•</span>
-                                                <i class="fas fa-download mr-1"></i>{{ $doc['downloads'] }}
-                                            </div>
-                                        </td>
-                                        <td
-                                            class="px-4 py-3 whitespace-nowrap w-1/6 text-sm font-medium text-center space-x-2">
-                                            <a href="{{ route('dokumen.detail', $doc['slug']) }}"
-                                                class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
-                                                <i class="far fa-eye mr-1"></i>Lihat
-                                            </a>
-                                            <a href="{{ asset('storage/documents/' . $doc['file']) }}" download
-                                                class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200">
-                                                <i class="fas fa-download mr-1"></i>Unduh
-                                            </a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="bg-blue-600 px-6 py-4 flex items-center justify-between border-t border-blue-500">
-                        <div class="text-sm text-white">
-                            <i class="fas fa-file-alt mr-2"></i>
-                            @php
-                                $totalDocuments = \App\Models\Dokumen::whereNotNull('file')
-                                    ->where('file', '!=', '')
-                                    ->whereNotNull('published_at')
-                                    ->where('published_at', '<=', now())
-                                    ->count();
-                            @endphp
-                            Total <span class="font-semibold">{{ $totalDocuments }} dokumen</span> tersedia untuk
-                            diunduh
-                        </div>
-                        <div class="flex-shrink-0">
-                            <a href="{{ route('dokumen') }}"
-                                class="relative inline-flex items-center px-4 py-2 border border-white text-sm font-medium rounded-md text-white bg-blue-700 hover:bg-blue-800 transition-colors duration-200">
-                                <i class="fas fa-list-ul mr-2"></i>Lihat Semua Dokumen
-                            </a>
-                        </div>
-                    </div>
+        <td class="px-3 py-3 text-center text-sm text-gray-700 font-medium w-12">
+            <span
+                class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-blue-100 text-blue-800 text-xs">
+                {{ $index + 1 }}
+            </span>
+        </td>
+        <td class="px-4 py-3 whitespace-nowrap w-2/5">
+            <div class="flex items-center">
+                @php
+                $icon = 'fa-file-alt';
+                if (str_contains(strtolower($doc['name']), 'laporan')) {
+                $icon = 'fa-file-invoice';
+                } elseif (str_contains(strtolower($doc['name']), 'panduan')) {
+                $icon = 'fa-book';
+                } elseif (str_contains(strtolower($doc['name']), 'struktur')) {
+                $icon = 'fa-sitemap';
+                } elseif (str_contains(strtolower($doc['name']), 'profil')) {
+                $icon = 'fa-building';
+                }
+                @endphp
+                <i class="fas {{ $icon }} text-blue-500 text-lg mr-3"></i>
+                <div class="text-sm font-medium text-gray-900">{{ $doc['name'] }}
                 </div>
             </div>
-        </div> --}}
-
-        <!-- Section External Links -->
-        <section id="external-links" class="external-links-section section">
-            <div class="mt-4">
-                <livewire:external-links />
+        </td>
+        <td class="px-4 py-3 whitespace-nowrap w-1/6">
+            @php
+            $badgeClass = 'bg-blue-100 text-blue-800';
+            if ($doc['type'] === 'PDF') {
+            $badgeClass = 'bg-red-100 text-red-800';
+            } elseif ($doc['type'] === 'DOCX') {
+            $badgeClass = 'bg-blue-100 text-blue-800';
+            } elseif ($doc['type'] === 'XLSX') {
+            $badgeClass = 'bg-green-100 text-green-800';
+            }
+            @endphp
+            <span
+                class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full {{ $badgeClass }}">
+                <i class="far fa-file-{{ strtolower($doc['type']) }} mr-1"></i>
+                {{ $doc['type'] }}
+            </span>
+        </td>
+        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+            <i class="far fa-calendar-alt mr-2 text-blue-500"></i>
+            {{ $doc['date'] }}
+            <div class="text-xs text-gray-500 mt-1">
+                <i class="far fa-eye mr-1"></i>{{ $doc['views'] }}
+                <span class="mx-1">•</span>
+                <i class="fas fa-download mr-1"></i>{{ $doc['downloads'] }}
             </div>
-        </section>
+        </td>
+        <td
+            class="px-4 py-3 whitespace-nowrap w-1/6 text-sm font-medium text-center space-x-2">
+            <a href="{{ route('dokumen.detail', $doc['slug']) }}"
+                class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
+                <i class="far fa-eye mr-1"></i>Lihat
+            </a>
+            <a href="{{ asset('storage/documents/' . $doc['file']) }}" download
+                class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200">
+                <i class="fas fa-download mr-1"></i>Unduh
+            </a>
+        </td>
+        </tr>
+        @endforeach
+        </tbody>
+        </table>
     </div>
+
+    <div class="bg-blue-600 px-6 py-4 flex items-center justify-between border-t border-blue-500">
+        <div class="text-sm text-white">
+            <i class="fas fa-file-alt mr-2"></i>
+            @php
+            $totalDocuments = \App\Models\Dokumen::whereNotNull('file')
+            ->where('file', '!=', '')
+            ->whereNotNull('published_at')
+            ->where('published_at', '<=', now())
+                ->count();
+                @endphp
+                Total <span class="font-semibold">{{ $totalDocuments }} dokumen</span> tersedia untuk
+                diunduh
+        </div>
+        <div class="flex-shrink-0">
+            <a href="{{ route('dokumen.index') }}"
+                class="relative inline-flex items-center px-4 py-2 border border-white text-sm font-medium rounded-md text-white bg-blue-700 hover:bg-blue-800 transition-colors duration-200">
+                <i class="fas fa-list-ul mr-2"></i>Lihat Semua Dokumen
+            </a>
+        </div>
+    </div>
+</div>
+</div>
+</div> --}}
+
+<!-- Section External Links -->
+<section id="external-links" class="external-links-section section">
+    <div class="mt-4">
+        <livewire:external-links />
+    </div>
+</section>
+</div>
 </div>
