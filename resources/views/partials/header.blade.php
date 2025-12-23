@@ -1,4 +1,4 @@
-<header id="header" class="header sticky-top">
+<header id="header" class="header sticky-top" style="margin-bottom: 0 !important; padding-bottom: 0 !important;">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
@@ -6,31 +6,41 @@
         /* Base Header Styles */
         .header {
             background-color: #fff;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
             width: 100%;
-            /* Sticky behavior handled by Bootstrap .sticky-top, but fallback here */
             top: 0;
             z-index: 1020;
         }
 
-        /* Top Bar / Brand Bar */
+        /* Top Bar */
         .header-main {
-            border-bottom: 1px solid #eee;
-            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+            padding: 5px 0;
+            /* Reduced padding */
             background: #fff;
             width: 100%;
         }
 
-        .logo-section {
+        /* Logo Area */
+        .logo-group {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 20px;
+        }
+
+        .main-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
             text-decoration: none;
             color: #333;
+            border-right: 1px solid #eee;
+            padding-right: 20px;
+            margin-right: 10px;
         }
 
         .logo-img {
-            height: 45px;
+            height: 48px;
             width: auto;
             object-fit: contain;
         }
@@ -38,33 +48,50 @@
         .site-identity {
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            line-height: 1.1;
         }
 
         .site-name {
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 700;
-            line-height: 1.2;
-            color: #1a1a1a;
+            color: #111;
             margin: 0;
-            font-family: 'Roboto', sans-serif;
+            text-transform: uppercase;
         }
 
         .site-tagline {
             font-size: 0.75rem;
             color: #666;
-            margin: 0;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
+
+        .partner-logos {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .partner-img {
+            height: 32px;
+            width: auto;
+            filter: grayscale(0%);
+            transition: filter 0.3s;
+        }
+
+
 
         /* Navigation Menu */
         .nav-container {
             background: #fff;
+            border-bottom: none;
+            /* No border to prevent gap */
+            padding: 0;
+            margin: 0;
         }
 
         .main-nav {
             display: flex;
+            justify-content: center;
             list-style: none;
             margin: 0;
             padding: 0;
@@ -73,40 +100,38 @@
 
         .main-nav>li>a {
             display: block;
-            padding: 12px 16px;
-            color: #444;
-            font-weight: 500;
+            padding: 14px 20px;
+            color: #333;
+            font-weight: 600;
             text-decoration: none;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             transition: all 0.2s;
-            border-bottom: 2px solid transparent;
-            white-space: nowrap;
+            border-bottom: 3px solid transparent;
+            height: 100%;
+            /* Ensure full height */
+            display: flex;
+            align-items: center;
+            /* Center content vertical */
+            gap: 8px;
+            /* Gap for icon + text */
         }
 
         .main-nav>li>a:hover,
         .main-nav>li>a.active {
-            color: #10b981;
-            /* Modern Emerald */
-            background-color: #f0fdf4;
-            border-bottom-color: #10b981;
+            color: #0d6efd;
+            /* Blue Color */
+            border-bottom-color: #0d6efd;
         }
 
-        .main-nav>li>a i {
-            margin-right: 5px;
+        .main-nav>li>a i.icon-only {
+            font-size: 1.2rem;
+            margin: 0;
+            line-height: 1;
         }
 
-        /* Mobile Menu Toggle */
-        .mobile-toggle {
-            display: none;
-            background: none;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-            font-size: 1.5rem;
-            color: #333;
-        }
-
-        /* Dropdown Support (Basic Hover) */
+        /* Dropdown */
         .dropdown {
             position: relative;
         }
@@ -115,96 +140,145 @@
             display: none;
             position: absolute;
             top: 100%;
-            left: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            /* Centered dropdown */
             background: #fff;
             border: 1px solid #eee;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            min-width: 200px;
-            z-index: 1000;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            min-width: 220px;
+            z-index: 9999;
+            /* High Z-Index */
             list-style: none;
-            padding: 5px 0;
+            padding: 8px 0;
+            border-radius: 0 0 8px 8px;
+            text-transform: none;
+            margin-top: 0;
+            /* consistent positioning */
         }
 
-        /* Desktop Hover Support */
+        /* Bridge to prevent closing */
+        .dropdown-menu::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: transparent;
+        }
+
+        /* Desktop Hover */
         @media (min-width: 992px) {
             .dropdown:hover .dropdown-menu {
-                display: block;
+                display: block !important;
+                /* Force display */
             }
         }
 
         .dropdown-menu li a {
             display: block;
-            padding: 8px 16px;
-            color: #444;
+            padding: 10px 20px;
+            color: #555;
             text-decoration: none;
             font-size: 0.9rem;
+            text-transform: none;
+            /* Normal case for submenu */
             transition: all 0.2s;
+            border-bottom: none;
         }
 
         .dropdown-menu li a:hover {
-            background: #f0fdf4;
-            color: #10b981;
-        }
-
-        /* Show class for click interaction (Mobile) */
-        .dropdown-menu.show {
-            display: block;
+            background: #eff6ff;
+            color: #0d6efd;
         }
 
         /* Mobile Responsive */
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            padding: 5px;
+            font-size: 1.8rem;
+            color: #333;
+            cursor: pointer;
+        }
+
         @media (max-width: 991px) {
+            .header-main {
+                padding: 10px 0;
+            }
+
+            .logo-group {
+                gap: 10px;
+            }
+
+            .partner-logos,
+            .search-container {
+                display: none;
+                /* Hide partners and search on minimal mobile header (can be moved deeper if needed) */
+            }
+
             .mobile-toggle {
                 display: block;
             }
 
-            .main-nav {
+            .nav-container {
                 display: none;
-                /* Hidden by default on mobile */
-                flex-direction: column;
-                width: 100%;
-                border-top: 1px solid #eee;
+                /* Hidden by default */
             }
 
-            .nav-container.active .main-nav {
-                display: flex;
+            .nav-container.active {
+                display: block;
+            }
+
+            .main-nav {
+                flex-direction: column;
+                justify-content: flex-start;
+                padding: 10px 0;
             }
 
             .main-nav>li>a {
                 padding: 12px 20px;
                 border-bottom: 1px solid #f5f5f5;
                 width: 100%;
+                text-align: left;
             }
 
+            /* Mobile Search in Nav */
+            .mobile-search {
+                padding: 15px 20px;
+                background: #f9fafb;
+                border-bottom: 1px solid #eee;
+            }
+
+            .mobile-search .search-input {
+                padding: 8px 15px 8px 40px;
+            }
+
+            /* Dropdown Mobile */
             .dropdown:hover .dropdown-menu {
                 display: none;
-                /* Disable hover on mobile */
+            }
+
+            .dropdown-menu {
+                position: relative;
+                top: 0;
+                left: 0;
+                transform: none;
+                width: 100%;
+                box-shadow: none;
+                border: none;
+                background: #f9fafb;
+                padding-left: 0;
             }
 
             .dropdown-menu.show {
                 display: block;
-                position: relative;
-                width: 100%;
-                box-shadow: none;
-                border: none;
-                background-color: #fff;
-                /* Match menu bg */
-                padding-left: 20px;
-                border-left: 2px solid #10b981;
-                /* Accent line for nested feel */
-            }
-        }
-
-        @media (max-width: 576px) {
-            .site-name {
-                font-size: 0.95rem;
             }
 
-            .logo-img {
-                height: 35px;
-            }
-
-            .header-main {
-                padding: 5px 0;
+            .dropdown-menu li a {
+                padding-left: 40px;
             }
         }
     </style>
@@ -218,36 +292,45 @@
 
     <div class="header-main w-100">
         <div class="container-fluid px-lg-5 px-3 d-flex align-items-center justify-content-between">
-            <!-- Logo & Identity -->
-            <a href="{{ url('/') }}" class="logo-section">
-                <img src="{{ $logoUrl }}" alt="Logo" class="logo-img" onerror="this.src='{{ asset('assets/img/logo.png') }}'">
-                <div class="site-identity">
-                    <h1 class="site-name">{{ $siteName }}</h1>
-                    <span class="site-tagline">Pemerintah {{ $pengaturan->kabupaten ?? 'Sijunjung' }}</span>
-                </div>
-            </a>
+            <!-- Left: Logo Group -->
+            <div class="logo-group">
+                <a href="{{ url('/') }}" class="main-logo">
+                    <img src="{{ $logoUrl }}" alt="Logo" class="logo-img" onerror="this.src='{{ asset('assets/img/logo.png') }}'">
+                    <div class="site-identity d-none d-sm-flex">
+                        <h1 class="site-name">{{ $siteName }}</h1>
+                        <span class="site-tagline">Pemerintah {{ $pengaturan->kabupaten ?? 'Sijunjung' }}</span>
+                    </div>
+                </a>
 
-            <!-- Additional Logos (Hidden on Mobile) -->
-            <div class="d-none d-md-flex align-items-center gap-3">
-                <img src="{{ asset('images/bangga.png') }}" alt="Bangga" style="height: 30px;">
-                <img src="{{ asset('images/berakhlak.png') }}" alt="Berakhlak" style="height: 30px;">
+                <!-- Partner Logos (Desktop) -->
+                <div class="partner-logos d-none d-lg-flex">
+                    <img src="{{ asset('images/bangga.png') }}" alt="Bangga" class="partner-img">
+                    <img src="{{ asset('images/berakhlak.png') }}" alt="Berakhlak" class="partner-img">
+                </div>
             </div>
 
+
+
             <!-- Mobile Toggle -->
-            <button class="mobile-toggle" onclick="this.parentElement.parentElement.nextElementSibling.classList.toggle('active')">
+            <button class="mobile-toggle d-lg-none" onclick="document.querySelector('.nav-container').classList.toggle('active')">
                 <i class="bi bi-list"></i>
             </button>
         </div>
     </div>
 
     <!-- Nav Container -->
-    <div class="nav-container border-bottom w-100">
+    <div class="nav-container w-100">
         <div class="container-fluid px-lg-5 px-3">
+
+
             <nav>
                 <ul class="main-nav">
-                    <li><a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">
-                            <i class="bi bi-house-door"></i> Beranda
-                        </a></li>
+                    <!-- Home Icon -->
+                    <li>
+                        <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">
+                            <i class="bi bi-house-door-fill icon-only"></i>
+                        </a>
+                    </li>
 
                     <li><a href="{{ request()->is('berita*') ? '#' : route('berita.index') }}" class="{{ request()->is('berita*') ? 'active' : '' }}">
                             Berita
@@ -275,42 +358,33 @@
                         </a></li>
 
                     <li><a href="{{ route('kontak') }}" class="{{ request()->routeIs('kontak') ? 'active' : '' }}">
-                            Kontak
+                            Layanan
                         </a></li>
                 </ul>
             </nav>
         </div>
     </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Universal Dropdown Toggle (Click-based)
+            // Dropdown Logic
             const dropdownLinks = document.querySelectorAll('.dropdown > a');
 
             function closeAllDropdowns() {
                 document.querySelectorAll('.dropdown-menu.show').forEach(menu => {
                     menu.classList.remove('show');
-                    // Reset icon rotation and active state
-                    const toggleLink = menu.previousElementSibling;
-                    if (toggleLink) {
-                        toggleLink.classList.remove('active'); // Remove active highlight
-                        const icon = toggleLink.querySelector('.bi-chevron-down');
-                        if (icon) {
-                            icon.style.transform = 'rotate(0deg)';
-                        }
-                    }
+                    menu.previousElementSibling.classList.remove('active');
+                    const icon = menu.previousElementSibling.querySelector('.bi-chevron-down');
+                    if (icon) icon.style.transform = 'rotate(0deg)';
                 });
             }
 
             dropdownLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
-                    // Prevent default for # links always
-                    if (this.getAttribute('href') === '#') {
-                        e.preventDefault();
-                    }
+                    if (this.getAttribute('href') === '#') e.preventDefault();
 
-                    // Mobile Interaction (Click-based)
+                    // Mobile interaction logic
                     if (window.matchMedia('(max-width: 991px)').matches) {
-                        // Prevent navigation on mobile for parent menu items
                         e.preventDefault();
                         e.stopPropagation();
 
@@ -319,28 +393,19 @@
 
                         closeAllDropdowns();
 
-                        // Toggle: If not open, open it. If open, closeAllDropdowns already closed it.
-                        if (menu && menu.classList.contains('dropdown-menu') && !isAlreadyOpen) {
+                        if (menu && !isAlreadyOpen) {
                             menu.classList.add('show');
-
-                            // Visual feedback for active state
                             this.classList.add('active');
-
                             const icon = this.querySelector('.bi-chevron-down');
-                            if (icon) {
-                                icon.style.transform = 'rotate(180deg)';
-                                icon.style.transition = 'transform 0.2s ease';
-                            }
+                            if (icon) icon.style.transform = 'rotate(180deg)';
                         }
                     }
                 });
             });
 
-            // Close dropdowns when clicking outside
+            // Close on outside click
             document.addEventListener('click', function(e) {
-                if (!e.target.closest('.dropdown')) {
-                    closeAllDropdowns();
-                }
+                if (!e.target.closest('.dropdown')) closeAllDropdowns();
             });
         });
     </script>

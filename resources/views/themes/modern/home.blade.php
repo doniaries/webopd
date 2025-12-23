@@ -7,7 +7,7 @@
     @endpush
 
 
-    <div class="space-y-8 bg-white">
+    <div class="bg-white" style="margin-top: 0 !important; padding-top: 0 !important;">
         <livewire:slider />
         <!-- Berita Section -->
         <section id="berita-informasi" class="features pb-8 border-b border-gray-200 bg-white"

@@ -97,7 +97,7 @@
 <body class="index-page">
 
     @include('partials.header')
-    <main class="main">
+    <main class="main" style="padding-top: 0 !important; margin-top: 0 !important;">
         @hasSection('content')
         @yield('content')
         @else
