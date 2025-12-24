@@ -4,7 +4,8 @@
 <head>
     @php
     use App\Models\Pengaturan;
-    $siteName = Pengaturan::first()->name ?? 'Web OPD';
+    $pengaturan = Pengaturan::first();
+    $siteName = 'Website - ' . ($pengaturan->name ?? 'Web OPD');
     @endphp
 
     <meta charset="utf-8">

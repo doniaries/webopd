@@ -5,7 +5,7 @@
     @php
     use App\Models\Pengaturan;
     $pengaturan = Pengaturan::first();
-    $siteName = $pengaturan->name ?? 'Web OPD';
+    $siteName = 'Website - ' . ($pengaturan->name ?? 'Web OPD');
     @endphp
 
     <meta charset="utf-8">
